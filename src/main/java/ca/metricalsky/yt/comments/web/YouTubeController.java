@@ -2,11 +2,12 @@ package ca.metricalsky.yt.comments.web;
 
 import ca.metricalsky.yt.comments.client.YouTubeClient;
 import ca.metricalsky.yt.comments.entity.Channel;
+import ca.metricalsky.yt.comments.entity.Comment;
 import ca.metricalsky.yt.comments.entity.Video;
 import ca.metricalsky.yt.comments.mapper.ChannelMapper;
+import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.mapper.VideoMapper;
 import com.google.api.services.youtube.model.CommentListResponse;
-import com.google.api.services.youtube.model.CommentThreadListResponse;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class YouTubeController {
 
     private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
+    private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
     private final YouTubeClient youTubeClient;
 
     @Autowired
@@ -49,11 +51,15 @@ public class YouTubeController {
     }
 
     @GetMapping("/comments/{videoId}")
-    public CommentThreadListResponse getCommentsByVideoId(
+    public List<Comment> getCommentsByVideoId(
             @PathVariable String videoId,
             @RequestParam(required = false) String pageToken
     ) throws IOException {
-        return youTubeClient.getComments(videoId, pageToken);
+        var commentThreadListResponse = youTubeClient.getComments(videoId, pageToken);
+        return commentThreadListResponse.getItems()
+                .stream()
+                .map(commentMapper::fromYouTube)
+                .toList();
     }
 
     @GetMapping("/replies/{commentId}")
