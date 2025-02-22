@@ -19,7 +19,7 @@ public abstract class ChannelMapper {
     @Mapping(target = "description", source = "snippet.description")
     @Mapping(target = "customUrl", source = "snippet.customUrl")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
-    @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.default.url")
+    @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "topics", source = "topicDetails.topicCategories")
     @Mapping(target = "keywords", source = "brandingSettings.channel.keywords")
     public abstract Channel fromYouTube(com.google.api.services.youtube.model.Channel ytChannel);

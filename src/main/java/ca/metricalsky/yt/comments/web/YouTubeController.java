@@ -2,8 +2,9 @@ package ca.metricalsky.yt.comments.web;
 
 import ca.metricalsky.yt.comments.client.YouTubeClient;
 import ca.metricalsky.yt.comments.entity.Channel;
+import ca.metricalsky.yt.comments.entity.Video;
 import ca.metricalsky.yt.comments.mapper.ChannelMapper;
-import com.google.api.services.youtube.model.ActivityListResponse;
+import ca.metricalsky.yt.comments.mapper.VideoMapper;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
 import org.mapstruct.factory.Mappers;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class YouTubeController {
 
     private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
+    private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     private final YouTubeClient youTubeClient;
 
     @Autowired
@@ -33,11 +36,16 @@ public class YouTubeController {
     }
 
     @GetMapping("/activities/{channelId}")
-    public ActivityListResponse getActivitiesByChannelId(
+    public List<Video> getActivitiesByChannelId(
             @PathVariable String channelId,
             @RequestParam(required = false) String pageToken
     ) throws IOException {
-        return youTubeClient.getActivities(channelId, pageToken);
+        var activityListResponse = youTubeClient.getActivities(channelId, pageToken);
+        return activityListResponse.getItems()
+                .stream()
+                .filter(activity -> activity.getContentDetails().getUpload() != null)
+                .map(videoMapper::fromYouTube)
+                .toList();
     }
 
     @GetMapping("/comments/{videoId}")

@@ -1,5 +1,7 @@
 package ca.metricalsky.yt.comments.mapper;
 
+import ca.metricalsky.yt.comments.entity.Keyword;
+import ca.metricalsky.yt.comments.entity.Topic;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelBrandingSettings;
@@ -35,25 +37,23 @@ class ChannelMapperTest {
                 .hasFieldOrPropertyWithValue("customUrl", ytChannel.getSnippet().getCustomUrl())
                 .hasFieldOrPropertyWithValue("publishedAt", OffsetDateTime.parse(PUBLISHED_AT))
                 .hasFieldOrPropertyWithValue("thumbnailUrl",
-                        ytChannel.getSnippet().getThumbnails().getDefault().getUrl());
+                        ytChannel.getSnippet().getThumbnails().getHigh().getUrl());
 
         assertThat(channel.getTopics())
-                .hasSize(1)
-                .element(0)
-                .hasFieldOrPropertyWithValue("topicUrl", ytChannel.getTopicDetails().getTopicCategories().getFirst());
+                .map(Topic::getTopicUrl)
+                .isEqualTo(ytChannel.getTopicDetails().getTopicCategories());
 
-        assertThat(channel.getKeywords()).hasSize(2);
-        assertThat(channel.getKeywords().get(0).getName()).isEqualTo("keyword");
-        assertThat(channel.getKeywords().get(1).getName()).isEqualTo("\"long keyword\"");
-
+        assertThat(channel.getKeywords())
+                .map(Keyword::getName)
+                .containsExactly("keyword", "\"long keyword\"");
     }
 
     private static Channel buildYouTubeChannel() {
-        var defaultThumbnail = new Thumbnail()
-                .setUrl("channel.snippet.thumbnails.default.url");
+        var thumbnail = new Thumbnail()
+                .setUrl("channel.snippet.thumbnails.high.url");
 
         var thumbnails = new ThumbnailDetails()
-                .setDefault(defaultThumbnail);
+                .setHigh(thumbnail);
 
         var snippet = new ChannelSnippet()
                 .setTitle("channel.snippet.title")
