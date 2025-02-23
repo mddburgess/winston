@@ -1,14 +1,13 @@
 package ca.metricalsky.yt.comments.mapper;
 
 import ca.metricalsky.yt.comments.entity.Channel;
-import ca.metricalsky.yt.comments.entity.Keyword;
-import ca.metricalsky.yt.comments.entity.Topic;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Mapper(uses = OffsetDateTimeMapper.class)
 public abstract class ChannelMapper {
@@ -24,16 +23,16 @@ public abstract class ChannelMapper {
     @Mapping(target = "keywords", source = "brandingSettings.channel.keywords")
     public abstract Channel fromYouTube(com.google.api.services.youtube.model.Channel ytChannel);
 
-    @Mapping(target = "topicUrl", source = ".")
-    abstract Topic fromYouTubeTopicCategory(String topicCategory);
-
-    List<Keyword> fromYouTubeKeywords(String ytKeywords) {
+    Set<String> fromYouTubeKeywords(String ytKeywords) {
         return KEYWORD_PATTERN.matcher(ytKeywords).results()
                 .map(MatchResult::group)
-                .map(this::fromYouTubeKeyword)
-                .toList();
+                .map(this::trimQuotes)
+                .collect(Collectors.toSet());
     }
 
-    @Mapping(target = "name", source = ".")
-    abstract Keyword fromYouTubeKeyword(String ytKeyword);
+    private String trimQuotes(String keyword) {
+        return keyword.startsWith("\"") && keyword.endsWith("\"")
+                ? keyword.substring(1, keyword.length() - 1)
+                : keyword;
+    }
 }

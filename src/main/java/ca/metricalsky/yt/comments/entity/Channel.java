@@ -3,7 +3,7 @@ package ca.metricalsky.yt.comments.entity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Channel {
@@ -22,11 +22,11 @@ public class Channel {
 
     private String thumbnailUrl;
 
-    @ManyToMany
-    private List<Topic> topics;
+    @ElementCollection
+    private Set<String> topics;
 
-    @ManyToMany
-    private List<Keyword> keywords;
+    @ElementCollection
+    private Set<String> keywords;
 
     public String getId() {
         return id;
@@ -76,19 +76,19 @@ public class Channel {
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    public List<Topic> getTopics() {
+    public Set<String> getTopics() {
         return topics;
     }
 
-    public void setTopics(List<Topic> topics) {
+    public void setTopics(Set<String> topics) {
         this.topics = topics;
     }
 
-    public List<Keyword> getKeywords() {
+    public Set<String> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(List<Keyword> keywords) {
+    public void setKeywords(Set<String> keywords) {
         this.keywords = keywords;
     }
 }

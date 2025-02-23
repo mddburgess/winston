@@ -1,7 +1,5 @@
 package ca.metricalsky.yt.comments.mapper;
 
-import ca.metricalsky.yt.comments.entity.Keyword;
-import ca.metricalsky.yt.comments.entity.Topic;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelBrandingSettings;
@@ -40,12 +38,10 @@ class ChannelMapperTest {
                         ytChannel.getSnippet().getThumbnails().getHigh().getUrl());
 
         assertThat(channel.getTopics())
-                .map(Topic::getTopicUrl)
-                .isEqualTo(ytChannel.getTopicDetails().getTopicCategories());
+                .containsOnlyOnceElementsOf(ytChannel.getTopicDetails().getTopicCategories());
 
         assertThat(channel.getKeywords())
-                .map(Keyword::getName)
-                .containsExactly("keyword", "\"long keyword\"");
+                .containsOnlyOnce("keyword", "long keyword");
     }
 
     private static Channel buildYouTubeChannel() {

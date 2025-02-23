@@ -7,6 +7,7 @@ import ca.metricalsky.yt.comments.entity.Video;
 import ca.metricalsky.yt.comments.mapper.ChannelMapper;
 import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.mapper.VideoMapper;
+import ca.metricalsky.yt.comments.repository.ChannelRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,17 +24,22 @@ public class YouTubeController {
     private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+
     private final YouTubeClient youTubeClient;
+    private final ChannelRepository channelRepository;
 
     @Autowired
-    public YouTubeController(YouTubeClient youTubeClient) {
+    public YouTubeController(YouTubeClient youTubeClient, ChannelRepository channelRepository) {
         this.youTubeClient = youTubeClient;
+        this.channelRepository = channelRepository;
     }
 
     @GetMapping("/channels/{handle}")
     public Channel getChannelByHandle(@PathVariable String handle) throws IOException {
         var channelListResponse = youTubeClient.getChannel(handle);
-        return channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
+        var channel = channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
+        channelRepository.save(channel);
+        return channel;
     }
 
     @GetMapping("/activities/{channelId}")
