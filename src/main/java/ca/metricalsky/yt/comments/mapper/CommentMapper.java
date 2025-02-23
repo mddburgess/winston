@@ -33,19 +33,21 @@ public abstract class CommentMapper {
     }
 
     @Mapping(target = "videoId", source = "snippet.videoId")
+    @Mapping(target = "parentId", source = "snippet.parentId")
     @Mapping(target = "author", source = "snippet")
     @Mapping(target = "textDisplay", source = "snippet.textDisplay")
     @Mapping(target = "textOriginal", source = "snippet.textOriginal")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "updatedAt", source = "snippet.updatedAt")
-    @Mapping(target = "parentId", source = "snippet.parentId")
+    @Mapping(target = "lastFetchedAt", ignore = true)
     @Mapping(target = "replyCount", ignore = true)
     @Mapping(target = "replies", ignore = true)
     public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
 
     @Mapping(target = "id", source = "authorChannelId.value")
     @Mapping(target = "displayName", source = "authorDisplayName")
-    @Mapping(target = "profileImageUrl", source = "authorProfileImageUrl")
     @Mapping(target = "channelUrl", source = "authorChannelUrl")
+    @Mapping(target = "profileImageUrl", source = "authorProfileImageUrl")
+    @Mapping(target = "lastFetchedAt", ignore = true)
     abstract Author getAuthor(com.google.api.services.youtube.model.CommentSnippet commentSnippet);
 }

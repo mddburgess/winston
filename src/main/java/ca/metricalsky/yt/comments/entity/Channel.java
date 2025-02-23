@@ -1,11 +1,13 @@
 package ca.metricalsky.yt.comments.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Entity
+@Table(name = "channels")
 public class Channel {
 
     @Id
@@ -18,14 +20,27 @@ public class Channel {
 
     private String customUrl;
 
-    private OffsetDateTime publishedAt;
-
     private String thumbnailUrl;
 
+    private OffsetDateTime publishedAt;
+
+    @UpdateTimestamp
+    private OffsetDateTime lastFetchedAt;
+
     @ElementCollection
+    @CollectionTable(
+            name = "channel_topics",
+            joinColumns = @JoinColumn(name = "channel_id", referencedColumnName = "id")
+    )
+    @Column(name = "topic_url")
     private Set<String> topics;
 
     @ElementCollection
+    @CollectionTable(
+            name = "channel_keywords",
+            joinColumns = @JoinColumn(name = "channel_id", referencedColumnName = "id")
+    )
+    @Column(name = "keyword")
     private Set<String> keywords;
 
     public String getId() {
@@ -60,6 +75,14 @@ public class Channel {
         this.customUrl = customUrl;
     }
 
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
     public OffsetDateTime getPublishedAt() {
         return publishedAt;
     }
@@ -68,12 +91,12 @@ public class Channel {
         this.publishedAt = publishedAt;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public OffsetDateTime getLastFetchedAt() {
+        return lastFetchedAt;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setLastFetchedAt(OffsetDateTime lastRefreshedAt) {
+        this.lastFetchedAt = lastRefreshedAt;
     }
 
     public Set<String> getTopics() {

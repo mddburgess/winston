@@ -2,26 +2,30 @@ package ca.metricalsky.yt.comments.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
 @Entity
+@Table(name = "videos")
 public class Video {
 
     @Id
     private String id;
 
-    private OffsetDateTime publishedAt;
-
     private String channelId;
 
     private String title;
 
-    @Lob
     private String description;
 
     private String thumbnailUrl;
+
+    private OffsetDateTime publishedAt;
+
+    @UpdateTimestamp
+    private OffsetDateTime lastFetchedAt;
 
     public String getId() {
         return id;
@@ -29,14 +33,6 @@ public class Video {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public OffsetDateTime getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setPublishedAt(OffsetDateTime publishedAt) {
-        this.publishedAt = publishedAt;
     }
 
     public String getChannelId() {
@@ -69,5 +65,21 @@ public class Video {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public OffsetDateTime getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(OffsetDateTime publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public OffsetDateTime getLastFetchedAt() {
+        return lastFetchedAt;
+    }
+
+    public void setLastFetchedAt(OffsetDateTime lastRefreshedAt) {
+        this.lastFetchedAt = lastRefreshedAt;
     }
 }

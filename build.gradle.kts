@@ -34,6 +34,8 @@ dependencies {
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.flywaydb:flyway-core")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

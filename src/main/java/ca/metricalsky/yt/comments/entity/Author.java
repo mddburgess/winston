@@ -2,8 +2,13 @@ package ca.metricalsky.yt.comments.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.OffsetDateTime;
 
 @Entity
+@Table(name = "authors")
 public class Author {
 
     @Id
@@ -11,9 +16,12 @@ public class Author {
 
     private String displayName;
 
+    private String channelUrl;
+
     private String profileImageUrl;
 
-    private String channelUrl;
+    @UpdateTimestamp
+    private OffsetDateTime lastFetchedAt;
 
     public String getId() {
         return id;
@@ -31,6 +39,14 @@ public class Author {
         this.displayName = displayName;
     }
 
+    public String getChannelUrl() {
+        return channelUrl;
+    }
+
+    public void setChannelUrl(String channelUrl) {
+        this.channelUrl = channelUrl;
+    }
+
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
@@ -39,11 +55,11 @@ public class Author {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public String getChannelUrl() {
-        return channelUrl;
+    public OffsetDateTime getLastFetchedAt() {
+        return lastFetchedAt;
     }
 
-    public void setChannelUrl(String channelUrl) {
-        this.channelUrl = channelUrl;
+    public void setLastFetchedAt(OffsetDateTime lastFetchedAt) {
+        this.lastFetchedAt = lastFetchedAt;
     }
 }

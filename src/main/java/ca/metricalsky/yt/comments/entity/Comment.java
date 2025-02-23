@@ -3,9 +3,10 @@ package ca.metricalsky.yt.comments.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.CascadeType.PERSIST;
 
 @Entity
+@Table(name = "comments")
 public class Comment {
 
     @Id
@@ -21,22 +23,23 @@ public class Comment {
 
     private String videoId;
 
+    private String parentId;
+
     @ManyToOne
     private Author author;
 
-    @Lob
     private String textDisplay;
 
-    @Lob
     private String textOriginal;
+
+    private Long replyCount;
 
     private OffsetDateTime publishedAt;
 
     private OffsetDateTime updatedAt;
 
-    private String parentId;
-
-    private Long replyCount;
+    @UpdateTimestamp
+    private OffsetDateTime lastFetchedAt;
 
     @OneToMany(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "parentId", referencedColumnName = "id")
@@ -56,6 +59,14 @@ public class Comment {
 
     public void setVideoId(String videoId) {
         this.videoId = videoId;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public Author getAuthor() {
@@ -82,6 +93,14 @@ public class Comment {
         this.textOriginal = textOriginal;
     }
 
+    public Long getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Long replyCount) {
+        this.replyCount = replyCount;
+    }
+
     public OffsetDateTime getPublishedAt() {
         return publishedAt;
     }
@@ -98,20 +117,12 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    public String getParentId() {
-        return parentId;
+    public OffsetDateTime getLastFetchedAt() {
+        return lastFetchedAt;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public Long getReplyCount() {
-        return replyCount;
-    }
-
-    public void setReplyCount(Long replyCount) {
-        this.replyCount = replyCount;
+    public void setLastFetchedAt(OffsetDateTime lastRefreshedAt) {
+        this.lastFetchedAt = lastRefreshedAt;
     }
 
     public List<Comment> getReplies() {

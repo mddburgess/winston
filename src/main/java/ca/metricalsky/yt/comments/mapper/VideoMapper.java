@@ -9,10 +9,11 @@ import org.mapstruct.Mapping;
 public interface VideoMapper {
 
     @Mapping(target = "id", source = "contentDetails.upload.videoId")
-    @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "channelId", source = "snippet.channelId")
     @Mapping(target = "title", source = "snippet.title")
     @Mapping(target = "description", source = "snippet.description")
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
+    @Mapping(target = "publishedAt", source = "snippet.publishedAt")
+    @Mapping(target = "lastFetchedAt", ignore = true)
     Video fromYouTube(Activity activity);
 }
