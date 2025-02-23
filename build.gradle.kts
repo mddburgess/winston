@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.google.api-client:google-api-client:2.7.2")
     implementation("com.google.apis:google-api-services-youtube:v3-rev20250128-2.0.0")
     implementation("com.google.http-client:google-http-client-gson:1.46.1")
@@ -33,7 +33,7 @@ dependencies {
     implementation("com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.10.0")
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
