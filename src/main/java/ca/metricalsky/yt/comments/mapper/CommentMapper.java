@@ -7,19 +7,45 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(uses = OffsetDateTimeMapper.class)
-public interface CommentMapper {
+public abstract class CommentMapper {
 
-    @Mapping(target = "id", source = "snippet.topLevelComment.id")
-    @Mapping(target = "videoId", source = "snippet.topLevelComment.snippet.videoId")
-    @Mapping(target = "author", source = "snippet.topLevelComment")
-    @Mapping(target = "textDisplay", source = "snippet.topLevelComment.snippet.textDisplay")
-    @Mapping(target = "textOriginal", source = "snippet.topLevelComment.snippet.textOriginal")
-    @Mapping(target = "replyCount", source = "snippet.totalReplyCount")
-    Comment fromYouTube(CommentThread commentThread);
+    public Comment fromYouTube(CommentThread commentThread) {
+        if (commentThread == null || commentThread.getSnippet() == null) {
+            return null;
+        }
 
-    @Mapping(target = "id", source = "snippet.authorChannelId.value")
-    @Mapping(target = "displayName", source = "snippet.authorDisplayName")
-    @Mapping(target = "profileImageUrl", source = "snippet.authorProfileImageUrl")
-    @Mapping(target = "channelUrl", source = "snippet.authorChannelUrl")
-    Author getAuthor(com.google.api.services.youtube.model.Comment comment);
+        var comment = fromYouTube(commentThread.getSnippet().getTopLevelComment());
+        if (comment == null) {
+            return null;
+        }
+
+        comment.setReplyCount(commentThread.getSnippet().getTotalReplyCount());
+
+        if (commentThread.getReplies() != null && commentThread.getReplies().getComments() != null) {
+            var replies = commentThread.getReplies().getComments()
+                    .stream()
+                    .map(this::fromYouTube)
+                    .toList();
+            comment.setReplies(replies);
+        }
+
+        return comment;
+    }
+
+    @Mapping(target = "videoId", source = "snippet.videoId")
+    @Mapping(target = "author", source = "snippet")
+    @Mapping(target = "textDisplay", source = "snippet.textDisplay")
+    @Mapping(target = "textOriginal", source = "snippet.textOriginal")
+    @Mapping(target = "publishedAt", source = "snippet.publishedAt")
+    @Mapping(target = "updatedAt", source = "snippet.updatedAt")
+    @Mapping(target = "parentId", source = "snippet.parentId")
+    @Mapping(target = "replyCount", ignore = true)
+    @Mapping(target = "replies", ignore = true)
+    public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
+
+    @Mapping(target = "id", source = "authorChannelId.value")
+    @Mapping(target = "displayName", source = "authorDisplayName")
+    @Mapping(target = "profileImageUrl", source = "authorProfileImageUrl")
+    @Mapping(target = "channelUrl", source = "authorChannelUrl")
+    abstract Author getAuthor(com.google.api.services.youtube.model.CommentSnippet commentSnippet);
 }

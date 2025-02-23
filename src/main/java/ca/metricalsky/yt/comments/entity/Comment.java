@@ -4,6 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -22,7 +26,16 @@ public class Comment {
     @Lob
     private String textOriginal;
 
+    private OffsetDateTime publishedAt;
+
+    private OffsetDateTime updatedAt;
+
+    private String parentId;
+
     private Long replyCount;
+
+    @OneToMany
+    private List<Comment> replies;
 
     public String getId() {
         return id;
@@ -64,11 +77,43 @@ public class Comment {
         this.textOriginal = textOriginal;
     }
 
+    public OffsetDateTime getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(OffsetDateTime publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     public Long getReplyCount() {
         return replyCount;
     }
 
     public void setReplyCount(Long replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public List<Comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
     }
 }

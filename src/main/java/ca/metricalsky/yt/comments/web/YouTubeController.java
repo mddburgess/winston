@@ -7,7 +7,6 @@ import ca.metricalsky.yt.comments.entity.Video;
 import ca.metricalsky.yt.comments.mapper.ChannelMapper;
 import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.mapper.VideoMapper;
-import com.google.api.services.youtube.model.CommentListResponse;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,10 +62,14 @@ public class YouTubeController {
     }
 
     @GetMapping("/replies/{commentId}")
-    public CommentListResponse getRepliesByCommentId(
+    public List<Comment> getRepliesByCommentId(
             @PathVariable String commentId,
             @RequestParam(required = false) String pageToken
     ) throws IOException {
-        return youTubeClient.getReplies(commentId, pageToken);
+        var commentListResponse = youTubeClient.getReplies(commentId, pageToken);
+        return commentListResponse.getItems()
+                .stream()
+                .map(commentMapper::fromYouTube)
+                .toList();
     }
 }
