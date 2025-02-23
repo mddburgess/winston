@@ -21,7 +21,7 @@ public class Comment {
 
     private String videoId;
 
-    @ManyToOne(cascade = {PERSIST, MERGE})
+    @ManyToOne
     private Author author;
 
     @Lob
@@ -38,7 +38,7 @@ public class Comment {
 
     private Long replyCount;
 
-    @OneToMany
+    @OneToMany(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "parentId", referencedColumnName = "id")
     private List<Comment> replies;
 

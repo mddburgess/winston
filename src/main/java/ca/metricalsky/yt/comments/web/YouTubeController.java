@@ -74,7 +74,7 @@ public class YouTubeController {
                 .stream()
                 .map(commentMapper::fromYouTube)
                 .toList();
-        commentService.saveCommentsAndReplies(comments);
+        commentService.saveAll(comments);
         return comments;
     }
 
@@ -84,9 +84,11 @@ public class YouTubeController {
             @RequestParam(required = false) String pageToken
     ) throws IOException {
         var commentListResponse = youTubeClient.getReplies(commentId, pageToken);
-        return commentListResponse.getItems()
+        var replies = commentListResponse.getItems()
                 .stream()
                 .map(commentMapper::fromYouTube)
                 .toList();
+        commentService.saveAll(replies);
+        return replies;
     }
 }
