@@ -2,6 +2,7 @@ package ca.metricalsky.yt.comments.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 import java.time.OffsetDateTime;
 
@@ -17,6 +18,7 @@ public class Video {
 
     private String title;
 
+    @Lob
     private String description;
 
     private String thumbnailUrl;
