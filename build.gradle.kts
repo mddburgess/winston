@@ -30,6 +30,7 @@ dependencies {
     implementation("com.google.apis:google-api-services-youtube:v3-rev20250128-2.0.0")
     implementation("com.google.http-client:google-http-client-gson:1.46.1")
     implementation("org.mapstruct:mapstruct:1.6.3")
+    implementation("com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.10.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
