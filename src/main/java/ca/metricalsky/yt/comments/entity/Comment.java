@@ -2,12 +2,16 @@ package ca.metricalsky.yt.comments.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.CascadeType.PERSIST;
 
 @Entity
 public class Comment {
@@ -17,7 +21,7 @@ public class Comment {
 
     private String videoId;
 
-    @ManyToOne
+    @ManyToOne(cascade = {PERSIST, MERGE})
     private Author author;
 
     @Lob
@@ -35,6 +39,7 @@ public class Comment {
     private Long replyCount;
 
     @OneToMany
+    @JoinColumn(name = "parentId", referencedColumnName = "id")
     private List<Comment> replies;
 
     public String getId() {

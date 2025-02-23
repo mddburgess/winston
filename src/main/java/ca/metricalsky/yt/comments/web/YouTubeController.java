@@ -9,6 +9,7 @@ import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.mapper.VideoMapper;
 import ca.metricalsky.yt.comments.repository.ChannelRepository;
 import ca.metricalsky.yt.comments.repository.VideoRepository;
+import ca.metricalsky.yt.comments.service.CommentService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +30,15 @@ public class YouTubeController {
     private final YouTubeClient youTubeClient;
     private final ChannelRepository channelRepository;
     private final VideoRepository videoRepository;
+    private final CommentService commentService;
 
     @Autowired
     public YouTubeController(YouTubeClient youTubeClient, ChannelRepository channelRepository,
-                             VideoRepository videoRepository) {
+                             VideoRepository videoRepository, CommentService commentService) {
         this.youTubeClient = youTubeClient;
         this.channelRepository = channelRepository;
         this.videoRepository = videoRepository;
+        this.commentService = commentService;
     }
 
     @GetMapping("/channels/{handle}")
@@ -67,10 +70,12 @@ public class YouTubeController {
             @RequestParam(required = false) String pageToken
     ) throws IOException {
         var commentThreadListResponse = youTubeClient.getComments(videoId, pageToken);
-        return commentThreadListResponse.getItems()
+        var comments = commentThreadListResponse.getItems()
                 .stream()
                 .map(commentMapper::fromYouTube)
                 .toList();
+        commentService.saveCommentsAndReplies(comments);
+        return comments;
     }
 
     @GetMapping("/replies/{commentId}")
