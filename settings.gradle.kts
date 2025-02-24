@@ -1,2 +1,2 @@
 rootProject.name = "yt-comments"
-include("backend", "package")
+include("backend", "frontend", "package")

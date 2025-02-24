@@ -41,7 +41,7 @@ public class YouTubeController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/channels/{handle}")
+    @GetMapping("/api/channels/{handle}")
     public Channel getChannelByHandle(@PathVariable String handle) throws IOException {
         var channelListResponse = youTubeClient.getChannel(handle);
         var channel = channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
@@ -49,7 +49,7 @@ public class YouTubeController {
         return channel;
     }
 
-    @GetMapping("/activities/{channelId}")
+    @GetMapping("/api/activities/{channelId}")
     public List<Video> getActivitiesByChannelId(
             @PathVariable String channelId,
             @RequestParam(required = false) String pageToken
@@ -64,7 +64,7 @@ public class YouTubeController {
         return videos;
     }
 
-    @GetMapping("/comments/{videoId}")
+    @GetMapping("/api/comments/{videoId}")
     public List<Comment> getCommentsByVideoId(
             @PathVariable String videoId,
             @RequestParam(required = false) String pageToken
@@ -78,7 +78,7 @@ public class YouTubeController {
         return comments;
     }
 
-    @GetMapping("/replies/{commentId}")
+    @GetMapping("/api/replies/{commentId}")
     public List<Comment> getRepliesByCommentId(
             @PathVariable String commentId,
             @RequestParam(required = false) String pageToken
