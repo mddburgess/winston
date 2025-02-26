@@ -32,7 +32,8 @@ tasks {
         inputs.files(
             fileTree("node_modules"),
             fileTree("src"),
-            "package.json"
+            "package.json",
+            "tsconfig.json"
         )
         outputs.dir("dist")
         npmCommand.addAll("run", "build")
