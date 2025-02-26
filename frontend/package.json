@@ -7,8 +7,16 @@
     "build": "parcel build --no-cache",
     "start": "parcel --no-cache"
   },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
   "devDependencies": {
-    "parcel": "^2.13.3"
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "parcel": "^2.13.3",
+    "process": "^0.11.10",
+    "typescript": "^5.7.3"
   },
   "browserslist": [
     ">0.5%",
