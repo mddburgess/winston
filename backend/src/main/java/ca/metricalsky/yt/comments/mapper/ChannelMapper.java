@@ -1,5 +1,6 @@
 package ca.metricalsky.yt.comments.mapper;
 
+import ca.metricalsky.yt.comments.dto.ChannelDto;
 import ca.metricalsky.yt.comments.entity.Channel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -36,4 +37,7 @@ public abstract class ChannelMapper {
                 ? keyword.substring(1, keyword.length() - 1)
                 : keyword;
     }
+
+    @Mapping(target = "videoCount", ignore = true)
+    public abstract ChannelDto toDto(Channel channel);
 }

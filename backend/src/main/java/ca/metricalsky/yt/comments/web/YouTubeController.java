@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/yt")
 public class YouTubeController {
 
     private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
@@ -41,7 +43,7 @@ public class YouTubeController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/api/channels/{handle}")
+    @GetMapping("/channels/{handle}")
     public Channel getChannelByHandle(@PathVariable String handle) throws IOException {
         var channelListResponse = youTubeClient.getChannel(handle);
         var channel = channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
@@ -49,7 +51,7 @@ public class YouTubeController {
         return channel;
     }
 
-    @GetMapping("/api/activities/{channelId}")
+    @GetMapping("/activities/{channelId}")
     public List<Video> getActivitiesByChannelId(
             @PathVariable String channelId,
             @RequestParam(required = false) String pageToken
@@ -64,7 +66,7 @@ public class YouTubeController {
         return videos;
     }
 
-    @GetMapping("/api/comments/{videoId}")
+    @GetMapping("/comments/{videoId}")
     public List<Comment> getCommentsByVideoId(
             @PathVariable String videoId,
             @RequestParam(required = false) String pageToken
@@ -78,7 +80,7 @@ public class YouTubeController {
         return comments;
     }
 
-    @GetMapping("/api/replies/{commentId}")
+    @GetMapping("/replies/{commentId}")
     public List<Comment> getRepliesByCommentId(
             @PathVariable String commentId,
             @RequestParam(required = false) String pageToken
