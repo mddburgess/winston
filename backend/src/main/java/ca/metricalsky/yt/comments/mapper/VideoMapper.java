@@ -1,5 +1,6 @@
 package ca.metricalsky.yt.comments.mapper;
 
+import ca.metricalsky.yt.comments.dto.VideoDto;
 import ca.metricalsky.yt.comments.entity.Video;
 import com.google.api.services.youtube.model.Activity;
 import org.mapstruct.Mapper;
@@ -16,4 +17,9 @@ public interface VideoMapper {
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "lastFetchedAt", ignore = true)
     Video fromYouTube(Activity activity);
+
+    @Mapping(target = "commentCount", ignore = true)
+    @Mapping(target = "replyCount", ignore = true)
+    @Mapping(target = "totalReplyCount", ignore = true)
+    VideoDto toDto(Video video);
 }
