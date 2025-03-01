@@ -11,7 +11,12 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
 
-    @Query("SELECT c.id, COUNT(v.id) FROM Channel c LEFT JOIN Video v ON c.id = v.channelId GROUP BY c.id")
+    @Query("""
+            SELECT c.id, COUNT(v.id)
+            FROM Channel c
+                JOIN Video v ON c.id = v.channelId
+            GROUP BY c.id
+            """)
     List<Tuple> countAllByChannelId();
 
     List<Video> findAllByChannelId(String channelId);

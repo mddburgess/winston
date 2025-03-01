@@ -6,6 +6,7 @@ import ca.metricalsky.yt.comments.repository.ChannelRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ChannelService {
         this.videoService = videoService;
     }
 
+    @Transactional(readOnly = true)
     public List<ChannelDto> findAll() {
         var videoCounts = videoService.countAllByChannelId();
         return channelRepository.findAll()

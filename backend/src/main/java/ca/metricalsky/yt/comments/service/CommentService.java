@@ -4,12 +4,18 @@ import ca.metricalsky.yt.comments.entity.Author;
 import ca.metricalsky.yt.comments.entity.Comment;
 import ca.metricalsky.yt.comments.repository.AuthorRepository;
 import ca.metricalsky.yt.comments.repository.CommentRepository;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.Tuple;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
+import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
 
 @Service
 public class CommentService {
@@ -42,5 +48,38 @@ public class CommentService {
         return comment.getReplies() != null
                 ? ListUtils.union(List.of(comment), comment.getReplies())
                 : List.of(comment);
+    }
+
+    public Map<String, Count> getCommentCountsByChannelId(String channelId) {
+        var counts = commentRepository.countCommentsForChannelIdGroupByVideoId(channelId)
+                .stream()
+                .collect(Collectors.toMap(tuple -> tuple.get(0, String.class), Count::forComment));
+        return defaultedMap(counts, Count.EMPTY);
+    }
+
+    public Map<String, Count> getReplyCountsByChannelId(String channelId) {
+        var counts = commentRepository.countRepliesForChannelIdGroupByVideoId(channelId)
+                .stream()
+                .collect(Collectors.toMap(tuple -> tuple.get(0, String.class), Count::forReply));
+        return defaultedMap(counts, Count.EMPTY);
+    }
+
+    public record Count(Long comments, Long replies) {
+
+        private static final Count EMPTY = new Count(0L, 0L);
+
+        private static Count forComment(Tuple comment) {
+            return new Count(
+                    firstNonNull(comment.get(1, Long.class), 0L),
+                    firstNonNull(comment.get(2, Long.class), 0L)
+            );
+        }
+
+        private static Count forReply(Tuple reply) {
+            return new Count(
+                    firstNonNull(reply.get(1, Long.class), 0L),
+                    0L
+            );
+        }
     }
 }
