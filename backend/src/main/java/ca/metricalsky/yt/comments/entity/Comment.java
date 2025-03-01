@@ -6,6 +6,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
@@ -16,6 +18,8 @@ import static jakarta.persistence.CascadeType.PERSIST;
 
 @Entity
 @Table(name = "comments")
+@Getter
+@Setter
 public class Comment {
 
     @Id
@@ -45,91 +49,4 @@ public class Comment {
     @JoinColumn(name = "parentId", referencedColumnName = "id")
     private List<Comment> replies;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public String getTextDisplay() {
-        return textDisplay;
-    }
-
-    public void setTextDisplay(String textDisplay) {
-        this.textDisplay = textDisplay;
-    }
-
-    public String getTextOriginal() {
-        return textOriginal;
-    }
-
-    public void setTextOriginal(String textOriginal) {
-        this.textOriginal = textOriginal;
-    }
-
-    public Long getReplyCount() {
-        return replyCount;
-    }
-
-    public void setReplyCount(Long replyCount) {
-        this.replyCount = replyCount;
-    }
-
-    public OffsetDateTime getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setPublishedAt(OffsetDateTime publishedAt) {
-        this.publishedAt = publishedAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(OffsetDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public OffsetDateTime getLastFetchedAt() {
-        return lastFetchedAt;
-    }
-
-    public void setLastFetchedAt(OffsetDateTime lastRefreshedAt) {
-        this.lastFetchedAt = lastRefreshedAt;
-    }
-
-    public List<Comment> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Comment> replies) {
-        this.replies = replies;
-    }
 }
