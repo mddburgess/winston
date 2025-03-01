@@ -9,4 +9,8 @@ public class OffsetDateTimeMapper {
     public OffsetDateTime fromYouTube(DateTime dateTime) {
         return dateTime == null ? null : OffsetDateTime.parse(dateTime.toString());
     }
+
+    public String toDto(OffsetDateTime offsetDateTime) {
+        return offsetDateTime == null ? null : offsetDateTime.toString();
+    }
 }

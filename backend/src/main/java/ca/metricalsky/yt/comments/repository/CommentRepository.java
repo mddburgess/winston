@@ -2,6 +2,7 @@ package ca.metricalsky.yt.comments.repository;
 
 import ca.metricalsky.yt.comments.entity.Comment;
 import jakarta.persistence.Tuple;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
+
+    @EntityGraph(attributePaths = {"author"})
+    List<Comment> findAllByVideoId(String videoId);
 
     @Query("""
             SELECT v.id, COUNT(c.id), SUM(c.totalReplyCount)

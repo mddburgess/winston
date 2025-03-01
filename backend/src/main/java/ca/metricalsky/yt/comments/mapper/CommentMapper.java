@@ -1,12 +1,15 @@
 package ca.metricalsky.yt.comments.mapper;
 
-import ca.metricalsky.yt.comments.entity.Author;
+import ca.metricalsky.yt.comments.dto.CommentDto;
 import ca.metricalsky.yt.comments.entity.Comment;
 import com.google.api.services.youtube.model.CommentThread;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = OffsetDateTimeMapper.class)
+@Mapper(uses = {
+        AuthorMapper.class,
+        OffsetDateTimeMapper.class
+})
 public abstract class CommentMapper {
 
     public Comment fromYouTube(CommentThread commentThread) {
@@ -44,10 +47,6 @@ public abstract class CommentMapper {
     @Mapping(target = "replies", ignore = true)
     public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
 
-    @Mapping(target = "id", source = "authorChannelId.value")
-    @Mapping(target = "displayName", source = "authorDisplayName")
-    @Mapping(target = "channelUrl", source = "authorChannelUrl")
-    @Mapping(target = "profileImageUrl", source = "authorProfileImageUrl")
-    @Mapping(target = "lastFetchedAt", ignore = true)
-    abstract Author getAuthor(com.google.api.services.youtube.model.CommentSnippet commentSnippet);
+    @Mapping(target = "text", source = "textDisplay")
+    public abstract CommentDto toDto(Comment comment);
 }

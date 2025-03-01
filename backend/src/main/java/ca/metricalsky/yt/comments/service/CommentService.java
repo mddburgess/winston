@@ -1,11 +1,14 @@
 package ca.metricalsky.yt.comments.service;
 
+import ca.metricalsky.yt.comments.dto.CommentDto;
 import ca.metricalsky.yt.comments.entity.Author;
 import ca.metricalsky.yt.comments.entity.Comment;
+import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.repository.AuthorRepository;
 import ca.metricalsky.yt.comments.repository.CommentRepository;
 import jakarta.persistence.Tuple;
 import org.apache.commons.collections4.ListUtils;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,8 @@ import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
 
 @Service
 public class CommentService {
+
+    private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
     private final CommentRepository commentRepository;
     private final AuthorRepository authorRepository;
@@ -62,6 +67,13 @@ public class CommentService {
                 .stream()
                 .collect(Collectors.toMap(tuple -> tuple.get(0, String.class), Count::forReply));
         return defaultedMap(counts, Count.EMPTY);
+    }
+
+    public List<CommentDto> findAllByVideoId(String videoId) {
+        return commentRepository.findAllByVideoId(videoId)
+                .stream()
+                .map(commentMapper::toDto)
+                .toList();
     }
 
     public record Count(Long comments, Long replies) {
