@@ -1,6 +1,7 @@
 import {Col, Container, Image, ListGroup, Row} from "react-bootstrap";
 import {ArrowClockwise, Youtube} from "react-bootstrap-icons";
 import {useListChannelsQuery} from "../store/slices/api";
+import {Link} from "react-router";
 
 export const Channels = () => {
     const { data = [] } = useListChannelsQuery()
@@ -12,7 +13,7 @@ export const Channels = () => {
                     <Image height={64} width={64} src={channel.thumbnailUrl}/>
                 </Col>
                 <Col>
-                    <h5>{channel.title}</h5>
+                    <h5><Link to={`/channels/${channel.id}`}>{channel.title}</Link></h5>
                     <small>{channel.customUrl}</small>
                 </Col>
                 <Col>
