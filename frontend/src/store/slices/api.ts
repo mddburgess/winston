@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {ChannelDto} from "../../model/ChannelDto";
+import {VideoDto} from "../../model/VideoDto";
 
 export const apiSlice = createApi({
     reducerPath: "api",
@@ -7,8 +8,14 @@ export const apiSlice = createApi({
     endpoints: builder => ({
         listChannels: builder.query<ChannelDto[], void>({
             query: () => "/channels"
+        }),
+        listVideosByChannelId: builder.query<VideoDto[], string>({
+            query: (channelId) => `/channels/${channelId}/videos`
         })
     })
 });
 
-export const { useListChannelsQuery } = apiSlice
+export const {
+    useListChannelsQuery,
+    useListVideosByChannelIdQuery,
+} = apiSlice

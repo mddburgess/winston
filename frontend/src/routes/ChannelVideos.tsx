@@ -1,15 +1,40 @@
 import {useMemo} from "react";
-import {Col, Container, Image, Row} from "react-bootstrap";
+import {Col, Container, Image, ListGroup, Row} from "react-bootstrap";
 import {useParams} from "react-router";
-import {useListChannelsQuery} from "../store/slices/api";
+import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../store/slices/api";
+import {ChatLeftQuoteFill, Download, ReplyAllFill, Upload} from "react-bootstrap-icons";
 
 export const ChannelVideos = () => {
-    const { channelId } = useParams();
+    const {channelId} = useParams();
 
-    const { data } = useListChannelsQuery()
+    const {data: channelData} = useListChannelsQuery()
     const channel = useMemo(() => {
-        return data?.find(it => it.id === channelId);
-    }, [data]);
+        return channelData?.find(it => it.id === channelId);
+    }, [channelData]);
+
+    const {data: videoData = []} = useListVideosByChannelIdQuery(channelId!)
+    const renderedVideos = videoData.map(video => (
+        <ListGroup.Item key={video.id}>
+            <Row>
+                <Col>
+                    <Image height={72} width={96} src={video.thumbnailUrl}/>
+                </Col>
+                <Col>
+                    {video.title}<br/>
+                </Col>
+                <Col>
+                    {video.commentCount} <ChatLeftQuoteFill/>
+                </Col>
+                <Col>
+                    {video.replyCount} / {video.totalReplyCount} <ReplyAllFill/>
+                </Col>
+                <Col>
+                    <Upload/> {video.publishedAt}<br/>
+                    <Download/> {video.lastFetchedAt}
+                </Col>
+            </Row>
+        </ListGroup.Item>
+    ))
 
     return (
         <Container>
@@ -23,6 +48,9 @@ export const ChannelVideos = () => {
                     <h3>{channel?.customUrl}</h3>
                 </Col>
             </Row>
+            <ListGroup>
+                {renderedVideos}
+            </ListGroup>
         </Container>
     );
 }
