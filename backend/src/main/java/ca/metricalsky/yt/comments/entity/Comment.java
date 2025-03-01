@@ -36,7 +36,7 @@ public class Comment {
 
     private String textOriginal;
 
-    private Long replyCount;
+    private Long totalReplyCount;
 
     private OffsetDateTime publishedAt;
 

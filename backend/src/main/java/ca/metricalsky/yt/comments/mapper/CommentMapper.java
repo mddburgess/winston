@@ -19,7 +19,7 @@ public abstract class CommentMapper {
             return null;
         }
 
-        comment.setReplyCount(commentThread.getSnippet().getTotalReplyCount());
+        comment.setTotalReplyCount(commentThread.getSnippet().getTotalReplyCount());
 
         if (commentThread.getReplies() != null && commentThread.getReplies().getComments() != null) {
             var replies = commentThread.getReplies().getComments()
@@ -40,7 +40,7 @@ public abstract class CommentMapper {
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "updatedAt", source = "snippet.updatedAt")
     @Mapping(target = "lastFetchedAt", ignore = true)
-    @Mapping(target = "replyCount", ignore = true)
+    @Mapping(target = "totalReplyCount", ignore = true)
     @Mapping(target = "replies", ignore = true)
     public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
 

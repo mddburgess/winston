@@ -31,7 +31,7 @@ public class CommentMapperTest {
         var ytTopLevelComment = ytCommentThread.getSnippet().getTopLevelComment();
         assertCommentProperties(comment, ytTopLevelComment);
         assertThat(comment)
-                .hasFieldOrPropertyWithValue("replyCount", ytCommentThread.getSnippet().getTotalReplyCount());
+                .hasFieldOrPropertyWithValue("totalReplyCount", ytCommentThread.getSnippet().getTotalReplyCount());
         assertThat(comment.getReplies()).hasSize(1);
 
         var replyComment = comment.getReplies().getFirst();
