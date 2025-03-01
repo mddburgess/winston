@@ -19,7 +19,7 @@ public class ChannelDto {
 
     private TreeSet<String> keywords;
 
-    private Integer videoCount;
+    private Long videoCount;
 
     private OffsetDateTime publishedAt;
 
@@ -81,11 +81,11 @@ public class ChannelDto {
         this.keywords = keywords;
     }
 
-    public Integer getVideoCount() {
+    public Long getVideoCount() {
         return videoCount;
     }
 
-    public void setVideoCount(Integer videoCount) {
+    public void setVideoCount(Long videoCount) {
         this.videoCount = videoCount;
     }
 
