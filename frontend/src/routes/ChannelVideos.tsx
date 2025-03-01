@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import {Col, Container, Image, ListGroup, Row} from "react-bootstrap";
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../store/slices/api";
 import {ChatLeftQuoteFill, Download, ReplyAllFill, Upload} from "react-bootstrap-icons";
 
@@ -20,7 +20,7 @@ export const ChannelVideos = () => {
                     <Image height={72} width={96} src={video.thumbnailUrl}/>
                 </Col>
                 <Col>
-                    {video.title}<br/>
+                    <Link to={`/videos/${video.id}`}>{video.title}</Link>
                 </Col>
                 <Col>
                     {video.commentCount} <ChatLeftQuoteFill/>

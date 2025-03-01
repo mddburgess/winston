@@ -11,11 +11,15 @@ export const apiSlice = createApi({
         }),
         listVideosByChannelId: builder.query<VideoDto[], string>({
             query: (channelId) => `/channels/${channelId}/videos`
-        })
+        }),
+        findVideoById: builder.query<VideoDto, string>({
+            query: (videoId) => `/videos/${videoId}`
+        }),
     })
 });
 
 export const {
     useListChannelsQuery,
     useListVideosByChannelIdQuery,
+    useFindVideoByIdQuery,
 } = apiSlice
