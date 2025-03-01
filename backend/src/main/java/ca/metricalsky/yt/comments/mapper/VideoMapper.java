@@ -18,6 +18,7 @@ public interface VideoMapper {
     @Mapping(target = "lastFetchedAt", ignore = true)
     Video fromYouTube(Activity activity);
 
+    @Mapping(target = "channel", ignore = true)
     @Mapping(target = "commentCount", ignore = true)
     @Mapping(target = "replyCount", ignore = true)
     @Mapping(target = "totalReplyCount", ignore = true)

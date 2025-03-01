@@ -5,8 +5,10 @@ import ca.metricalsky.yt.comments.mapper.VideoMapper;
 import ca.metricalsky.yt.comments.repository.VideoRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -48,5 +50,11 @@ public class VideoService {
                 .peek(video -> video.setReplyCount(replyCounts.get(video.getId()).comments()))
                 .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).replies()))
                 .toList();
+    }
+
+    public VideoDto getById(String videoId) {
+        return videoRepository.findById(videoId)
+                .map(videoMapper::toDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

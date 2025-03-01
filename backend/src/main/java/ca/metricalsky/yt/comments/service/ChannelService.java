@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChannelService {
@@ -34,5 +35,10 @@ public class ChannelService {
                 .peek(channelDto -> channelDto.setVideoCount(videoCounts.get(channelDto.getId())))
                 .sorted(Comparator.comparing(ChannelDto::getTitle))
                 .toList();
+    }
+
+    public Optional<ChannelDto> findById(String channelId) {
+        return channelRepository.findById(channelId)
+                .map(channelMapper::toDto);
     }
 }
