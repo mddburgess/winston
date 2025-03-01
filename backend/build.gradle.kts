@@ -45,6 +45,14 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks {
+    compileJava {
+        options.compilerArgs.addAll(listOf(
+            "-Amapstruct.unmappedTargetPolicy=ERROR"
+        ))
+    }
+
+    withType<Test> {
+        useJUnitPlatform()
+    }
 }
