@@ -6,5 +6,6 @@ export type CommentDto = {
     text?: string,
     publishedAt?: string,
     updateAt?: string,
-    lastFetchedAt?: string
+    lastFetchedAt?: string,
+    replies?: CommentDto[]
 }

@@ -1,5 +1,6 @@
 import {useListCommentsByVideoIdQuery} from "../../store/slices/api";
 import {Col, ListGroup, Row} from "react-bootstrap";
+import {ReplyFill} from "react-bootstrap-icons";
 
 type CommentListProps = {
     videoId?: string;
@@ -24,6 +25,24 @@ export const CommentList = ({ videoId } : CommentListProps) => {
                 <Col>
                     {comment.publishedAt}
                 </Col>
+            </Row>
+            <Row>
+                <ListGroup>
+                    {comment.replies?.map(reply => (
+                        <ListGroup.Item key={reply.id}>
+                            <Row>
+                                <Col>
+                                    <ReplyFill/>
+                                    {reply.author?.displayName}
+                                </Col>
+                                <Col>
+                                    {reply.text}
+                                </Col>
+                                <Col>{reply.publishedAt}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
             </Row>
         </ListGroup.Item>
     ))
