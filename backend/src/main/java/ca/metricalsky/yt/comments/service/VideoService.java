@@ -1,6 +1,7 @@
 package ca.metricalsky.yt.comments.service;
 
 import ca.metricalsky.yt.comments.dto.VideoDto;
+import ca.metricalsky.yt.comments.entity.view.VideoCount;
 import ca.metricalsky.yt.comments.mapper.VideoMapper;
 import ca.metricalsky.yt.comments.repository.VideoRepository;
 import org.mapstruct.factory.Mappers;
@@ -32,10 +33,7 @@ public class VideoService {
     public Map<String, Long> countAllByChannelId() {
         var counts = videoRepository.countAllByChannelId()
                 .stream()
-                .collect(Collectors.toMap(
-                        tuple -> tuple.get(0, String.class),
-                        tuple -> tuple.get(1, Long.class)
-                ));
+                .collect(Collectors.toMap(VideoCount::getChannelId, VideoCount::getVideos));
         return defaultedMap(counts, 0L);
     }
 
@@ -46,9 +44,9 @@ public class VideoService {
         return videoRepository.findAllByChannelId(channelId)
                 .stream()
                 .map(videoMapper::toDto)
-                .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).comments()))
-                .peek(video -> video.setReplyCount(replyCounts.get(video.getId()).comments()))
-                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).replies()))
+                .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
+                .peek(video -> video.setReplyCount(replyCounts.get(video.getId()).getComments()))
+                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getReplies()))
                 .toList();
     }
 

@@ -1,7 +1,7 @@
 package ca.metricalsky.yt.comments.repository;
 
 import ca.metricalsky.yt.comments.entity.Video;
-import jakarta.persistence.Tuple;
+import ca.metricalsky.yt.comments.entity.view.VideoCount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
 
+    List<Video> findAllByChannelId(String channelId);
+
     @Query("""
-            SELECT c.id, COUNT(v.id)
+            SELECT c.id AS channelId, COUNT(v.id) AS videos
             FROM Channel c
                 JOIN Video v ON c.id = v.channelId
             GROUP BY c.id
             """)
-    List<Tuple> countAllByChannelId();
-
-    List<Video> findAllByChannelId(String channelId);
+    List<VideoCount> countAllByChannelId();
 }

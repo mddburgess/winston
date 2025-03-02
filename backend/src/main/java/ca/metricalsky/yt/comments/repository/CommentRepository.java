@@ -1,7 +1,7 @@
 package ca.metricalsky.yt.comments.repository;
 
 import ca.metricalsky.yt.comments.entity.Comment;
-import jakarta.persistence.Tuple;
+import ca.metricalsky.yt.comments.entity.view.CommentCount;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,19 +16,19 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findAllByVideoId(String videoId);
 
     @Query("""
-            SELECT v.id, COUNT(c.id), SUM(c.totalReplyCount)
+            SELECT v.id AS videoId, COUNT(c.id) AS comments, SUM(c.totalReplyCount) AS replies
             FROM Video v
                 JOIN Comment c ON v.id = c.videoId
             GROUP BY v.id
             """)
-    List<Tuple> countCommentsForChannelIdGroupByVideoId(String channelId);
+    List<CommentCount> countCommentsForChannelIdGroupByVideoId(String channelId);
 
     @Query("""
-            SELECT v.id, COUNT(r.id)
+            SELECT v.id AS videoId, COUNT(r.id) AS comments
             FROM Video v
                 JOIN Comment c ON v.id = c.videoId
                 JOIN Comment r ON c.id = r.parentId
             GROUP BY v.id
             """)
-    List<Tuple> countRepliesForChannelIdGroupByVideoId(String channelId);
+    List<CommentCount> countRepliesForChannelIdGroupByVideoId(String channelId);
 }

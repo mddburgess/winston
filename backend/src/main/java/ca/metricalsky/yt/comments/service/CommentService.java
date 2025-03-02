@@ -3,10 +3,10 @@ package ca.metricalsky.yt.comments.service;
 import ca.metricalsky.yt.comments.dto.CommentDto;
 import ca.metricalsky.yt.comments.entity.Author;
 import ca.metricalsky.yt.comments.entity.Comment;
+import ca.metricalsky.yt.comments.entity.view.CommentCount;
 import ca.metricalsky.yt.comments.mapper.CommentMapper;
 import ca.metricalsky.yt.comments.repository.AuthorRepository;
 import ca.metricalsky.yt.comments.repository.CommentRepository;
-import jakarta.persistence.Tuple;
 import org.apache.commons.collections4.ListUtils;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
 import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
 
 @Service
 public class CommentService {
+
+    private static final CommentCount EMPTY_COUNT = new CommentCount.Empty();
 
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
@@ -55,18 +56,18 @@ public class CommentService {
                 : List.of(comment);
     }
 
-    public Map<String, Count> getCommentCountsByChannelId(String channelId) {
+    public Map<String, CommentCount> getCommentCountsByChannelId(String channelId) {
         var counts = commentRepository.countCommentsForChannelIdGroupByVideoId(channelId)
                 .stream()
-                .collect(Collectors.toMap(tuple -> tuple.get(0, String.class), Count::forComment));
-        return defaultedMap(counts, Count.EMPTY);
+                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
+        return defaultedMap(counts, EMPTY_COUNT);
     }
 
-    public Map<String, Count> getReplyCountsByChannelId(String channelId) {
+    public Map<String, CommentCount> getReplyCountsByChannelId(String channelId) {
         var counts = commentRepository.countRepliesForChannelIdGroupByVideoId(channelId)
                 .stream()
-                .collect(Collectors.toMap(tuple -> tuple.get(0, String.class), Count::forReply));
-        return defaultedMap(counts, Count.EMPTY);
+                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
+        return defaultedMap(counts, EMPTY_COUNT);
     }
 
     public List<CommentDto> findAllByVideoId(String videoId) {
@@ -74,24 +75,5 @@ public class CommentService {
                 .stream()
                 .map(commentMapper::toDto)
                 .toList();
-    }
-
-    public record Count(Long comments, Long replies) {
-
-        private static final Count EMPTY = new Count(0L, 0L);
-
-        private static Count forComment(Tuple comment) {
-            return new Count(
-                    firstNonNull(comment.get(1, Long.class), 0L),
-                    firstNonNull(comment.get(2, Long.class), 0L)
-            );
-        }
-
-        private static Count forReply(Tuple reply) {
-            return new Count(
-                    firstNonNull(reply.get(1, Long.class), 0L),
-                    0L
-            );
-        }
     }
 }
