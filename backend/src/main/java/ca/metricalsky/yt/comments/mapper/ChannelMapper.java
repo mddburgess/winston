@@ -38,6 +38,11 @@ public abstract class ChannelMapper {
                 : keyword;
     }
 
+    @Mapping(target = "thumbnailUrl", source = ".")
     @Mapping(target = "videoCount", ignore = true)
     public abstract ChannelDto toDto(Channel channel);
+
+    String getDtoThumbnailUrl(Channel channel) {
+        return "/api/channels/" + channel.getId() + "/thumbnail";
+    }
 }

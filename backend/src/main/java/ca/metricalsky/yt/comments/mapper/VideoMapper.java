@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(uses = OffsetDateTimeMapper.class)
-public interface VideoMapper {
+public abstract class VideoMapper {
 
     @Mapping(target = "id", source = "contentDetails.upload.videoId")
     @Mapping(target = "channelId", source = "snippet.channelId")
@@ -16,11 +16,16 @@ public interface VideoMapper {
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "lastFetchedAt", ignore = true)
-    Video fromYouTube(Activity activity);
+    public abstract Video fromYouTube(Activity activity);
 
+    @Mapping(target = "thumbnailUrl", source = ".")
     @Mapping(target = "channel", ignore = true)
     @Mapping(target = "commentCount", ignore = true)
     @Mapping(target = "replyCount", ignore = true)
     @Mapping(target = "totalReplyCount", ignore = true)
-    VideoDto toDto(Video video);
+    public abstract VideoDto toDto(Video video);
+
+    String toDtoThumbnailUrl(Video video) {
+        return "/api/videos/" + video.getId() + "/thumbnail";
+    }
 }
