@@ -32,5 +32,6 @@ tasks {
 
     bootRun {
         mainClass.set("ca.metricalsky.yt.comments.Application")
+        environment["SPRING_PROFILES_ACTIVE"] = "dev"
     }
 }
