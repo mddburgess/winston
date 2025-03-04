@@ -1,7 +1,7 @@
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
 import {useMemo} from "react";
-import {Container} from "react-bootstrap";
+import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
 import {VideoList} from "./VideoList";
 
@@ -17,7 +17,12 @@ export const ChannelsIdRoute = () => {
 
     return (
         <Container>
-            <h1>Videos</h1>
+            <Breadcrumb>
+                <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
+                    Channels
+                </BreadcrumbItem>
+                <BreadcrumbItem active={true}>{channel?.title}</BreadcrumbItem>
+            </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
             <VideoList videos={videos}/>
         </Container>

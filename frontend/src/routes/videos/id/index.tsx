@@ -1,6 +1,6 @@
-import {useParams} from "react-router";
+import {Link, useParams} from "react-router";
 import {useFindVideoByIdQuery, useListCommentsByVideoIdQuery} from "../../../store/slices/api";
-import {Col, Container, Image, Row} from "react-bootstrap";
+import {Breadcrumb, BreadcrumbItem, Col, Container, Image, Row} from "react-bootstrap";
 import {CommentList} from "../../../components/comments/CommentList";
 
 export const VideosIdRoute = () => {
@@ -10,6 +10,17 @@ export const VideosIdRoute = () => {
 
     return (
         <Container>
+            <Breadcrumb>
+                <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
+                    Channels
+                </BreadcrumbItem>
+                <BreadcrumbItem linkAs={Link} linkProps={{to: `/channels/${video?.channel?.id}`}}>
+                    {video?.channel?.title}
+                </BreadcrumbItem>
+                <BreadcrumbItem active>
+                    {video?.title}
+                </BreadcrumbItem>
+            </Breadcrumb>
             <Row>
                 <Col>
                     <Image width={480} height={360} src={video?.thumbnailUrl}/>
