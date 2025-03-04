@@ -1,7 +1,7 @@
-import {CommentDto} from "../../../model/CommentDto";
 import {Col, ListGroupItem, Row} from "react-bootstrap";
 import {ReplyFill} from "react-bootstrap-icons";
 import {Link} from "react-router";
+import {CommentDto} from "../../model/CommentDto";
 
 type ReplyListItemProps = {
     reply: CommentDto

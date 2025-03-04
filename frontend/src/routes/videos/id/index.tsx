@@ -1,14 +1,12 @@
 import {useParams} from "react-router";
+import {useFindVideoByIdQuery, useListCommentsByVideoIdQuery} from "../../../store/slices/api";
 import {Col, Container, Image, Row} from "react-bootstrap";
-import {useFindVideoByIdQuery} from "../store/slices/api";
-import {CommentList} from "../components/comments/CommentList";
+import {CommentList} from "../../../components/comments/CommentList";
 
-export const Video = () => {
+export const VideosIdRoute = () => {
     const {videoId} = useParams();
-
     const {data: video} = useFindVideoByIdQuery(videoId!)
-
-
+    const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
 
     return (
         <Container>
@@ -17,12 +15,12 @@ export const Video = () => {
                     <Image width={480} height={360} src={video?.thumbnailUrl}/>
                 </Col>
                 <Col>
-                    <h2>{video?.title}</h2>
-                    <h3>{video?.channel?.title}</h3>
+                    <h1>{video?.title}</h1>
+                    <h2>{video?.channel?.title}</h2>
                     {video?.description}
                 </Col>
             </Row>
-            <CommentList videoId={videoId} />
+            <CommentList comments={comments}/>
         </Container>
-    );
-};
+    )
+}

@@ -1,7 +1,7 @@
 import {useParams} from "react-router";
 import {Container, Row} from "react-bootstrap";
 import {useListCommentsByAuthorIdQuery} from "../../../store/slices/api";
-import {CommentList} from "./CommentList";
+import {CommentList} from "../../../components/comments/CommentList";
 
 export const AuthorsIdRoute = () => {
     const {authorId} = useParams()
