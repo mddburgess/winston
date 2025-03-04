@@ -1,6 +1,7 @@
 export type CommentDto = {
     id: string,
     author?: {
+        id?: string,
         displayName?: string
     },
     text?: string,

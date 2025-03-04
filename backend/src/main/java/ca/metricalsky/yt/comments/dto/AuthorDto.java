@@ -7,5 +7,7 @@ import lombok.Setter;
 @Setter
 public class AuthorDto {
 
+    private String id;
+
     private String displayName;
 }

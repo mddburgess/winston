@@ -76,4 +76,11 @@ public class CommentService {
                 .map(commentMapper::toDto)
                 .toList();
     }
+
+    public List<CommentDto> findAllWithContextByAuthorId(String authorId) {
+        return commentRepository.findAllWithContextByAuthorId(authorId)
+                .stream()
+                .map(commentMapper::toDto)
+                .toList();
+    }
 }

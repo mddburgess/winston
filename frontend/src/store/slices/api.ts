@@ -19,6 +19,9 @@ export const apiSlice = createApi({
         listCommentsByVideoId: builder.query<CommentDto[], string>({
             query: (videoId) => `/videos/${videoId}/comments`
         }),
+        listCommentsByAuthorId: builder.query<CommentDto[], string>({
+            query: (authorId) => `/authors/${authorId}/comments`
+        })
     })
 });
 
@@ -27,4 +30,5 @@ export const {
     useListVideosByChannelIdQuery,
     useFindVideoByIdQuery,
     useListCommentsByVideoIdQuery,
+    useListCommentsByAuthorIdQuery,
 } = apiSlice

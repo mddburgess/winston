@@ -1,6 +1,7 @@
 import {useListCommentsByVideoIdQuery} from "../../store/slices/api";
 import {Col, ListGroup, Row} from "react-bootstrap";
 import {ReplyFill} from "react-bootstrap-icons";
+import {Link} from "react-router";
 
 type CommentListProps = {
     videoId?: string;
@@ -17,7 +18,9 @@ export const CommentList = ({ videoId } : CommentListProps) => {
         <ListGroup.Item key={comment.id}>
             <Row>
                 <Col>
-                    {comment.author?.displayName}
+                    <Link to={`/authors/${comment.author?.id}`}>
+                        {comment.author?.displayName}
+                    </Link>
                 </Col>
                 <Col>
                     {comment.text}
@@ -33,7 +36,9 @@ export const CommentList = ({ videoId } : CommentListProps) => {
                             <Row>
                                 <Col>
                                     <ReplyFill/>
-                                    {reply.author?.displayName}
+                                    <Link to={`/authors/${reply.author?.id}`}>
+                                        {reply.author?.displayName}
+                                    </Link>
                                 </Col>
                                 <Col>
                                     {reply.text}
