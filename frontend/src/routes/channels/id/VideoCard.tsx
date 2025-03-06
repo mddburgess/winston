@@ -1,6 +1,8 @@
 import {Card, Col} from "react-bootstrap";
 import {VideoDto} from "../../../model/VideoDto";
 import {Link} from "react-router";
+import {DateTime} from "luxon";
+import {ArrowUpLeftCircleFill} from "react-bootstrap-icons";
 
 type VideoCardProps = {
     video: VideoDto
@@ -17,8 +19,9 @@ export const VideoCard = ({video}: VideoCardProps) => (
                     </Link>
                 </Card.Subtitle>
             </Card.Body>
-            <Card.Footer>
-                {video.publishedAt}
+            <Card.Footer className={"d-flex align-items-center"}>
+                <ArrowUpLeftCircleFill className={"me-2"}/>
+                {DateTime.fromISO(video.publishedAt!).toRelative()}
             </Card.Footer>
         </Card>
     </Col>
