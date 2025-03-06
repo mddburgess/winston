@@ -3,7 +3,7 @@ import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../../../stor
 import {useMemo} from "react";
 import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
-import {VideoList} from "./VideoList";
+import {VideoCards} from "./VideoCards";
 
 export const ChannelsIdRoute = () => {
     const { channelId } = useParams()
@@ -24,7 +24,7 @@ export const ChannelsIdRoute = () => {
                 <BreadcrumbItem active={true}>{channel?.title}</BreadcrumbItem>
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
-            <VideoList videos={videos}/>
+            <VideoCards videos={videos}/>
         </Container>
     )
 }

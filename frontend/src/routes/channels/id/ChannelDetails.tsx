@@ -7,8 +7,8 @@ type ChannelDetailsProps = {
 
 export const ChannelDetails = ({channel}: ChannelDetailsProps) => (
     <Row>
-        <Col>
-            <Image width={200} height={200} src={channel.thumbnailUrl}/>
+        <Col xs={"auto"}>
+            <Image width={120} height={120} src={channel.thumbnailUrl}/>
         </Col>
         <Col>
             <h2>{channel.title}</h2>
