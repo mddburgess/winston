@@ -4,7 +4,7 @@ import ca.metricalsky.yt.comments.dto.CommentDto;
 import ca.metricalsky.yt.comments.entity.Author;
 import ca.metricalsky.yt.comments.entity.Comment;
 import ca.metricalsky.yt.comments.entity.view.CommentCount;
-import ca.metricalsky.yt.comments.mapper.CommentMapper;
+import ca.metricalsky.yt.comments.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.yt.comments.repository.AuthorRepository;
 import ca.metricalsky.yt.comments.repository.CommentRepository;
 import org.apache.commons.collections4.ListUtils;
@@ -24,7 +24,7 @@ public class CommentService {
 
     private static final CommentCount EMPTY_COUNT = new CommentCount.Empty();
 
-    private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+    private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
     private final CommentRepository commentRepository;
     private final AuthorRepository authorRepository;
@@ -73,14 +73,14 @@ public class CommentService {
     public List<CommentDto> findAllByVideoId(String videoId) {
         return commentRepository.findAllByVideoId(videoId)
                 .stream()
-                .map(commentMapper::toDto)
+                .map(commentDtoMapper::fromEntity)
                 .toList();
     }
 
     public List<CommentDto> findAllWithContextByAuthorId(String authorId) {
         return commentRepository.findAllWithContextByAuthorId(authorId)
                 .stream()
-                .map(commentMapper::toDto)
+                .map(commentDtoMapper::fromEntity)
                 .toList();
     }
 }

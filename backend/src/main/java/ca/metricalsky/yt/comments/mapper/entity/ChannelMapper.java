@@ -1,7 +1,7 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
-import ca.metricalsky.yt.comments.dto.ChannelDto;
 import ca.metricalsky.yt.comments.entity.Channel;
+import ca.metricalsky.yt.comments.mapper.OffsetDateTimeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -26,7 +26,7 @@ public abstract class ChannelMapper {
     public abstract Channel fromYouTube(com.google.api.services.youtube.model.Channel ytChannel);
 
     Set<String> fromYouTubeKeywords(String ytKeywords) {
-        return KEYWORD_PATTERN.matcher(ytKeywords).results()
+        return ytKeywords == null ? null : KEYWORD_PATTERN.matcher(ytKeywords).results()
                 .map(MatchResult::group)
                 .map(this::trimQuotes)
                 .collect(Collectors.toSet());
@@ -36,13 +36,5 @@ public abstract class ChannelMapper {
         return keyword.startsWith("\"") && keyword.endsWith("\"")
                 ? keyword.substring(1, keyword.length() - 1)
                 : keyword;
-    }
-
-    @Mapping(target = "thumbnailUrl", source = ".")
-    @Mapping(target = "videoCount", ignore = true)
-    public abstract ChannelDto toDto(Channel channel);
-
-    String getDtoThumbnailUrl(Channel channel) {
-        return "/api/channels/" + channel.getId() + "/thumbnail";
     }
 }

@@ -10,7 +10,7 @@ public class OffsetDateTimeMapper {
         return dateTime == null ? null : OffsetDateTime.parse(dateTime.toString());
     }
 
-    public String toDto(OffsetDateTime offsetDateTime) {
+    public String fromEntity(OffsetDateTime offsetDateTime) {
         return offsetDateTime == null ? null : offsetDateTime.toString();
     }
 }
