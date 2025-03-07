@@ -1,14 +1,10 @@
 package ca.metricalsky.yt.comments.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
 public class VideoDto {
 
     private String id;

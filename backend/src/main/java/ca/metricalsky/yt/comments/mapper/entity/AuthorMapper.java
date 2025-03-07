@@ -1,4 +1,4 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
 import ca.metricalsky.yt.comments.entity.Author;
 import org.mapstruct.Mapper;

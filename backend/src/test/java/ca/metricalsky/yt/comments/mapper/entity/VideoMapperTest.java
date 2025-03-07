@@ -1,4 +1,4 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Activity;
@@ -34,6 +34,20 @@ public class VideoMapperTest {
                 .hasFieldOrPropertyWithValue("description", ytActivity.getSnippet().getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl",
                         ytActivity.getSnippet().getThumbnails().getHigh().getUrl());
+    }
+
+    @Test
+    void fromYouTube_nullActivity() {
+        var video = videoMapper.fromYouTube(null);
+        assertThat(video).isNull();
+    }
+
+    @Test
+    void fromYouTube_emptyActivity() {
+        var video = videoMapper.fromYouTube(new Activity());
+        assertThat(video)
+                .isNotNull()
+                .hasAllNullFieldsOrProperties();
     }
 
     private static Activity buildYouTubeActivity() {

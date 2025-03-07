@@ -1,4 +1,4 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Channel;
@@ -42,6 +42,20 @@ class ChannelMapperTest {
 
         assertThat(channel.getKeywords())
                 .containsOnlyOnce("keyword", "long keyword");
+    }
+
+    @Test
+    void fromYouTube_nullChannel() {
+        var channel = channelMapper.fromYouTube(null);
+        assertThat(channel).isNull();
+    }
+
+    @Test
+    void fromYouTube_emptyChannel() {
+        var channel = channelMapper.fromYouTube(new Channel());
+        assertThat(channel)
+                .isNotNull()
+                .hasAllNullFieldsOrProperties();
     }
 
     private static Channel buildYouTubeChannel() {

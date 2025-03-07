@@ -1,4 +1,4 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Comment;
@@ -41,7 +41,27 @@ public class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("parentId", ytReplyComment.getSnippet().getParentId());
     }
 
-    private void assertCommentProperties(ca.metricalsky.yt.comments.entity.Comment actual, Comment expected) {
+    @Test
+    void fromYouTubeCommentThread_nullCommentThread() {
+        var comment = commentMapper.fromYouTube((CommentThread) null);
+        assertThat(comment).isNull();
+    }
+
+    @Test
+    void fromYouTubeComment_nullComment() {
+        var comment = commentMapper.fromYouTube((Comment) null);
+        assertThat(comment).isNull();
+    }
+
+    @Test
+    void fromYouTubeComment_emptyComment() {
+        var comment = commentMapper.fromYouTube(new Comment());
+        assertThat(comment)
+                .isNotNull()
+                .hasAllNullFieldsOrProperties();
+    }
+
+    private static void assertCommentProperties(ca.metricalsky.yt.comments.entity.Comment actual, Comment expected) {
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("id", expected.getId())
                 .hasFieldOrPropertyWithValue("videoId", expected.getSnippet().getVideoId())

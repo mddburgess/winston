@@ -56,13 +56,16 @@ tasks {
     test {
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
+        testLogging {
+            events("FAILED", "SKIPPED")
+        }
     }
 
     jacocoTestReport {
         dependsOn(test)
         reports {
             xml.required.set(true)
-            html.required.set(false)
+            html.required.set(true)
         }
     }
 }

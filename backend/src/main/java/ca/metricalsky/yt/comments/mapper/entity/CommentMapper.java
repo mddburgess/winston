@@ -1,6 +1,5 @@
-package ca.metricalsky.yt.comments.mapper;
+package ca.metricalsky.yt.comments.mapper.entity;
 
-import ca.metricalsky.yt.comments.dto.CommentDto;
 import ca.metricalsky.yt.comments.entity.Comment;
 import com.google.api.services.youtube.model.CommentThread;
 import org.mapstruct.Mapper;
@@ -46,7 +45,4 @@ public abstract class CommentMapper {
     @Mapping(target = "totalReplyCount", ignore = true)
     @Mapping(target = "replies", ignore = true)
     public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
-
-    @Mapping(target = "text", source = "textDisplay")
-    public abstract CommentDto toDto(Comment comment);
 }
