@@ -1,10 +1,8 @@
 package ca.metricalsky.yt.comments.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class AuthorDto {
 
     private String id;
