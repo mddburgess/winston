@@ -1,7 +1,6 @@
 package ca.metricalsky.yt.comments.mapper.entity;
 
 import ca.metricalsky.yt.comments.entity.Video;
-import ca.metricalsky.yt.comments.mapper.OffsetDateTimeMapper;
 import com.google.api.services.youtube.model.Activity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

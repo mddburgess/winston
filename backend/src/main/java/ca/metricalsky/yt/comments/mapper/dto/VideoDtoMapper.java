@@ -2,11 +2,10 @@ package ca.metricalsky.yt.comments.mapper.dto;
 
 import ca.metricalsky.yt.comments.dto.VideoDto;
 import ca.metricalsky.yt.comments.entity.Video;
-import ca.metricalsky.yt.comments.mapper.OffsetDateTimeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = OffsetDateTimeMapper.class)
+@Mapper
 public abstract class VideoDtoMapper {
 
     @Mapping(target = "thumbnailUrl", source = ".")
@@ -17,6 +16,7 @@ public abstract class VideoDtoMapper {
     public abstract VideoDto fromEntity(Video video);
 
     String getThumbnailUrl(Video video) {
-        return "/api/videos/" + video.getId() + "/thumbnail";
+        return video.getThumbnailUrl() == null ? null
+                : "/api/videos/" + video.getId() + "/thumbnail";
     }
 }

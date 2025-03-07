@@ -1,7 +1,6 @@
 package ca.metricalsky.yt.comments.mapper.entity;
 
 import ca.metricalsky.yt.comments.entity.Channel;
-import ca.metricalsky.yt.comments.mapper.OffsetDateTimeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -3,6 +3,7 @@ package ca.metricalsky.yt.comments.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Getter
@@ -15,11 +16,11 @@ public class CommentDto {
 
     private String text;
 
-    private String publishedAt;
+    private OffsetDateTime publishedAt;
 
-    private String updatedAt;
+    private OffsetDateTime updatedAt;
 
-    private String lastFetchedAt;
+    private OffsetDateTime lastFetchedAt;
 
     private List<CommentDto> replies;
 }

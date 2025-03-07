@@ -45,7 +45,8 @@ public class VideoMapperTest {
     @Test
     void fromYouTube_emptyActivity() {
         var video = videoMapper.fromYouTube(new Activity());
-        assertThat(video).isNotNull()
+        assertThat(video)
+                .isNotNull()
                 .hasAllNullFieldsOrProperties();
     }
 

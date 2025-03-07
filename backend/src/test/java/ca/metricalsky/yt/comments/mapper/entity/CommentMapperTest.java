@@ -56,7 +56,8 @@ public class CommentMapperTest {
     @Test
     void fromYouTubeComment_emptyComment() {
         var comment = commentMapper.fromYouTube(new Comment());
-        assertThat(comment).isNotNull()
+        assertThat(comment)
+                .isNotNull()
                 .hasAllNullFieldsOrProperties();
     }
 
