@@ -5,6 +5,7 @@ import ca.metricalsky.yt.comments.entity.Comment;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +27,7 @@ public class CommentDtoMapperTest {
                 .hasFieldOrPropertyWithValue("publishedAt", comment.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", comment.getUpdatedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", comment.getLastFetchedAt())
-                .hasFieldOrPropertyWithValue("replies", null);
+                .hasFieldOrPropertyWithValue("replies", List.of());
     }
 
     @Test
@@ -40,7 +41,7 @@ public class CommentDtoMapperTest {
         var commentDto = commentDtoMapper.fromEntity(new Comment());
         assertThat(commentDto)
                 .isNotNull()
-                .hasAllNullFieldsOrProperties();
+                .hasNoNullFieldsOrProperties();
     }
 
     private static Comment buildComment() {

@@ -1,11 +1,14 @@
 package ca.metricalsky.yt.comments.dto;
 
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
 @Data
 public class AuthorDto {
 
-    private String id;
+    @NonNull
+    private String id = "";
 
-    private String displayName;
+    @NonNull
+    private String displayName = "";
 }

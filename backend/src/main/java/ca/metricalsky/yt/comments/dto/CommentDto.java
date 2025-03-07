@@ -1,24 +1,35 @@
 package ca.metricalsky.yt.comments.dto;
 
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class CommentDto {
 
-    private String id;
+    @NonNull
+    private String id = "";
 
-    private AuthorDto author;
+    @NonNull
+    private AuthorDto author = new AuthorDto();
 
-    private String text;
+    @NonNull
+    private String text = "";
 
-    private OffsetDateTime publishedAt;
+    @NonNull
+    private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
-    private OffsetDateTime updatedAt;
+    @NonNull
+    private OffsetDateTime updatedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
-    private OffsetDateTime lastFetchedAt;
+    @NonNull
+    private OffsetDateTime lastFetchedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
-    private List<CommentDto> replies;
+    @NonNull
+    private List<CommentDto> replies = new ArrayList<>();
 }

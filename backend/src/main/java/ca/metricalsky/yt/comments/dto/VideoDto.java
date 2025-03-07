@@ -1,31 +1,45 @@
 package ca.metricalsky.yt.comments.dto;
 
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Data
 public class VideoDto {
 
-    private String id;
+    @NonNull
+    private String id = "";
 
-    private String channelId;
+    @NonNull
+    private String channelId = "";
 
-    private ChannelDto channel;
+    @NonNull
+    private ChannelDto channel = new ChannelDto();
 
-    private String title;
+    @NonNull
+    private String title = "";
 
-    private String description;
+    @NonNull
+    private String description = "";
 
-    private String thumbnailUrl;
+    @NonNull
+    private String thumbnailUrl = "";
 
-    private Long commentCount;
+    @NonNull
+    private Long commentCount = 0L;
 
-    private Long replyCount;
+    @NonNull
+    private Long replyCount = 0L;
 
-    private Long totalReplyCount;
+    @NonNull
+    private Long totalReplyCount = 0L;
 
-    private OffsetDateTime publishedAt;
+    @NonNull
+    private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
-    private OffsetDateTime lastFetchedAt;
+    @NonNull
+    private OffsetDateTime lastFetchedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 }

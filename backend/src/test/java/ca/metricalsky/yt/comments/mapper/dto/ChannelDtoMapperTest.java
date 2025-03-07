@@ -24,7 +24,7 @@ public class ChannelDtoMapperTest {
                 .hasFieldOrPropertyWithValue("description", channel.getDescription())
                 .hasFieldOrPropertyWithValue("customUrl", channel.getCustomUrl())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/channels/" + channel.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("videoCount", null)
+                .hasFieldOrPropertyWithValue("videoCount", 0L)
                 .hasFieldOrPropertyWithValue("publishedAt", channel.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", channel.getLastFetchedAt());
     }
@@ -40,7 +40,7 @@ public class ChannelDtoMapperTest {
         var channelDto = channelDtoMapper.fromEntity(new Channel());
         assertThat(channelDto)
                 .isNotNull()
-                .hasAllNullFieldsOrProperties();
+                .hasNoNullFieldsOrProperties();
     }
 
     private static Channel buildChannel() {

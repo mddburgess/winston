@@ -1,31 +1,44 @@
 package ca.metricalsky.yt.comments.dto;
 
 import lombok.Data;
+import org.springframework.lang.NonNull;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.TreeSet;
 
 
 @Data
 public class ChannelDto {
 
-    private String id;
+    @NonNull
+    private String id = "";
 
-    private String title;
+    @NonNull
+    private String title = "";
 
-    private String description;
+    @NonNull
+    private String description = "";
 
-    private String customUrl;
+    @NonNull
+    private String customUrl = "";
 
-    private String thumbnailUrl;
+    @NonNull
+    private String thumbnailUrl = "";
 
-    private TreeSet<String> topics;
+    @NonNull
+    private TreeSet<String> topics = new TreeSet<>();
 
-    private TreeSet<String> keywords;
+    @NonNull
+    private TreeSet<String> keywords = new TreeSet<>();
 
-    private Long videoCount;
+    @NonNull
+    private Long videoCount = 0L;
 
-    private OffsetDateTime publishedAt;
+    @NonNull
+    private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
-    private OffsetDateTime lastFetchedAt;
+    @NonNull
+    private OffsetDateTime lastFetchedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 }

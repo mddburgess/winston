@@ -1,5 +1,6 @@
 package ca.metricalsky.yt.comments.mapper.dto;
 
+import ca.metricalsky.yt.comments.dto.ChannelDto;
 import ca.metricalsky.yt.comments.entity.Video;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +21,13 @@ public class VideoDtoMapperTest {
         assertThat(videoDto)
                 .hasFieldOrPropertyWithValue("id", video.getId())
                 .hasFieldOrPropertyWithValue("channelId", video.getChannelId())
-                .hasFieldOrPropertyWithValue("channel", null)
+                .hasFieldOrPropertyWithValue("channel", new ChannelDto())
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/videos/" + video.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("commentCount", null)
-                .hasFieldOrPropertyWithValue("replyCount", null)
-                .hasFieldOrPropertyWithValue("totalReplyCount", null)
+                .hasFieldOrPropertyWithValue("commentCount", 0L)
+                .hasFieldOrPropertyWithValue("replyCount", 0L)
+                .hasFieldOrPropertyWithValue("totalReplyCount", 0L)
                 .hasFieldOrPropertyWithValue("publishedAt", video.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", video.getLastFetchedAt());
     }
@@ -42,7 +43,7 @@ public class VideoDtoMapperTest {
         var videoDto = videoDtoMapper.fromEntity(new Video());
         assertThat(videoDto)
                 .isNotNull()
-                .hasAllNullFieldsOrProperties();
+                .hasNoNullFieldsOrProperties();
     }
 
     private static Video buildVideo() {
