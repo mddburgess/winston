@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
 
-    List<Video> findAllByChannelId(String channelId);
+    List<Video> findAllByChannelIdOrderByPublishedAtDesc(String channelId);
 
     @Query("""
             SELECT c.id AS channelId, COUNT(v.id) AS videos

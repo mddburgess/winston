@@ -13,7 +13,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, String> {
 
     @EntityGraph(attributePaths = {"author", "replies"})
-    List<Comment> findAllByVideoId(String videoId);
+    List<Comment> findAllByVideoIdOrderByPublishedAtAsc(String videoId);
 
     @Query("""
             SELECT c FROM Comment c

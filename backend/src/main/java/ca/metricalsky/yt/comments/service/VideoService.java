@@ -41,7 +41,7 @@ public class VideoService {
     public List<VideoDto> findAllByChannelId(String channelId) {
         var commentCounts = commentService.getCommentCountsByChannelId(channelId);
         var replyCounts = commentService.getReplyCountsByChannelId(channelId);
-        return videoRepository.findAllByChannelId(channelId)
+        return videoRepository.findAllByChannelIdOrderByPublishedAtDesc(channelId)
                 .stream()
                 .map(videoDtoMapper::fromEntity)
                 .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
