@@ -33,7 +33,11 @@ public class ProblemException {
         return forException(ex, List.of());
     }
 
-    public static ProblemException forException(Throwable ex, List<String> parentStackTrace) {
+    private static ProblemException forException(Throwable ex, List<String> parentStackTrace) {
+        if (ex == null) {
+            return null;
+        }
+
         var stackTrace = Arrays.stream(ex.getStackTrace())
                 .map(StackTraceElement::toString)
                 .toList();
@@ -42,19 +46,15 @@ public class ProblemException {
         problemException.setClazz(ex.getClass().getName());
         problemException.setMessage(ex.getLocalizedMessage());
         problemException.setTrace(truncateStackTrace(stackTrace, parentStackTrace));
-        if (ex.getCause() != null) {
-            problemException.setCause(ProblemException.forException(ex.getCause(), stackTrace));
-        }
+        problemException.setCause(ProblemException.forException(ex.getCause(), stackTrace));
         return problemException;
     }
 
     private static List<String> truncateStackTrace(List<String> stackTrace, List<String> parentStackTrace) {
         var lastIndex = stackTrace.size() - 1;
         var lastParentIndex = parentStackTrace.size() - 1;
-        while (lastParentIndex >= 0 && lastIndex >= 0) {
-            if (!stackTrace.get(lastIndex).equals(parentStackTrace.get(lastParentIndex))) {
-                break;
-            }
+        while (lastIndex >= 0 && lastParentIndex >= 0 &&
+                stackTrace.get(lastIndex).equals(parentStackTrace.get(lastParentIndex))) {
             lastIndex--;
             lastParentIndex--;
         }
