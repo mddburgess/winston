@@ -13,11 +13,9 @@ public class VideoDto {
     @NonNull
     private String id = "";
 
-    @NonNull
-    private String channelId = "";
+    private String channelId;
 
-    @NonNull
-    private ChannelDto channel = new ChannelDto();
+    private ChannelDto channel;
 
     @NonNull
     private String title = "";

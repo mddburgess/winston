@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @JsonPropertyOrder({"class", "message", "trace", "cause"})
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProblemException {
 
     @JsonProperty("class")

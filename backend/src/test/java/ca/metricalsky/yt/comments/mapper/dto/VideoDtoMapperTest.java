@@ -1,6 +1,5 @@
 package ca.metricalsky.yt.comments.mapper.dto;
 
-import ca.metricalsky.yt.comments.dto.ChannelDto;
 import ca.metricalsky.yt.comments.entity.Video;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,7 @@ public class VideoDtoMapperTest {
         assertThat(videoDto)
                 .hasFieldOrPropertyWithValue("id", video.getId())
                 .hasFieldOrPropertyWithValue("channelId", video.getChannelId())
-                .hasFieldOrPropertyWithValue("channel", new ChannelDto())
+                .hasFieldOrPropertyWithValue("channel", null)
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/videos/" + video.getId() + "/thumbnail")
@@ -43,7 +42,7 @@ public class VideoDtoMapperTest {
         var videoDto = videoDtoMapper.fromEntity(new Video());
         assertThat(videoDto)
                 .isNotNull()
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel");
     }
 
     private static Video buildVideo() {
