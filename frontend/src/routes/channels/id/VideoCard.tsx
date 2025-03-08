@@ -9,7 +9,7 @@ type VideoCardProps = {
 }
 
 export const VideoCard = ({video}: VideoCardProps) => (
-    <Col className={"mb-2 px-1"}>
+    <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Card.Img variant={"top"} src={video.thumbnailUrl}/>
             <Card.Body>

@@ -4,6 +4,7 @@ import {useMemo} from "react";
 import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
 import {VideoCards} from "./VideoCards";
+import {FetchVideosAlert} from "./FetchVideosAlert";
 
 export const ChannelsIdRoute = () => {
     const { channelId } = useParams()
@@ -24,6 +25,7 @@ export const ChannelsIdRoute = () => {
                 {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
+            {channel && <FetchVideosAlert channel={channel}/>}
             <VideoCards videos={videos}/>
         </Container>
     )
