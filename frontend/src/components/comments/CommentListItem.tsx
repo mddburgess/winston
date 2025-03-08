@@ -11,8 +11,8 @@ export const CommentListItem = ({ comment }: CommentListItemProps) => (
     <ListGroupItem key={comment.id}>
         <Row>
             <Col>
-                <Link to={`/authors/${comment.author?.id}`}>
-                    {comment.author?.displayName}
+                <Link to={`/authors/${comment.author.id}`}>
+                    {comment.author.displayName}
                 </Link>
             </Col>
             <Col>

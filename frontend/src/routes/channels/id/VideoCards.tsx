@@ -1,9 +1,9 @@
-import {VideoDto} from "../../../model/VideoDto";
+import {VideoWithChannelIdDto} from "../../../model/VideoDto";
 import {Row} from "react-bootstrap";
 import {VideoCard} from "./VideoCard";
 
 type VideoCardsProps = {
-    videos?: VideoDto[]
+    videos?: VideoWithChannelIdDto[]
 }
 
 export const VideoCards = ({videos = []}: VideoCardsProps) => (

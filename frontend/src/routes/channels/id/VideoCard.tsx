@@ -1,11 +1,11 @@
 import {Card, Col} from "react-bootstrap";
-import {VideoDto} from "../../../model/VideoDto";
+import {VideoWithChannelIdDto} from "../../../model/VideoDto";
 import {Link} from "react-router";
 import {ArrowUpLeftCircleFill} from "react-bootstrap-icons";
 import {Date} from "../../../components/Date";
 
 type VideoCardProps = {
-    video: VideoDto
+    video: VideoWithChannelIdDto
 }
 
 export const VideoCard = ({video}: VideoCardProps) => (
@@ -21,7 +21,7 @@ export const VideoCard = ({video}: VideoCardProps) => (
             </Card.Body>
             <Card.Footer className={"d-flex align-items-center"}>
                 <ArrowUpLeftCircleFill className={"me-2"}/>
-                <Date date={video.publishedAt!}/>
+                <Date date={video.publishedAt}/>
             </Card.Footer>
         </Card>
     </Col>

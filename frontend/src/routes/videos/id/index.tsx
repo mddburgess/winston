@@ -14,12 +14,14 @@ export const VideosIdRoute = () => {
                 <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
                     Channels
                 </BreadcrumbItem>
-                <BreadcrumbItem linkAs={Link} linkProps={{to: `/channels/${video?.channel?.id}`}}>
-                    {video?.channel?.title}
-                </BreadcrumbItem>
-                <BreadcrumbItem active>
-                    {video?.title}
-                </BreadcrumbItem>
+                {video && <>
+                    <BreadcrumbItem linkAs={Link} linkProps={{to: `/channels/${video?.channel.id}`}}>
+                        {video?.channel.title}
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>
+                        {video?.title}
+                    </BreadcrumbItem>
+                </>}
             </Breadcrumb>
             <Row>
                 <Col>
@@ -27,7 +29,7 @@ export const VideosIdRoute = () => {
                 </Col>
                 <Col>
                     <h1>{video?.title}</h1>
-                    <h2>{video?.channel?.title}</h2>
+                    <h2>{video?.channel.title}</h2>
                     {video?.description}
                 </Col>
             </Row>

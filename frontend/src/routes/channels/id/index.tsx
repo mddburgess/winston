@@ -21,7 +21,7 @@ export const ChannelsIdRoute = () => {
                 <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
                     Channels
                 </BreadcrumbItem>
-                <BreadcrumbItem active={true}>{channel?.title}</BreadcrumbItem>
+                {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
             <VideoCards videos={videos}/>
