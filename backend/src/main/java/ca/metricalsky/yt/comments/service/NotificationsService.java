@@ -1,12 +1,16 @@
 package ca.metricalsky.yt.comments.service;
 
+import ca.metricalsky.yt.comments.events.SubscriptionEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,12 +48,9 @@ public class NotificationsService {
         return sseEmitter;
     }
 
-    public SseEmitter getSubscription(UUID subscriptionId) {
-        return subscriptions.get(subscriptionId);
+    public SseEmitter requireSubscription(UUID subscriptionId) {
+        return Optional.ofNullable(subscriptions.get(subscriptionId)).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                        "The provided subscription stream is not open."));
     }
-
-    private record SubscriptionEvent(
-            boolean connected,
-            UUID subscriptionId
-    ) { }
 }

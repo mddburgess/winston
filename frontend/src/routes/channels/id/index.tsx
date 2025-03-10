@@ -1,20 +1,31 @@
 import {Link, useParams} from "react-router";
 import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
 import {VideoCards} from "./VideoCards";
 import {FetchVideosAlert} from "./FetchVideosAlert";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks";
+import {DateTime} from "luxon";
+import {initFetchStateForChannel} from "../../../store/slices/fetches";
 
 export const ChannelsIdRoute = () => {
-    const { channelId } = useParams()
+    const {channelId} = useParams()
+    const dispatch = useAppDispatch()
 
     const {data: channels} = useListChannelsQuery()
     const channel = useMemo(() => {
         return channels?.find(channel => channel.id === channelId)
     }, [channels])
+    useEffect(() => {
+        channel && dispatch(initFetchStateForChannel(channel))
+    }, [channel])
 
     const {data: videos} = useListVideosByChannelIdQuery(channelId!)
+    const fetchedVideos = useAppSelector(state => state.fetches[channelId!]?.videos)
+    const combinedVideos = useMemo(() => (fetchedVideos ?? []).concat(videos ?? [])
+        .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
+    [videos, fetchedVideos])
 
     return (
         <Container>
@@ -26,7 +37,7 @@ export const ChannelsIdRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
             {channel && <FetchVideosAlert channel={channel}/>}
-            <VideoCards videos={videos}/>
+            <VideoCards videos={combinedVideos}/>
         </Container>
     )
 }
