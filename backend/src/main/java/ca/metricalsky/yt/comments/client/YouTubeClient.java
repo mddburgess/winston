@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -42,10 +44,17 @@ public class YouTubeClient {
                 .execute();
     }
 
-    public ActivityListResponse getActivities(String channelId, String pageToken) throws IOException {
+    public ActivityListResponse getActivities(String channelId, OffsetDateTime publishedAfter, String pageToken)
+            throws IOException {
+
+        var publishedAfterString = publishedAfter != null
+                ? DateTimeFormatter.ISO_INSTANT.format(publishedAfter)
+                : null;
+
         return youTube.activities()
                 .list(ACTIVITY_PARTS)
                 .setChannelId(channelId)
+                .setPublishedAfter(publishedAfterString)
                 .setPageToken(pageToken)
                 .setMaxResults(50L)
                 .execute();

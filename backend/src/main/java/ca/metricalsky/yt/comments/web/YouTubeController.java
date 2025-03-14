@@ -51,21 +51,6 @@ public class YouTubeController {
         return channel;
     }
 
-    @GetMapping("/activities/{channelId}")
-    public List<Video> getActivitiesByChannelId(
-            @PathVariable String channelId,
-            @RequestParam(required = false) String pageToken
-    ) throws IOException {
-        var activityListResponse = youTubeClient.getActivities(channelId, pageToken);
-        var videos = activityListResponse.getItems()
-                .stream()
-                .filter(activity -> activity.getContentDetails().getUpload() != null)
-                .map(videoMapper::fromYouTube)
-                .toList();
-        videoRepository.saveAll(videos);
-        return videos;
-    }
-
     @GetMapping("/comments/{videoId}")
     public List<Comment> getCommentsByVideoId(
             @PathVariable String videoId,

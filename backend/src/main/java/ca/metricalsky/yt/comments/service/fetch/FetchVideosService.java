@@ -1,45 +1,52 @@
 package ca.metricalsky.yt.comments.service.fetch;
 
-import ca.metricalsky.yt.comments.dto.VideoDto;
 import ca.metricalsky.yt.comments.events.FetchStatus;
 import ca.metricalsky.yt.comments.events.FetchVideosEvent;
-import ca.metricalsky.yt.comments.service.VideoService;
+import ca.metricalsky.yt.comments.mapper.dto.VideoDtoMapper;
+import ca.metricalsky.yt.comments.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class FetchVideosService {
 
-    private final VideoService videoService;
+    private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
+    private final YouTubeService youTubeService;
+    private final VideoRepository videoRepository;
 
     @Async
-    public void fetchVideosForChannel(String channelId, SseEmitter sseEmitter) {
+    public void fetchVideosForChannel(String channelId, SseEmitter sseEmitter) throws IOException {
         try {
-            var page = PageRequest.of(0, 10);
-            List<VideoDto> videos;
+            var lastPublishedAt = videoRepository.getLastPublishedAtForChannelId(channelId).plusSeconds(1);
+            String nextPageToken = null;
 
             do {
-                videos = videoService.findByChannelId(channelId, page);
+                var fetchVideosResponse = youTubeService.fetchVideos(channelId, lastPublishedAt, nextPageToken);
+                var videos = fetchVideosResponse.videos().stream()
+                        .map(videoDtoMapper::fromEntity)
+                        .toList();
+                nextPageToken = fetchVideosResponse.nextPageToken();
 
-                var eventStatus = videos.isEmpty() ? FetchStatus.COMPLETED : FetchStatus.FETCHING;
+                var eventStatus = nextPageToken == null ? FetchStatus.COMPLETED : FetchStatus.FETCHING;
                 var eventData = new FetchVideosEvent(channelId, eventStatus, videos);
                 var event = SseEmitter.event()
-                        .id(String.valueOf(page.getPageNumber()))
+                        .id(UUID.randomUUID().toString())
                         .name("fetch-videos")
                         .data(eventData, MediaType.APPLICATION_JSON);
 
                 sseEmitter.send(event);
-                page = page.next();
-            } while (!videos.isEmpty());
+                Thread.sleep(1000);
+            } while (nextPageToken != null);
 
             sseEmitter.complete();
         } catch (Exception ex) {
