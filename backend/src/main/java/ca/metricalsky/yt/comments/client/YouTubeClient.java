@@ -5,13 +5,14 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class YouTubeClient {
 
     private static final List<String> CHANNEL_PARTS = List.of(
@@ -32,11 +33,6 @@ public class YouTubeClient {
     );
 
     private final YouTube youTube;
-
-    @Autowired
-    public YouTubeClient(YouTube youTube) {
-        this.youTube = youTube;
-    }
 
     public ChannelListResponse getChannel(String handle) throws IOException {
         return youTube.channels()
