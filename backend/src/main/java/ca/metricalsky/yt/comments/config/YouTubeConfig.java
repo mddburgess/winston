@@ -20,10 +20,18 @@ public class YouTubeConfig {
     @Value("${youtube.apiKey}")
     private String apiKey;
 
+    @Value("${youtube.mock.rootUrl:}")
+    private String mockRootUrl;
+
     @Bean
     public YouTube youTube() {
-        return new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HTTP_REQUEST_INITIALIZER)
-                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey))
-                .build();
+        var youTubeBuilder = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HTTP_REQUEST_INITIALIZER)
+                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey));
+
+        if (!mockRootUrl.isBlank()) {
+            youTubeBuilder.setRootUrl(mockRootUrl);
+        };
+
+        return youTubeBuilder.build();
     }
 }
