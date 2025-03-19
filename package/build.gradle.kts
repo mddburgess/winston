@@ -4,7 +4,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "ca.metricalsky.yt"
+group = "ca.metricalsky.winston"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
@@ -27,11 +27,11 @@ tasks {
     }
 
     bootJar {
-        mainClass.set("ca.metricalsky.yt.comments.Application")
+        mainClass.set("ca.metricalsky.winston.Application")
     }
 
     bootRun {
-        mainClass.set("ca.metricalsky.yt.comments.Application")
+        mainClass.set("ca.metricalsky.winston.Application")
         environment["SPRING_PROFILES_ACTIVE"] = "dev"
     }
 }

@@ -1,2 +1,2 @@
-rootProject.name = "yt-comments"
+rootProject.name = "winston"
 include("backend", "frontend", "package")
