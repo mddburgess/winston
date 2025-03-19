@@ -1,8 +1,7 @@
 package ca.metricalsky.yt.comments.web.fetch;
 
-import ca.metricalsky.yt.comments.repository.VideoRepository;
-import ca.metricalsky.yt.comments.service.ChannelService;
 import ca.metricalsky.yt.comments.service.NotificationsService;
+import ca.metricalsky.yt.comments.service.fetch.FetchRequestService;
 import ca.metricalsky.yt.comments.service.fetch.FetchVideosService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,7 @@ import java.util.UUID;
 public class FetchVideosController {
 
     private final FetchVideosService fetchVideosService;
+    private final FetchRequestService fetchRequestService;
     private final NotificationsService notificationsService;
 
     @PostMapping("/api/channels/{channelId}/fetch-videos")
@@ -34,6 +34,7 @@ public class FetchVideosController {
                 ? notificationsService.requireSubscription(subscriptionId)
                 : notificationsService.openSubscription();
 
+        fetchRequestService.acceptFetch(context);
         fetchVideosService.asyncFetchVideosForChannel(context, sseEmitter);
 
         return subscriptionId != null

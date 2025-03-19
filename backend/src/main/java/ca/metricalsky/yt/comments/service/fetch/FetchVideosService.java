@@ -22,6 +22,7 @@ public class FetchVideosService {
     private final YouTubeService youTubeService;
     private final VideoRepository videoRepository;
     private final ChannelService channelService;
+    private final FetchRequestService fetchRequestService;
 
     public FetchVideosContext buildFetchContext(String channelId) {
         channelService.requireChannelExists(channelId);
@@ -36,14 +37,19 @@ public class FetchVideosService {
     @Async
     public void asyncFetchVideosForChannel(FetchVideosContext context, SseEmitter sseEmitter) {
         try {
+            fetchRequestService.startFetch(context);
+
             do {
                 var eventData = fetchVideos(context);
                 sseEmitter.send(SseEvent.named("fetch-videos", eventData));
                 Thread.sleep(1000);
             } while (context.hasNext());
+
             sseEmitter.complete();
+            fetchRequestService.completeFetch(context);
         } catch (Exception ex) {
             sseEmitter.completeWithError(ex);
+            fetchRequestService.failFetch(context, ex);
         }
     }
 
