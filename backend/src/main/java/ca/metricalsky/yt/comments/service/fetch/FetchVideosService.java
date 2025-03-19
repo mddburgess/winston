@@ -23,6 +23,7 @@ public class FetchVideosService {
     private final VideoRepository videoRepository;
     private final ChannelService channelService;
     private final FetchRequestService fetchRequestService;
+    private final FetchOperationService fetchOperationService;
 
     public FetchVideosContext buildFetchContext(String channelId) {
         channelService.requireChannelExists(channelId);
@@ -54,17 +55,27 @@ public class FetchVideosService {
     }
 
     private FetchVideosEvent fetchVideos(FetchVideosContext context) throws IOException {
-        var channelId = context.getChannelId();
-        var lastPublishedAt = context.getLastPublishedAt();
-        var nextPageToken = context.getNextPageToken();
+        try {
+            fetchOperationService.startOperation(context);
 
-        var fetchVideosResponse = youTubeService.fetchVideos(channelId, lastPublishedAt, nextPageToken);
-        var videos = fetchVideosResponse.videos().stream()
-                .map(videoDtoMapper::fromEntity)
-                .toList();
-        context.setNextPageToken(fetchVideosResponse.nextPageToken());
+            var channelId = context.getChannelId();
+            var lastPublishedAt = context.getLastPublishedAt();
+            var nextPageToken = context.getNextPageToken();
 
-        var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return new FetchVideosEvent(channelId, eventStatus, videos);
+            var fetchVideosResponse = youTubeService.fetchVideos(channelId, lastPublishedAt, nextPageToken);
+            var videos = fetchVideosResponse.videos().stream()
+                    .map(videoDtoMapper::fromEntity)
+                    .toList();
+            context.setNextPageToken(fetchVideosResponse.nextPageToken());
+
+            var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
+            var event = new FetchVideosEvent(channelId, eventStatus, videos);
+
+            fetchOperationService.completeOperation(context);
+            return event;
+        } catch (Exception ex) {
+            fetchOperationService.failOperation(context, ex);
+            throw ex;
+        }
     }
 }
