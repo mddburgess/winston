@@ -22,9 +22,9 @@
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "@types/luxon": "^3.4.2",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
-    "parcel": "^2.13.3",
+    "parcel": "^2.14.0",
     "process": "^0.11.10",
     "typescript": "^5.8.2"
   },

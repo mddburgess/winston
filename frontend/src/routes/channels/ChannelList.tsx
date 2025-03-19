@@ -8,6 +8,6 @@ type ChannelListProps = {
 
 export const ChannelList = ({channels = []}: ChannelListProps) => (
     <ListGroup>
-        {channels.map((channel) => (<ChannelListItem channel={channel}/>))}
+        {channels.map((channel) => (<ChannelListItem key={channel.id} channel={channel}/>))}
     </ListGroup>
 )
