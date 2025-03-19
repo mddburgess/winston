@@ -63,13 +63,15 @@ public class FetchVideosService {
             var nextPageToken = context.getNextPageToken();
 
             var fetchVideosResponse = youTubeService.fetchVideos(channelId, lastPublishedAt, nextPageToken);
-            var videos = fetchVideosResponse.videos().stream()
+            videoRepository.saveAll(fetchVideosResponse.videos());
+
+            var videoDtos = fetchVideosResponse.videos().stream()
                     .map(videoDtoMapper::fromEntity)
                     .toList();
             context.setNextPageToken(fetchVideosResponse.nextPageToken());
 
             var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-            var event = new FetchVideosEvent(channelId, eventStatus, videos);
+            var event = new FetchVideosEvent(channelId, eventStatus, videoDtos);
 
             fetchOperationService.completeOperation(context);
             return event;
