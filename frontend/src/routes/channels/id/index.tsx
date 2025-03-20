@@ -28,7 +28,7 @@ export const ChannelsIdRoute = () => {
     [videos, fetchedVideos])
 
     return (
-        <Container>
+        <>
             <Breadcrumb>
                 <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
                     Channels
@@ -38,6 +38,6 @@ export const ChannelsIdRoute = () => {
             {channel && <ChannelDetails channel={channel}/>}
             {channel && <FetchVideosAlert channel={channel}/>}
             <VideoCards videos={combinedVideos}/>
-        </Container>
+        </>
     )
 }

@@ -8,6 +8,6 @@ type ReplyListProps = {
 
 export const ReplyList = ({ replies }: ReplyListProps) => (
     <ListGroup>
-        {replies.map((reply) => (<ReplyListItem reply={reply}/>))}
+        {replies.map((reply) => (<ReplyListItem key={reply.id} reply={reply}/>))}
     </ListGroup>
 )

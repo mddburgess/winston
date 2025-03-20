@@ -9,7 +9,7 @@ export const VideosIdRoute = () => {
     const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
 
     return (
-        <Container>
+        <>
             <Breadcrumb>
                 <BreadcrumbItem linkAs={Link} linkProps={{to: "/"}}>
                     Channels
@@ -34,6 +34,6 @@ export const VideosIdRoute = () => {
                 </Col>
             </Row>
             <CommentList comments={comments}/>
-        </Container>
+        </>
     )
 }

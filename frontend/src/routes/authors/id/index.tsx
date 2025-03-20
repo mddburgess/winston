@@ -8,11 +8,11 @@ export const AuthorsIdRoute = () => {
     const {data: comments} = useListCommentsByAuthorIdQuery(authorId!)
 
     return (
-        <Container>
+        <>
             <Row>
                 <h1>{authorId!}</h1>
             </Row>
             <CommentList comments={comments} />
-        </Container>
+        </>
     )
 }

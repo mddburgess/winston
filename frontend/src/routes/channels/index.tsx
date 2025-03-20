@@ -6,7 +6,7 @@ export const ChannelsRoute = () => {
     const { data: channels } = useListChannelsQuery()
 
     return (
-        <Container>
+        <>
             <Breadcrumb>
                 <BreadcrumbItem active>
                     Channels
@@ -14,6 +14,6 @@ export const ChannelsRoute = () => {
             </Breadcrumb>
             <h1>Channels</h1>
             <ChannelList channels={channels} />
-        </Container>
+        </>
     )
 }
