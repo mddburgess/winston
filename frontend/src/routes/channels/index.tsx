@@ -1,19 +1,13 @@
 import {useListChannelsQuery} from "../../store/slices/api";
-import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
-import {ChannelList} from "./ChannelList";
+import {ChannelCards} from "./ChannelCards";
 
 export const ChannelsRoute = () => {
     const { data: channels } = useListChannelsQuery()
 
     return (
         <>
-            <Breadcrumb>
-                <BreadcrumbItem active>
-                    Channels
-                </BreadcrumbItem>
-            </Breadcrumb>
-            <h1>Channels</h1>
-            <ChannelList channels={channels} />
+            <h1 className={"mb-2"}>Channels</h1>
+            <ChannelCards channels={channels} />
         </>
     )
 }
