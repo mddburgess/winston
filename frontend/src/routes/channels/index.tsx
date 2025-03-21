@@ -1,10 +1,15 @@
 import {useListChannelsQuery} from "../../store/slices/api";
 import {ChannelCards} from "./ChannelCards";
-import {Button, Col, Row, Stack} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
+import {useState} from "react";
+import {FetchChannelModal} from "./FetchChannelModal";
 
 export const ChannelsRoute = () => {
     const { data: channels } = useListChannelsQuery()
+    const [showModal, setShowModal] = useState(false);
+
+    const fetchChannel = (channelHandle: string) => {}
 
     return (
         <>
@@ -15,13 +20,21 @@ export const ChannelsRoute = () => {
                     </p>
                 </Col>
                 <Col xs={"auto"} className={"align-items-center d-flex"}>
-                    <Button className={"align-items-center d-flex"}>
+                    <Button
+                        className={"align-items-center d-flex"}
+                        onClick={() => setShowModal(true)}
+                    >
                         Fetch...
                         <ArrowDownRightCircleFill className={"ms-2"}/>
                     </Button>
                 </Col>
             </Row>
             <ChannelCards channels={channels} />
+            <FetchChannelModal
+                show={showModal}
+                setShow={setShowModal}
+                onSubmit={fetchChannel}
+            />
         </>
     )
 }
