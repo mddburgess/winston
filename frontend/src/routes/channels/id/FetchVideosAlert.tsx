@@ -2,8 +2,7 @@ import {Alert, Button, Col} from "react-bootstrap";
 import {Date} from "../../../components/Date";
 import {ArrowDownRightCircleFill, CheckCircleFill} from "react-bootstrap-icons";
 import {ChannelDto} from "../../../model/ChannelDto";
-import {FetchVideosWidget} from "./FetchVideosWidget";
-import {EventSourceProvider} from "react-sse-hooks";
+import {FetchVideosAction} from "./FetchVideosAction";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {FetchState, requestedVideosForChannelId} from "../../../store/slices/fetches";
 
@@ -63,10 +62,8 @@ const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
             </Col>
             <Col xs={"auto"}>
                 <Button className={"d-flex align-items-center btn-outline-secondary"} disabled={true}>
-                    <EventSourceProvider>
-                        Fetching...
-                        <FetchVideosWidget channelId={channel.id}/>
-                    </EventSourceProvider>
+                    Fetching...
+                    <FetchVideosAction channelId={channel.id}/>
                 </Button>
             </Col>
         </Alert>

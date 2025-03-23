@@ -1,6 +1,7 @@
 import {useEventSource, useEventSourceListener} from "react-sse-hooks";
 import {useEffect} from "react";
 import {SubscriptionEvent} from "../model/events/SubscriptionEvent";
+import {Spinner} from "react-bootstrap";
 
 type NotificationsSourceProps = {
     onSubscribed: (subscriptionId: string) => void,
@@ -43,5 +44,7 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
         }
     }, [eventSource, props]);
 
-    return (<></>);
+    return (
+        <Spinner size={"sm"} className={"ms-2"}/>
+    );
 }
