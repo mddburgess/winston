@@ -22,6 +22,9 @@ export const apiSlice = createApi({
         listChannels: builder.query<ChannelDto[], void>({
             query: () => "/channels"
         }),
+        findChannelById: builder.query<ChannelDto, string>({
+            query: (channelId) => `/channels/${channelId}`
+        }),
         listVideosByChannelId: builder.query<VideoWithChannelIdDto[], string>({
             query: (channelId) => `/channels/${channelId}/videos`
         }),
@@ -58,6 +61,7 @@ export const apiSlice = createApi({
 
 export const {
     useListChannelsQuery,
+    useFindChannelByIdQuery,
     useListVideosByChannelIdQuery,
     useFindVideoByIdQuery,
     useListCommentsByVideoIdQuery,

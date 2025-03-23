@@ -1,5 +1,5 @@
 import {Link, useParams} from "react-router";
-import {useListChannelsQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
+import {useFindChannelByIdQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
 import {useEffect, useMemo} from "react";
 import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
@@ -10,13 +10,11 @@ import {DateTime} from "luxon";
 import {initFetchStateForChannel} from "../../../store/slices/fetches";
 
 export const ChannelsIdRoute = () => {
+
     const {channelId} = useParams()
     const dispatch = useAppDispatch()
 
-    const {data: channels} = useListChannelsQuery()
-    const channel = useMemo(() => {
-        return channels?.find(channel => channel.id === channelId)
-    }, [channels])
+    const {data: channel} = useFindChannelByIdQuery(channelId!)
     useEffect(() => {
         channel && dispatch(initFetchStateForChannel(channel))
     }, [channel])
