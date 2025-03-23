@@ -6,10 +6,9 @@ import {useState} from "react";
 import {FetchChannelModal} from "./FetchChannelModal";
 
 export const ChannelsRoute = () => {
+
     const { data: channels } = useListChannelsQuery()
     const [showModal, setShowModal] = useState(false);
-
-    const fetchChannel = (channelHandle: string) => {}
 
     return (
         <>
@@ -30,11 +29,7 @@ export const ChannelsRoute = () => {
                 </Col>
             </Row>
             <ChannelCards channels={channels} />
-            <FetchChannelModal
-                show={showModal}
-                setShow={setShowModal}
-                onSubmit={fetchChannel}
-            />
+            <FetchChannelModal show={showModal} setShow={setShowModal} />
         </>
     )
 }

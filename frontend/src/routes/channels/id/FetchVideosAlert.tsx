@@ -5,17 +5,18 @@ import {ChannelDto} from "../../../model/ChannelDto";
 import {FetchVideosAction} from "./FetchVideosAction";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {FetchState, requestedVideosForChannelId} from "../../../store/slices/fetches";
+import {VideoWithChannelIdDto} from "../../../model/VideoDto";
 
 type FetchVideosAlertProps = {
     channel: ChannelDto
 }
 
 type AlertBodyProps = FetchVideosAlertProps & {
-    fetchState: FetchState
+    fetchState: FetchState<VideoWithChannelIdDto>
 }
 
 export const FetchVideosAlert = ({channel}: FetchVideosAlertProps) => {
-    const fetchState = useAppSelector(state => state.fetches[channel.id])
+    const fetchState = useAppSelector(state => state.fetches.videos[channel.id])
     switch (fetchState?.status) {
         case 'COMPLETED':
             return (<FetchCompletedBody channel={channel} fetchState={fetchState}/>)
@@ -52,8 +53,8 @@ const FetchAvailableBody = ({channel}: FetchVideosAlertProps) => {
 
 const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
 
-    const videoCountLabel = fetchState.videos.length === 0 ? 'latest videos'
-        : fetchState.videos.length === 1 ? '1 video' : fetchState.videos.length + ' videos'
+    const videoCountLabel = fetchState.data.length === 0 ? 'latest videos'
+        : fetchState.data.length === 1 ? '1 video' : fetchState.data.length + ' videos'
 
     return (
         <Alert className={"d-flex align-items-center alert-secondary"}>
@@ -72,7 +73,7 @@ const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
 
 const FetchCompletedBody = ({fetchState}: AlertBodyProps) => {
 
-    const videoCountLabel = fetchState.videos.length === 1 ? '1 video' : fetchState.videos.length + ' videos'
+    const videoCountLabel = fetchState.data.length === 1 ? '1 video' : fetchState.data.length + ' videos'
 
     return (
         <Alert className={"d-flex align-items-center alert-success"}>

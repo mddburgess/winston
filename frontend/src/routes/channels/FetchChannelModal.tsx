@@ -1,19 +1,23 @@
 import {Button, Form, InputGroup, Modal} from "react-bootstrap";
 import {ChangeEvent, FormEvent, useState} from "react";
 import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {requestedChannelForHandle} from "../../store/slices/fetches";
+import {FetchChannelAction} from "./FetchChannelAction";
 
-const handleRegex = /^@([A-Za-z0-9_\-.]{3,30})$/;
+const handleRegex = /^@([A-Za-z0-9_\-.]{0,30})$/;
 const urlRegex = /^(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/@([A-Za-z0-9_\-.]{3,30})/;
 
 type FetchChannelModalProps = {
     show: boolean,
     setShow: (show: boolean) => void,
-    onSubmit: (channelHandle: string) => void,
 }
 
 export const FetchChannelModal = (props: FetchChannelModalProps) => {
 
     const [channelHandle, setChannelHandle] = useState("");
+    const fetchState = useAppSelector(state => state.fetches);
+    const dispatch = useAppDispatch();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
@@ -40,8 +44,9 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
     }
 
     const handleFetch = () => {
-        props.onSubmit(channelHandle);
-        props.setShow(false);
+        if (channelHandle.length > 0) {
+            dispatch(requestedChannelForHandle(channelHandle));
+        }
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -72,20 +77,35 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button
-                    variant={"outline-secondary"}
-                    onClick={handleHide}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    variant={"primary"}
-                    className={"align-items-center d-flex"}
-                    onClick={handleFetch}
-                >
-                    Fetch
-                    <ArrowDownRightCircleFill className="ms-2" />
-                </Button>
+                {fetchState.channel[channelHandle]?.status === undefined &&
+                    <>
+                        <Button
+                            variant={"outline-secondary"}
+                            onClick={handleHide}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant={"primary"}
+                            disabled={channelHandle.length === 0}
+                            className={"align-items-center d-flex"}
+                            onClick={handleFetch}
+                        >
+                            Fetch
+                            <ArrowDownRightCircleFill className="ms-2" />
+                        </Button>
+                    </>
+                }
+                {fetchState.channel[channelHandle]?.status === 'REQUESTED' &&
+                    <Button
+                        variant={"primary"}
+                        disabled={true}
+                        className={"align-items-center d-flex"}
+                    >
+                        Fetching...
+                        <FetchChannelAction channelHandle={channelHandle} />
+                    </Button>
+                }
             </Modal.Footer>
         </Modal>
     );

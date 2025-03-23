@@ -3,6 +3,7 @@ import {useAppDispatch} from "../../../store/hooks";
 import {useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
 import {FetchVideosEvent} from "../../../model/events/FetchVideosEvent";
 import {NotificationsSource} from "../../../components/NotificationsSource";
+import {EventSourceProvider} from "react-sse-hooks";
 
 type FetchVideosWidgetProps = {
     channelId: string
@@ -22,10 +23,12 @@ export const FetchVideosAction = ({channelId}: FetchVideosWidgetProps) => {
     }
 
     return (
-        <NotificationsSource
-            onSubscribed={handleSubscribed}
-            eventName={"fetch-videos"}
-            onEvent={handleEvent}
-        />
+        <EventSourceProvider>
+            <NotificationsSource
+                onSubscribed={handleSubscribed}
+                eventName={"fetch-videos"}
+                onEvent={handleEvent}
+            />
+        </EventSourceProvider>
     )
 }

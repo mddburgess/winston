@@ -3,9 +3,16 @@ import {ChannelDto} from "../../model/ChannelDto";
 import {VideoWithChannelIdDto, VideoWithChannelDto} from "../../model/VideoDto";
 import {CommentDto} from "../../model/CommentDto";
 
-type FetchVideosRequest = {
-    channelId: string;
+type FetchRequest = {
     subscriptionId: string;
+}
+
+type FetchChannelRequest = FetchRequest & {
+    channelHandle: string;
+}
+
+type FetchVideosRequest = FetchRequest & {
+    channelId: string;
 }
 
 export const apiSlice = createApi({
@@ -27,13 +34,25 @@ export const apiSlice = createApi({
         listCommentsByAuthorId: builder.query<CommentDto[], string>({
             query: (authorId) => `/authors/${authorId}/comments`
         }),
+        fetchChannelByHandle: builder.mutation<string, FetchChannelRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: `POST`,
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    channel: {
+                        handle: request.channelHandle
+                    }
+                }
+            })
+        }),
         fetchVideosByChannelId: builder.mutation<VideoWithChannelIdDto, FetchVideosRequest>({
             query: (request) => ({
                 url: `/channels/${request.channelId}/fetch-videos`,
                 method: 'POST',
                 headers: [ ["X-Notify-Subscription", request.subscriptionId] ]
             }),
-        })
+        }),
     })
 });
 
@@ -43,5 +62,6 @@ export const {
     useFindVideoByIdQuery,
     useListCommentsByVideoIdQuery,
     useListCommentsByAuthorIdQuery,
+    useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
 } = apiSlice

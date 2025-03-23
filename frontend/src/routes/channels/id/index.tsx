@@ -22,7 +22,7 @@ export const ChannelsIdRoute = () => {
     }, [channel])
 
     const {data: videos} = useListVideosByChannelIdQuery(channelId!)
-    const fetchedVideos = useAppSelector(state => state.fetches[channelId!]?.videos)
+    const fetchedVideos = useAppSelector(state => state.fetches.videos[channelId!]?.data)
     const combinedVideos = useMemo(() => (fetchedVideos ?? []).concat(videos ?? [])
         .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
     [videos, fetchedVideos])

@@ -3,49 +3,65 @@ import {VideoWithChannelIdDto} from "../../model/VideoDto";
 import {FetchVideosEvent} from "../../model/events/FetchVideosEvent";
 import {ChannelDto} from "../../model/ChannelDto";
 
-export type FetchState = {
+export type FetchState<T> = {
     id: string;
     status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED';
-    videos: VideoWithChannelIdDto[];
+    data: T[];
 }
 
-type FetchStateMap = {
-    [id: string]: FetchState;
+type FetchStates = {
+    channel: {
+        [id: string]: FetchState<ChannelDto>;
+    },
+    videos: {
+        [id: string]: FetchState<VideoWithChannelIdDto>;
+    }
 }
 
-const initialState: FetchStateMap = {}
+const initialState: FetchStates = {
+    channel: {},
+    videos: {},
+}
 
 export const fetchesSlice = createSlice({
     name: "fetches",
     initialState,
     reducers: {
+        requestedChannelForHandle: (state, action: PayloadAction<string>) => {
+            state.channel[action.payload] = {
+                id: action.payload,
+                status: 'REQUESTED',
+                data: []
+            }
+        },
         initFetchStateForChannel: (state, action: PayloadAction<ChannelDto>) => {
-            state[action.payload.id] = {
+            state.videos[action.payload.id] = {
                 id: action.payload.id,
                 status: 'READY',
-                videos: []
+                data: []
             }
         },
         requestedVideosForChannelId: (state, action: PayloadAction<string>) => {
-            state[action.payload] = {
+            state.videos[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
-                videos: []
+                data: []
             }
         },
         fetchedVideos: (state, action: PayloadAction<FetchVideosEvent>) => {
             const event = action.payload;
-            const fetchState = state[event.channelId];
-            state[event.channelId] = {
+            const fetchState = state.videos[event.channelId];
+            state.videos[event.channelId] = {
                 id: event.channelId,
                 status: event.status,
-                videos: (fetchState?.videos ?? []).concat(event.videos)
+                data: (fetchState?.data ?? []).concat(event.videos)
             }
         }
     }
 })
 
 export const {
+    requestedChannelForHandle,
     initFetchStateForChannel,
     requestedVideosForChannelId,
     fetchedVideos,
