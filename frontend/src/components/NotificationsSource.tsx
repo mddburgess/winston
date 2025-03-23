@@ -15,6 +15,7 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
 
     useEffect(() => {
         eventSource.onerror = (event) => {
+            console.debug("Unsubscribed from notifications:", event);
             eventSource.close();
         }
     }, [eventSource]);
@@ -25,6 +26,7 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
         event: {
             name: "message",
             listener: (event) => {
+                console.debug("Subscribed to notifications:", event.data.subscriptionId);
                 props.onSubscribed(event.data.subscriptionId);
             },
             options: {
@@ -39,6 +41,7 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
         event: {
             name: props.eventName,
             listener: event => {
+                console.debug(`Received event of type '${props.eventName}':`, event);
                 props.onEvent(event.data)
             }
         }
