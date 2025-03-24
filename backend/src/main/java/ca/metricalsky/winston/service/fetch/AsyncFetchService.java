@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -21,18 +20,19 @@ public class AsyncFetchService {
 
     private final ChannelDtoMapper channelDtoMapper = Mappers.getMapper(ChannelDtoMapper.class);
     private final ChannelRepository channelRepository;
+    private final YouTubeService youTubeService;
 
     @Async
     public void fetchChannel(FetchRequest request, SseEmitter sseEmitter) throws IOException {
 
         var handle = request.getChannel().getHandle();
-        var channel = channelRepository.findByCustomUrl("@" + handle.toLowerCase(Locale.ENGLISH));
 
-        if (channel.isPresent()) {
-            var channelDto = channelDtoMapper.fromEntity(channel.get());
-            var eventData = new FetchChannelEvent(handle, FetchStatus.COMPLETED, channelDto);
-            sseEmitter.send(SseEvent.named("fetch-channel", eventData));
-        }
+        var channel = youTubeService.fetchChannel("@" + handle);
+        channelRepository.save(channel);
+
+        var channelDto = channelDtoMapper.fromEntity(channel);
+        var eventData = new FetchChannelEvent(handle, FetchStatus.COMPLETED, channelDto);
+        sseEmitter.send(SseEvent.named("fetch-channel", eventData));
 
         sseEmitter.complete();
     }
