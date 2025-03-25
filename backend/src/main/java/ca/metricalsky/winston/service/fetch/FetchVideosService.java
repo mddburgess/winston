@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
+import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.FetchVideosEvent;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
@@ -8,7 +9,6 @@ import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.utils.SseEvent;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class FetchVideosService {
+public class FetchVideosService implements FetchRequestHandler {
 
     private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
     private final YouTubeService youTubeService;
@@ -25,33 +25,33 @@ public class FetchVideosService {
     private final FetchRequestService fetchRequestService;
     private final FetchOperationService fetchOperationService;
 
+    @Override
+    public void fetch(FetchRequest fetchRequest, SseEmitter sseEmitter) {
+        var context = buildFetchContext(fetchRequest.getVideos().getChannelId());
+
+        try {
+            fetchRequestService.startFetch(context);
+            do {
+                var eventData = fetchVideos(context);
+                sseEmitter.send(SseEvent.named("fetch-videos", eventData));
+            } while (context.hasNext());
+            fetchRequestService.completeFetch(context);
+        } catch (Exception ex) {
+            fetchRequestService.failFetch(context, ex);
+            throw new RuntimeException(ex);
+        }
+    }
+
     public FetchVideosContext buildFetchContext(String channelId) {
         channelService.requireChannelExists(channelId);
-        var lastPublishedAt = videoRepository.getLastPublishedAtForChannelId(channelId).plusSeconds(1);
+        var lastPublishedAt = videoRepository.findLastPublishedAtForChannelId(channelId)
+                .map(date -> date.plusSeconds(1))
+                .orElse(null);
 
         return FetchVideosContext.builder()
                 .channelId(channelId)
                 .lastPublishedAt(lastPublishedAt)
                 .build();
-    }
-
-    @Async
-    public void asyncFetchVideosForChannel(FetchVideosContext context, SseEmitter sseEmitter) {
-        try {
-            fetchRequestService.startFetch(context);
-
-            do {
-                var eventData = fetchVideos(context);
-                sseEmitter.send(SseEvent.named("fetch-videos", eventData));
-                Thread.sleep(1000);
-            } while (context.hasNext());
-
-            sseEmitter.complete();
-            fetchRequestService.completeFetch(context);
-        } catch (Exception ex) {
-            sseEmitter.completeWithError(ex);
-            fetchRequestService.failFetch(context, ex);
-        }
     }
 
     private FetchVideosEvent fetchVideos(FetchVideosContext context) throws IOException {

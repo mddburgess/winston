@@ -13,17 +13,9 @@ public class FetchRequestService {
 
     private final FetchRequestRepository fetchRequestRepository;
 
-    public void acceptFetch(FetchVideosContext context) {
+    public void startFetch(FetchVideosContext context) {
         var fetchRequest = new FetchRequest();
         fetchRequest.setFetchId(context.getChannelId());
-        fetchRequest.setStatus(Status.ACCEPTED);
-
-        fetchRequest = fetchRequestRepository.save(fetchRequest);
-        context.setFetchRequest(fetchRequest);
-    }
-
-    public void startFetch(FetchVideosContext context) {
-        var fetchRequest = context.getFetchRequest();
         fetchRequest.setStatus(Status.FETCHING);
 
         fetchRequest = fetchRequestRepository.save(fetchRequest);

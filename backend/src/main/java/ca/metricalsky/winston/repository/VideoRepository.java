@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VideoRepository extends JpaRepository<Video, String> {
@@ -27,5 +28,5 @@ public interface VideoRepository extends JpaRepository<Video, String> {
     List<VideoCount> countAllByChannelId();
 
     @Query("SELECT MAX(v.publishedAt) FROM Video v WHERE v.channelId = :channelId")
-    OffsetDateTime getLastPublishedAtForChannelId(String channelId);
+    Optional<OffsetDateTime> findLastPublishedAtForChannelId(String channelId);
 }

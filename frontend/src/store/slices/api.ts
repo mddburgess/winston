@@ -51,9 +51,15 @@ export const apiSlice = createApi({
         }),
         fetchVideosByChannelId: builder.mutation<VideoWithChannelIdDto, FetchVideosRequest>({
             query: (request) => ({
-                url: `/channels/${request.channelId}/fetch-videos`,
+                url: `/fetch`,
                 method: 'POST',
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ]
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    videos: {
+                        channelId: request.channelId,
+                        fetch: 'LATEST'
+                    }
+                }
             }),
         }),
     })

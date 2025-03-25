@@ -6,4 +6,5 @@ import lombok.Data;
 public class FetchRequest {
 
     private FetchChannel channel;
+    private FetchVideos videos;
 }

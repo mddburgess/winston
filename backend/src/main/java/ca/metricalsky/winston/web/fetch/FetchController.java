@@ -33,7 +33,7 @@ public class FetchController {
                 ? notificationsService.openSubscription()
                 : notificationsService.requireSubscription(subscriptionId);
 
-        asyncFetchService.fetchChannel(request, sseEmitter);
+        asyncFetchService.fetch(request, sseEmitter);
 
         return subscriptionId == null
                 ? ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_EVENT_STREAM).body(sseEmitter)

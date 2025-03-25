@@ -38,7 +38,6 @@ public class FetchRequest {
     private OffsetDateTime lastUpdatedAt;
 
     public enum Status {
-        ACCEPTED,
         FETCHING,
         COMPLETED,
         FAILED,
