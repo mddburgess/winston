@@ -11,7 +11,7 @@ type VideoCardProps = {
 export const VideoCard = ({video}: VideoCardProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
-            <Ratio aspectRatio={"4x3"}>
+            <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
                 <Card.Img variant={"top"} src={video.thumbnailUrl}/>
             </Ratio>
             <Card.Body>

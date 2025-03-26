@@ -31,8 +31,11 @@ const SinglePagePaginationRow = (props: PaginationRowProps) => (
 
 const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
 
+    const firstPageNumber = Math.max(1, Math.min(props.page - 2, props.totalPages - 4));
+    const lastPageNumber = Math.min(props.totalPages, Math.max(props.page + 2, 5));
+
     const paginationItems: ReactElement[] = [];
-    for (let page = 1; page <= props.totalPages; ++page) {
+    for (let page = firstPageNumber; page <= lastPageNumber; ++page) {
         paginationItems.push(
             <Pagination.Item
                 key={page}
@@ -47,7 +50,7 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
     return (
         <>
             <Col className={"align-items-center d-flex"}>
-                {first(props)} &ndash; {last(props)} of {props.total} {pluralize(props)}
+                {first(props)}&ndash;{last(props)} of {props.total} {pluralize(props)}
             </Col>
             <Col xs={"auto"}>
                 <Pagination className={"mb-0"}>
@@ -59,7 +62,9 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
                         disabled={props.page === 1}
                         onClick={() => props.setPage(props.page - 1)}
                     />
+                    {firstPageNumber > 1 && <Pagination.Ellipsis disabled/>}
                     {...paginationItems}
+                    {lastPageNumber < props.totalPages && <Pagination.Ellipsis disabled/>}
                     <Pagination.Next
                         disabled={props.page === props.totalPages}
                         onClick={() => props.setPage(props.page + 1)}
