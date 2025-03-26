@@ -1,18 +1,22 @@
 import {Link, useParams} from "react-router";
 import {useFindChannelByIdQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
-import {useEffect, useMemo} from "react";
-import {Breadcrumb, BreadcrumbItem, Container} from "react-bootstrap";
+import {useEffect, useMemo, useState} from "react";
+import {Breadcrumb, BreadcrumbItem, Col, Container, Pagination, Row} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
 import {VideoCards} from "./VideoCards";
 import {FetchVideosAlert} from "./FetchVideosAlert";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {DateTime} from "luxon";
 import {initFetchStateForChannel} from "../../../store/slices/fetches";
+import {PaginationRow} from "../../../components/PaginationRow";
 
 export const ChannelsIdRoute = () => {
 
     const {channelId} = useParams()
     const dispatch = useAppDispatch()
+
+    const pageSize = 24;
+    const [page, setPage] = useState(1);
 
     const {data: channel} = useFindChannelByIdQuery(channelId!)
     useEffect(() => {
@@ -25,6 +29,11 @@ export const ChannelsIdRoute = () => {
         .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
     [videos, fetchedVideos])
 
+    const displayedVideos = useMemo(
+        () => combinedVideos.slice(pageSize * (page - 1), pageSize * page),
+        [combinedVideos, pageSize, page]
+    );
+
     return (
         <>
             <Breadcrumb>
@@ -35,7 +44,14 @@ export const ChannelsIdRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel}/>}
             {channel && <FetchVideosAlert channel={channel}/>}
-            <VideoCards videos={combinedVideos}/>
+            <PaginationRow
+                name={"video"}
+                total={combinedVideos.length}
+                pageSize={pageSize}
+                page={page}
+                setPage={setPage}
+            />
+            <VideoCards videos={displayedVideos}/>
         </>
     )
 }
