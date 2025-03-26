@@ -44,18 +44,21 @@ public class YouTubeClient {
                 .execute();
     }
 
-    public ActivityListResponse getActivities(String channelId, OffsetDateTime publishedAfter, String pageToken)
+    public ActivityListResponse getActivities(String channelId, OffsetDateTime publishedAfter, OffsetDateTime publishedBefore)
             throws IOException {
 
         var publishedAfterString = publishedAfter != null
                 ? DateTimeFormatter.ISO_INSTANT.format(publishedAfter)
+                : null;
+        var publishedBeforeString = publishedBefore != null
+                ? DateTimeFormatter.ISO_INSTANT.format(publishedBefore)
                 : null;
 
         return youTube.activities()
                 .list(ACTIVITY_PARTS)
                 .setChannelId(channelId)
                 .setPublishedAfter(publishedAfterString)
-                .setPageToken(pageToken)
+                .setPublishedBefore(publishedBeforeString)
                 .setMaxResults(50L)
                 .execute();
     }

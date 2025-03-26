@@ -17,7 +17,8 @@ public class FetchOperationService {
         var fetchOperation = new FetchOperation();
         fetchOperation.setFetchRequestId(context.getFetchRequest().getId());
         fetchOperation.setChannelId(context.getChannelId());
-        fetchOperation.setLastPublishedAt(context.getLastPublishedAt());
+        fetchOperation.setLastPublishedAt(context.getPublishedAfter());
+        fetchOperation.setPublishedBefore(context.getPublishedBefore());
         fetchOperation.setNextPageToken(context.getNextPageToken());
         fetchOperation.setStatus(Status.FETCHING);
 

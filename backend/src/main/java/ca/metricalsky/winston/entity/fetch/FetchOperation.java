@@ -30,6 +30,8 @@ public class FetchOperation {
 
     private OffsetDateTime lastPublishedAt;
 
+    private OffsetDateTime publishedBefore;
+
     private String nextPageToken;
 
     @Enumerated(EnumType.STRING)

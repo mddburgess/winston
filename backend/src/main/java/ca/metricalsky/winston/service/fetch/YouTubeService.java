@@ -31,10 +31,10 @@ public class YouTubeService {
         return channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
     }
 
-    public FetchVideosResponse fetchVideos(String channelId, OffsetDateTime publishedAt, String pageToken)
+    public FetchVideosResponse fetchVideos(String channelId, OffsetDateTime publishedAfter, OffsetDateTime publishedBefore)
             throws IOException {
 
-        var activityListResponse = youTubeClient.getActivities(channelId, publishedAt, pageToken);
+        var activityListResponse = youTubeClient.getActivities(channelId, publishedAfter, publishedBefore);
         var videos = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)

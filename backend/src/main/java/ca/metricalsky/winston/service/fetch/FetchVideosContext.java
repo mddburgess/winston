@@ -12,7 +12,8 @@ import java.time.OffsetDateTime;
 public class FetchVideosContext {
 
     private final String channelId;
-    private final OffsetDateTime lastPublishedAt;
+    private final OffsetDateTime publishedAfter;
+    private OffsetDateTime publishedBefore;
     private String nextPageToken;
     private FetchRequest fetchRequest;
     private FetchOperation currentOperation;

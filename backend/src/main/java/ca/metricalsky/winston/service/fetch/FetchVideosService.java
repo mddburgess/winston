@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
+import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
 import ca.metricalsky.winston.events.FetchStatus;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +57,7 @@ public class FetchVideosService implements FetchRequestHandler {
 
         return FetchVideosContext.builder()
                 .channelId(channelId)
-                .lastPublishedAt(lastPublishedAt)
+                .publishedAfter(lastPublishedAt)
                 .build();
     }
 
@@ -64,15 +66,22 @@ public class FetchVideosService implements FetchRequestHandler {
             fetchOperationService.startOperation(context);
 
             var channelId = context.getChannelId();
-            var lastPublishedAt = context.getLastPublishedAt();
-            var nextPageToken = context.getNextPageToken();
+            var publishedAfter = context.getPublishedAfter();
+            var publishedBefore = context.getPublishedBefore();
 
-            var fetchVideosResponse = youTubeService.fetchVideos(channelId, lastPublishedAt, nextPageToken);
+            var fetchVideosResponse = youTubeService.fetchVideos(channelId, publishedAfter, publishedBefore);
             videoRepository.saveAll(fetchVideosResponse.videos());
 
             var videoDtos = fetchVideosResponse.videos().stream()
                     .map(videoDtoMapper::fromEntity)
                     .toList();
+
+            var oldestPublishedAt = videoDtos.stream()
+                    .min(Comparator.comparing(VideoDto::getPublishedAt))
+                    .map(VideoDto::getPublishedAt)
+                    .map(publishedAt -> publishedAt.minusSeconds(1))
+                    .orElse(null);
+            context.setPublishedBefore(oldestPublishedAt);
             context.setNextPageToken(fetchVideosResponse.nextPageToken());
 
             var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
