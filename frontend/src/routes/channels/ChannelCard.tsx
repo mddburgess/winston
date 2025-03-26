@@ -13,16 +13,20 @@ export const ChannelCard = ({channel}: ChannelCardProps) => (
         <Card className={"h-100"}>
             <Card.Body className={"p-2"}>
                 <Row className={"m-0"}>
-                    <Col className={"col-3 p-0"}>
-                        <Image className={"w-100"} src={channel.thumbnailUrl}/>
+                    <Col className={"col-2 col-md-3 p-0"}>
+                        <Image
+                            roundedCircle
+                            className={"border w-100"}
+                            src={channel.thumbnailUrl}
+                        />
                     </Col>
-                    <Col>
+                    <Col className={"col-10 col-md-9"}>
                        <p className={"fs-5 mb-1"}>
                             <Link to={`/channels/${channel.id}`}>
                                 {channel.title}
                             </Link>
                         </p>
-                        <p className={"mb-1 small"}>
+                        <p className={"mb-1 small line-clamp"}>
                             {channel.description}
                         </p>
                     </Col>

@@ -7,7 +7,7 @@ type ChannelCardsProps = {
 }
 
 export const ChannelCards = ({channels = []}: ChannelCardsProps) => (
-    <Row xs={1} md={2} xl={3} className={"px-2"}>
+    <Row xs={1} md={2} lg={3} xxl={4} className={"px-2"}>
         {channels.map(channel => (<ChannelCard key={channel.id} channel={channel}/>))}
     </Row>
 );

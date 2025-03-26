@@ -5,6 +5,7 @@ import {BrowserRouter} from "react-router";
 import {App} from "./App";
 import {store} from "./store"
 import "bootstrap/dist/css/bootstrap.min.css"
+import "./index.css"
 
 const root = document.getElementById("root")!;
 createRoot(root).render(
