@@ -13,6 +13,7 @@ type FetchChannelRequest = FetchRequest & {
 
 type FetchVideosRequest = FetchRequest & {
     channelId: string;
+    mode: 'ALL' | 'LATEST'
 }
 
 export const apiSlice = createApi({
@@ -57,7 +58,7 @@ export const apiSlice = createApi({
                 body: {
                     videos: {
                         channelId: request.channelId,
-                        fetch: 'LATEST'
+                        fetch: request.mode
                     }
                 }
             }),

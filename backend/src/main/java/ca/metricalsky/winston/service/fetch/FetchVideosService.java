@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.dto.fetch.FetchVideos;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.FetchVideosEvent;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
@@ -27,7 +28,7 @@ public class FetchVideosService implements FetchRequestHandler {
 
     @Override
     public void fetch(FetchRequest fetchRequest, SseEmitter sseEmitter) {
-        var context = buildFetchContext(fetchRequest.getVideos().getChannelId());
+        var context = buildFetchContext(fetchRequest);
 
         try {
             fetchRequestService.startFetch(context);
@@ -42,11 +43,15 @@ public class FetchVideosService implements FetchRequestHandler {
         }
     }
 
-    public FetchVideosContext buildFetchContext(String channelId) {
+    public FetchVideosContext buildFetchContext(FetchRequest fetchRequest) {
+        var channelId = fetchRequest.getVideos().getChannelId();
+        var fetchMode = fetchRequest.getVideos().getFetch();
+
         channelService.requireChannelExists(channelId);
-        var lastPublishedAt = videoRepository.findLastPublishedAtForChannelId(channelId)
-                .map(date -> date.plusSeconds(1))
-                .orElse(null);
+        var lastPublishedAt = fetchMode == FetchVideos.Mode.ALL ? null
+                : videoRepository.findLastPublishedAtForChannelId(channelId)
+                        .map(date -> date.plusSeconds(1))
+                        .orElse(null);
 
         return FetchVideosContext.builder()
                 .channelId(channelId)

@@ -15,7 +15,6 @@ type MultiPagePaginationRowProps = PaginationRowProps & {
 
 export const PaginationRow = (props: PaginationRowProps) => {
     const totalPages = Math.ceil(props.total / props.pageSize)
-    console.log("Total pages", totalPages);
     return (
         <Row className={"mb-2"}>
             {totalPages < 2 && <SinglePagePaginationRow {...props}/>}

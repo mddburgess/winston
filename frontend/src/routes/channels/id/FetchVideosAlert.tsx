@@ -1,6 +1,6 @@
-import {Alert, Button, Col} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Col, Dropdown, SplitButton} from "react-bootstrap";
 import {Date} from "../../../components/Date";
-import {ArrowDownRightCircleFill, CheckCircleFill} from "react-bootstrap-icons";
+import {ArrowDownRightCircleFill, ArrowRepeat, CheckCircleFill} from "react-bootstrap-icons";
 import {ChannelDto} from "../../../model/ChannelDto";
 import {FetchVideosAction} from "./FetchVideosAction";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
@@ -39,13 +39,29 @@ const FetchAvailableBody = ({channel}: FetchVideosAlertProps) => {
                 <Date date={channel.lastFetchedAt}/>.</strong>
             </Col>
             <Col xs={"auto"}>
-                <Button
-                    className={`d-flex align-items-center`}
-                    onClick={() => dispatch(requestedVideosForChannelId(channel.id))}
-                >
-                    Fetch latest
-                    <ArrowDownRightCircleFill className={"ms-2"}/>
-                </Button>
+                <Dropdown as={ButtonGroup}>
+                    <Button
+                        className={`d-flex align-items-center`}
+                        onClick={() =>
+                            dispatch(requestedVideosForChannelId({channelId: channel.id, mode: 'LATEST'}))
+                        }
+                    >
+                        Fetch latest
+                        <ArrowDownRightCircleFill className={"ms-2"}/>
+                    </Button>
+                    <Dropdown.Toggle />
+                    <Dropdown.Menu align={"end"}>
+                        <Dropdown.Item
+                            className={"align-items-center d-flex"}
+                            onClick={() =>
+                                dispatch(requestedVideosForChannelId({channelId: channel.id, mode: 'ALL'}))
+                            }
+                        >
+                            Fetch all videos
+                            <ArrowRepeat className={"ms-2"}/>
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </Col>
         </Alert>
     );
@@ -64,7 +80,7 @@ const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
             <Col xs={"auto"}>
                 <Button className={"d-flex align-items-center btn-outline-secondary"} disabled={true}>
                     Fetching...
-                    <FetchVideosAction channelId={channel.id}/>
+                    <FetchVideosAction channelId={channel.id} mode={fetchState.mode ?? 'LATEST'}/>
                 </Button>
             </Col>
         </Alert>

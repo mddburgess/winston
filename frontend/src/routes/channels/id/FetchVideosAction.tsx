@@ -6,16 +6,17 @@ import {NotificationsSource} from "../../../components/NotificationsSource";
 import {EventSourceProvider} from "react-sse-hooks";
 
 type FetchVideosWidgetProps = {
-    channelId: string
+    channelId: string,
+    mode: 'ALL' | 'LATEST',
 }
 
-export const FetchVideosAction = ({channelId}: FetchVideosWidgetProps) => {
+export const FetchVideosAction = ({channelId, mode}: FetchVideosWidgetProps) => {
 
     const [fetchVideosByChannelId] = useFetchVideosByChannelIdMutation()
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchVideosByChannelId({ subscriptionId, channelId });
+        fetchVideosByChannelId({ subscriptionId, channelId, mode });
     }
 
     const handleEvent = (event: FetchVideosEvent) => {

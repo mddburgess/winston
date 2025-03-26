@@ -5,6 +5,7 @@ import {ChannelDto} from "../../model/ChannelDto";
 
 export type FetchState<T> = {
     id: string;
+    mode?: 'ALL' | 'LATEST';
     status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED';
     data: T[];
 }
@@ -21,6 +22,11 @@ type FetchStates = {
 const initialState: FetchStates = {
     channel: {},
     videos: {},
+}
+
+type FetchVideosRequest = {
+    channelId: string;
+    mode: 'ALL' | 'LATEST';
 }
 
 export const fetchesSlice = createSlice({
@@ -41,9 +47,10 @@ export const fetchesSlice = createSlice({
                 data: []
             }
         },
-        requestedVideosForChannelId: (state, action: PayloadAction<string>) => {
-            state.videos[action.payload] = {
-                id: action.payload,
+        requestedVideosForChannelId: (state, action: PayloadAction<FetchVideosRequest>) => {
+            state.videos[action.payload.channelId] = {
+                id: action.payload.channelId,
+                mode: action.payload.mode,
                 status: 'REQUESTED',
                 data: []
             }
