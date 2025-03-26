@@ -76,13 +76,7 @@ public class FetchVideosService implements FetchRequestHandler {
                     .map(videoDtoMapper::fromEntity)
                     .toList();
 
-            var oldestPublishedAt = videoDtos.stream()
-                    .min(Comparator.comparing(VideoDto::getPublishedAt))
-                    .map(VideoDto::getPublishedAt)
-                    .map(publishedAt -> publishedAt.minusSeconds(1))
-                    .orElse(null);
-            context.setPublishedBefore(oldestPublishedAt);
-            context.setNextPageToken(fetchVideosResponse.nextPageToken());
+            context.setPublishedBefore(fetchVideosResponse.nextPublishedBefore());
 
             var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
             var event = new FetchVideosEvent(channelId, eventStatus, videoDtos);

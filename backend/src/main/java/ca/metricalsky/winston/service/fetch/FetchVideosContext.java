@@ -14,11 +14,10 @@ public class FetchVideosContext {
     private final String channelId;
     private final OffsetDateTime publishedAfter;
     private OffsetDateTime publishedBefore;
-    private String nextPageToken;
     private FetchRequest fetchRequest;
     private FetchOperation currentOperation;
 
     public boolean hasNext() {
-        return nextPageToken != null;
+        return publishedBefore != null;
     }
 }

@@ -4,9 +4,9 @@ import com.google.api.client.util.DateTime;
 
 import java.time.OffsetDateTime;
 
-class OffsetDateTimeMapper {
+public class OffsetDateTimeMapper {
 
-    OffsetDateTime fromYouTube(DateTime dateTime) {
+    public OffsetDateTime fromYouTube(DateTime dateTime) {
         return dateTime == null ? null : OffsetDateTime.parse(dateTime.toString());
     }
 }

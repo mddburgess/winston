@@ -19,7 +19,6 @@ public class FetchOperationService {
         fetchOperation.setChannelId(context.getChannelId());
         fetchOperation.setLastPublishedAt(context.getPublishedAfter());
         fetchOperation.setPublishedBefore(context.getPublishedBefore());
-        fetchOperation.setNextPageToken(context.getNextPageToken());
         fetchOperation.setStatus(Status.FETCHING);
 
         fetchOperation = fetchOperationRepository.save(fetchOperation);
