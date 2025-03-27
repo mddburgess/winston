@@ -7,7 +7,7 @@ type ReplyListProps = {
 }
 
 export const ReplyList = ({ replies }: ReplyListProps) => (
-    <ListGroup>
+    <ListGroup variant={"flush"} className={"ps-4"}>
         {replies.map((reply) => (<ReplyListItem key={reply.id} reply={reply}/>))}
     </ListGroup>
 )
