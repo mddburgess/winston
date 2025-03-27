@@ -12,7 +12,9 @@ export const VideoCard = ({video}: VideoCardProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
-                <Card.Img variant={"top"} src={video.thumbnailUrl}/>
+                <Link to={`/videos/${video.id}`}>
+                    <Card.Img variant={"top"} src={video.thumbnailUrl}/>
+                </Link>
             </Ratio>
             <Card.Body>
                 <Card.Subtitle>
