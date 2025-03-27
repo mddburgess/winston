@@ -6,7 +6,7 @@ type CommentListProps = {
     comments?: CommentDto[]
 }
 export const CommentList = ({comments = []}: CommentListProps) => (
-    <ListGroup>
+    <ListGroup className={"pb-3 pt-2"}>
         {comments.map((comment: CommentDto) => (<CommentListItem key={comment.id} comment={comment}/>))}
     </ListGroup>
 )

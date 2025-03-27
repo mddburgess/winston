@@ -3,11 +3,20 @@ import {useFindVideoByIdQuery, useListCommentsByVideoIdQuery} from "../../../sto
 import {Breadcrumb, BreadcrumbItem, Col, Container, Image, Row} from "react-bootstrap";
 import {CommentList} from "../../../components/comments/CommentList";
 import {VideoDetails} from "./VideoDetails";
+import {PaginationRow} from "../../../components/PaginationRow";
+import {useMemo, useState} from "react";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
     const {data: video} = useFindVideoByIdQuery(videoId!)
     const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
+
+    const pageSize = 50;
+    const [page, setPage] = useState(1);
+    const displayedComments = useMemo(
+        () => comments?.slice(pageSize * (page - 1), pageSize * page) ?? [],
+        [comments, pageSize, page]
+    );
 
     return (
         <>
@@ -25,7 +34,21 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            <CommentList comments={comments}/>
+            <PaginationRow
+                name={"comment"}
+                total={comments?.length ?? 0}
+                pageSize={pageSize}
+                page={page}
+                setPage={setPage}
+            />
+            <CommentList comments={displayedComments}/>
+            {(comments?.length ?? 0) > pageSize && <PaginationRow
+                name={"comment"}
+                total={comments?.length ?? 0}
+                pageSize={pageSize}
+                page={page}
+                setPage={setPage}
+            />}
         </>
     )
 }
