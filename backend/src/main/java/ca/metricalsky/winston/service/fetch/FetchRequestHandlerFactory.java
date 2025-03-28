@@ -12,6 +12,7 @@ public class FetchRequestHandlerFactory {
 
     private final FetchChannelService fetchChannelService;
     private final FetchVideosService fetchVideosService;
+    private final FetchCommentsService fetchCommentsService;
 
     public FetchRequestHandler getHandlerForRequest(FetchRequest fetchRequest) {
         if (fetchRequest.getChannel() != null) {
@@ -19,6 +20,9 @@ public class FetchRequestHandlerFactory {
         }
         if (fetchRequest.getVideos() != null) {
             return fetchVideosService;
+        }
+        if (fetchRequest.getComments() != null) {
+            return fetchCommentsService;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }

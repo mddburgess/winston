@@ -47,21 +47,21 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            {video && (comments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
+            {video && (combinedComments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
             {video && <FetchCommentsAlert video={video}/>}
-            {(comments?.length ?? 0) > 0 && (
+            {(combinedComments?.length ?? 0) > 0 && (
                 <>
                     <PaginationRow
                         name={"comment"}
-                        total={comments?.length ?? 0}
+                        total={combinedComments?.length ?? 0}
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}
                     />
                     <CommentList comments={displayedComments}/>
-                    {(comments?.length ?? 0) > pageSize && <PaginationRow
+                    {(combinedComments?.length ?? 0) > pageSize && <PaginationRow
                         name={"comment"}
-                        total={comments?.length ?? 0}
+                        total={combinedComments?.length ?? 0}
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}

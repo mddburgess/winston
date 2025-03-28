@@ -1,10 +1,12 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.client.YouTubeClient;
+import ca.metricalsky.winston.dto.FetchCommentsResponse;
 import ca.metricalsky.winston.dto.FetchVideosResponse;
 import ca.metricalsky.winston.entity.Channel;
 import ca.metricalsky.winston.entity.Video;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
+import ca.metricalsky.winston.mapper.entity.CommentMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
 import com.google.api.services.youtube.model.Activity;
@@ -25,6 +27,7 @@ public class YouTubeService {
 
     private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
+    private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
     private final YouTubeClient youTubeClient;
 
@@ -66,5 +69,16 @@ public class YouTubeService {
                 nextPublishedBefore,
                 videos
         );
+    }
+
+    public FetchCommentsResponse fetchComments(String channelId, String pageToken) throws IOException {
+        var commentThreadListResponse = youTubeClient.getComments(channelId, pageToken);
+        var comments = commentThreadListResponse.getItems()
+                .stream()
+                .map(commentMapper::fromYouTube)
+                .toList();
+        var nextPageToken = commentThreadListResponse.getNextPageToken();
+
+        return new FetchCommentsResponse(comments, nextPageToken);
     }
 }
