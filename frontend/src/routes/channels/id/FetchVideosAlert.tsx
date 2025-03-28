@@ -6,6 +6,7 @@ import {FetchVideosAction} from "./FetchVideosAction";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {FetchState, requestedVideosForChannelId} from "../../../store/slices/fetches";
 import {VideoWithChannelIdDto} from "../../../model/VideoDto";
+import {pluralize} from "../../../utils";
 
 type FetchVideosAlertProps = {
     channel: ChannelDto
@@ -69,8 +70,8 @@ const FetchAvailableBody = ({channel}: FetchVideosAlertProps) => {
 
 const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
 
-    const videoCountLabel = fetchState.data.length === 0 ? 'latest videos'
-        : fetchState.data.length === 1 ? '1 video' : fetchState.data.length + ' videos'
+    const videoCountLabel = fetchState.data.length === 0
+        ? "latest videos" : pluralize(fetchState.data.length, "video");
 
     return (
         <Alert className={"d-flex align-items-center alert-secondary"}>
@@ -87,21 +88,16 @@ const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
     );
 }
 
-const FetchCompletedBody = ({fetchState}: AlertBodyProps) => {
-
-    const videoCountLabel = fetchState.data.length === 1 ? '1 video' : fetchState.data.length + ' videos'
-
-    return (
-        <Alert className={"d-flex align-items-center alert-success"}>
-            <Col>
-                Fetched <strong>{videoCountLabel}</strong> from YouTube.
-            </Col>
-            <Col xs={"auto"}>
-                <Button className={"d-flex align-items-center btn-outline-success"} disabled={true}>
-                    Fetched
-                    <CheckCircleFill className={"ms-2"}/>
-                </Button>
-            </Col>
-        </Alert>
-    )
-}
+const FetchCompletedBody = ({fetchState}: AlertBodyProps) => (
+    <Alert className={"d-flex align-items-center alert-success"}>
+        <Col>
+            Fetched <strong>{pluralize(fetchState.data.length, "video")}</strong> from YouTube.
+        </Col>
+        <Col xs={"auto"}>
+            <Button className={"d-flex align-items-center btn-outline-success"} disabled={true}>
+                Fetched
+                <CheckCircleFill className={"ms-2"}/>
+            </Button>
+        </Col>
+    </Alert>
+)

@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {VideoWithChannelIdDto} from "../../model/VideoDto";
 import {FetchVideosEvent} from "../../model/events/FetchVideosEvent";
 import {ChannelDto} from "../../model/ChannelDto";
+import {CommentDto} from "../../model/CommentDto";
 
 export type FetchState<T> = {
     id: string;
@@ -16,12 +17,16 @@ type FetchStates = {
     },
     videos: {
         [id: string]: FetchState<VideoWithChannelIdDto>;
+    },
+    comments: {
+        [id: string]: FetchState<CommentDto>;
     }
 }
 
 const initialState: FetchStates = {
     channel: {},
     videos: {},
+    comments: {},
 }
 
 type FetchVideosRequest = {
@@ -63,6 +68,13 @@ export const fetchesSlice = createSlice({
                 status: event.status,
                 data: (fetchState?.data ?? []).concat(event.videos)
             }
+        },
+        requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
+            state.comments[action.payload] = {
+                id: action.payload,
+                status: 'REQUESTED',
+                data: []
+            }
         }
     }
 })
@@ -72,6 +84,7 @@ export const {
     initFetchStateForChannel,
     requestedVideosForChannelId,
     fetchedVideos,
+    requestedCommentsForVideoId,
 } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;

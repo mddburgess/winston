@@ -1,5 +1,6 @@
 import {Col, Pagination, Row} from "react-bootstrap";
 import {ReactElement} from "react";
+import {pluralize} from "../utils";
 
 type PaginationRowProps = {
     name: string,
@@ -25,7 +26,7 @@ export const PaginationRow = (props: PaginationRowProps) => {
 
 const SinglePagePaginationRow = (props: PaginationRowProps) => (
     <Col className={"align-items-center d-flex"}>
-        {props.total} {pluralize(props)}
+        {pluralize(props.total, props.name)}
     </Col>
 )
 
@@ -50,7 +51,7 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
     return (
         <>
             <Col className={"align-items-center d-flex"}>
-                {first(props)}&ndash;{last(props)} of {props.total} {pluralize(props)}
+                {first(props)}&ndash;{last(props)} of {pluralize(props.total, props.name)}
             </Col>
             <Col xs={"auto"}>
                 <Pagination className={"mb-0"}>
@@ -85,8 +86,4 @@ const first = (props: PaginationRowProps) => {
 
 const last = (props: PaginationRowProps) => {
     return props.pageSize * props.page > props.total ? props.total : props.pageSize * props.page;
-}
-
-const pluralize = (props: PaginationRowProps) => {
-    return props.total === 1 ? props.name : `${props.name}s`
 }

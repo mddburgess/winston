@@ -6,6 +6,7 @@ import {VideoDetails} from "./VideoDetails";
 import {PaginationRow} from "../../../components/PaginationRow";
 import {useMemo, useState} from "react";
 import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
+import {FetchCommentsAlert} from "./FetchCommentsAlert";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
@@ -35,7 +36,8 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            {(comments?.length ?? 0) == 0 && <NoCommentsJumbotron/>}
+            {video && (comments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
+            {video && <FetchCommentsAlert video={video}/>}
             {(comments?.length ?? 0) > 0 && (
                 <>
                     <PaginationRow
