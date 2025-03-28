@@ -16,6 +16,10 @@ type FetchVideosRequest = FetchRequest & {
     mode: 'ALL' | 'LATEST'
 }
 
+type FetchCommentsRequest = FetchRequest & {
+    videoId: string;
+}
+
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({baseUrl: "/api"}),
@@ -38,7 +42,7 @@ export const apiSlice = createApi({
         listCommentsByAuthorId: builder.query<CommentDto[], string>({
             query: (authorId) => `/authors/${authorId}/comments`
         }),
-        fetchChannelByHandle: builder.mutation<string, FetchChannelRequest>({
+        fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
                 url: `/fetch`,
                 method: `POST`,
@@ -50,7 +54,7 @@ export const apiSlice = createApi({
                 }
             })
         }),
-        fetchVideosByChannelId: builder.mutation<VideoWithChannelIdDto, FetchVideosRequest>({
+        fetchVideosByChannelId: builder.mutation<undefined, FetchVideosRequest>({
             query: (request) => ({
                 url: `/fetch`,
                 method: 'POST',
@@ -63,6 +67,18 @@ export const apiSlice = createApi({
                 }
             }),
         }),
+        fetchCommentsByVideoId: builder.mutation<undefined, FetchCommentsRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: "POST",
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    comments: {
+                        videoId: request.videoId
+                    }
+                }
+            })
+        })
     })
 });
 
@@ -75,4 +91,5 @@ export const {
     useListCommentsByAuthorIdQuery,
     useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
+    useFetchCommentsByVideoIdMutation,
 } = apiSlice

@@ -5,6 +5,7 @@ import {CommentDto} from "../../../model/CommentDto";
 import {Alert, Button, Col} from "react-bootstrap";
 import {pluralize} from "../../../utils";
 import {CheckCircleFill} from "react-bootstrap-icons";
+import {FetchCommentsAction} from "./FetchCommentsAction";
 
 type FetchCommentsAlertProps = {
     video: VideoWithChannelDto
@@ -40,7 +41,7 @@ const FetchingCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) 
             <Col xs={"auto"}>
                 <Button className={"align-items-center btn-outline-secondary d-flex"} disabled>
                     Fetching...
-                    {/*<FetchCommentsAction videoId={video.id}/>*/}
+                    <FetchCommentsAction videoId={video.id}/>
                 </Button>
             </Col>
         </Alert>

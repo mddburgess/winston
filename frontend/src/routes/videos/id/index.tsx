@@ -7,17 +7,28 @@ import {PaginationRow} from "../../../components/PaginationRow";
 import {useMemo, useState} from "react";
 import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 import {FetchCommentsAlert} from "./FetchCommentsAlert";
+import {useAppSelector} from "../../../store/hooks";
+import {DateTime} from "luxon";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
-    const {data: video} = useFindVideoByIdQuery(videoId!)
-    const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
 
     const pageSize = 50;
     const [page, setPage] = useState(1);
+
+    const {data: video} = useFindVideoByIdQuery(videoId!)
+
+    const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
+    const fetchedComments = useAppSelector(state => state.fetches.comments[videoId!]?.data)
+    const combinedComments = useMemo(
+        () => (fetchedComments ?? []).concat(comments ?? [])
+            .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
+        [comments, fetchedComments]
+    );
+
     const displayedComments = useMemo(
-        () => comments?.slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [comments, pageSize, page]
+        () => combinedComments.slice(pageSize * (page - 1), pageSize * page) ?? [],
+        [combinedComments, pageSize, page]
     );
 
     return (

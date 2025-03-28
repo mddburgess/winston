@@ -3,6 +3,7 @@ import {VideoWithChannelIdDto} from "../../model/VideoDto";
 import {FetchVideosEvent} from "../../model/events/FetchVideosEvent";
 import {ChannelDto} from "../../model/ChannelDto";
 import {CommentDto} from "../../model/CommentDto";
+import {FetchCommentsEvent} from "../../model/events/FetchCommentsEvent";
 
 export type FetchState<T> = {
     id: string;
@@ -75,6 +76,15 @@ export const fetchesSlice = createSlice({
                 status: 'REQUESTED',
                 data: []
             }
+        },
+        fetchedComments: (state, action: PayloadAction<FetchCommentsEvent>) => {
+            const event = action.payload;
+            const fetchState = state.comments[event.videoId];
+            state.comments[event.videoId] = {
+                id: event.videoId,
+                status: event.status,
+                data: (fetchState?.data ?? []).concat(event.comments)
+            }
         }
     }
 })
@@ -85,6 +95,7 @@ export const {
     requestedVideosForChannelId,
     fetchedVideos,
     requestedCommentsForVideoId,
+    fetchedComments,
 } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;
