@@ -5,6 +5,7 @@ import {CommentList} from "../../../components/comments/CommentList";
 import {VideoDetails} from "./VideoDetails";
 import {PaginationRow} from "../../../components/PaginationRow";
 import {useMemo, useState} from "react";
+import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
@@ -34,21 +35,26 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            <PaginationRow
-                name={"comment"}
-                total={comments?.length ?? 0}
-                pageSize={pageSize}
-                page={page}
-                setPage={setPage}
-            />
-            <CommentList comments={displayedComments}/>
-            {(comments?.length ?? 0) > pageSize && <PaginationRow
-                name={"comment"}
-                total={comments?.length ?? 0}
-                pageSize={pageSize}
-                page={page}
-                setPage={setPage}
-            />}
+            {(comments?.length ?? 0) == 0 && <NoCommentsJumbotron/>}
+            {(comments?.length ?? 0) > 0 && (
+                <>
+                    <PaginationRow
+                        name={"comment"}
+                        total={comments?.length ?? 0}
+                        pageSize={pageSize}
+                        page={page}
+                        setPage={setPage}
+                    />
+                    <CommentList comments={displayedComments}/>
+                    {(comments?.length ?? 0) > pageSize && <PaginationRow
+                        name={"comment"}
+                        total={comments?.length ?? 0}
+                        pageSize={pageSize}
+                        page={page}
+                        setPage={setPage}
+                    />}
+                </>
+            )}
         </>
     )
 }
