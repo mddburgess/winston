@@ -71,7 +71,7 @@ public class CommentService {
     }
 
     public List<CommentDto> findAllByVideoId(String videoId) {
-        return commentRepository.findAllByVideoIdOrderByPublishedAtAsc(videoId)
+        return commentRepository.findTopLevelCommentsByVideoId(videoId)
                 .stream()
                 .map(commentDtoMapper::fromEntity)
                 .toList();

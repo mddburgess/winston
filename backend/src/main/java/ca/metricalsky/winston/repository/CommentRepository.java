@@ -12,8 +12,13 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
 
+    @Query("""
+            SELECT c FROM Comment c
+            WHERE c.videoId = :videoId AND c.parentId IS NULL
+            ORDER BY c.publishedAt ASC
+            """)
     @EntityGraph(attributePaths = {"author", "replies"})
-    List<Comment> findAllByVideoIdOrderByPublishedAtAsc(String videoId);
+    List<Comment> findTopLevelCommentsByVideoId(String videoId);
 
     @Query("""
             SELECT c FROM Comment c
