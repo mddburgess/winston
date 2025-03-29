@@ -24,34 +24,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class YouTubeController {
 
-    private final ChannelMapper channelMapper = Mappers.getMapper(ChannelMapper.class);
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
     private final YouTubeClient youTubeClient;
-    private final ChannelRepository channelRepository;
     private final CommentService commentService;
-
-    @GetMapping("/channels/{handle}")
-    public Channel getChannelByHandle(@PathVariable String handle) throws IOException {
-        var channelListResponse = youTubeClient.getChannel(handle);
-        var channel = channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
-        channelRepository.save(channel);
-        return channel;
-    }
-
-    @GetMapping("/comments/{videoId}")
-    public List<Comment> getCommentsByVideoId(
-            @PathVariable String videoId,
-            @RequestParam(required = false) String pageToken
-    ) throws IOException {
-        var commentThreadListResponse = youTubeClient.getComments(videoId, pageToken);
-        var comments = commentThreadListResponse.getItems()
-                .stream()
-                .map(commentMapper::fromYouTube)
-                .toList();
-        commentService.saveAll(comments);
-        return comments;
-    }
 
     @GetMapping("/replies/{commentId}")
     public List<Comment> getRepliesByCommentId(
