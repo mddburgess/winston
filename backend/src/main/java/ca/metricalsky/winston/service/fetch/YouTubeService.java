@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 @Service
@@ -44,7 +45,14 @@ public class YouTubeService {
             String channelId, OffsetDateTime publishedAfter, OffsetDateTime publishedBefore)
             throws IOException {
 
-        var activityListResponse = youTubeClient.getActivities(channelId, publishedAfter, publishedBefore);
+        var publishedAfterString = publishedAfter != null
+                ? DateTimeFormatter.ISO_INSTANT.format(publishedAfter)
+                : null;
+        var publishedBeforeString = publishedBefore != null
+                ? DateTimeFormatter.ISO_INSTANT.format(publishedBefore)
+                : null;
+
+        var activityListResponse = youTubeClient.getActivities(channelId, publishedAfterString, publishedBeforeString);
         var videos = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
