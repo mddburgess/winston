@@ -31,5 +31,8 @@ public class CommentDto {
     private OffsetDateTime lastFetchedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
     @NonNull
+    private Long totalReplyCount = 0L;
+
+    @NonNull
     private List<CommentDto> replies = new ArrayList<>();
 }

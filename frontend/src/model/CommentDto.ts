@@ -8,5 +8,6 @@ export type CommentDto = {
     publishedAt: string,
     updateAt: string,
     lastFetchedAt: string,
+    totalReplyCount: number,
     replies: CommentDto[]
 }

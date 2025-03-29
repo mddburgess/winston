@@ -26,7 +26,7 @@ export const CommentListItem = ({ comment }: CommentListItemProps) => (
             </Col>
         </Row>
         <Row>
-            <ReplyList replies={comment.replies}/>
+            <ReplyList totalReplyCount={comment.totalReplyCount} replies={comment.replies}/>
         </Row>
     </ListGroupItem>
 )
