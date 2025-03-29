@@ -36,32 +36,25 @@ public class VideoService {
     @Transactional(readOnly = true)
     public List<VideoDto> findAllByChannelId(String channelId) {
         var commentCounts = commentService.getCommentCountsByChannelId(channelId);
-        var replyCounts = commentService.getReplyCountsByChannelId(channelId);
         return videoRepository.findAllByChannelIdOrderByPublishedAtDesc(channelId)
                 .stream()
                 .map(videoDtoMapper::fromEntity)
                 .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
-                .peek(video -> video.setReplyCount(replyCounts.get(video.getId()).getComments()))
-                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getReplies()))
-                .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<VideoDto> findByChannelId(String channelId, Pageable pageable) {
-        var commentCounts = commentService.getCommentCountsByChannelId(channelId);
-        var replyCounts = commentService.getReplyCountsByChannelId(channelId);
-        return videoRepository.findByChannelIdOrderByPublishedAtDesc(channelId, pageable)
-                .stream()
-                .map(videoDtoMapper::fromEntity)
-                .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
-                .peek(video -> video.setReplyCount(replyCounts.get(video.getId()).getComments()))
-                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getReplies()))
+                .peek(video -> video.setReplyCount(commentCounts.get(video.getId()).getReplies()))
+                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getTotalReplies()))
                 .toList();
     }
 
     public VideoDto getById(String videoId) {
-        return videoRepository.findById(videoId)
+        var videoDto = videoRepository.findById(videoId)
                 .map(videoDtoMapper::fromEntity)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var commentCount = commentService.getCommentCountByVideoId(videoId);
+        videoDto.setCommentCount(commentCount.getComments());
+        videoDto.setReplyCount(commentCount.getReplies());
+        videoDto.setTotalReplyCount(commentCount.getTotalReplies());
+
+        return videoDto;
     }
 }

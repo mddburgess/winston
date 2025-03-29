@@ -4,9 +4,15 @@ public interface CommentCount {
 
     String getVideoId();
 
-    Long getComments();
+    default Long getComments() {
+        return getCommentsAndReplies() - getReplies();
+    }
+
+    Long getCommentsAndReplies();
 
     Long getReplies();
+
+    Long getTotalReplies();
 
     class Empty implements CommentCount {
 
@@ -16,12 +22,17 @@ public interface CommentCount {
         }
 
         @Override
-        public Long getComments() {
+        public Long getCommentsAndReplies() {
             return 0L;
         }
 
         @Override
         public Long getReplies() {
+            return 0L;
+        }
+
+        @Override
+        public Long getTotalReplies() {
             return 0L;
         }
     }

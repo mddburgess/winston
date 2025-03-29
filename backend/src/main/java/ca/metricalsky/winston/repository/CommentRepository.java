@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
@@ -17,7 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
             WHERE c.videoId = :videoId AND c.parentId IS NULL
             ORDER BY c.publishedAt ASC
             """)
-    @EntityGraph(attributePaths = {"author", "replies"})
+    @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
     List<Comment> findTopLevelCommentsByVideoId(String videoId);
 
     @Query("""
@@ -32,7 +33,11 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findAllWithContextByAuthorId(String authorId);
 
     @Query("""
-            SELECT v.id AS videoId, COUNT(c.id) AS comments, SUM(c.totalReplyCount) AS replies
+            SELECT
+                v.id AS videoId,
+                COUNT(c.id) AS commentsAndReplies,
+                COUNT(c.parentId) AS replies,
+                COALESCE(SUM(c.totalReplyCount), 0) AS totalReplies
             FROM Video v
                 JOIN Comment c ON v.id = c.videoId
             WHERE v.channelId = :channelId
@@ -41,12 +46,12 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<CommentCount> countCommentsForChannelIdGroupByVideoId(String channelId);
 
     @Query("""
-            SELECT v.id AS videoId, COUNT(r.id) AS comments
-            FROM Video v
-                JOIN Comment c ON v.id = c.videoId
-                JOIN Comment r ON c.id = r.parentId
-            WHERE v.channelId = :channelId
-            GROUP BY v.id
+            SELECT
+                COUNT(c.id) AS commentsAndReplies,
+                COUNT(c.parentId) AS replies,
+                COALESCE(SUM(c.totalReplyCount), 0) AS totalReplies
+            FROM Comment c
+            WHERE c.videoId = :videoId
             """)
-    List<CommentCount> countRepliesForChannelIdGroupByVideoId(String channelId);
+    CommentCount countCommentsForVideoId(String videoId);
 }

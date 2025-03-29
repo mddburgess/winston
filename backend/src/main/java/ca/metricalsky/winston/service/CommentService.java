@@ -63,11 +63,8 @@ public class CommentService {
         return defaultedMap(counts, EMPTY_COUNT);
     }
 
-    public Map<String, CommentCount> getReplyCountsByChannelId(String channelId) {
-        var counts = commentRepository.countRepliesForChannelIdGroupByVideoId(channelId)
-                .stream()
-                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
-        return defaultedMap(counts, EMPTY_COUNT);
+    public CommentCount getCommentCountByVideoId(String videoId) {
+        return commentRepository.countCommentsForVideoId(videoId);
     }
 
     public List<CommentDto> findAllByVideoId(String videoId) {
