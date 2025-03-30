@@ -6,12 +6,15 @@ import {ReplyAll} from "react-bootstrap-icons";
 
 type ReplyListProps = {
     totalReplyCount: number,
-    replies: CommentDto[]
+    replies: CommentDto[],
+    highlightAuthorId?: string,
 }
 
-export const ReplyList = ({ totalReplyCount, replies }: ReplyListProps) => (
+export const ReplyList = ({ totalReplyCount, replies, highlightAuthorId = "" }: ReplyListProps) => (
     <ListGroup variant={"flush"} className={"ps-4"}>
-        {replies.map((reply) => (<ReplyListItem key={reply.id} reply={reply}/>))}
+        {replies.map((reply) => (
+            <ReplyListItem key={reply.id} reply={reply} highlightAuthorId={highlightAuthorId}/>
+        ))}
         {totalReplyCount > replies.length &&
             <ListGroupItem key={"more"} className={"align-items-center d-flex"}>
                 <ReplyAll className={"me-2"}/>

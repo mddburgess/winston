@@ -9,6 +9,7 @@ import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 import {FetchCommentsAlert} from "./FetchCommentsAlert";
 import {useAppSelector} from "../../../store/hooks";
 import {DateTime} from "luxon";
+import {descBy} from "../../../utils";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
@@ -22,7 +23,7 @@ export const VideosIdRoute = () => {
     const fetchedComments = useAppSelector(state => state.fetches.comments[videoId!]?.data)
     const combinedComments = useMemo(
         () => (fetchedComments ?? []).concat(comments ?? [])
-            .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
+            .sort(descBy(comment => DateTime.fromISO(comment.publishedAt).valueOf())),
         [comments, fetchedComments]
     );
 

@@ -1,7 +1,7 @@
 import {useParams} from "react-router";
 import {Row} from "react-bootstrap";
 import {useFindAuthorDetailsByIdQuery} from "../../../store/slices/api";
-import {CommentList} from "../../../components/comments/CommentList";
+import {VideoCommentsList} from "./VideoCommentsList";
 
 export const AuthorsIdRoute = () => {
     const {authorId} = useParams()
@@ -15,7 +15,7 @@ export const AuthorsIdRoute = () => {
             <Row>
                 <h1>{authorDetails.author.displayName}</h1>
             </Row>
-            <CommentList comments={authorDetails.comments} />
+            <VideoCommentsList {...authorDetails}/>
         </>
     );
 }

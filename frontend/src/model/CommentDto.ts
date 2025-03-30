@@ -2,6 +2,7 @@ import {AuthorDto} from "./AuthorDto";
 
 export type CommentDto = {
     id: string,
+    videoId: string,
     author: AuthorDto,
     text: string,
     publishedAt: string,
