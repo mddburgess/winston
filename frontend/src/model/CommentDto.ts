@@ -1,9 +1,8 @@
+import {AuthorDto} from "./AuthorDto";
+
 export type CommentDto = {
     id: string,
-    author: {
-        id: string,
-        displayName: string
-    },
+    author: AuthorDto,
     text: string,
     publishedAt: string,
     updateAt: string,
