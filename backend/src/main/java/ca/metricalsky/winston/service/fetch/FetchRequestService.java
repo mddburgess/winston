@@ -13,29 +13,19 @@ public class FetchRequestService {
 
     private final FetchRequestRepository fetchRequestRepository;
 
-    public void startFetch(FetchVideosContext context) {
-        var fetchRequest = new FetchRequest();
-        fetchRequest.setFetchId(context.getChannelId());
+    public FetchRequest startFetch(FetchRequest fetchRequest) {
         fetchRequest.setStatus(Status.FETCHING);
-
-        fetchRequest = fetchRequestRepository.save(fetchRequest);
-        context.setFetchRequest(fetchRequest);
+        return fetchRequestRepository.save(fetchRequest);
     }
 
-    public void completeFetch(FetchVideosContext context) {
-        var fetchRequest = context.getFetchRequest();
+    public FetchRequest fetchCompleted(FetchRequest fetchRequest) {
         fetchRequest.setStatus(Status.COMPLETED);
-
-        fetchRequest = fetchRequestRepository.save(fetchRequest);
-        context.setFetchRequest(fetchRequest);
+        return fetchRequestRepository.save(fetchRequest);
     }
 
-    public void failFetch(FetchVideosContext context, Throwable throwable) {
-        var fetchRequest = context.getFetchRequest();
+    public FetchRequest fetchFailed(FetchRequest fetchRequest, Throwable throwable) {
         fetchRequest.setStatus(Status.FAILED);
         fetchRequest.setError(Throwables.getStackTraceAsString(throwable));
-
-        fetchRequest = fetchRequestRepository.save(fetchRequest);
-        context.setFetchRequest(fetchRequest);
+        return fetchRequestRepository.save(fetchRequest);
     }
 }

@@ -1,0 +1,54 @@
+package ca.metricalsky.winston.mapper.entity;
+
+import ca.metricalsky.winston.dto.fetch.FetchChannel;
+import ca.metricalsky.winston.dto.fetch.FetchComments;
+import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
+import ca.metricalsky.winston.dto.fetch.FetchVideos;
+import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+@Service
+public class FetchRequestMapper {
+
+    public FetchRequest toFetchRequest(FetchRequestDto fetchRequestDto) {
+        if (fetchRequestDto.getChannel() != null) {
+            return channelRequest(fetchRequestDto.getChannel());
+        }
+        if (fetchRequestDto.getVideos() != null) {
+            return videosRequest(fetchRequestDto.getVideos());
+        }
+        if (fetchRequestDto.getComments() != null) {
+            return commentsRequest(fetchRequestDto.getComments());
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+
+    private FetchRequest channelRequest(FetchChannel fetchChannel) {
+        var fetchRequest = new FetchRequest();
+        fetchRequest.setFetchType(FetchType.CHANNEL);
+        fetchRequest.setObjectId(fetchChannel.getHandle());
+        return fetchRequest;
+    }
+
+    private FetchRequest videosRequest(FetchVideos fetchVideos) {
+        var fetchRequest = new FetchRequest();
+        fetchRequest.setFetchType(FetchType.VIDEOS);
+        fetchRequest.setObjectId(fetchVideos.getChannelId());
+        fetchRequest.setMode(fetchVideos.getFetch().toString());
+        if (fetchVideos.getRange() != null) {
+            fetchRequest.setPublishedAfter(fetchVideos.getRange().getAfter());
+            fetchRequest.setPublishedBefore(fetchVideos.getRange().getBefore());
+        }
+        return fetchRequest;
+    }
+
+    private FetchRequest commentsRequest(FetchComments fetchComments) {
+        var fetchRequest = new FetchRequest();
+        fetchRequest.setFetchType(FetchType.COMMENTS);
+        fetchRequest.setObjectId(fetchComments.getVideoId());
+        return fetchRequest;
+    }
+}

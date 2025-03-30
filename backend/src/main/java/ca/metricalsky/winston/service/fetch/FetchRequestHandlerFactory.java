@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,11 @@ public class FetchRequestHandlerFactory {
     private final FetchCommentsService fetchCommentsService;
 
     public FetchRequestHandler getHandlerForRequest(FetchRequest fetchRequest) {
-        if (fetchRequest.getChannel() != null) {
-            return fetchChannelService;
-        }
-        if (fetchRequest.getVideos() != null) {
-            return fetchVideosService;
-        }
-        if (fetchRequest.getComments() != null) {
-            return fetchCommentsService;
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return switch (fetchRequest.getFetchType()) {
+            case CHANNEL -> fetchChannelService;
+            case VIDEOS -> fetchVideosService;
+            case COMMENTS -> fetchCommentsService;
+            default -> throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+        };
     }
 }

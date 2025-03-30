@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface FetchRequestHandler {

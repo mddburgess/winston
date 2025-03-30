@@ -24,7 +24,16 @@ public class FetchRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fetchId;
+    @Enumerated(EnumType.STRING)
+    private FetchType fetchType;
+
+    private String objectId;
+
+    private String mode;
+
+    private OffsetDateTime publishedAfter;
+
+    private OffsetDateTime publishedBefore;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -32,10 +41,16 @@ public class FetchRequest {
     private String error;
 
     @CreationTimestamp
-    private OffsetDateTime requestedAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     private OffsetDateTime lastUpdatedAt;
+
+    public enum FetchType {
+        CHANNEL,
+        VIDEOS,
+        COMMENTS,
+    }
 
     public enum Status {
         FETCHING,

@@ -1,14 +1,20 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.client.YouTubeClient;
+import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.FetchCommentsResponse;
 import ca.metricalsky.winston.dto.FetchVideosResponse;
 import ca.metricalsky.winston.entity.Channel;
 import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchAction.Status;
+import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
+import ca.metricalsky.winston.entity.fetch.YouTubeRequest.RequestType;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
+import ca.metricalsky.winston.repository.fetch.FetchActionRepository;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivitySnippet;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
 @Service
@@ -30,29 +34,48 @@ public class YouTubeService {
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
-    private final YouTubeClient youTubeClient;
+    private final FetchActionRepository fetchActionRepository;
+    private final YouTubeClientAdapter youTubeClientAdapter;
 
-    public Channel fetchChannel(String channelHandle) throws IOException {
-        var channelListResponse = youTubeClient.getChannel(channelHandle);
-        if (channelListResponse.getItems().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public Channel fetchChannel(FetchAction fetchAction) throws IOException {
+        fetchAction.setStatus(Status.FETCHING);
+        fetchAction = fetchActionRepository.save(fetchAction);
+
+        var youTubeRequest = new YouTubeRequest();
+        youTubeRequest.setFetchActionId(fetchAction.getId());
+        youTubeRequest.setRequestType(RequestType.CHANNELS);
+        youTubeRequest.setObjectId(fetchAction.getObjectId());
+
+        try {
+            var channelListResponse = youTubeClientAdapter.getChannels(youTubeRequest);
+
+            var channel = channelListResponse.getItems()
+                    .stream()
+                    .findFirst()
+                    .map(channelMapper::fromYouTube)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            fetchAction.setStatus(Status.COMPLETED);
+            fetchAction.setItemCount(channelListResponse.getItems().size());
+            return channel;
+        } catch (IOException | RuntimeException ex) {
+            fetchAction.setStatus(Status.FAILED);
+            fetchAction.setError(ex.getMessage());
+            throw ex;
+        } finally {
+            fetchActionRepository.save(fetchAction);
         }
-
-        return channelMapper.fromYouTube(channelListResponse.getItems().getFirst());
     }
 
-    public FetchVideosResponse fetchVideos(
-            String channelId, OffsetDateTime publishedAfter, OffsetDateTime publishedBefore)
-            throws IOException {
+    public FetchVideosResponse fetchVideos(FetchAction fetchAction) throws IOException {
+        var youTubeRequest = new YouTubeRequest();
+        youTubeRequest.setFetchActionId(fetchAction.getId());
+        youTubeRequest.setRequestType(RequestType.ACTIVITIES);
+        youTubeRequest.setObjectId(fetchAction.getObjectId());
+        youTubeRequest.setPublishedAfter(fetchAction.getPublishedAfter());
+        youTubeRequest.setPublishedBefore(fetchAction.getPublishedBefore());
 
-        var publishedAfterString = publishedAfter != null
-                ? DateTimeFormatter.ISO_INSTANT.format(publishedAfter)
-                : null;
-        var publishedBeforeString = publishedBefore != null
-                ? DateTimeFormatter.ISO_INSTANT.format(publishedBefore)
-                : null;
-
-        var activityListResponse = youTubeClient.getActivities(channelId, publishedAfterString, publishedBeforeString);
+        var activityListResponse = youTubeClientAdapter.getActivities(youTubeRequest);
         var videos = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -79,14 +102,35 @@ public class YouTubeService {
         );
     }
 
-    public FetchCommentsResponse fetchComments(String channelId, String pageToken) throws IOException {
-        var commentThreadListResponse = youTubeClient.getComments(channelId, pageToken);
-        var comments = commentThreadListResponse.getItems()
-                .stream()
-                .map(commentMapper::fromYouTube)
-                .toList();
-        var nextPageToken = commentThreadListResponse.getNextPageToken();
+    public FetchCommentsResponse fetchComments(FetchAction fetchAction) throws IOException {
+        fetchAction.setStatus(Status.FETCHING);
+        fetchAction = fetchActionRepository.save(fetchAction);
 
-        return new FetchCommentsResponse(comments, nextPageToken);
+        var youTubeRequest = new YouTubeRequest();
+        youTubeRequest.setFetchActionId(fetchAction.getId());
+        youTubeRequest.setRequestType(RequestType.COMMENTS);
+        youTubeRequest.setObjectId(fetchAction.getObjectId());
+        youTubeRequest.setPageToken(fetchAction.getPageToken());
+
+        try {
+            var commentThreadListResponse = youTubeClientAdapter.getComments(youTubeRequest);
+            var comments = commentThreadListResponse.getItems()
+                    .stream()
+                    .map(commentMapper::fromYouTube)
+                    .toList();
+            var nextPageToken = commentThreadListResponse.getNextPageToken();
+
+            var response = new FetchCommentsResponse(comments, nextPageToken);
+
+            fetchAction.setStatus(Status.COMPLETED);
+            fetchAction.setItemCount(commentThreadListResponse.getItems().size());
+            return response;
+        } catch (IOException | RuntimeException ex) {
+            fetchAction.setStatus(Status.FAILED);
+            fetchAction.setError(ex.getMessage());
+            throw ex;
+        } finally {
+            fetchActionRepository.save(fetchAction);
+        }
     }
 }

@@ -15,10 +15,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "fetch_operations")
+@Table(name = "fetch_actions")
 @Getter
 @Setter
-public class FetchOperation {
+public class FetchAction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,24 +26,36 @@ public class FetchOperation {
 
     private Long fetchRequestId;
 
-    private String channelId;
+    @Enumerated(EnumType.STRING)
+    private ActionType actionType;
 
-    private OffsetDateTime lastPublishedAt;
+    private String objectId;
+
+    private OffsetDateTime publishedAfter;
 
     private OffsetDateTime publishedBefore;
 
-    private String nextPageToken;
+    private String pageToken;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private Integer itemCount;
+
     private String error;
 
     @CreationTimestamp
-    private OffsetDateTime requestedAt;
+    private OffsetDateTime createdAt;
 
     @UpdateTimestamp
     private OffsetDateTime lastUpdatedAt;
+
+    public enum ActionType {
+        CHANNELS,
+        VIDEOS,
+        COMMENTS,
+        REPLIES,
+    }
 
     public enum Status {
         FETCHING,

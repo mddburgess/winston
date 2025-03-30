@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.web.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.service.NotificationsService;
 import ca.metricalsky.winston.service.fetch.AsyncFetchService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class FetchController {
     @PostMapping("/api/fetch")
     public ResponseEntity<SseEmitter> fetch(
             @RequestHeader(value = "X-Notify-Subscription", required = false) UUID subscriptionId,
-            @RequestBody FetchRequest request
+            @RequestBody FetchRequestDto request
     ) throws IOException {
 
         var sseEmitter = subscriptionId == null

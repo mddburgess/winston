@@ -1,8 +1,9 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
+import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
+import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.FetchVideosEvent;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -25,66 +25,64 @@ public class FetchVideosService implements FetchRequestHandler {
     private final YouTubeService youTubeService;
     private final VideoRepository videoRepository;
     private final ChannelService channelService;
+    private final FetchActionService fetchActionService;
     private final FetchRequestService fetchRequestService;
-    private final FetchOperationService fetchOperationService;
 
     @Override
     public void fetch(FetchRequest fetchRequest, SseEmitter sseEmitter) {
-        var context = buildFetchContext(fetchRequest);
-
         try {
-            fetchRequestService.startFetch(context);
+            var fetchContext = buildFetchContext(fetchRequest);
+            fetchRequest = fetchRequestService.startFetch(fetchRequest);
+
             do {
-                var eventData = fetchVideos(context);
+                var eventData = fetchVideos(fetchContext);
                 sseEmitter.send(SseEvent.named("fetch-videos", eventData));
-            } while (context.hasNext());
-            fetchRequestService.completeFetch(context);
+            } while (fetchContext.getPublishedBefore() != null);
+
+            fetchRequestService.fetchCompleted(fetchRequest);
         } catch (Exception ex) {
-            fetchRequestService.failFetch(context, ex);
+            fetchRequestService.fetchFailed(fetchRequest, ex);
             throw new RuntimeException(ex);
         }
     }
 
-    public FetchVideosContext buildFetchContext(FetchRequest fetchRequest) {
-        var channelId = fetchRequest.getVideos().getChannelId();
-        var fetchMode = fetchRequest.getVideos().getFetch();
+    public FetchContext buildFetchContext(FetchRequest fetchRequest) {
+        var channelId = fetchRequest.getObjectId();
+        var fetchMode = FetchVideos.Mode.valueOf(fetchRequest.getMode());
 
         channelService.requireChannelExists(channelId);
-        var lastPublishedAt = fetchMode == FetchVideos.Mode.ALL ? null
+        var publishedAfter = fetchMode == FetchVideos.Mode.ALL ? null
                 : videoRepository.findLastPublishedAtForChannelId(channelId)
                         .map(date -> date.plusSeconds(1))
                         .orElse(null);
+        fetchRequest.setPublishedAfter(publishedAfter);
 
-        return FetchVideosContext.builder()
-                .channelId(channelId)
-                .publishedAfter(lastPublishedAt)
+        return FetchContext.builder()
+                .objectId(channelId)
+                .publishedAfter(publishedAfter)
+                .fetchRequest(fetchRequest)
                 .build();
     }
 
-    private FetchVideosEvent fetchVideos(FetchVideosContext context) throws IOException {
+    private FetchVideosEvent fetchVideos(FetchContext fetchContext) throws IOException {
+        var fetchAction = fetchActionService.startAction(fetchContext, ActionType.VIDEOS);
         try {
-            fetchOperationService.startOperation(context);
-
-            var channelId = context.getChannelId();
-            var publishedAfter = context.getPublishedAfter();
-            var publishedBefore = context.getPublishedBefore();
-
-            var fetchVideosResponse = youTubeService.fetchVideos(channelId, publishedAfter, publishedBefore);
+            var fetchVideosResponse = youTubeService.fetchVideos(fetchAction);
             videoRepository.saveAll(fetchVideosResponse.videos());
 
             var videoDtos = fetchVideosResponse.videos().stream()
                     .map(videoDtoMapper::fromEntity)
                     .toList();
 
-            context.setPublishedBefore(fetchVideosResponse.nextPublishedBefore());
+            fetchContext.setPublishedBefore(fetchVideosResponse.nextPublishedBefore());
 
-            var eventStatus = context.hasNext() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-            var event = new FetchVideosEvent(channelId, eventStatus, videoDtos);
+            var eventStatus = fetchContext.getPublishedBefore() != null ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
+            var event = new FetchVideosEvent(fetchContext.getObjectId(), eventStatus, videoDtos);
 
-            fetchOperationService.completeOperation(context);
+            fetchActionService.actionCompleted(fetchAction, videoDtos.size());
             return event;
         } catch (Exception ex) {
-            fetchOperationService.failOperation(context, ex);
+            fetchActionService.actionFailed(fetchAction, ex);
             throw ex;
         }
     }
