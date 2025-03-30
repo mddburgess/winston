@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Show author's channel handle on the authors page instead of the ID. (#4)
-- Group author's comments by video, and show the video card with the comments. (#4)
-- Highlight the author's comments and replies. (#4)
+- Show author's channel handle on the authors page instead of the ID. (mddburgess/winston#4)
+- Group author's comments by video, and show the video card with the comments. (mddburgess/winston#4)
+- Highlight the author's comments and replies. (mddburgess/winston#4)
 
 ## [1.0.0] — 2025-03-29
 
