@@ -16,6 +16,9 @@ public class CommentDto {
     private String id = "";
 
     @NonNull
+    private String videoId = "";
+
+    @NonNull
     private AuthorDto author = new AuthorDto();
 
     @NonNull

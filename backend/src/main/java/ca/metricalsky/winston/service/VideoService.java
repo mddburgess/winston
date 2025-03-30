@@ -6,7 +6,6 @@ import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +55,16 @@ public class VideoService {
         videoDto.setTotalReplyCount(commentCount.getTotalReplies());
 
         return videoDto;
+    }
+
+    public List<VideoDto> getAllById(Iterable<String> videoIds) {
+        var commentCounts = commentService.getCommentCountsByVideoIds(videoIds);
+        return videoRepository.findAllById(videoIds)
+                .stream()
+                .map(videoDtoMapper::fromEntity)
+                .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
+                .peek(video -> video.setReplyCount(commentCounts.get(video.getId()).getReplies()))
+                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getTotalReplies()))
+                .toList();
     }
 }
