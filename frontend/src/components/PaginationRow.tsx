@@ -1,6 +1,7 @@
 import {Col, Pagination, Row} from "react-bootstrap";
 import {ReactElement} from "react";
 import {pluralize} from "../utils";
+import {SearchControl} from "./SearchControl";
 
 type PaginationRowProps = {
     name: string,
@@ -8,6 +9,8 @@ type PaginationRowProps = {
     pageSize: number,
     page: number,
     setPage: (page: number) => void,
+    search?: string,
+    setSearch?: (search: string) => void,
 }
 
 type MultiPagePaginationRowProps = PaginationRowProps & {
@@ -25,9 +28,16 @@ export const PaginationRow = (props: PaginationRowProps) => {
 };
 
 const SinglePagePaginationRow = (props: PaginationRowProps) => (
-    <Col className={"align-items-center d-flex"}>
-        {pluralize(props.total, props.name)}
-    </Col>
+    <>
+        <Col className={"align-items-center d-flex"}>
+            {pluralize(props.total, props.name)}
+        </Col>
+        {props.setSearch && (
+            <Col xs={"auto"}>
+                <SearchControl value={props.search} setValue={props.setSearch}/>
+            </Col>
+        )}
+    </>
 )
 
 const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
@@ -76,6 +86,11 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
                     />
                 </Pagination>
             </Col>
+            {props.setSearch && (
+                <Col xs={"auto"}>
+                    <SearchControl value={props.search} setValue={props.setSearch}/>
+                </Col>
+            )}
         </>
     )
 }

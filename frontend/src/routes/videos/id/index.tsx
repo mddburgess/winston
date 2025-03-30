@@ -17,6 +17,8 @@ export const VideosIdRoute = () => {
     const pageSize = 50;
     const [page, setPage] = useState(1);
 
+    const [search, setSearch] = useState("");
+
     const {data: video} = useFindVideoByIdQuery(videoId!)
 
     const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
@@ -28,8 +30,14 @@ export const VideosIdRoute = () => {
     );
 
     const displayedComments = useMemo(
-        () => combinedComments.slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [combinedComments, pageSize, page]
+        () => combinedComments.filter(comment =>
+            comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
+            comment.text.toLowerCase().includes(search.toLowerCase()) ||
+            comment.replies.filter(reply =>
+                    reply.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
+                    reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
+            .slice(pageSize * (page - 1), pageSize * page) ?? [],
+        [combinedComments, pageSize, page, search]
     );
 
     return (
@@ -58,6 +66,8 @@ export const VideosIdRoute = () => {
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}
+                        search={search}
+                        setSearch={setSearch}
                     />
                     <CommentList comments={displayedComments}/>
                     {(combinedComments?.length ?? 0) > pageSize && <PaginationRow

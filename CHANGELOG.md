@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Search box on channel page to search videos by title. (mddburgess/winston#7)
+- Search box on video page to search comments by text or author. (mddburgess/winston#7)
+- Pagination row at the bottom of the channel page after the video cards. (mddburgess/winston#7)
+
 ### Changed
 
 - Show author's channel handle on the authors page instead of the ID. (mddburgess/winston#4)
