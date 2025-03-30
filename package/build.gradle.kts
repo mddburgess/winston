@@ -4,8 +4,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "ca.metricalsky.winston"
-version = "0.0.1-SNAPSHOT"
+group = rootProject.group
+version = rootProject.version
 
 repositories {
     mavenCentral()
@@ -26,8 +26,13 @@ tasks {
         dependsOn("copyFrontendResources")
     }
 
+    springBoot {
+        buildInfo()
+    }
+
     bootJar {
         mainClass.set("ca.metricalsky.winston.Application")
+        archiveBaseName.set("winston")
     }
 
     bootRun {

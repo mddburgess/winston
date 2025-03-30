@@ -5,8 +5,8 @@ plugins {
     id("com.github.node-gradle.node") version "7.1.0"
 }
 
-group = "ca.metricalsky.yt"
-version = "0.0.1-SNAPSHOT"
+group = rootProject.group
+version = rootProject.version
 
 node {
     download.set(true)

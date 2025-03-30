@@ -5,8 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "ca.metricalsky.yt"
-version = "0.0.1-SNAPSHOT"
+group = rootProject.group
+version = rootProject.version
 
 java {
     toolchain {
@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.google.api-client:google-api-client:2.7.2")
