@@ -23,6 +23,8 @@ public class CommentDtoMapperTest {
                 .hasFieldOrPropertyWithValue("id", comment.getId())
                 .hasFieldOrPropertyWithValue("author.id", comment.getAuthor().getId())
                 .hasFieldOrPropertyWithValue("author.displayName", comment.getAuthor().getDisplayName())
+                .hasFieldOrPropertyWithValue("author.channelUrl", comment.getAuthor().getChannelUrl())
+                .hasFieldOrPropertyWithValue("author.profileImageUrl", comment.getAuthor().getProfileImageUrl())
                 .hasFieldOrPropertyWithValue("text", comment.getTextDisplay())
                 .hasFieldOrPropertyWithValue("publishedAt", comment.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", comment.getUpdatedAt())
