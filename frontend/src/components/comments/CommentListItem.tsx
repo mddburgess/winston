@@ -3,6 +3,7 @@ import {ReplyList} from "./ReplyList";
 import {Link} from "react-router";
 import {CommentDto} from "../../model/CommentDto";
 import {Date} from "../Date";
+import {HtmlText} from "../HtmlText";
 
 type CommentListItemProps = {
     comment: CommentDto,
@@ -26,7 +27,7 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: CommentList
             </Row>
             <Row>
                 <Col className={highlight ? "bg-info-subtle py-1 rounded text-info-emphasis" : ""}>
-                    {comment.text}
+                    <HtmlText text={comment.text}/>
                 </Col>
             </Row>
             <Row>
