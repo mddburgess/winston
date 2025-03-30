@@ -23,9 +23,4 @@ public class CommentController {
     public List<CommentDto> listByVideoId(@PathVariable String videoId) {
         return commentService.findAllByVideoId(videoId);
     }
-
-    @GetMapping("/api/authors/{authorId}/comments")
-    public List<CommentDto> listByAuthorId(@PathVariable String authorId) {
-        return commentService.findAllWithContextByAuthorId(authorId);
-    }
 }

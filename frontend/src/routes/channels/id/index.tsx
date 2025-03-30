@@ -9,6 +9,7 @@ import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {DateTime} from "luxon";
 import {initFetchStateForChannel} from "../../../store/slices/fetches";
 import {PaginationRow} from "../../../components/PaginationRow";
+import {descBy} from "../../../utils";
 
 export const ChannelsIdRoute = () => {
 
@@ -26,7 +27,7 @@ export const ChannelsIdRoute = () => {
     const {data: videos} = useListVideosByChannelIdQuery(channelId!)
     const fetchedVideos = useAppSelector(state => state.fetches.videos[channelId!]?.data)
     const combinedVideos = useMemo(() => (fetchedVideos ?? []).concat(videos ?? [])
-        .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
+        .sort(descBy(video => DateTime.fromISO(video.publishedAt).valueOf())),
     [videos, fetchedVideos])
 
     const displayedVideos = useMemo(

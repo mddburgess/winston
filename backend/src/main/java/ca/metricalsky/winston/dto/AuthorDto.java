@@ -11,4 +11,10 @@ public class AuthorDto {
 
     @NonNull
     private String displayName = "";
+
+    @NonNull
+    private String channelUrl = "";
+
+    @NonNull
+    private String profileImageUrl = "";
 }

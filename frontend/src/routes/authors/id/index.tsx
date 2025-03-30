@@ -1,18 +1,21 @@
 import {useParams} from "react-router";
-import {Container, Row} from "react-bootstrap";
-import {useListCommentsByAuthorIdQuery} from "../../../store/slices/api";
-import {CommentList} from "../../../components/comments/CommentList";
+import {Row} from "react-bootstrap";
+import {useFindAuthorDetailsByIdQuery} from "../../../store/slices/api";
+import {VideoCommentsList} from "./VideoCommentsList";
 
 export const AuthorsIdRoute = () => {
     const {authorId} = useParams()
-    const {data: comments} = useListCommentsByAuthorIdQuery(authorId!)
+    const {
+        isSuccess,
+        data: authorDetails,
+    } = useFindAuthorDetailsByIdQuery(authorId!)
 
-    return (
+    return (isSuccess &&
         <>
             <Row>
-                <h1>{authorId!}</h1>
+                <h1>{authorDetails.author.displayName}</h1>
             </Row>
-            <CommentList comments={comments} />
+            <VideoCommentsList {...authorDetails}/>
         </>
-    )
+    );
 }
