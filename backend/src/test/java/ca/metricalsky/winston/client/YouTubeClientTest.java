@@ -2,15 +2,19 @@ package ca.metricalsky.winston.client;
 
 import ca.metricalsky.winston.config.YouTubeConfig;
 import ca.metricalsky.winston.test.TestResources;
+import com.github.tomakehurst.wiremock.http.Fault;
 import com.google.api.client.util.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.wiremock.spring.EnableWireMock;
 
+import java.io.IOException;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.including;
@@ -18,6 +22,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(classes = {
         YouTubeClient.class,
@@ -79,6 +84,21 @@ class YouTubeClientTest {
     }
 
     @Test
+    void getChannel_fault() {
+        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
+                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
+                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+        assertThatThrownBy(() -> youTubeClient.getChannel(CHANNEL_HANDLE))
+                .isInstanceOf(YouTubeException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
+                .hasCauseExactlyInstanceOf(IOException.class);
+    }
+
+    @Test
     void getActivities() throws Exception {
         stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
                 .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
@@ -131,6 +151,21 @@ class YouTubeClientTest {
     }
 
     @Test
+    void getActivities_fault() {
+        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
+                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
+                .withQueryParam("channelId", equalTo("channelId"))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+        assertThatThrownBy(() -> youTubeClient.getActivities("channelId", null, null))
+                .isInstanceOf(YouTubeException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
+                .hasCauseExactlyInstanceOf(IOException.class);
+    }
+
+    @Test
     void getComments() throws Exception {
         stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
@@ -179,6 +214,21 @@ class YouTubeClientTest {
     }
 
     @Test
+    void getComments_fault() {
+        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
+                .withQueryParam("videoId", equalTo("videoId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+        assertThatThrownBy(() -> youTubeClient.getComments("videoId", null))
+                .isInstanceOf(YouTubeException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
+                .hasCauseExactlyInstanceOf(IOException.class);
+    }
+
+    @Test
     void getReplies() throws Exception {
         stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
@@ -205,8 +255,6 @@ class YouTubeClientTest {
                 .hasFieldOrPropertyWithValue("snippet.textDisplay", "comment.snippet.textDisplay")
                 .hasFieldOrPropertyWithValue("snippet.textOriginal", "comment.snippet.textOriginal")
                 .hasFieldOrPropertyWithValue("snippet.updatedAt", new DateTime("2025-01-02T00:00:00Z"));
-
-
     }
 
     @Test
@@ -222,5 +270,20 @@ class YouTubeClientTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
+    }
+
+    @Test
+    void getReplies_fault() {
+        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
+                .withQueryParam("parentId", equalTo("commentId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+        assertThatThrownBy(() -> youTubeClient.getReplies("commentId", null))
+                .isInstanceOf(YouTubeException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
+                .hasCauseExactlyInstanceOf(IOException.class);
     }
 }
