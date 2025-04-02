@@ -36,7 +36,7 @@ public class YouTubeClient {
 
     private final YouTube youTube;
 
-    public ChannelListResponse getChannel(String handle) throws IOException {
+    public ChannelListResponse getChannel(String handle) {
         try {
             log.info("Fetching channels for handle '{}'", handle);
 
@@ -50,12 +50,11 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch channels for handle '{}'", handle, ex);
-            throw ex;
+            throw YouTubeException.wrap(ex);
         }
     }
 
-    public ActivityListResponse getActivities(String channelId, String publishedAfter, String publishedBefore)
-            throws IOException {
+    public ActivityListResponse getActivities(String channelId, String publishedAfter, String publishedBefore) {
         try {
             log.info("Fetching activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
                     channelId, publishedAfter, publishedBefore);
@@ -74,11 +73,11 @@ public class YouTubeClient {
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
                     channelId, publishedAfter, publishedBefore, ex);
-            throw ex;
+            throw YouTubeException.wrap(ex);
         }
     }
 
-    public CommentThreadListResponse getComments(String videoId, String pageToken) throws IOException {
+    public CommentThreadListResponse getComments(String videoId, String pageToken) {
         try {
             log.info("Fetching comments for videoId '{}' pageToken '{}'", videoId, pageToken);
 
@@ -94,11 +93,11 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch comments for videoId '{}' pageToken '{}'", videoId, pageToken, ex);
-            throw ex;
+            throw YouTubeException.wrap(ex);
         }
     }
 
-    public CommentListResponse getReplies(String commentId, String pageToken) throws IOException {
+    public CommentListResponse getReplies(String commentId, String pageToken) {
         try {
             log.info("Fetching replies for commentId '{}' pageToken '{}'", commentId, pageToken);
 
@@ -114,7 +113,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch replies for commentId '{}' pageToken '{}'", commentId, pageToken, ex);
-            throw ex;
+            throw YouTubeException.wrap(ex);
         }
     }
 }

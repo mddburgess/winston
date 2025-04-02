@@ -6,11 +6,11 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
+import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.OffsetDateTime;
 
 @Service
@@ -20,7 +20,7 @@ public class YouTubeClientAdapter {
     private final YouTubeClient youTubeClient;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
-    public ChannelListResponse getChannels(YouTubeRequest youTubeRequest) throws IOException {
+    public ChannelListResponse getChannels(YouTubeRequest youTubeRequest) {
         youTubeRequest.setRequestedAt(OffsetDateTime.now());
         youTubeRequest = youTubeRequestRepository.save(youTubeRequest);
 
@@ -32,9 +32,9 @@ public class YouTubeClientAdapter {
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
-        } catch (IOException | RuntimeException ex) {
-            youTubeRequest.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            youTubeRequest.setError(ex.getMessage());
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
             youTubeRequest.setRespondedAt(OffsetDateTime.now());
@@ -42,7 +42,7 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public ActivityListResponse getActivities(YouTubeRequest youTubeRequest) throws IOException {
+    public ActivityListResponse getActivities(YouTubeRequest youTubeRequest) {
         youTubeRequest.setRequestedAt(OffsetDateTime.now());
         youTubeRequest = youTubeRequestRepository.save(youTubeRequest);
 
@@ -56,9 +56,9 @@ public class YouTubeClientAdapter {
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
-        } catch (IOException | RuntimeException ex) {
-            youTubeRequest.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            youTubeRequest.setError(ex.getMessage());
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
             youTubeRequest.setRespondedAt(OffsetDateTime.now());
@@ -66,7 +66,7 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public CommentThreadListResponse getComments(YouTubeRequest youTubeRequest) throws IOException {
+    public CommentThreadListResponse getComments(YouTubeRequest youTubeRequest) {
         youTubeRequest.setRequestedAt(OffsetDateTime.now());
         youTubeRequest = youTubeRequestRepository.save(youTubeRequest);
 
@@ -79,9 +79,9 @@ public class YouTubeClientAdapter {
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
-        } catch (IOException | RuntimeException ex) {
-            youTubeRequest.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            youTubeRequest.setError(ex.getMessage());
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
             youTubeRequest.setRespondedAt(OffsetDateTime.now());
@@ -89,7 +89,7 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public CommentListResponse getReplies(YouTubeRequest youTubeRequest) throws IOException {
+    public CommentListResponse getReplies(YouTubeRequest youTubeRequest) {
         youTubeRequest.setRequestedAt(OffsetDateTime.now());
         youTubeRequest = youTubeRequestRepository.save(youTubeRequest);
 
@@ -102,9 +102,9 @@ public class YouTubeClientAdapter {
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
-        } catch (IOException | RuntimeException ex) {
-            youTubeRequest.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            youTubeRequest.setError(ex.getMessage());
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
             youTubeRequest.setRespondedAt(OffsetDateTime.now());

@@ -1,6 +1,5 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.client.YouTubeClient;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.FetchCommentsResponse;
 import ca.metricalsky.winston.dto.FetchVideosResponse;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.Comparator;
 
 @Service
@@ -37,7 +35,7 @@ public class YouTubeService {
     private final FetchActionRepository fetchActionRepository;
     private final YouTubeClientAdapter youTubeClientAdapter;
 
-    public Channel fetchChannel(FetchAction fetchAction) throws IOException {
+    public Channel fetchChannel(FetchAction fetchAction) {
         fetchAction.setStatus(Status.FETCHING);
         fetchAction = fetchActionRepository.save(fetchAction);
 
@@ -58,7 +56,7 @@ public class YouTubeService {
             fetchAction.setStatus(Status.COMPLETED);
             fetchAction.setItemCount(channelListResponse.getItems().size());
             return channel;
-        } catch (IOException | RuntimeException ex) {
+        } catch (RuntimeException ex) {
             fetchAction.setStatus(Status.FAILED);
             fetchAction.setError(ex.getMessage());
             throw ex;
@@ -67,7 +65,7 @@ public class YouTubeService {
         }
     }
 
-    public FetchVideosResponse fetchVideos(FetchAction fetchAction) throws IOException {
+    public FetchVideosResponse fetchVideos(FetchAction fetchAction) {
         var youTubeRequest = new YouTubeRequest();
         youTubeRequest.setFetchActionId(fetchAction.getId());
         youTubeRequest.setRequestType(RequestType.ACTIVITIES);
@@ -102,7 +100,7 @@ public class YouTubeService {
         );
     }
 
-    public FetchCommentsResponse fetchComments(FetchAction fetchAction) throws IOException {
+    public FetchCommentsResponse fetchComments(FetchAction fetchAction) {
         fetchAction.setStatus(Status.FETCHING);
         fetchAction = fetchActionRepository.save(fetchAction);
 
@@ -125,7 +123,7 @@ public class YouTubeService {
             fetchAction.setStatus(Status.COMPLETED);
             fetchAction.setItemCount(commentThreadListResponse.getItems().size());
             return response;
-        } catch (IOException | RuntimeException ex) {
+        } catch (RuntimeException ex) {
             fetchAction.setStatus(Status.FAILED);
             fetchAction.setError(ex.getMessage());
             throw ex;
