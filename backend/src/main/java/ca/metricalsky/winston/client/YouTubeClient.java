@@ -22,7 +22,7 @@ public class YouTubeClient {
             "localizations", "snippet", "statistics", "status", "topicDetails"
     );
 
-    private static final List<String> ACTIVITY_PARTS = List.of(
+    static final List<String> ACTIVITY_PARTS = List.of(
             "contentDetails", "id", "snippet"
     );
 

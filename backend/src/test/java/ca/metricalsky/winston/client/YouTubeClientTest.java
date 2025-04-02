@@ -28,7 +28,7 @@ class YouTubeClientTest {
 
     private static final String CHANNEL_HANDLE = "@handle";
     private static final String MAX_RESULTS = "50";
-    private static final TestResources TEST_RESOURCES = TestResources.dir("client", "channels");
+    private static final TestResources TEST_RESOURCES = TestResources.dir("client");
 
     @Value("${youtube.apiKey}")
     private String youtubeApiKey;
@@ -43,7 +43,7 @@ class YouTubeClientTest {
                 .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
                 .withQueryParam("maxResults", equalTo(MAX_RESULTS))
                 .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("200.json"))));
+                .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json"))));
 
         var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
@@ -51,16 +51,16 @@ class YouTubeClientTest {
         assertThat(result.getItems())
                 .hasSize(1)
                 .first()
-                .hasFieldOrPropertyWithValue("snippet.title", "channel.snippet.title")
-                .hasFieldOrPropertyWithValue("snippet.description", "channel.snippet.description")
+                .hasFieldOrPropertyWithValue("brandingSettings.channel.keywords",
+                        "channel \"branding settings\" keywords")
                 .hasFieldOrPropertyWithValue("snippet.customUrl", "@channelCustomUrl")
+                .hasFieldOrPropertyWithValue("snippet.description", "channel.snippet.description")
                 .hasFieldOrPropertyWithValue("snippet.publishedAt", new DateTime("2025-01-01T00:00:00Z"))
                 .hasFieldOrPropertyWithValue("snippet.thumbnails.high.url",
                         "https://www.example.com/channel/snippet/thumbnails/high")
+                .hasFieldOrPropertyWithValue("snippet.title", "channel.snippet.title")
                 .hasFieldOrPropertyWithValue("topicDetails.topicCategories",
-                        List.of("https://en.wikipedia.org/wiki/Topic", "https://en.wikipedia.org/wiki/Category"))
-                .hasFieldOrPropertyWithValue("brandingSettings.channel.keywords",
-                        "channel \"branding settings\" keywords");
+                        List.of("https://en.wikipedia.org/wiki/Topic", "https://en.wikipedia.org/wiki/Category"));
     }
 
     @Test
@@ -70,11 +70,63 @@ class YouTubeClientTest {
                 .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
                 .withQueryParam("maxResults", equalTo(MAX_RESULTS))
                 .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("200_not_found.json"))));
+                .willReturn(okJson(TEST_RESOURCES.load("channels", "200_not_found.json"))));
 
         var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isNull();
+    }
+
+    @Test
+    void getActivities() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
+                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
+                .withQueryParam("channelId", equalTo("channelId"))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("activities", "200.json"))));
+
+        var result = youTubeClient.getActivities("channelId", null, null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems()).hasSize(2);
+
+        var videoActivity = result.getItems().getFirst();
+        assertThat(videoActivity)
+                .hasFieldOrPropertyWithValue("contentDetails.upload.videoId",
+                        "videoActivity.contentDetails.upload.videoId")
+                .hasFieldOrPropertyWithValue("snippet.channelId", "videoActivity.snippet.channelId")
+                .hasFieldOrPropertyWithValue("snippet.description", "videoActivity.snippet.description")
+                .hasFieldOrPropertyWithValue("snippet.publishedAt", new DateTime("2025-01-01T00:00:00Z"))
+                .hasFieldOrPropertyWithValue("snippet.thumbnails.high.url",
+                        "https://www.example.com/videoActivity/snippet/thumbnails/high")
+                .hasFieldOrPropertyWithValue("snippet.title", "videoActivity.snippet.title");
+
+        var playlistActivity = result.getItems().getLast();
+        assertThat(playlistActivity)
+                .hasFieldOrPropertyWithValue("contentDetails.playlistItem.playlistId",
+                        "playlistActivity.contentDetails.playlistItem.playlistId")
+                .hasFieldOrPropertyWithValue("snippet.channelId", "playlistActivity.snippet.channelId")
+                .hasFieldOrPropertyWithValue("snippet.description", "playlistActivity.snippet.description")
+                .hasFieldOrPropertyWithValue("snippet.publishedAt", new DateTime("2025-01-01T00:00:00Z"))
+                .hasFieldOrPropertyWithValue("snippet.thumbnails.high.url",
+                        "https://www.example.com/playlistActivity/snippet/thumbnails/high")
+                .hasFieldOrPropertyWithValue("snippet.title", "playlistActivity.snippet.title");
+    }
+
+    @Test
+    void getActivities_empty() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
+                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
+                .withQueryParam("channelId", equalTo("channelId"))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("activities", "200_empty.json"))));
+
+        var result = youTubeClient.getActivities("channelId", null, null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems()).isEmpty();
     }
 }

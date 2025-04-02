@@ -1,0 +1,9 @@
+{
+  "kind": "youtube#activityListResponse",
+  "etag": "activityListResponse.etag",
+  "items": [],
+  "pageInfo": {
+    "totalResults": 0,
+    "resultsPerPage": 50
+  }
+}
