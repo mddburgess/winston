@@ -44,6 +44,7 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.9.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
