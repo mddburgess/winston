@@ -129,4 +129,98 @@ class YouTubeClientTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
     }
+
+    @Test
+    void getComments() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
+                .withQueryParam("videoId", equalTo("videoId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("comments", "200.json"))));
+
+        var result = youTubeClient.getComments("videoId", null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems())
+                .hasSize(1)
+                .first()
+                .hasFieldOrProperty("snippet.topLevelComment");
+
+        var topLevelComment = result.getItems().getFirst().getSnippet().getTopLevelComment();
+        assertThat(topLevelComment)
+                .hasFieldOrPropertyWithValue("snippet.authorChannelId.value",
+                        "topLevelComment.snippet.authorChannelId.value")
+                .hasFieldOrPropertyWithValue("snippet.authorChannelUrl",
+                        "https://www.example.com/topLevelComment/snippet/authorChannelUrl")
+                .hasFieldOrPropertyWithValue("snippet.authorProfileImageUrl",
+                        "https://www.example.com/topLevelComment/snippet/authorProfileImageUrl")
+                .hasFieldOrPropertyWithValue("snippet.authorDisplayName", "@topLevelCommentAuthorDisplayName")
+                .hasFieldOrPropertyWithValue("snippet.publishedAt", new DateTime("2025-01-01T00:00:00Z"))
+                .hasFieldOrPropertyWithValue("snippet.textDisplay", "topLevelComment.snippet.textDisplay")
+                .hasFieldOrPropertyWithValue("snippet.textOriginal", "topLevelComment.snippet.textOriginal")
+                .hasFieldOrPropertyWithValue("snippet.updatedAt", new DateTime("2025-01-02T00:00:00Z"))
+                .hasFieldOrPropertyWithValue("snippet.videoId", "topLevelComment.snippet.videoId");
+    }
+
+    @Test
+    void getComments_empty() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
+                .withQueryParam("videoId", equalTo("videoId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("comments", "200_empty.json"))));
+
+        var result = youTubeClient.getComments("videoId", null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems()).isEmpty();
+    }
+
+    @Test
+    void getReplies() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
+                .withQueryParam("parentId", equalTo("commentId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("replies", "200.json"))));
+
+        var result = youTubeClient.getReplies("commentId", null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("snippet.authorChannelId.value",
+                        "comment.snippet.authorChannelId.value")
+                .hasFieldOrPropertyWithValue("snippet.authorChannelUrl",
+                        "https://www.example.com/comment/snippet/authorChannelUrl")
+                .hasFieldOrPropertyWithValue("snippet.authorProfileImageUrl",
+                        "https://www.example.com/comment/snippet/authorProfileImageUrl")
+                .hasFieldOrPropertyWithValue("snippet.authorDisplayName", "@commentAuthorDisplayName")
+                .hasFieldOrPropertyWithValue("snippet.parentId", "comment.snippet.parentId")
+                .hasFieldOrPropertyWithValue("snippet.publishedAt", new DateTime("2025-01-01T00:00:00Z"))
+                .hasFieldOrPropertyWithValue("snippet.textDisplay", "comment.snippet.textDisplay")
+                .hasFieldOrPropertyWithValue("snippet.textOriginal", "comment.snippet.textOriginal")
+                .hasFieldOrPropertyWithValue("snippet.updatedAt", new DateTime("2025-01-02T00:00:00Z"));
+
+
+    }
+
+    @Test
+    void getReplies_empty() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
+                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
+                .withQueryParam("parentId", equalTo("commentId"))
+                .withQueryParam("maxResults", equalTo("100"))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("replies", "200_empty.json"))));
+
+        var result = youTubeClient.getReplies("commentId", null);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems()).isEmpty();
+    }
 }

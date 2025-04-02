@@ -26,11 +26,11 @@ public class YouTubeClient {
             "contentDetails", "id", "snippet"
     );
 
-    private static final List<String> COMMENT_THREAD_PARTS = List.of(
+    static final List<String> COMMENT_THREAD_PARTS = List.of(
             "id", "replies", "snippet"
     );
 
-    private static final List<String> COMMENT_PARTS = List.of(
+    static final List<String> COMMENT_PARTS = List.of(
             "id", "snippet"
     );
 

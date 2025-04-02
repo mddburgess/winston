@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Render comments as HTML. (mddburgess/winston#5)
 
 ### Fixed
+
 - Fix `NullPointerException` that occurs when attempting to fetch a channel with a bad handle. (mddburgess/winston#14)
 
 ## [1.0.0] — 2025-03-29
