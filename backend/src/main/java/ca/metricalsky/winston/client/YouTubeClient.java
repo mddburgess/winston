@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class YouTubeClient {
 
-    private static final List<String> CHANNEL_PARTS = List.of(
+    static final List<String> CHANNEL_PARTS = List.of(
             "brandingSettings", "contentDetails", "contentOwnerDetails", "id",
             "localizations", "snippet", "statistics", "status", "topicDetails"
     );
@@ -46,7 +46,8 @@ public class YouTubeClient {
                     .setMaxResults(50L)
                     .execute();
 
-            log.info("Fetched {} channels for handle '{}'", response.getItems().size(), handle);
+            var channelCount = response.getItems() != null ? response.getItems().size() : 0;
+            log.info("Fetched {} channels for handle '{}'", channelCount, handle);
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch channels for handle '{}'", handle, ex);

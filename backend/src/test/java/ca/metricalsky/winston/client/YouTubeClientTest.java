@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.including;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
@@ -25,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnableWireMock
 class YouTubeClientTest {
 
+    private static final String CHANNEL_HANDLE = "@handle";
+    private static final String MAX_RESULTS = "50";
     private static final TestResources TEST_RESOURCES = TestResources.dir("client", "channels");
 
     @Value("${youtube.apiKey}")
@@ -36,12 +39,13 @@ class YouTubeClientTest {
     @Test
     void getChannel() throws Exception {
         stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
-                .withQueryParam("forHandle", equalTo("@handle"))
-                .withQueryParam("maxResults", equalTo("50"))
+                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
+                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
                 .withQueryParam("key", equalTo(youtubeApiKey))
                 .willReturn(okJson(TEST_RESOURCES.load("200.json"))));
 
-        var result = youTubeClient.getChannel("@handle");
+        var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems())
@@ -57,5 +61,20 @@ class YouTubeClientTest {
                         List.of("https://en.wikipedia.org/wiki/Topic", "https://en.wikipedia.org/wiki/Category"))
                 .hasFieldOrPropertyWithValue("brandingSettings.channel.keywords",
                         "channel \"branding settings\" keywords");
+    }
+
+    @Test
+    void getChannel_notFound() throws Exception {
+        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
+                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
+                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
+                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
+                .withQueryParam("key", equalTo(youtubeApiKey))
+                .willReturn(okJson(TEST_RESOURCES.load("200_not_found.json"))));
+
+        var result = youTubeClient.getChannel(CHANNEL_HANDLE);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getItems()).isNull();
     }
 }
