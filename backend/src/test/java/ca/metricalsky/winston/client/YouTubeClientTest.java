@@ -42,7 +42,7 @@ class YouTubeClientTest {
     private YouTubeClient youTubeClient;
 
     @Test
-    void getChannel() throws Exception {
+    void getChannel() {
         stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
                 .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
                 .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
@@ -69,7 +69,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getChannel_notFound() throws Exception {
+    void getChannel_notFound() {
         stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
                 .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
                 .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
@@ -99,7 +99,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getActivities() throws Exception {
+    void getActivities() {
         stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
                 .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
                 .withQueryParam("channelId", equalTo("channelId"))
@@ -136,7 +136,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getActivities_empty() throws Exception {
+    void getActivities_empty() {
         stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
                 .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
                 .withQueryParam("channelId", equalTo("channelId"))
@@ -166,7 +166,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getComments() throws Exception {
+    void getComments() {
         stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
                 .withQueryParam("videoId", equalTo("videoId"))
@@ -199,7 +199,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getComments_empty() throws Exception {
+    void getComments_empty() {
         stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
                 .withQueryParam("videoId", equalTo("videoId"))
@@ -229,7 +229,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getReplies() throws Exception {
+    void getReplies() {
         stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
                 .withQueryParam("parentId", equalTo("commentId"))
@@ -258,7 +258,7 @@ class YouTubeClientTest {
     }
 
     @Test
-    void getReplies_empty() throws Exception {
+    void getReplies_empty() {
         stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
                 .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
                 .withQueryParam("parentId", equalTo("commentId"))

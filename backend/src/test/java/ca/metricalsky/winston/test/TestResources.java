@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.assertj.core.api.Assertions.fail;
+
 public class TestResources {
 
     private static final Path ROOT_DIR = Paths.get("src", "test", "resources");
@@ -20,7 +22,13 @@ public class TestResources {
         return new TestResources(ROOT_DIR.resolve(first, more));
     }
 
-    public String load(String first, String... more) throws IOException {
-        return FileUtils.readFileToString(resourceDir.resolve(first, more).toFile(), StandardCharsets.UTF_8);
+    public String load(String first, String... more) {
+        var resourcePath = resourceDir.resolve(first, more);
+        try {
+            return FileUtils.readFileToString(resourcePath.toFile(), StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            fail("Failed to load test resource: " + resourcePath, ex);
+            return null;
+        }
     }
 }
