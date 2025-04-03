@@ -39,13 +39,8 @@ public class YouTubeService {
         fetchAction.setStatus(Status.FETCHING);
         fetchAction = fetchActionRepository.save(fetchAction);
 
-        var youTubeRequest = new YouTubeRequest();
-        youTubeRequest.setFetchActionId(fetchAction.getId());
-        youTubeRequest.setRequestType(RequestType.CHANNELS);
-        youTubeRequest.setObjectId(fetchAction.getObjectId());
-
         try {
-            var channelListResponse = youTubeClientAdapter.getChannels(youTubeRequest);
+            var channelListResponse = youTubeClientAdapter.getChannels(fetchAction);
 
             var channel = channelListResponse.getItems()
                     .stream()
@@ -66,14 +61,7 @@ public class YouTubeService {
     }
 
     public FetchVideosResponse fetchVideos(FetchAction fetchAction) {
-        var youTubeRequest = new YouTubeRequest();
-        youTubeRequest.setFetchActionId(fetchAction.getId());
-        youTubeRequest.setRequestType(RequestType.ACTIVITIES);
-        youTubeRequest.setObjectId(fetchAction.getObjectId());
-        youTubeRequest.setPublishedAfter(fetchAction.getPublishedAfter());
-        youTubeRequest.setPublishedBefore(fetchAction.getPublishedBefore());
-
-        var activityListResponse = youTubeClientAdapter.getActivities(youTubeRequest);
+        var activityListResponse = youTubeClientAdapter.getActivities(fetchAction);
         var videos = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -104,14 +92,8 @@ public class YouTubeService {
         fetchAction.setStatus(Status.FETCHING);
         fetchAction = fetchActionRepository.save(fetchAction);
 
-        var youTubeRequest = new YouTubeRequest();
-        youTubeRequest.setFetchActionId(fetchAction.getId());
-        youTubeRequest.setRequestType(RequestType.COMMENTS);
-        youTubeRequest.setObjectId(fetchAction.getObjectId());
-        youTubeRequest.setPageToken(fetchAction.getPageToken());
-
         try {
-            var commentThreadListResponse = youTubeClientAdapter.getComments(youTubeRequest);
+            var commentThreadListResponse = youTubeClientAdapter.getComments(fetchAction);
             var comments = commentThreadListResponse.getItems()
                     .stream()
                     .map(commentMapper::fromYouTube)

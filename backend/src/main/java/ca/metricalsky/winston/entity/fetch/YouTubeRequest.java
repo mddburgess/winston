@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "youtube_requests")
@@ -51,26 +50,6 @@ public class YouTubeRequest {
     private String error;
 
     private OffsetDateTime respondedAt;
-
-    public void setPublishedAfter(String publishedAfter) {
-        this.publishedAfter = publishedAfter;
-    }
-
-    public void setPublishedAfter(OffsetDateTime publishedAfter) {
-        this.publishedAfter = formatDate(publishedAfter);
-    }
-
-    public void setPublishedBefore(String publishedBefore) {
-        this.publishedBefore = publishedBefore;
-    }
-
-    public void setPublishedBefore(OffsetDateTime publishedBefore) {
-        this.publishedBefore = formatDate(publishedBefore);
-    }
-
-    private static String formatDate(OffsetDateTime date) {
-        return date != null ? DateTimeFormatter.ISO_INSTANT.format(date) : null;
-    }
 
     public enum RequestType {
         CHANNELS,
