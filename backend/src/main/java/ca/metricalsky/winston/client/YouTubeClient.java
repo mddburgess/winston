@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -46,7 +48,7 @@ public class YouTubeClient {
                     .setMaxResults(50L)
                     .execute();
 
-            var channelCount = response.getItems() != null ? response.getItems().size() : 0;
+            var channelCount = firstNonNull(response.getItems(), List.of()).size();
             log.info("Fetched {} channels for handle '{}'", channelCount, handle);
             return response;
         } catch (IOException | RuntimeException ex) {
@@ -68,8 +70,9 @@ public class YouTubeClient {
                     .setMaxResults(50L)
                     .execute();
 
+            var activityCount = firstNonNull(response.getItems(), List.of()).size();
             log.info("Fetched {} activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
-                    response.getItems().size(), channelId, publishedAfter, publishedBefore);
+                    activityCount, channelId, publishedAfter, publishedBefore);
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
@@ -89,8 +92,8 @@ public class YouTubeClient {
                     .setMaxResults(100L)
                     .execute();
 
-            log.info("Fetched {} comments for videoId '{}' pageToken '{}'",
-                    response.getItems().size(), videoId, pageToken);
+            var commentCount = firstNonNull(response.getItems(), List.of()).size();
+            log.info("Fetched {} comments for videoId '{}' pageToken '{}'", commentCount, videoId, pageToken);
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch comments for videoId '{}' pageToken '{}'", videoId, pageToken, ex);
@@ -109,8 +112,8 @@ public class YouTubeClient {
                     .setPageToken(pageToken)
                     .execute();
 
-            log.info("Fetched {} replies for commentId '{}' pageToken '{}'",
-                    response.getItems().size(), commentId, pageToken);
+            var replyCount = firstNonNull(response.getItems(), List.of()).size();
+            log.info("Fetched {} replies for commentId '{}' pageToken '{}'", replyCount, commentId, pageToken);
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch replies for commentId '{}' pageToken '{}'", commentId, pageToken, ex);

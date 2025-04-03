@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+
+import static com.google.common.base.MoreObjects.firstNonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +33,7 @@ public class YouTubeClientAdapter {
             var response = youTubeClient.getChannel(handle);
 
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
+            youTubeRequest.setItemCount(firstNonNull(response.getItems(), List.of()).size());
             return response;
         } catch (YouTubeException ex) {
             youTubeRequest.setHttpStatus(ex.getStatusCode().value());
