@@ -7,8 +7,6 @@ import ca.metricalsky.winston.entity.Channel;
 import ca.metricalsky.winston.entity.Video;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchAction.Status;
-import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
-import ca.metricalsky.winston.entity.fetch.YouTubeRequest.RequestType;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
@@ -89,28 +87,12 @@ public class YouTubeService {
     }
 
     public FetchCommentsResponse fetchComments(FetchAction fetchAction) {
-        fetchAction.setStatus(Status.FETCHING);
-        fetchAction = fetchActionRepository.save(fetchAction);
-
-        try {
-            var commentThreadListResponse = youTubeClientAdapter.getComments(fetchAction);
-            var comments = commentThreadListResponse.getItems()
-                    .stream()
-                    .map(commentMapper::fromYouTube)
-                    .toList();
-            var nextPageToken = commentThreadListResponse.getNextPageToken();
-
-            var response = new FetchCommentsResponse(comments, nextPageToken);
-
-            fetchAction.setStatus(Status.COMPLETED);
-            fetchAction.setItemCount(commentThreadListResponse.getItems().size());
-            return response;
-        } catch (RuntimeException ex) {
-            fetchAction.setStatus(Status.FAILED);
-            fetchAction.setError(ex.getMessage());
-            throw ex;
-        } finally {
-            fetchActionRepository.save(fetchAction);
-        }
+        var commentThreadListResponse = youTubeClientAdapter.getComments(fetchAction);
+        var comments = commentThreadListResponse.getItems()
+                .stream()
+                .map(commentMapper::fromYouTube)
+                .toList();
+        var nextPageToken = commentThreadListResponse.getNextPageToken();
+        return new FetchCommentsResponse(comments, nextPageToken);
     }
 }
