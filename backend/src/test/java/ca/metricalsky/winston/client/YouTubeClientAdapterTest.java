@@ -2,10 +2,13 @@ package ca.metricalsky.winston.client;
 
 import ca.metricalsky.winston.config.YouTubeConfig;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
 import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.test.TestResources;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +20,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.wiremock.spring.EnableWireMock;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.including;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest(includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
@@ -35,7 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class YouTubeClientAdapterTest {
 
     private static final String CHANNEL_HANDLE = "@handle";
-    private static final String MAX_RESULTS = "50";
+    private static final String CHANNEL_ID = "channelId";
+    private static final String VIDEO_ID = "videoId";
+    private static final String COMMENT_ID = "commentId";
+
     private static final TestResources TEST_RESOURCES = TestResources.dir("client");
 
     @Value("${youtube.apiKey}")
@@ -48,30 +49,24 @@ class YouTubeClientAdapterTest {
     @Autowired
     private YouTubeRequestRepository requestRepository;
 
+    private YouTubeWireMock wireMock;
+
+    @BeforeEach
+    void beforeEach() {
+        wireMock = new YouTubeWireMock(youtubeApiKey);
+    }
+
     @Test
     void getChannels() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
-                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
-                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json"))));
+        wireMock.stubForGetChannels(CHANNEL_HANDLE)
+                .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json")));
 
-        var fetchRequest = entityManager.persist(FetchRequest.builder()
-                .fetchType(FetchRequest.FetchType.CHANNEL)
-                .objectId("@handle")
-                .status(FetchRequest.Status.FETCHING)
-                .build());
-        var fetchAction = entityManager.persist(FetchAction.builder()
-                .fetchRequestId(fetchRequest.getId())
-                .actionType(FetchAction.ActionType.CHANNELS)
-                .objectId("@handle")
-                .status(FetchAction.Status.FETCHING)
-                .build());
+        var fetchRequest = persistFetchRequest(FetchType.CHANNEL, CHANNEL_HANDLE);
+        var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
         var youTubeRequest = YouTubeRequest.builder()
                 .fetchActionId(fetchAction.getId())
                 .requestType(YouTubeRequest.RequestType.CHANNELS)
-                .objectId("@handle")
+                .objectId(CHANNEL_HANDLE)
                 .build();
 
         var result = clientAdapter.getChannels(youTubeRequest);
@@ -90,28 +85,15 @@ class YouTubeClientAdapterTest {
 
     @Test
     void getActivities() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
-                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
-                .withQueryParam("channelId", equalTo("channelId"))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("activities", "200.json"))));
+        wireMock.stubForGetActivities(CHANNEL_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("activities", "200.json")));
 
-        var fetchRequest = entityManager.persist(FetchRequest.builder()
-                .fetchType(FetchRequest.FetchType.VIDEOS)
-                .objectId("channelId")
-                .status(FetchRequest.Status.FETCHING)
-                .build());
-        var fetchAction = entityManager.persist(FetchAction.builder()
-                .fetchRequestId(fetchRequest.getId())
-                .actionType(FetchAction.ActionType.VIDEOS)
-                .objectId("channelId")
-                .status(FetchAction.Status.FETCHING)
-                .build());
+        var fetchRequest = persistFetchRequest(FetchType.VIDEOS, CHANNEL_ID);
+        var fetchAction = persistFetchAction(fetchRequest, ActionType.VIDEOS, CHANNEL_ID);
         var youTubeRequest = YouTubeRequest.builder()
                 .fetchActionId(fetchAction.getId())
                 .requestType(YouTubeRequest.RequestType.ACTIVITIES)
-                .objectId("channelId")
+                .objectId(CHANNEL_ID)
                 .build();
 
         var result = clientAdapter.getActivities(youTubeRequest);
@@ -130,28 +112,15 @@ class YouTubeClientAdapterTest {
 
     @Test
     void getComments() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
-                .withQueryParam("videoId", equalTo("videoId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("comments", "200.json"))));
+        wireMock.stubForGetCommentThreads(VIDEO_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("comments", "200.json")));
 
-        var fetchRequest = entityManager.persist(FetchRequest.builder()
-                .fetchType(FetchRequest.FetchType.COMMENTS)
-                .objectId("videoId")
-                .status(FetchRequest.Status.FETCHING)
-                .build());
-        var fetchAction = entityManager.persist(FetchAction.builder()
-                .fetchRequestId(fetchRequest.getId())
-                .actionType(FetchAction.ActionType.COMMENTS)
-                .objectId("videoId")
-                .status(FetchAction.Status.FETCHING)
-                .build());
+        var fetchRequest = persistFetchRequest(FetchType.COMMENTS, VIDEO_ID);
+        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, VIDEO_ID);
         var youTubeRequest = YouTubeRequest.builder()
                 .fetchActionId(fetchAction.getId())
                 .requestType(YouTubeRequest.RequestType.COMMENTS)
-                .objectId("videoId")
+                .objectId(VIDEO_ID)
                 .build();
 
         var result = clientAdapter.getComments(youTubeRequest);
@@ -170,28 +139,15 @@ class YouTubeClientAdapterTest {
 
     @Test
     void getReplies() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
-                .withQueryParam("parentId", equalTo("commentId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("replies", "200.json"))));
+        wireMock.stubForGetComments(COMMENT_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("replies", "200.json")));
 
-        var fetchRequest = entityManager.persist(FetchRequest.builder()
-                .fetchType(FetchRequest.FetchType.REPLIES)
-                .objectId("commentId")
-                .status(FetchRequest.Status.FETCHING)
-                .build());
-        var fetchAction = entityManager.persist(FetchAction.builder()
-                .fetchRequestId(fetchRequest.getId())
-                .actionType(FetchAction.ActionType.REPLIES)
-                .objectId("commentId")
-                .status(FetchAction.Status.FETCHING)
-                .build());
+        var fetchRequest = persistFetchRequest(FetchType.REPLIES, COMMENT_ID);
+        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, COMMENT_ID);
         var youTubeRequest = YouTubeRequest.builder()
                 .fetchActionId(fetchAction.getId())
                 .requestType(YouTubeRequest.RequestType.REPLIES)
-                .objectId("commentId")
+                .objectId(COMMENT_ID)
                 .build();
 
         var result = clientAdapter.getReplies(youTubeRequest);
@@ -206,5 +162,22 @@ class YouTubeClientAdapterTest {
                 .hasFieldOrProperty("respondedAt")
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", result.getItems().size());
+    }
+
+    private FetchRequest persistFetchRequest(FetchType fetchType, String objectId) {
+        return entityManager.persist(FetchRequest.builder()
+                .fetchType(fetchType)
+                .objectId(objectId)
+                .status(FetchRequest.Status.FETCHING)
+                .build());
+    }
+
+    private FetchAction persistFetchAction(FetchRequest fetchRequest, ActionType actionType, String objectId) {
+        return entityManager.persist(FetchAction.builder()
+                .fetchRequestId(fetchRequest.getId())
+                .actionType(actionType)
+                .objectId(objectId)
+                .status(FetchAction.Status.FETCHING)
+                .build());
     }
 }

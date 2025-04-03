@@ -4,6 +4,7 @@ import ca.metricalsky.winston.config.YouTubeConfig;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.google.api.client.util.DateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.including;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -32,7 +28,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class YouTubeClientTest {
 
     private static final String CHANNEL_HANDLE = "@handle";
-    private static final String MAX_RESULTS = "50";
+    private static final String CHANNEL_ID = "channelId";
+    private static final String VIDEO_ID = "videoId";
+    private static final String COMMENT_ID = "commentId";
+
     private static final TestResources TEST_RESOURCES = TestResources.dir("client");
 
     @Value("${youtube.apiKey}")
@@ -41,14 +40,17 @@ class YouTubeClientTest {
     @Autowired
     private YouTubeClient youTubeClient;
 
+    private YouTubeWireMock wireMock;
+
+    @BeforeEach
+    void beforeEach() {
+        wireMock = new YouTubeWireMock(youtubeApiKey);
+    }
+
     @Test
     void getChannel() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
-                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
-                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json"))));
+        wireMock.stubForGetChannels(CHANNEL_HANDLE)
+                .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json")));
 
         var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
@@ -70,12 +72,8 @@ class YouTubeClientTest {
 
     @Test
     void getChannel_notFound() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
-                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
-                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("channels", "200_not_found.json"))));
+        wireMock.stubForGetChannels(CHANNEL_HANDLE)
+                .willReturn(okJson(TEST_RESOURCES.load("channels", "200_not_found.json")));
 
         var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
@@ -85,12 +83,8 @@ class YouTubeClientTest {
 
     @Test
     void getChannel_fault() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/channels"))
-                .withQueryParam("part", including(YouTubeClient.CHANNEL_PARTS.toArray(new String[0])))
-                .withQueryParam("forHandle", equalTo(CHANNEL_HANDLE))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+        wireMock.stubForGetChannels(CHANNEL_HANDLE)
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
         assertThatThrownBy(() -> youTubeClient.getChannel(CHANNEL_HANDLE))
                 .isInstanceOf(YouTubeException.class)
@@ -100,14 +94,10 @@ class YouTubeClientTest {
 
     @Test
     void getActivities() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
-                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
-                .withQueryParam("channelId", equalTo("channelId"))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("activities", "200.json"))));
+        wireMock.stubForGetActivities(CHANNEL_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("activities", "200.json")));
 
-        var result = youTubeClient.getActivities("channelId", null, null);
+        var result = youTubeClient.getActivities(CHANNEL_ID, null, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).hasSize(2);
@@ -137,14 +127,10 @@ class YouTubeClientTest {
 
     @Test
     void getActivities_empty() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
-                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
-                .withQueryParam("channelId", equalTo("channelId"))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("activities", "200_empty.json"))));
+        wireMock.stubForGetActivities(CHANNEL_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("activities", "200_empty.json")));
 
-        var result = youTubeClient.getActivities("channelId", null, null);
+        var result = youTubeClient.getActivities(CHANNEL_ID, null, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
@@ -152,14 +138,10 @@ class YouTubeClientTest {
 
     @Test
     void getActivities_fault() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/activities"))
-                .withQueryParam("part", including(YouTubeClient.ACTIVITY_PARTS.toArray(new String[0])))
-                .withQueryParam("channelId", equalTo("channelId"))
-                .withQueryParam("maxResults", equalTo(MAX_RESULTS))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+        wireMock.stubForGetActivities(CHANNEL_ID)
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        assertThatThrownBy(() -> youTubeClient.getActivities("channelId", null, null))
+        assertThatThrownBy(() -> youTubeClient.getActivities(CHANNEL_ID, null, null))
                 .isInstanceOf(YouTubeException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
                 .hasCauseExactlyInstanceOf(IOException.class);
@@ -167,14 +149,10 @@ class YouTubeClientTest {
 
     @Test
     void getComments() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
-                .withQueryParam("videoId", equalTo("videoId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("comments", "200.json"))));
+        wireMock.stubForGetCommentThreads(VIDEO_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("comments", "200.json")));
 
-        var result = youTubeClient.getComments("videoId", null);
+        var result = youTubeClient.getComments(VIDEO_ID, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems())
@@ -200,14 +178,10 @@ class YouTubeClientTest {
 
     @Test
     void getComments_empty() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
-                .withQueryParam("videoId", equalTo("videoId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("comments", "200_empty.json"))));
+        wireMock.stubForGetCommentThreads(VIDEO_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("comments", "200_empty.json")));
 
-        var result = youTubeClient.getComments("videoId", null);
+        var result = youTubeClient.getComments(VIDEO_ID, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
@@ -215,14 +189,10 @@ class YouTubeClientTest {
 
     @Test
     void getComments_fault() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/commentThreads"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_THREAD_PARTS.toArray(new String[0])))
-                .withQueryParam("videoId", equalTo("videoId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+        wireMock.stubForGetCommentThreads(VIDEO_ID)
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        assertThatThrownBy(() -> youTubeClient.getComments("videoId", null))
+        assertThatThrownBy(() -> youTubeClient.getComments(VIDEO_ID, null))
                 .isInstanceOf(YouTubeException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
                 .hasCauseExactlyInstanceOf(IOException.class);
@@ -230,14 +200,10 @@ class YouTubeClientTest {
 
     @Test
     void getReplies() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
-                .withQueryParam("parentId", equalTo("commentId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("replies", "200.json"))));
+        wireMock.stubForGetComments(COMMENT_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("replies", "200.json")));
 
-        var result = youTubeClient.getReplies("commentId", null);
+        var result = youTubeClient.getReplies(COMMENT_ID, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems())
@@ -259,14 +225,10 @@ class YouTubeClientTest {
 
     @Test
     void getReplies_empty() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
-                .withQueryParam("parentId", equalTo("commentId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(okJson(TEST_RESOURCES.load("replies", "200_empty.json"))));
+        wireMock.stubForGetComments(COMMENT_ID)
+                .willReturn(okJson(TEST_RESOURCES.load("replies", "200_empty.json")));
 
-        var result = youTubeClient.getReplies("commentId", null);
+        var result = youTubeClient.getReplies(COMMENT_ID, null);
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
@@ -274,14 +236,10 @@ class YouTubeClientTest {
 
     @Test
     void getReplies_fault() {
-        stubFor(get(urlPathEqualTo("/youtube/v3/comments"))
-                .withQueryParam("part", including(YouTubeClient.COMMENT_PARTS.toArray(new String[0])))
-                .withQueryParam("parentId", equalTo("commentId"))
-                .withQueryParam("maxResults", equalTo("100"))
-                .withQueryParam("key", equalTo(youtubeApiKey))
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+        wireMock.stubForGetComments(COMMENT_ID)
+                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        assertThatThrownBy(() -> youTubeClient.getReplies("commentId", null))
+        assertThatThrownBy(() -> youTubeClient.getReplies(COMMENT_ID, null))
                 .isInstanceOf(YouTubeException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.INTERNAL_SERVER_ERROR)
                 .hasCauseExactlyInstanceOf(IOException.class);
