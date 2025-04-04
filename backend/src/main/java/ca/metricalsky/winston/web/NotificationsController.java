@@ -20,6 +20,6 @@ public class NotificationsController {
 
     @GetMapping("/api/notifications")
     public SseEmitter subscribe() throws IOException{
-        return notificationsService.openSubscription();
+        return notificationsService.openSubscription().sseEmitter();
     }
 }

@@ -26,6 +26,8 @@ public class Video {
 
     private String thumbnailUrl;
 
+    private Boolean commentsDisabled;
+
     private OffsetDateTime publishedAt;
 
     @UpdateTimestamp
