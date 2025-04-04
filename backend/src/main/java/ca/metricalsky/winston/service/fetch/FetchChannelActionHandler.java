@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class FetchChannelActionHandler implements FetchActionHandler<ChannelDto> {
@@ -24,7 +27,8 @@ public class FetchChannelActionHandler implements FetchActionHandler<ChannelDto>
     @Override
     public FetchResult<ChannelDto> fetch(FetchAction fetchAction) {
         var channelListResponse = youTubeClientAdapter.getChannels(fetchAction);
-        var channelEntity = channelListResponse.getItems()
+        var channelEntity = Optional.ofNullable(channelListResponse.getItems())
+                .orElse(Collections.emptyList())
                 .stream()
                 .findFirst()
                 .map(channelMapper::fromYouTube)
