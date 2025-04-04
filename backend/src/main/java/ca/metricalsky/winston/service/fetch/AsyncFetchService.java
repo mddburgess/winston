@@ -8,14 +8,12 @@ import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.utils.SseEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AsyncFetchService {
 
     private final FetchActionHandlerFactory fetchActionHandlerFactory;

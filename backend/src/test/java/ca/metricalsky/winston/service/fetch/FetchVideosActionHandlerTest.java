@@ -64,7 +64,7 @@ class FetchVideosActionHandlerTest {
         verify(videoRepository).saveAll(anyList());
     }
 
-    private Activity buildUploadActivity() {
+    private static Activity buildUploadActivity() {
         var upload = new ActivityContentDetailsUpload();
         upload.setVideoId(VIDEO_ID);
 
@@ -80,7 +80,7 @@ class FetchVideosActionHandlerTest {
         return activity;
     }
 
-    private Activity buildPlaylistItemActivity() {
+    private static Activity buildPlaylistItemActivity() {
         var playlistItem = new ActivityContentDetailsPlaylistItem();
         playlistItem.setPlaylistId(PLAYLIST_ID);
 
