@@ -1,0 +1,44 @@
+{
+  "kind": "youtube#commentThreadListResponse",
+  "etag": "commentThreadListResponse.etag",
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 100
+  },
+  "items": [
+    {
+      "kind": "youtube#commentThread",
+      "etag": "commentThread.etag",
+      "id": "commentThread.id",
+      "snippet": {
+        "channelId": "commentThread.snippet.channelId",
+        "videoId": "commentThread.snippet.videoId",
+        "topLevelComment": {
+          "kind": "youtube#comment",
+          "etag": "topLevelComment.etag",
+          "id": "topLevelComment.id",
+          "snippet": {
+            "channelId": "topLevelComment.snippet.channelId",
+            "videoId": "topLevelComment.snippet.videoId",
+            "textDisplay": "topLevelComment.snippet.textDisplay",
+            "textOriginal": "topLevelComment.snippet.textOriginal",
+            "authorDisplayName": "@topLevelCommentAuthorDisplayName",
+            "authorProfileImageUrl": "https://www.example.com/topLevelComment/snippet/authorProfileImageUrl",
+            "authorChannelUrl": "https://www.example.com/topLevelComment/snippet/authorChannelUrl",
+            "authorChannelId": {
+              "value": "topLevelComment.snippet.authorChannelId.value"
+            },
+            "canRate": true,
+            "viewerRating": "none",
+            "likeCount": 0,
+            "publishedAt": "2025-01-01T00:00:00Z",
+            "updatedAt": "2025-01-02T00:00:00Z"
+          }
+        },
+        "canReply": true,
+        "totalReplyCount": 0,
+        "isPublic": true
+      }
+    }
+  ]
+}

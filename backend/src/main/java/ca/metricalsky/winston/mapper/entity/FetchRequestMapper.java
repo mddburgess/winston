@@ -28,7 +28,7 @@ public class FetchRequestMapper {
 
     private FetchRequest channelRequest(FetchChannel fetchChannel) {
         var fetchRequest = new FetchRequest();
-        fetchRequest.setFetchType(FetchType.CHANNEL);
+        fetchRequest.setFetchType(FetchType.CHANNELS);
         fetchRequest.setObjectId(fetchChannel.getHandle());
         return fetchRequest;
     }

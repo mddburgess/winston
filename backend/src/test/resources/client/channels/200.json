@@ -1,0 +1,80 @@
+{
+  "kind": "youtube#channelListResponse",
+  "etag": "channelListResponse.etag",
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 50
+  },
+  "items": [
+    {
+      "kind": "youtube#channel",
+      "etag": "channel.etag",
+      "id": "channel.id",
+      "snippet": {
+        "title": "channel.snippet.title",
+        "description": "channel.snippet.description",
+        "customUrl": "@channelCustomUrl",
+        "publishedAt": "2025-01-01T00:00:00Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://www.example.com/channel/snippet/thumbnails/default",
+            "width": 88,
+            "height": 88
+          },
+          "medium": {
+            "url": "https://www.example.com/channel/snippet/thumbnails/medium",
+            "width": 240,
+            "height": 240
+          },
+          "high": {
+            "url": "https://www.example.com/channel/snippet/thumbnails/high",
+            "width": 800,
+            "height": 800
+          }
+        },
+        "localized": {
+          "title": "channel.snippet.localized.title",
+          "description": "channel.snippet.localized.description"
+        }
+      },
+      "contentDetails": {
+        "relatedPlaylists": {
+          "likes": "",
+          "uploads": "channel.contentDetails.relatedPlaylists.uploads"
+        }
+      },
+      "statistics": {
+        "viewCount": "1",
+        "subscriberCount": "1",
+        "hiddenSubscriberCount": false,
+        "videoCount": "1"
+      },
+      "topicDetails": {
+        "topicIds": [
+          "/m/02jjt"
+        ],
+        "topicCategories": [
+          "https://en.wikipedia.org/wiki/Topic",
+          "https://en.wikipedia.org/wiki/Category"
+        ]
+      },
+      "status": {
+        "privacyStatus": "public",
+        "isLinked": true,
+        "longUploadsStatus": "longUploadsUnspecified"
+      },
+      "brandingSettings": {
+        "channel": {
+          "title": "channel.brandingSettings.channel.title",
+          "description": "channel.brandingSettings.channel.description",
+          "keywords": "channel \"branding settings\" keywords",
+          "unsubscribedTrailer": "channel.brandingSettings.channel.unsubscribedTrailer"
+        },
+        "image": {
+          "bannerExternalUrl": "https://www.example.com/channel/brandingSettings/image/bannerExternalUrl"
+        }
+      },
+      "contentOwnerDetails": {}
+    }
+  ]
+}
