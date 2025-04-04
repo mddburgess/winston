@@ -3,19 +3,23 @@ package ca.metricalsky.winston.client;
 import ca.metricalsky.winston.config.YouTubeConfig;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.util.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.wiremock.spring.EnableWireMock;
 
 import java.io.IOException;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.forbidden;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -185,6 +189,19 @@ class YouTubeClientTest {
 
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isEmpty();
+    }
+
+    @Test
+    void getComments_commentsDisabled() {
+        wireMock.stubForGetCommentThreads(VIDEO_ID).willReturn(forbidden()
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(TEST_RESOURCES.load("comments", "403_comments_disabled.json")));
+
+        assertThatThrownBy(() -> youTubeClient.getComments(VIDEO_ID, null))
+                .isExactlyInstanceOf(CommentsDisabledException.class)
+                .hasMessageContaining("Comments are disabled for the requested video.")
+                .hasFieldOrPropertyWithValue("status", HttpStatus.UNPROCESSABLE_ENTITY)
+                .hasCauseExactlyInstanceOf(GoogleJsonResponseException.class);
     }
 
     @Test

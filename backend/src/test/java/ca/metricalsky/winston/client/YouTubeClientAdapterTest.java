@@ -9,6 +9,7 @@ import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactory;
 import org.assertj.core.api.ObjectAssert;
@@ -23,12 +24,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Example;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.wiremock.spring.EnableWireMock;
 
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.forbidden;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -188,6 +192,27 @@ class YouTubeClientAdapterTest {
                 .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", expectedItemCount);
+    }
+
+    @Test
+    void getComments_commentsDisabled() {
+        wireMock.stubForGetCommentThreads(VIDEO_ID).willReturn(forbidden()
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(TEST_RESOURCES.load("comments", "403_comments_disabled.json")));
+
+        var fetchRequest = persistFetchRequest(FetchType.COMMENTS, VIDEO_ID);
+        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, VIDEO_ID);
+
+        assertThatThrownBy(() -> clientAdapter.getComments(fetchAction))
+                .isExactlyInstanceOf(CommentsDisabledException.class)
+                .hasFieldOrPropertyWithValue("status", HttpStatus.UNPROCESSABLE_ENTITY)
+                .hasCauseExactlyInstanceOf(GoogleJsonResponseException.class);
+
+        assertThatYouTubeRequest(fetchAction)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.COMMENTS)
+                .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
+                .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .hasFieldOrProperty("error");
     }
 
     @Test
