@@ -1,8 +1,8 @@
 import {useFetchChannelByHandleMutation} from "../../store/slices/api";
 import {NotificationsSource} from "../../components/NotificationsSource";
-import {FetchChannelEvent} from "../../model/events/FetchChannelEvent";
 import {useNavigate} from "react-router";
 import {EventSourceProvider} from "react-sse-hooks";
+import {FetchChannelEvent} from "../../model/events/FetchEvent";
 
 type FetchChannelActionProps = {
     channelHandle: string
@@ -18,14 +18,14 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
     }
 
     const handleEvent = (event: FetchChannelEvent) => {
-        navigate(`/channels/${event.channel.id}`);
+        navigate(`/channels/${event.items[0].id}`);
     }
 
     return (
         <EventSourceProvider>
             <NotificationsSource
                 onSubscribed={handleSubscribed}
-                eventName={"fetch-channel"}
+                eventName={"fetch-channels"}
                 onEvent={handleEvent}
             />
         </EventSourceProvider>

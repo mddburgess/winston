@@ -71,7 +71,7 @@ class YouTubeClientAdapterTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json")));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNEL, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
         var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
 
         var result = clientAdapter.getChannels(fetchAction);
@@ -90,7 +90,7 @@ class YouTubeClientAdapterTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(okJson(TEST_RESOURCES.load("channels", "200_not_found.json")));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNEL, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
         var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
 
         var result = clientAdapter.getChannels(fetchAction);
@@ -109,7 +109,7 @@ class YouTubeClientAdapterTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNEL, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
         var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
 
         assertThatThrownBy(() -> clientAdapter.getChannels(fetchAction))

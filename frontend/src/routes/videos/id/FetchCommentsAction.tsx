@@ -2,8 +2,8 @@ import {useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
 import {useAppDispatch} from "../../../store/hooks";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
-import {FetchCommentsEvent} from "../../../model/events/FetchCommentsEvent";
 import {fetchedComments} from "../../../store/slices/fetches";
+import {FetchCommentsEvent} from "../../../model/events/FetchEvent";
 
 type FetchVideosActionProps = {
     videoId: string,

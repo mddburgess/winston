@@ -53,7 +53,7 @@ public class FetchRequest {
     private OffsetDateTime lastUpdatedAt;
 
     public enum FetchType {
-        CHANNEL,
+        CHANNELS,
         VIDEOS,
         COMMENTS,
         REPLIES,

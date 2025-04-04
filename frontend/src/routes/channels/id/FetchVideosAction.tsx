@@ -1,9 +1,9 @@
 import {fetchedVideos} from "../../../store/slices/fetches";
 import {useAppDispatch} from "../../../store/hooks";
 import {useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
-import {FetchVideosEvent} from "../../../model/events/FetchVideosEvent";
 import {NotificationsSource} from "../../../components/NotificationsSource";
 import {EventSourceProvider} from "react-sse-hooks";
+import {FetchVideosEvent} from "../../../model/events/FetchEvent";
 
 type FetchVideosWidgetProps = {
     channelId: string,
