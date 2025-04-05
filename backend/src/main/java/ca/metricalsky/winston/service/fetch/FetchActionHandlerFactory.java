@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class FetchActionHandlerFactory {
 
     private final FetchChannelActionHandler fetchChannelActionHandler;
-    private final FetchVideosActionHandler fetchVideosActionHandler;
     private final FetchCommentsActionHandler fetchCommentsActionHandler;
+    private final FetchVideosActionHandler fetchVideosActionHandler;
 
     public FetchActionHandler<?> getHandlerForAction(FetchAction fetchAction) {
         return switch (fetchAction.getActionType()) {
