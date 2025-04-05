@@ -6,8 +6,8 @@ import {CommentList} from "../../../components/comments/CommentList";
 import {v4 as uuidv4} from "uuid";
 import {DateTime} from "luxon";
 import {descBy} from "../../../utils";
-import {AuthorDto} from "../../../model/AuthorDto";
-import {AuthorDetailsResponse} from "../../../model/AuthorDetailsResponse";
+import {AuthorDto} from "../../../model/authors/AuthorDto";
+import {AuthorDetailsResponse} from "../../../model/authors/AuthorDetailsResponse";
 
 type VideoCommentsListProps = AuthorDetailsResponse;
 

@@ -1,4 +1,4 @@
-import {AuthorDto} from "./AuthorDto";
+import {AuthorDto} from "./authors/AuthorDto";
 
 export type CommentDto = {
     id: string,
