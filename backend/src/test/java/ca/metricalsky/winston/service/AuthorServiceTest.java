@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,31 @@ class AuthorServiceTest {
 
     @Mock
     private AuthorRepository authorRepository;
+
+    @Test
+    void findAll() {
+        var author = new Author();
+        author.setId(AUTHOR_ID);
+        when(authorRepository.findAll())
+                .thenReturn(List.of(author));
+
+        var authorDtos = authorService.findAll();
+
+        assertThat(authorDtos)
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("id", AUTHOR_ID);
+    }
+
+    @Test
+    void findAll_empty() {
+        when(authorRepository.findAll())
+                .thenReturn(List.of());
+
+        var authorDtos = authorService.findAll();
+
+        assertThat(authorDtos).isEmpty();
+    }
 
     @Test
     void findById() {

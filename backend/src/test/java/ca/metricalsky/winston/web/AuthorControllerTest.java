@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.config.AppResourceResolver;
-import ca.metricalsky.winston.dto.AuthorDto;
+import ca.metricalsky.winston.dto.author.AuthorDto;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.service.AuthorService;
@@ -41,6 +41,29 @@ class AuthorControllerTest {
     private CommentService commentService;
     @MockitoBean
     private VideoService videoService;
+
+    @Test
+    void list() throws Exception {
+        when(authorService.findAll())
+                .thenReturn(List.of(buildAuthorDto()));
+
+        mvc.perform(get("/api/authors"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results").value(1))
+                .andExpect(jsonPath("$.authors", hasSize(1)))
+                .andExpect(jsonPath("$.authors[0].id").value(AUTHOR_ID));
+    }
+
+    @Test
+    void list_noResults() throws Exception {
+        when(authorService.findAll())
+                .thenReturn(List.of());
+
+        mvc.perform(get("/api/authors"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results").value(0))
+                .andExpect(jsonPath("$.authors", hasSize(0)));
+    }
 
     @Test
     void findAuthorDetails() throws Exception {

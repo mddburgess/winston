@@ -1,5 +1,7 @@
-package ca.metricalsky.winston.dto;
+package ca.metricalsky.winston.dto.author;
 
+import ca.metricalsky.winston.dto.CommentDto;
+import ca.metricalsky.winston.dto.VideoDto;
 import lombok.Builder;
 import lombok.Data;
 
