@@ -2,6 +2,7 @@ import {useListAuthorsQuery} from "../../store/slices/api";
 import {Col, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";
+import {Link} from "react-router";
 
 export const AuthorsRoute = () => {
 
@@ -39,7 +40,9 @@ export const AuthorsRoute = () => {
             <ListGroup className={"mb-2"}>
                 {displayedAuthors.map((author) => (
                     <ListGroupItem key={author.id}>
-                        {author.displayName}
+                        <Link to={`/authors/${author.id}`}>
+                            {author.displayName}
+                        </Link>
                     </ListGroupItem>
                 ))}
             </ListGroup>
