@@ -18,7 +18,9 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
     }
 
     const handleEvent = (event: FetchChannelEvent) => {
-        navigate(`/channels/${event.items[0].id}`);
+        if (event.status === 'COMPLETED') {
+            navigate(`/channels/${event.items[0].id}`);
+        }
     }
 
     return (

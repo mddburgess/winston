@@ -6,9 +6,9 @@ import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import ca.metricalsky.winston.exception.AppException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class FetchRequestMapper {
@@ -23,7 +23,7 @@ public class FetchRequestMapper {
         if (fetchRequestDto.getComments() != null) {
             return commentsRequest(fetchRequestDto.getComments());
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        throw new AppException(HttpStatus.BAD_REQUEST, "The request is syntactically invalid and cannot be processed.");
     }
 
     private FetchRequest channelRequest(FetchChannel fetchChannel) {

@@ -29,14 +29,16 @@ public class FetchController {
             @RequestBody FetchRequestDto request
     ) throws IOException {
 
-        var sseEmitter = subscriptionId == null
+        var ssePublisher = subscriptionId == null
                 ? notificationsService.openSubscription()
                 : notificationsService.requireSubscription(subscriptionId);
 
-        asyncFetchService.fetch(request, sseEmitter);
+        asyncFetchService.fetch(request, ssePublisher);
 
         return subscriptionId == null
-                ? ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_EVENT_STREAM).body(sseEmitter)
+                ? ResponseEntity.status(HttpStatus.OK)
+                        .contentType(MediaType.TEXT_EVENT_STREAM)
+                        .body(ssePublisher.sseEmitter())
                 : ResponseEntity.accepted().build();
     }
 }

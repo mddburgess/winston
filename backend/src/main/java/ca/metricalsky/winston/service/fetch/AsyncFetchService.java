@@ -6,11 +6,10 @@ import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchEvent;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
-import ca.metricalsky.winston.utils.SseEvent;
+import ca.metricalsky.winston.utils.SsePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
@@ -22,17 +21,18 @@ public class AsyncFetchService {
     private final FetchRequestService fetchRequestService;
 
     @Async
-    public void fetch(FetchRequestDto fetchRequestDto, SseEmitter sseEmitter) {
+    public void fetch(FetchRequestDto fetchRequestDto, SsePublisher ssePublisher) {
+        var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
         try {
-            var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
-            fetch(fetchRequest, sseEmitter);
-            sseEmitter.complete();
-        } catch (Exception ex) {
-            sseEmitter.completeWithError(ex);
+            fetch(fetchRequest, ssePublisher);
+            ssePublisher.complete();
+        } catch (RuntimeException ex) {
+            ssePublisher.publish(getFetchErrorEvent(fetchRequest, ex));
+            ssePublisher.completeWithError(ex);
         }
     }
 
-    private void fetch(FetchRequest fetchRequest, SseEmitter sseEmitter) {
+    private void fetch(FetchRequest fetchRequest, SsePublisher ssePublisher) {
         try {
             fetchRequest = fetchRequestService.startFetch(fetchRequest);
             var fetchAction = getFirstFetchAction(fetchRequest);
@@ -41,12 +41,12 @@ public class AsyncFetchService {
                 fetchAction = fetchResult.nextFetchAction();
 
                 var fetchEvent = getFetchEvent(fetchResult);
-                sseEmitter.send(SseEvent.named(fetchEvent.type(), fetchEvent));
+                ssePublisher.publish(fetchEvent);
             }
             fetchRequestService.fetchCompleted(fetchRequest);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             fetchRequestService.fetchFailed(fetchRequest, ex);
-            throw new RuntimeException(ex);
+            throw ex;
         }
     }
 
@@ -57,7 +57,7 @@ public class AsyncFetchService {
             var fetchResult = actionHandler.fetch(fetchAction);
             fetchActionService.actionCompleted(fetchAction, fetchResult.items().size());
             return fetchResult;
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             fetchActionService.actionFailed(fetchAction, ex);
             throw ex;
         }
@@ -82,6 +82,16 @@ public class AsyncFetchService {
             default -> null;
         };
         var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return new FetchEvent(type, fetchResult.objectId(), status, fetchResult.items());
+        return FetchEvent.data(type, fetchResult.objectId(), status, fetchResult.items());
+    }
+
+    private static FetchEvent getFetchErrorEvent(FetchRequest fetchRequest, Throwable ex) {
+        var type = switch (fetchRequest.getFetchType()) {
+            case CHANNELS -> "fetch-channels";
+            case VIDEOS -> "fetch-videos";
+            case COMMENTS -> "fetch-comments";
+            default -> null;
+        };
+        return FetchEvent.error(type, fetchRequest.getObjectId(), ex);
     }
 }

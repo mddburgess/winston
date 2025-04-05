@@ -3,12 +3,14 @@ import {VideoWithChannelIdDto} from "../../model/VideoDto";
 import {ChannelDto} from "../../model/ChannelDto";
 import {CommentDto} from "../../model/CommentDto";
 import {FetchCommentsEvent, FetchVideosEvent} from "../../model/events/FetchEvent";
+import {ProblemDetail} from "../../model/events/ProblemDetail";
 
 export type FetchState<T> = {
     id: string;
     mode?: 'ALL' | 'LATEST';
-    status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED';
+    status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED' | 'FAILED';
     data: T[];
+    error?: ProblemDetail;
 }
 
 type FetchStates = {
@@ -66,7 +68,8 @@ export const fetchesSlice = createSlice({
             state.videos[event.objectId] = {
                 id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items)
+                data: (fetchState?.data ?? []).concat(event.items ?? []),
+                error: event.error,
             }
         },
         requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
@@ -82,7 +85,8 @@ export const fetchesSlice = createSlice({
             state.comments[event.objectId] = {
                 id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items)
+                data: (fetchState?.data ?? []).concat(event.items ?? []),
+                error: event.error,
             }
         }
     }

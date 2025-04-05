@@ -1,11 +1,12 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.events.SubscriptionEvent;
+import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.utils.SsePublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -22,11 +23,11 @@ public class NotificationsService {
 
     private final Map<UUID, SseEmitter> subscriptions = new ConcurrentHashMap<>();
 
-    public SseEmitter openSubscription() throws IOException {
+    public SsePublisher openSubscription() throws IOException {
         return openSubscription(DEFAULT_TIMEOUT_MS);
     }
 
-    public SseEmitter openSubscription(Long timeout) throws IOException {
+    public SsePublisher openSubscription(Long timeout) throws IOException {
         var subscriptionId = UUID.randomUUID();
         var sseEmitter = new SseEmitter(timeout);
         sseEmitter.onCompletion(() -> {
@@ -45,12 +46,13 @@ public class NotificationsService {
 
         log.info("Notifications subscription {} opened", subscriptionId);
         sseEmitter.send(new SubscriptionEvent(true, subscriptionId), MediaType.APPLICATION_JSON);
-        return sseEmitter;
+        return new SsePublisher(sseEmitter);
     }
 
-    public SseEmitter requireSubscription(UUID subscriptionId) {
-        return Optional.ofNullable(subscriptions.get(subscriptionId)).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+    public SsePublisher requireSubscription(UUID subscriptionId) {
+        return Optional.ofNullable(subscriptions.get(subscriptionId))
+                .map(SsePublisher::new)
+                .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "The provided subscription stream is not open."));
     }
 }
