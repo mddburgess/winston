@@ -9,6 +9,7 @@ import org.mapstruct.MappingTarget;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
@@ -38,6 +39,6 @@ public abstract class AuthorDtoMapper {
                 return URLDecoder.decode(channelUrlParts[1], StandardCharsets.UTF_8);
             }
         }
-        return author.getId();
+        return defaultIfBlank(author.getId(), "");
     }
 }
