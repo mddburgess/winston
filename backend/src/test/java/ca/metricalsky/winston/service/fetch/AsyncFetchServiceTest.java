@@ -5,7 +5,7 @@ import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchEvent;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
-import ca.metricalsky.winston.utils.SsePublisher;
+import ca.metricalsky.winston.events.SsePublisher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,7 +55,7 @@ class AsyncFetchServiceTest {
                 .thenReturn(fetchRequest);
         when(fetchRequestService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
-        when(fetchActionService.startAction(any(FetchAction.class)))
+        when(fetchActionService.actionFetching(any(FetchAction.class)))
                 .thenReturn(fetchAction);
         when(fetchActionHandlerFactory.getHandlerForAction(fetchAction))
                 .thenReturn((FetchActionHandler) fetchActionHandler);

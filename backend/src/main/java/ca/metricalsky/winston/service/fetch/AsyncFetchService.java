@@ -5,8 +5,9 @@ import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchEvent;
 import ca.metricalsky.winston.events.FetchStatus;
+import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
-import ca.metricalsky.winston.utils.SsePublisher;
+import ca.metricalsky.winston.events.SsePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -27,23 +28,31 @@ public class AsyncFetchService {
             fetch(fetchRequest, ssePublisher);
             ssePublisher.complete();
         } catch (RuntimeException ex) {
-            ssePublisher.publish(getFetchErrorEvent(fetchRequest, ex));
-            ssePublisher.completeWithError(ex);
+            if (ssePublisher.isOpen()) {
+                ssePublisher.publish(getFetchErrorEvent(fetchRequest, ex));
+                ssePublisher.completeWithError(ex);
+            }
         }
     }
 
     private void fetch(FetchRequest fetchRequest, SsePublisher ssePublisher) {
+        fetchRequest = fetchRequestService.startFetch(fetchRequest);
+        var fetchAction = getFirstFetchAction(fetchRequest);
         try {
-            fetchRequest = fetchRequestService.startFetch(fetchRequest);
-            var fetchAction = getFirstFetchAction(fetchRequest);
             while (fetchAction != null) {
                 var fetchResult = fetch(fetchAction);
                 fetchAction = fetchResult.nextFetchAction();
-
-                var fetchEvent = getFetchEvent(fetchResult);
-                ssePublisher.publish(fetchEvent);
+                ssePublisher.publish(getFetchEvent(fetchResult));
             }
             fetchRequestService.fetchCompleted(fetchRequest);
+        } catch (PublisherException ex) {
+            if (fetchAction == null) {
+                fetchRequestService.fetchCompleted(fetchRequest);
+            } else {
+                fetchActionService.actionReady(fetchAction);
+                fetchRequestService.fetchFailed(fetchRequest, ex);
+            }
+            throw ex;
         } catch (RuntimeException ex) {
             fetchRequestService.fetchFailed(fetchRequest, ex);
             throw ex;
@@ -52,7 +61,7 @@ public class AsyncFetchService {
 
     private FetchResult<?> fetch(FetchAction fetchAction) {
         try {
-            fetchAction = fetchActionService.startAction(fetchAction);
+            fetchAction = fetchActionService.actionFetching(fetchAction);
             var actionHandler = fetchActionHandlerFactory.getHandlerForAction(fetchAction);
             var fetchResult = actionHandler.fetch(fetchAction);
             fetchActionService.actionCompleted(fetchAction, fetchResult.items().size());
