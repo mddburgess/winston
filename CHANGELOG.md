@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pagination row at the bottom of the channel page after the video cards. (mddburgess/winston#7)
 - Show in the UI when comments are disabled for a video. (mddburgess/winston#6)
 - New page to list all authors. (mddburgess/winston#11)
+- Navbar in the header with links to channel and author list pages. (mddburgess/winston#11)
+- Breadcrumb on the author details page. (mddburgess/winston#11)
 
 ### Changed
 
