@@ -1,12 +1,12 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.events.SubscriptionEvent;
+import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.utils.SsePublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class NotificationsService {
     public SsePublisher requireSubscription(UUID subscriptionId) {
         return Optional.ofNullable(subscriptions.get(subscriptionId))
                 .map(SsePublisher::new)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "The provided subscription stream is not open."));
     }
 }
