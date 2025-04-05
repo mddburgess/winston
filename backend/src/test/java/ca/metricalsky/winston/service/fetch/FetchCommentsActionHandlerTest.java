@@ -79,7 +79,7 @@ class FetchCommentsActionHandlerTest {
         assertThatThrownBy(() -> fetchCommentsActionHandler.fetch(fetchAction))
                 .isExactlyInstanceOf(CommentsDisabledException.class);
 
-        assertThat(video.getCommentsDisabled()).isTrue();
+        assertThat(video.isCommentsDisabled()).isTrue();
         verify(videoRepository).save(video);
     }
 
