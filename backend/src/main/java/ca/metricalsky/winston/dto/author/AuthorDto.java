@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.dto;
+package ca.metricalsky.winston.dto.author;
 
 import lombok.Data;
 import org.springframework.lang.NonNull;
