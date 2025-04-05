@@ -2,6 +2,8 @@ package ca.metricalsky.winston.mapper.dto;
 
 import ca.metricalsky.winston.entity.Author;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +34,24 @@ public class AuthorDtoMapperTest {
     void toAuthorDto_emptyAuthor() {
         var authorDto = authorDtoMapper.toAuthorDto(new Author());
         assertThat(authorDto).hasNoNullFieldsOrProperties();
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "@displayName, https://www.example.com/@displayName, authorId, @displayName",
+            ", https://www.example.com/c/channelUrl, authorId, channelUrl",
+            ", https://www.example.com/invalidChannelUrl, authorId, authorId",
+            ", , authorId, authorId",
+    })
+    void mapDisplayName(String displayName, String channelUrl, String id, String expectedDisplayName) {
+        var author = new Author();
+        author.setId(id);
+        author.setDisplayName(displayName);
+        author.setChannelUrl(channelUrl);
+
+        var mappedDisplayName = authorDtoMapper.mapDisplayName(author);
+
+        assertThat(mappedDisplayName).isEqualTo(expectedDisplayName);
     }
 
     private static Author buildAuthor() {
