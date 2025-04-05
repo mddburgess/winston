@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Search box on video page to search comments by text or author. (mddburgess/winston#7)
 - Pagination row at the bottom of the channel page after the video cards. (mddburgess/winston#7)
 - Show in the UI when comments are disabled for a video. (mddburgess/winston#6)
+- New page to list all authors. (mddburgess/winston#11)
 
 ### Changed
 
