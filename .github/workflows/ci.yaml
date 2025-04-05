@@ -43,6 +43,13 @@ jobs:
         env:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
+      - name: Upload test reports
+        uses: codecov/test-results-action@v1
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./backend/build/test-results/test/
+          flags: backend
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5
         with:
