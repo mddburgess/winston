@@ -1,6 +1,5 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.config.exception.AppProblemDetail;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
@@ -11,7 +10,6 @@ import ca.metricalsky.winston.utils.SsePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponseException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +22,12 @@ public class AsyncFetchService {
 
     @Async
     public void fetch(FetchRequestDto fetchRequestDto, SsePublisher ssePublisher) {
+        var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
         try {
-            var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
             fetch(fetchRequest, ssePublisher);
             ssePublisher.complete();
         } catch (RuntimeException ex) {
-            ssePublisher.publish(AppProblemDetail.forException(ex));
+            ssePublisher.publish(getFetchErrorEvent(fetchRequest, ex));
             ssePublisher.completeWithError(ex);
         }
     }
@@ -84,6 +82,16 @@ public class AsyncFetchService {
             default -> null;
         };
         var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return new FetchEvent(type, fetchResult.objectId(), status, fetchResult.items());
+        return FetchEvent.data(type, fetchResult.objectId(), status, fetchResult.items());
+    }
+
+    private static FetchEvent getFetchErrorEvent(FetchRequest fetchRequest, Throwable ex) {
+        var type = switch (fetchRequest.getFetchType()) {
+            case CHANNELS -> "fetch-channels";
+            case VIDEOS -> "fetch-videos";
+            case COMMENTS -> "fetch-comments";
+            default -> null;
+        };
+        return FetchEvent.error(type, fetchRequest.getObjectId(), ex);
     }
 }

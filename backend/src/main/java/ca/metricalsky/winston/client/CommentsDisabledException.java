@@ -7,7 +7,7 @@ public class CommentsDisabledException extends YouTubeException {
 
     private static final String MESSAGE = "Comments are disabled for the requested video.";
 
-    public CommentsDisabledException(GoogleJsonResponseException cause) {
+    CommentsDisabledException(GoogleJsonResponseException cause) {
         super(HttpStatus.UNPROCESSABLE_ENTITY, MESSAGE, cause);
     }
 }

@@ -39,7 +39,6 @@ public record SsePublisher(SseEmitter sseEmitter) {
             sseEmitter.send(builder);
         } catch (IOException ex) {
             log.error("Failed to publish SSE event name='{}'", name, ex);
-            throw new RuntimeException(ex);
         }
     }
 }
