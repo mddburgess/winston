@@ -8,7 +8,10 @@ import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
-@Mapper(nullValuePropertyMappingStrategy = IGNORE)
+@Mapper(
+        uses = {AuthorDtoMapper.class},
+        nullValuePropertyMappingStrategy = IGNORE
+)
 public abstract class CommentDtoMapper {
 
     public CommentDto fromEntity(Comment comment) {

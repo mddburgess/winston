@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "source": "src/index.html",
   "scripts": {
@@ -9,24 +9,26 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
-    "bootstrap": "^5.3.3",
-    "luxon": "^3.6.0",
+    "bootstrap": "^5.3.5",
+    "dompurify": "^3.2.5",
+    "luxon": "^3.6.1",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.9",
     "react-bootstrap-icons": "^1.11.5",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
-    "react-router": "^7.4.1",
-    "react-sse-hooks": "^1.0.6"
+    "react-router": "^7.5.0",
+    "react-sse-hooks": "^1.0.6",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
-    "@types/luxon": "^3.4.2",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
+    "@types/luxon": "^3.6.2",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
     "parcel": "^2.14.4",
     "process": "^0.11.10",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "browserslist": [
     ">0.5%",

@@ -63,6 +63,13 @@ public class CommentService {
         return defaultedMap(counts, EMPTY_COUNT);
     }
 
+    public Map<String, CommentCount> getCommentCountsByVideoIds(Iterable<String> videoIds) {
+        var counts = commentRepository.countCommentsForVideoIds(videoIds)
+                .stream()
+                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
+        return defaultedMap(counts, EMPTY_COUNT);
+    }
+
     public CommentCount getCommentCountByVideoId(String videoId) {
         return commentRepository.countCommentsForVideoId(videoId);
     }

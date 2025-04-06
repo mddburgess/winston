@@ -2,6 +2,8 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {ChannelDto} from "../../model/ChannelDto";
 import {VideoWithChannelIdDto, VideoWithChannelDto} from "../../model/VideoDto";
 import {CommentDto} from "../../model/CommentDto";
+import {AuthorDetailsResponse} from "../../model/authors/AuthorDetailsResponse";
+import {AuthorListResponse} from "../../model/authors/AuthorListResponse";
 
 type FetchRequest = {
     subscriptionId: string;
@@ -39,8 +41,11 @@ export const apiSlice = createApi({
         listCommentsByVideoId: builder.query<CommentDto[], string>({
             query: (videoId) => `/videos/${videoId}/comments`
         }),
-        listCommentsByAuthorId: builder.query<CommentDto[], string>({
-            query: (authorId) => `/authors/${authorId}/comments`
+        listAuthors: builder.query<AuthorListResponse, void>({
+            query: () => "/authors"
+        }),
+        findAuthorDetailsById: builder.query<AuthorDetailsResponse, string>({
+            query: (authorId) => `/authors/${authorId}`
         }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
@@ -88,7 +93,8 @@ export const {
     useListVideosByChannelIdQuery,
     useFindVideoByIdQuery,
     useListCommentsByVideoIdQuery,
-    useListCommentsByAuthorIdQuery,
+    useListAuthorsQuery,
+    useFindAuthorDetailsByIdQuery,
     useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
     useFetchCommentsByVideoIdMutation,

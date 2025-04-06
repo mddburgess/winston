@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,6 +43,13 @@ jobs:
         env:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
+      - name: Upload test reports
+        uses: codecov/test-results-action@v1
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./backend/build/test-results/test/
+          flags: backend
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5
         with:
@@ -54,3 +63,13 @@ jobs:
         with:
           name: backend-build-reports
           path: backend/build/reports
+
+  require-changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check changelog
+        uses: dangoslen/changelog-enforcer@v3

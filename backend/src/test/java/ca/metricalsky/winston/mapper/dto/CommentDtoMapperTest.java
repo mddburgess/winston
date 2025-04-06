@@ -21,8 +21,11 @@ public class CommentDtoMapperTest {
 
         assertThat(commentDto)
                 .hasFieldOrPropertyWithValue("id", comment.getId())
+                .hasFieldOrPropertyWithValue("videoId", comment.getVideoId())
                 .hasFieldOrPropertyWithValue("author.id", comment.getAuthor().getId())
                 .hasFieldOrPropertyWithValue("author.displayName", comment.getAuthor().getDisplayName())
+                .hasFieldOrPropertyWithValue("author.channelUrl", comment.getAuthor().getChannelUrl())
+                .hasFieldOrPropertyWithValue("author.profileImageUrl", comment.getAuthor().getProfileImageUrl())
                 .hasFieldOrPropertyWithValue("text", comment.getTextDisplay())
                 .hasFieldOrPropertyWithValue("publishedAt", comment.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", comment.getUpdatedAt())

@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, String> {
@@ -44,6 +43,19 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
             GROUP BY v.id
             """)
     List<CommentCount> countCommentsForChannelIdGroupByVideoId(String channelId);
+
+    @Query("""
+            SELECT
+                v.id AS videoId,
+                COUNT(c.id) AS commentsAndReplies,
+                COUNT(c.parentId) AS replies,
+                COALESCE(SUM(c.totalReplyCount), 0) AS totalReplies
+            FROM Video v
+                JOIN Comment c ON v.id = c.videoId
+            WHERE v.id IN :videoIds
+            GROUP BY v.id
+            """)
+    List<CommentCount> countCommentsForVideoIds(Iterable<String> videoIds);
 
     @Query("""
             SELECT

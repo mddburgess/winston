@@ -1,0 +1,31 @@
+{
+  "kind": "youtube#commentListResponse",
+  "etag": "xj8JjkKNwZ6OSBlunNEytV9-teo",
+  "pageInfo": {
+    "resultsPerPage": 100
+  },
+  "items": [
+    {
+      "kind": "youtube#comment",
+      "etag": "comment.etag",
+      "id": "comment.id",
+      "snippet": {
+        "channelId": "comment.snippet.channelId",
+        "textDisplay": "comment.snippet.textDisplay",
+        "textOriginal": "comment.snippet.textOriginal",
+        "parentId": "comment.snippet.parentId",
+        "authorDisplayName": "@commentAuthorDisplayName",
+        "authorProfileImageUrl": "https://www.example.com/comment/snippet/authorProfileImageUrl",
+        "authorChannelUrl": "https://www.example.com/comment/snippet/authorChannelUrl",
+        "authorChannelId": {
+          "value": "comment.snippet.authorChannelId.value"
+        },
+        "canRate": true,
+        "viewerRating": "none",
+        "likeCount": 0,
+        "publishedAt": "2025-01-01T00:00:00Z",
+        "updatedAt": "2025-01-02T00:00:00Z"
+      }
+    }
+  ]
+}

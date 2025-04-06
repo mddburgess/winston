@@ -36,14 +36,10 @@ public class AppProblemDetail extends ProblemDetail {
         return new AppProblemDetail(status);
     }
 
-    public static AppProblemDetail forException(@NonNull ErrorResponseException ex) {
-        var appProblemDetail = new AppProblemDetail(ex.getBody());
-        appProblemDetail.setException(ProblemException.forException(ex));
-        return appProblemDetail;
-    }
-
     public static AppProblemDetail forException(@NonNull Throwable ex) {
-        var appProblemDetail = AppProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        var appProblemDetail = ex instanceof ErrorResponseException errorResponse
+                ? new AppProblemDetail(errorResponse.getBody())
+                : forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         appProblemDetail.setException(ProblemException.forException(ex));
         return appProblemDetail;
     }

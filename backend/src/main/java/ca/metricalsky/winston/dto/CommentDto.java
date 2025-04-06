@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.dto;
 
+import ca.metricalsky.winston.dto.author.AuthorDto;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
@@ -14,6 +15,9 @@ public class CommentDto {
 
     @NonNull
     private String id = "";
+
+    @NonNull
+    private String videoId = "";
 
     @NonNull
     private AuthorDto author = new AuthorDto();

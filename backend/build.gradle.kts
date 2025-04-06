@@ -34,6 +34,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.6.3")
     implementation("com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.10.0")
     implementation("org.apache.commons:commons-collections4:4.5.0-M3")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
@@ -44,7 +45,10 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:3.9.0")
+    testCompileOnly("org.projectlombok:lombok")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 tasks {

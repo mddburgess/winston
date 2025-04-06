@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
-
 @RestController
 public class NotificationsController {
 
@@ -19,7 +17,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/api/notifications")
-    public SseEmitter subscribe() throws IOException{
-        return notificationsService.openSubscription();
+    public SseEmitter subscribe() {
+        return notificationsService.openSubscription().getSseEmitter();
     }
 }

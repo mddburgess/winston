@@ -1,0 +1,104 @@
+{
+  "kind": "youtube#activityListResponse",
+  "etag": "activityListResponse.etag",
+  "items": [
+    {
+      "kind": "youtube#activity",
+      "etag": "videoActivity.etag",
+      "id": "videoActivity.id",
+      "snippet": {
+        "publishedAt": "2025-01-01T00:00:00+00:00",
+        "channelId": "videoActivity.snippet.channelId",
+        "title": "videoActivity.snippet.title",
+        "description": "videoActivity.snippet.description",
+        "thumbnails": {
+          "default": {
+            "url": "https://www.example.com/videoActivity/snippet/thumbnails/default",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://www.example.com/videoActivity/snippet/thumbnails/medium",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://www.example.com/videoActivity/snippet/thumbnails/high",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://www.example.com/videoActivity/snippet/thumbnails/standard",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://www.example.com/videoActivity/snippet/thumbnails/maxres",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "channelTitle": "videoActivity.snippet.channelTitle",
+        "type": "upload"
+      },
+      "contentDetails": {
+        "upload": {
+          "videoId": "videoActivity.contentDetails.upload.videoId"
+        }
+      }
+    },
+    {
+      "kind": "youtube#activity",
+      "etag": "playlistActivity.etag",
+      "id": "playlistActivity.id",
+      "snippet": {
+        "publishedAt": "2025-01-01T00:00:00+00:00",
+        "channelId": "playlistActivity.snippet.channelId",
+        "title": "playlistActivity.snippet.title",
+        "description": "playlistActivity.snippet.description",
+        "thumbnails": {
+          "default": {
+            "url": "https://www.example.com/playlistActivity/snippet/thumbnails/default",
+            "width": 120,
+            "height": 90
+          },
+          "medium": {
+            "url": "https://www.example.com/playlistActivity/snippet/thumbnails/medium",
+            "width": 320,
+            "height": 180
+          },
+          "high": {
+            "url": "https://www.example.com/playlistActivity/snippet/thumbnails/high",
+            "width": 480,
+            "height": 360
+          },
+          "standard": {
+            "url": "https://www.example.com/playlistActivity/snippet/thumbnails/standard",
+            "width": 640,
+            "height": 480
+          },
+          "maxres": {
+            "url": "https://www.example.com/playlistActivity/snippet/thumbnails/maxres",
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "channelTitle": "playlistActivity.snippet.channelTitle",
+        "type": "playlistItem"
+      },
+      "contentDetails": {
+        "playlistItem": {
+          "resourceId": {
+            "kind": "youtube#video",
+            "videoId": "playlistActivity.contentDetails.playlistItem.resourceId.videoId"
+          },
+          "playlistId": "playlistActivity.contentDetails.playlistItem.playlistId"
+        }
+      }
+    }
+  ],
+  "pageInfo": {
+    "totalResults": 2,
+    "resultsPerPage": 50
+  }
+}

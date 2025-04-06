@@ -10,6 +10,7 @@ type VideoDto = {
     commentCount: number;
     replyCount: number;
     totalReplyCount: number;
+    commentsDisabled: boolean;
     publishedAt: string;
     lastFetchedAt: string;
 }

@@ -7,7 +7,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,6 +21,9 @@ import java.time.OffsetDateTime;
 @Table(name = "fetch_actions")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FetchAction {
 
     @Id
@@ -58,6 +64,7 @@ public class FetchAction {
     }
 
     public enum Status {
+        READY,
         FETCHING,
         COMPLETED,
         FAILED,

@@ -1,0 +1,2 @@
+ALTER TABLE videos
+    ADD COLUMN comments_disabled BOOLEAN NOT NULL DEFAULT FALSE;

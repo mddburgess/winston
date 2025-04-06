@@ -3,10 +3,13 @@ import {CommentDto} from "../../model/CommentDto";
 import {CommentListItem} from "./CommentListItem";
 
 type CommentListProps = {
-    comments?: CommentDto[]
+    comments?: CommentDto[],
+    highlightAuthorId?: string
 }
-export const CommentList = ({comments = []}: CommentListProps) => (
+export const CommentList = ({comments = [], highlightAuthorId = ""}: CommentListProps) => (
     <ListGroup className={"pb-3 pt-2"}>
-        {comments.map((comment: CommentDto) => (<CommentListItem key={comment.id} comment={comment}/>))}
+        {comments.map((comment: CommentDto) => (
+            <CommentListItem key={comment.id} comment={comment} highlightAuthorId={highlightAuthorId}/>))
+        }
     </ListGroup>
 )

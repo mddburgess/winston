@@ -1,15 +1,16 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {VideoWithChannelIdDto} from "../../model/VideoDto";
-import {FetchVideosEvent} from "../../model/events/FetchVideosEvent";
 import {ChannelDto} from "../../model/ChannelDto";
 import {CommentDto} from "../../model/CommentDto";
-import {FetchCommentsEvent} from "../../model/events/FetchCommentsEvent";
+import {FetchCommentsEvent, FetchVideosEvent} from "../../model/events/FetchEvent";
+import {ProblemDetail} from "../../model/events/ProblemDetail";
 
 export type FetchState<T> = {
     id: string;
     mode?: 'ALL' | 'LATEST';
-    status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED';
+    status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED' | 'FAILED';
     data: T[];
+    error?: ProblemDetail;
 }
 
 type FetchStates = {
@@ -63,11 +64,12 @@ export const fetchesSlice = createSlice({
         },
         fetchedVideos: (state, action: PayloadAction<FetchVideosEvent>) => {
             const event = action.payload;
-            const fetchState = state.videos[event.channelId];
-            state.videos[event.channelId] = {
-                id: event.channelId,
+            const fetchState = state.videos[event.objectId];
+            state.videos[event.objectId] = {
+                id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.videos)
+                data: (fetchState?.data ?? []).concat(event.items ?? []),
+                error: event.error,
             }
         },
         requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
@@ -79,11 +81,12 @@ export const fetchesSlice = createSlice({
         },
         fetchedComments: (state, action: PayloadAction<FetchCommentsEvent>) => {
             const event = action.payload;
-            const fetchState = state.comments[event.videoId];
-            state.comments[event.videoId] = {
-                id: event.videoId,
+            const fetchState = state.comments[event.objectId];
+            state.comments[event.objectId] = {
+                id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.comments)
+                data: (fetchState?.data ?? []).concat(event.items ?? []),
+                error: event.error,
             }
         }
     }

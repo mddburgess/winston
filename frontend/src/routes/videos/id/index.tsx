@@ -9,6 +9,8 @@ import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 import {FetchCommentsAlert} from "./FetchCommentsAlert";
 import {useAppSelector} from "../../../store/hooks";
 import {DateTime} from "luxon";
+import {descBy} from "../../../utils";
+import {CommentsDisabledJumbotron} from "./CommentsDisabledJumbotron";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
@@ -16,19 +18,32 @@ export const VideosIdRoute = () => {
     const pageSize = 50;
     const [page, setPage] = useState(1);
 
+    const [search, setSearch] = useState("");
+
     const {data: video} = useFindVideoByIdQuery(videoId!)
 
     const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
-    const fetchedComments = useAppSelector(state => state.fetches.comments[videoId!]?.data)
+    const fetchState = useAppSelector(state => state.fetches.comments[videoId!])
     const combinedComments = useMemo(
-        () => (fetchedComments ?? []).concat(comments ?? [])
-            .sort((a, b) => DateTime.fromISO(b.publishedAt).valueOf() - DateTime.fromISO(a.publishedAt).valueOf()),
-        [comments, fetchedComments]
+        () => (fetchState?.data ?? []).concat(comments ?? [])
+            .sort(descBy(comment => DateTime.fromISO(comment.publishedAt).valueOf())),
+        [comments, fetchState]
     );
 
     const displayedComments = useMemo(
-        () => combinedComments.slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [combinedComments, pageSize, page]
+        () => combinedComments.filter(comment =>
+            comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
+            comment.text.toLowerCase().includes(search.toLowerCase()) ||
+            comment.replies.filter(reply =>
+                    reply.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
+                    reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
+            .slice(pageSize * (page - 1), pageSize * page) ?? [],
+        [combinedComments, pageSize, page, search]
+    );
+
+    const commentsDisabled = useMemo(
+        () => video?.commentsDisabled || fetchState?.error?.type === "/api/problem/comments-disabled",
+        [video, fetchState]
     );
 
     return (
@@ -47,8 +62,9 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            {video && (combinedComments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
+            {video && !commentsDisabled && (combinedComments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
             {video && <FetchCommentsAlert video={video}/>}
+            {commentsDisabled && <CommentsDisabledJumbotron/>}
             {(combinedComments?.length ?? 0) > 0 && (
                 <>
                     <PaginationRow
@@ -57,6 +73,8 @@ export const VideosIdRoute = () => {
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}
+                        search={search}
+                        setSearch={setSearch}
                     />
                     <CommentList comments={displayedComments}/>
                     {(combinedComments?.length ?? 0) > pageSize && <PaginationRow
