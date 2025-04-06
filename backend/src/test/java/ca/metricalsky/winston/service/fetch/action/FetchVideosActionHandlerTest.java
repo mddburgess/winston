@@ -1,8 +1,12 @@
-package ca.metricalsky.winston.service.fetch;
+package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchStatus;
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.service.fetch.FetchActionService;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityContentDetails;
@@ -12,6 +16,8 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,9 +41,15 @@ class FetchVideosActionHandlerTest {
     private FetchVideosActionHandler fetchVideosActionHandler;
 
     @Mock
+    private FetchActionService fetchActionService;
+    @Mock
     private VideoRepository videoRepository;
     @Mock
     private YouTubeClientAdapter youTubeClientAdapter;
+    @Mock
+    private SsePublisher ssePublisher;
+    @Captor
+    private ArgumentCaptor<FetchEvent> fetchEvent;
 
     @Test
     void fetch() {
@@ -48,20 +60,27 @@ class FetchVideosActionHandlerTest {
         var activityListResponse = new ActivityListResponse();
         activityListResponse.setItems(List.of(buildUploadActivity(), buildPlaylistItemActivity()));
 
-        when(youTubeClientAdapter.getActivities(fetchAction)).thenReturn(activityListResponse);
+        when(fetchActionService.actionFetching(fetchAction))
+                .thenReturn(fetchAction);
+        when(youTubeClientAdapter.getActivities(fetchAction))
+                .thenReturn(activityListResponse);
 
-        var fetchResult = fetchVideosActionHandler.fetch(fetchAction);
+        var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction, ssePublisher);
 
-        assertThat(fetchResult)
-                .hasFieldOrPropertyWithValue("actionType", FetchAction.ActionType.VIDEOS)
+        assertThat(nextFetchAction).isNull();
+
+        verify(videoRepository).saveAll(anyList());
+        verify(fetchActionService).actionCompleted(fetchAction, 1);
+        verify(ssePublisher).publish(fetchEvent.capture());
+
+        assertThat(fetchEvent.getValue())
+                .hasFieldOrPropertyWithValue("type", "fetch-videos")
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID)
-                .hasFieldOrPropertyWithValue("nextFetchAction", null);
-        assertThat(fetchResult.items())
+                .hasFieldOrPropertyWithValue("status", FetchStatus.COMPLETED);
+        assertThat(fetchEvent.getValue().items())
                 .hasSize(1)
                 .first()
                 .hasFieldOrPropertyWithValue("id", VIDEO_ID);
-
-        verify(videoRepository).saveAll(anyList());
     }
 
     private static Activity buildUploadActivity() {

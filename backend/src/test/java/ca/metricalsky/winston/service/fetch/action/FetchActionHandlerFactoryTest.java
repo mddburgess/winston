@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.service.fetch;
+package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.exception.AppException;
