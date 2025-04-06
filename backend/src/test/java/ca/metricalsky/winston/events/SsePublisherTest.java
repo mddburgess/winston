@@ -1,7 +1,5 @@
-package ca.metricalsky.winston.utils;
+package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.events.FetchEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -63,8 +61,9 @@ class SsePublisherTest {
         doThrow(IOException.class)
                 .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
 
-        assertThatCode(() -> ssePublisher.publish(fetchEvent))
-                .doesNotThrowAnyException();
+        assertThatThrownBy(() -> ssePublisher.publish(fetchEvent))
+                .isExactlyInstanceOf(PublisherException.class)
+                .hasCauseExactlyInstanceOf(IOException.class);
     }
 
     @Test
@@ -82,7 +81,8 @@ class SsePublisherTest {
         doThrow(IOException.class)
                 .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
 
-        assertThatCode(() -> ssePublisher.publish(problemDetail))
-                .doesNotThrowAnyException();
+        assertThatThrownBy(() -> ssePublisher.publish(problemDetail))
+                .isExactlyInstanceOf(PublisherException.class)
+                .hasCauseExactlyInstanceOf(IOException.class);
     }
 }

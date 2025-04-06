@@ -13,7 +13,12 @@ public class FetchActionService {
 
     private final FetchActionRepository fetchActionRepository;
 
-    public FetchAction startAction(FetchAction fetchAction) {
+    public FetchAction actionReady(FetchAction fetchAction) {
+        fetchAction.setStatus(Status.READY);
+        return fetchActionRepository.save(fetchAction);
+    }
+
+    public FetchAction actionFetching(FetchAction fetchAction) {
         fetchAction.setStatus(Status.FETCHING);
         return fetchActionRepository.save(fetchAction);
     }

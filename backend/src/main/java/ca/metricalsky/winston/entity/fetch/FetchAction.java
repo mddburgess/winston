@@ -64,6 +64,7 @@ public class FetchAction {
     }
 
     public enum Status {
+        READY,
         FETCHING,
         COMPLETED,
         FAILED,

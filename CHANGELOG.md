@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Group author's comments by video, and show the video card with the comments. (mddburgess/winston#4)
 - Highlight the author's comments and replies. (mddburgess/winston#4)
 - Render comments as HTML. (mddburgess/winston#5)
+- Close event publishers early when shutting down the server. (mddburgess/winston#13)
 
 ### Fixed
 

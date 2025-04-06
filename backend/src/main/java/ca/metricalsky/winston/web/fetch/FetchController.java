@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -27,8 +26,7 @@ public class FetchController {
     public ResponseEntity<SseEmitter> fetch(
             @RequestHeader(value = "X-Notify-Subscription", required = false) UUID subscriptionId,
             @RequestBody FetchRequestDto request
-    ) throws IOException {
-
+    ) {
         var ssePublisher = subscriptionId == null
                 ? notificationsService.openSubscription()
                 : notificationsService.requireSubscription(subscriptionId);
@@ -38,7 +36,7 @@ public class FetchController {
         return subscriptionId == null
                 ? ResponseEntity.status(HttpStatus.OK)
                         .contentType(MediaType.TEXT_EVENT_STREAM)
-                        .body(ssePublisher.sseEmitter())
+                        .body(ssePublisher.getSseEmitter())
                 : ResponseEntity.accepted().build();
     }
 }
