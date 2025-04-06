@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.service.fetch;
+package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.exception.AppException;
@@ -23,6 +23,8 @@ class FetchActionHandlerFactoryTest {
     private FetchChannelActionHandler fetchChannelActionHandler;
     @Mock
     private FetchCommentsActionHandler fetchCommentsActionHandler;
+    @Mock
+    private FetchRepliesActionHandler fetchRepliesActionHandler;
     @Mock
     private FetchVideosActionHandler fetchVideosActionHandler;
 
@@ -65,9 +67,18 @@ class FetchActionHandlerFactoryTest {
                 .actionType(FetchAction.ActionType.REPLIES)
                 .build();
 
+        var handler = fetchActionHandlerFactory.getHandlerForAction(fetchAction);
+
+        assertThat(handler).isEqualTo(fetchRepliesActionHandler);
+    }
+
+    @Test
+    void getHandlerForAction_unsupported() {
+        var fetchAction = new FetchAction();
+
         assertThatThrownBy(() -> fetchActionHandlerFactory.getHandlerForAction(fetchAction))
                 .isExactlyInstanceOf(AppException.class)
-                .hasFieldOrPropertyWithValue("status", HttpStatus.NOT_IMPLEMENTED)
-                .hasFieldOrPropertyWithValue("body.detail", "The requested fetch action is not supported.");
+                .hasFieldOrPropertyWithValue("status", HttpStatus.BAD_REQUEST)
+                .hasFieldOrPropertyWithValue("body.detail", "The fetch action must have a valid action type.");
     }
 }

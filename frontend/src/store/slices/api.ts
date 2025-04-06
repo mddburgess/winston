@@ -22,6 +22,10 @@ type FetchCommentsRequest = FetchRequest & {
     videoId: string;
 }
 
+type FetchRepliesRequest = FetchRequest & {
+    commentId: string;
+}
+
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({baseUrl: "/api"}),
@@ -83,7 +87,19 @@ export const apiSlice = createApi({
                     }
                 }
             })
-        })
+        }),
+        fetchRepliesByCommentId: builder.mutation<undefined, FetchRepliesRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: "POST",
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    replies: {
+                        commentId: request.commentId
+                    }
+                }
+            })
+        }),
     })
 });
 
@@ -98,4 +114,5 @@ export const {
     useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
     useFetchCommentsByVideoIdMutation,
+    useFetchRepliesByCommentIdMutation,
 } = apiSlice

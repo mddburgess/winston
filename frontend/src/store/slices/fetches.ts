@@ -22,6 +22,9 @@ type FetchStates = {
     },
     comments: {
         [id: string]: FetchState<CommentDto>;
+    },
+    replies: {
+        [id: string]: FetchState<CommentDto>;
     }
 }
 
@@ -29,6 +32,7 @@ const initialState: FetchStates = {
     channel: {},
     videos: {},
     comments: {},
+    replies: {},
 }
 
 type FetchVideosRequest = {
@@ -88,6 +92,23 @@ export const fetchesSlice = createSlice({
                 data: (fetchState?.data ?? []).concat(event.items ?? []),
                 error: event.error,
             }
+        },
+        requestedRepliesForCommentId: (state, action: PayloadAction<string>) => {
+            state.replies[action.payload] = {
+                id: action.payload,
+                status: 'REQUESTED',
+                data: []
+            }
+        },
+        fetchedReplies: (state, action: PayloadAction<FetchCommentsEvent>) => {
+            const event = action.payload;
+            const fetchState = state.replies[event.objectId];
+            state.replies[event.objectId] = {
+                id: event.objectId,
+                status: event.status,
+                data: (fetchState?.data ?? []).concat(event.items ?? []),
+                error: event.error,
+            }
         }
     }
 })
@@ -99,6 +120,8 @@ export const {
     fetchedVideos,
     requestedCommentsForVideoId,
     fetchedComments,
+    requestedRepliesForCommentId,
+    fetchedReplies,
 } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;

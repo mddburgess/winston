@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New fetch operation to fetch replies by parent comment ID. (mddburgess/winston#8)
+
+### Changed
+
+- Make "more replies..." item a link that fetches replies to the comment. (mddburgess/winston#8)
+
 ## [1.1.0] — 2025-04-05
 
 ### Added
