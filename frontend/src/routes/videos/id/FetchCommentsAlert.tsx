@@ -31,7 +31,7 @@ export const FetchCommentsAlert = ({video}: FetchCommentsAlertProps) => {
 const FetchingCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) => {
 
     const commentCountLabel = fetchState.data.length === 0
-        ? "comments" : pluralize(fetchState.data.length, "comments");
+        ? "comments" : pluralize(fetchState.data.length, "comment");
 
     return (
         <Alert className={"alert-secondary align-items-center d-flex"}>
