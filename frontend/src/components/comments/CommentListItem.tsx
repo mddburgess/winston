@@ -32,6 +32,7 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: CommentList
             </Row>
             <Row>
                 <ReplyList
+                    commentId={comment.id}
                     totalReplyCount={comment.totalReplyCount}
                     replies={comment.replies}
                     highlightAuthorId={highlightAuthorId}
