@@ -2,7 +2,6 @@ package ca.metricalsky.winston.service.fetch.request;
 
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandlerFactory;
@@ -26,13 +25,6 @@ public class DefaultFetchRequestHandler implements FetchRequestHandler {
                 fetchAction = actionHandler.fetch(fetchAction, ssePublisher);
             }
             fetchRequestService.fetchCompleted(fetchRequest);
-        } catch (PublisherException ex) {
-            if (fetchAction == null) {
-                fetchRequestService.fetchCompleted(fetchRequest);
-            } else {
-                fetchRequestService.fetchFailed(fetchRequest, ex);
-            }
-            throw ex;
         } catch (RuntimeException ex) {
             fetchRequestService.fetchFailed(fetchRequest, ex);
             throw ex;

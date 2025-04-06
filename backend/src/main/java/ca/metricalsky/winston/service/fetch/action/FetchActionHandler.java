@@ -21,9 +21,10 @@ public abstract class FetchActionHandler<T> {
             ssePublisher.publish(getFetchEvent(fetchResult));
             return nextFetchAction;
         } catch (PublisherException ex) {
-            if (nextFetchAction != null) {
-                fetchActionService.actionReady(nextFetchAction);
+            if (nextFetchAction == null) {
+                return null;
             }
+            fetchActionService.actionReady(nextFetchAction);
             throw ex;
         }
     }
