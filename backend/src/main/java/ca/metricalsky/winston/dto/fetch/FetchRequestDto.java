@@ -8,4 +8,5 @@ public class FetchRequestDto {
     private FetchChannel channel;
     private FetchVideos videos;
     private FetchComments comments;
+    private FetchReplies replies;
 }

@@ -46,7 +46,7 @@ public class FetchCommentsActionHandler implements FetchActionHandler<CommentDto
         }
     }
 
-    private FetchAction getNextFetchAction(FetchAction fetchAction, CommentThreadListResponse youTubeResponse) {
+    private static FetchAction getNextFetchAction(FetchAction fetchAction, CommentThreadListResponse youTubeResponse) {
         return youTubeResponse.getNextPageToken() == null ? null : FetchAction.builder()
                 .fetchRequestId(fetchAction.getFetchRequestId())
                 .actionType(fetchAction.getActionType())

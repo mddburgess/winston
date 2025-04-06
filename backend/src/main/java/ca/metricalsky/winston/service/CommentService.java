@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
@@ -33,6 +34,10 @@ public class CommentService {
     public CommentService(CommentRepository commentRepository, AuthorRepository authorRepository) {
         this.commentRepository = commentRepository;
         this.authorRepository = authorRepository;
+    }
+
+    public Optional<Comment> findById(String id) {
+        return commentRepository.findById(id);
     }
 
     @Transactional

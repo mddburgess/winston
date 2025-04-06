@@ -24,6 +24,8 @@ class FetchActionHandlerFactoryTest {
     @Mock
     private FetchCommentsActionHandler fetchCommentsActionHandler;
     @Mock
+    private FetchRepliesActionHandler fetchRepliesActionHandler;
+    @Mock
     private FetchVideosActionHandler fetchVideosActionHandler;
 
     @Test
@@ -65,9 +67,18 @@ class FetchActionHandlerFactoryTest {
                 .actionType(FetchAction.ActionType.REPLIES)
                 .build();
 
+        var handler = fetchActionHandlerFactory.getHandlerForAction(fetchAction);
+
+        assertThat(handler).isEqualTo(fetchRepliesActionHandler);
+    }
+
+    @Test
+    void getHandlerForAction_unsupported() {
+        var fetchAction = new FetchAction();
+
         assertThatThrownBy(() -> fetchActionHandlerFactory.getHandlerForAction(fetchAction))
                 .isExactlyInstanceOf(AppException.class)
-                .hasFieldOrPropertyWithValue("status", HttpStatus.NOT_IMPLEMENTED)
-                .hasFieldOrPropertyWithValue("body.detail", "The requested fetch action is not supported.");
+                .hasFieldOrPropertyWithValue("status", HttpStatus.BAD_REQUEST)
+                .hasFieldOrPropertyWithValue("body.detail", "The fetch action must have a valid action type.");
     }
 }

@@ -13,14 +13,17 @@ public class FetchActionHandlerFactory {
     private final FetchChannelActionHandler fetchChannelActionHandler;
     private final FetchCommentsActionHandler fetchCommentsActionHandler;
     private final FetchVideosActionHandler fetchVideosActionHandler;
+    private final FetchRepliesActionHandler fetchRepliesActionHandler;
 
     public FetchActionHandler<?> getHandlerForAction(FetchAction fetchAction) {
+        if (fetchAction.getActionType() == null) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "The fetch action must have a valid action type.");
+        }
         return switch (fetchAction.getActionType()) {
             case CHANNELS -> fetchChannelActionHandler;
             case VIDEOS -> fetchVideosActionHandler;
             case COMMENTS -> fetchCommentsActionHandler;
-            default -> throw new AppException(HttpStatus.NOT_IMPLEMENTED,
-                    "The requested fetch action is not supported.");
+            case REPLIES -> fetchRepliesActionHandler;
         };
     }
 }

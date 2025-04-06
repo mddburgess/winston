@@ -88,7 +88,7 @@ public class AsyncFetchService {
             case CHANNELS -> "fetch-channels";
             case VIDEOS -> "fetch-videos";
             case COMMENTS -> "fetch-comments";
-            default -> null;
+            case REPLIES -> "fetch-replies";
         };
         var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
         return FetchEvent.data(type, fetchResult.objectId(), status, fetchResult.items());
@@ -99,7 +99,7 @@ public class AsyncFetchService {
             case CHANNELS -> "fetch-channels";
             case VIDEOS -> "fetch-videos";
             case COMMENTS -> "fetch-comments";
-            default -> null;
+            case REPLIES -> "fetch-replies";
         };
         return FetchEvent.error(type, fetchRequest.getObjectId(), ex);
     }
