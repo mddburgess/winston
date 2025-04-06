@@ -7,11 +7,18 @@ import ca.metricalsky.winston.dto.fetch.FetchVideos;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.service.ChannelService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FetchRequestMapper {
+
+    private final ChannelService channelService;
+    private final VideoRepository videoRepository;
 
     public FetchRequest toFetchRequest(FetchRequestDto fetchRequestDto) {
         if (fetchRequestDto.getChannel() != null) {
@@ -34,11 +41,18 @@ public class FetchRequestMapper {
     }
 
     private FetchRequest videosRequest(FetchVideos fetchVideos) {
+        channelService.requireChannelExists(fetchVideos.getChannelId());
+
         var fetchRequest = new FetchRequest();
         fetchRequest.setFetchType(FetchType.VIDEOS);
         fetchRequest.setObjectId(fetchVideos.getChannelId());
         fetchRequest.setMode(fetchVideos.getFetch().toString());
-        if (fetchVideos.getRange() != null) {
+        if (fetchVideos.getFetch() == FetchVideos.Mode.LATEST) {
+            var publishedAfter = videoRepository.findLastPublishedAtForChannelId(fetchVideos.getChannelId())
+                    .map(date -> date.plusSeconds(1))
+                    .orElse(null);
+            fetchRequest.setPublishedAfter(publishedAfter);
+        } else if (fetchVideos.getRange() != null) {
             fetchRequest.setPublishedAfter(fetchVideos.getRange().getAfter());
             fetchRequest.setPublishedBefore(fetchVideos.getRange().getBefore());
         }
