@@ -15,6 +15,7 @@ node {
 
 tasks {
     register<Delete>("clean") {
+        delete("coverage")
         delete("dist")
     }
 
@@ -39,7 +40,16 @@ tasks {
         npmCommand.addAll("run", "build")
     }
 
+    register<NpmTask>("test") {
+        dependsOn("npmInstall")
+        npmCommand.addAll("test")
+    }
+
+    register<DefaultTask>("check") {
+        dependsOn("test")
+    }
+
     register<DefaultTask>("build") {
-        dependsOn("assemble")
+        dependsOn("assemble", "check")
     }
 }

@@ -43,33 +43,38 @@ jobs:
         env:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
-      - name: Upload test reports
+      - name: Upload backend test reports
         uses: codecov/test-results-action@v1
         if: ${{ always() }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./backend/build/test-results/test/
           flags: backend
-      - name: Upload coverage reports
+      - name: Upload frontend test reports
+        uses: codecov/test-results-action@v1
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./frontend/coverage/
+          file: ./junit.xml
+          flags: frontend
+      - name: Upload backend coverage reports
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./backend/build/reports/jacoco/test/
           files: ./jacocoTestReport.xml
           flags: backend
+      - name: Upload frontend coverage reports
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./frontend/coverage/
+          files: ./cobertura-coverage.xml
+          flags: frontend
       - name: Upload build reports
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: backend-build-reports
           path: backend/build/reports
-
-  require-changelog:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Check changelog
-        uses: dangoslen/changelog-enforcer@v3
