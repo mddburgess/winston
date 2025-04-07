@@ -1,6 +1,24 @@
-import {pluralize} from "./index";
+import {ascBy, descBy, pluralize} from "./index";
 
-describe("pluralize", () => {
+describe("ascBy()", () => {
+
+    it("sorts values in ascending order by the specified property", () => {
+        const list = ["apple", "banana", "pear"];
+        expect(list.sort(ascBy(str => str.length)))
+            .toEqual(["pear", "apple", "banana"]);
+    })
+})
+
+describe("descBy()", () => {
+
+    it("sorts values in descending order by the specified property", () => {
+        const list = ["apple", "banana", "pear"];
+        expect(list.sort(descBy(str => str.length)))
+            .toEqual(["banana", "apple", "pear"]);
+    })
+})
+
+describe("pluralize()", () => {
 
     it("returns plural value when count is 0", () => {
         expect(pluralize(0, "channel"))

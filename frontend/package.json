@@ -41,5 +41,12 @@
     ">0.5%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "jest-junit": {
+    "suiteName": "frontend tests",
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}",
+    "outputDirectory": "coverage"
+  }
 }
