@@ -1,7 +1,7 @@
 import {ChannelDto} from "../../../model/ChannelDto";
 import {Col, Image, Row} from "react-bootstrap";
-import {Clipboard} from "react-bootstrap-icons";
 import {BadgeList} from "../../../components/BadgeList";
+import {CopyToClipboard} from "../../../components/CopyToClipboard";
 
 type ChannelDetailsProps = {
     channel: ChannelDto
@@ -25,7 +25,7 @@ export const ChannelDetails = ({channel}: ChannelDetailsProps) => (
                 <a href={`https://www.youtube.com/${channel.customUrl}`} target={"_blank"}>
                     {channel.customUrl}
                 </a>
-                <Clipboard className={"ms-2"}/>
+                <CopyToClipboard text={`https://www.youtube.com/${channel.customUrl}`}/>
             </p>
             <p className={"small"}>
                 {channel.description}
