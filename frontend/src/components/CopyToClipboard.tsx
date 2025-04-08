@@ -15,6 +15,10 @@ export const CopyToClipboard = ({ text }: CopyToClipboardProps) => {
     const ClipboardIcon = copied ? ClipboardCheckFill : Clipboard;
 
     return (
-        <ClipboardIcon className={"cursor-pointer ms-2"} onClick={handleOnClick} />
+        <ClipboardIcon
+            className={"cursor-pointer ms-2"}
+            data-testid={"clipboard"}
+            onClick={handleOnClick}
+        />
     );
 }
