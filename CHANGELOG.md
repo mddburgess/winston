@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New fetch operation to fetch replies by parent comment ID. (mddburgess/winston#8)
+- Clipboard icon on the video page to copy the video link to the clipboard. (mddburgess/winston#22)
 
 ### Changed
 
 - Make "more replies..." item a link that fetches replies to the comment. (mddburgess/winston#8)
+- Clipboard icon on the channel page now copies the channel link to the clipboard. (mddburgess/winston#22)
 
 ## [1.1.0] — 2025-04-05
 

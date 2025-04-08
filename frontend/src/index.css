@@ -7,6 +7,10 @@
     --bs-border-width: 1px;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .line-clamp {
     display: -webkit-box;
     -webkit-line-clamp: 5;

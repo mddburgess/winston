@@ -2,6 +2,7 @@ import {VideoWithChannelDto} from "../../../model/VideoDto";
 import {Col, Image, Ratio, Row} from "react-bootstrap";
 import {Date} from "../../../components/Date";
 import {ArrowUpLeftCircleFill, ChatFill, ChatQuoteFill, PersonVideo3} from "react-bootstrap-icons";
+import {CopyToClipboard} from "../../../components/CopyToClipboard";
 
 type VideoDetailsProps = {
     video: VideoWithChannelDto;
@@ -18,6 +19,9 @@ export const VideoDetails = ({video}: VideoDetailsProps) => (
             <Row>
                 <Col className={"h3"}>
                     {video.title}
+                </Col>
+                <Col xs={"auto"}>
+                    <CopyToClipboard text={`https://www.youtube.com/watch?v=${video.id}`}/>
                 </Col>
             </Row>
             <Row className={"pb-2"}>
