@@ -3,6 +3,7 @@ import {Col, Image, Ratio, Row} from "react-bootstrap";
 import {Date} from "../../../components/Date";
 import {ArrowUpLeftCircleFill, ChatFill, ChatQuoteFill, PersonVideo3} from "react-bootstrap-icons";
 import {CopyToClipboard} from "../../../components/CopyToClipboard";
+import {CommentCounts} from "../../../components/comments/CommentCounts";
 
 type VideoDetailsProps = {
     video: VideoWithChannelDto;
@@ -33,16 +34,12 @@ export const VideoDetails = ({video}: VideoDetailsProps) => (
                     <ArrowUpLeftCircleFill className={"me-2"}/>
                     <Date date={video.publishedAt}/>
                 </Col>
-                <Col xs={"auto"} className={"align-items-center d-flex"}>
-                    <ChatFill className={"me-2"}/>
-                    {video.commentCount}
-                </Col>
-                <Col xs={"auto"} className={"align-items-center d-flex"}>
-                    <ChatQuoteFill className={"me-2"}/>
-                    {video.replyCount} {video.replyCount < video.totalReplyCount &&
-                        <span className={"text-body-tertiary"}>&nbsp;/ {video.totalReplyCount}</span>
-                    }
-                </Col>
+                <CommentCounts
+                    comments={video.commentCount}
+                    commentsDisabled={video.commentsDisabled}
+                    replies={video.replyCount}
+                    totalReplies={video.totalReplyCount}
+                />
             </Row>
             <Row>
                 <Col className={"small"}>
