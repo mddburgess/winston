@@ -3,9 +3,9 @@ import {ReplyListItem} from "./ReplyListItem";
 import {CommentDto} from "../../model/CommentDto";
 import {pluralize} from "../../utils";
 import {ReplyAll} from "react-bootstrap-icons";
-import {useMemo, useState} from "react";
+import {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {requestedCommentsForVideoId, requestedRepliesForCommentId} from "../../store/slices/fetches";
+import {requestedRepliesForCommentId} from "../../store/slices/fetches";
 import {FetchRepliesAction} from "../../routes/videos/id/FetchRepliesAction";
 
 type ReplyListProps = {
@@ -36,7 +36,7 @@ export const ReplyList = ({ highlightAuthorId = "", ...props }: ReplyListProps) 
 
     return (
         <ListGroup variant={"flush"} className={"ps-4"}>
-            <ReplyListPart {...props} />
+            <ReplyListPart {...props} highlightAuthorId={highlightAuthorId} />
             {moreRepliesElement}
         </ListGroup>
     );
