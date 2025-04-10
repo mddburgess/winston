@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.entity.Author;
+import ca.metricalsky.winston.entity.view.AuthorDetails;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,13 +25,15 @@ class AuthorServiceTest {
 
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private AuthorDetails authorDetails;
 
     @Test
     void findAll() {
-        var author = new Author();
-        author.setId(AUTHOR_ID);
-        when(authorRepository.findAll())
-                .thenReturn(List.of(author));
+        when(authorDetails.getAuthor())
+                .thenReturn(buildAuthor());
+        when(authorRepository.findAllAuthorDetails())
+                .thenReturn(List.of(authorDetails));
 
         var authorDtos = authorService.findAll();
 
@@ -42,7 +45,7 @@ class AuthorServiceTest {
 
     @Test
     void findAll_empty() {
-        when(authorRepository.findAll())
+        when(authorRepository.findAllAuthorDetails())
                 .thenReturn(List.of());
 
         var authorDtos = authorService.findAll();
@@ -71,5 +74,14 @@ class AuthorServiceTest {
         var authorDto = authorService.findById(AUTHOR_ID);
 
         assertThat(authorDto).isEmpty();
+    }
+
+    private static Author buildAuthor() {
+        var author = new Author();
+        author.setId(AUTHOR_ID);
+        author.setChannelUrl("channelUrl");
+        author.setDisplayName("displayName");
+        author.setProfileImageUrl("profileImageUrl");
+        return author;
     }
 }

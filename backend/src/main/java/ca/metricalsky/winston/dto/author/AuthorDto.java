@@ -17,4 +17,6 @@ public class AuthorDto {
 
     @NonNull
     private String profileImageUrl = "";
+
+    private AuthorStatistics statistics;
 }
