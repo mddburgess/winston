@@ -3,7 +3,10 @@ export type AuthorDto = {
     displayName: string;
     channelUrl: string;
     profileImageUrl: string;
-    statistics?: AuthorStatistics;
+}
+
+export type AuthorWithStatisticsDto = AuthorDto & {
+    statistics: AuthorStatistics;
 }
 
 type AuthorStatistics = {

@@ -3,7 +3,7 @@ import {Col, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";
 import {Link} from "react-router";
-import {ChatFill, ChatQuoteFill, Youtube} from "react-bootstrap-icons";
+import {AuthorStatistics} from "./AuthorStatistics";
 
 export const AuthorsRoute = () => {
 
@@ -47,23 +47,7 @@ export const AuthorsRoute = () => {
                                     {author.displayName}
                                 </Link>
                             </Col>
-
-                            {author.statistics && (
-                                <>
-                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
-                                        <Youtube className={"me-2"}/>
-                                        {author.statistics.commentedVideos}
-                                    </Col>
-                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
-                                        <ChatFill className={"me-2"}/>
-                                        {author.statistics.totalComments}
-                                    </Col>
-                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
-                                        <ChatQuoteFill className={"me-2"}/>
-                                        {author.statistics.totalReplies}
-                                    </Col>
-                                </>
-                            )}
+                            <AuthorStatistics author={author}/>
                         </Row>
                     </ListGroupItem>
                 ))}
