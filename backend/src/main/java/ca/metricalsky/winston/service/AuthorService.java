@@ -19,7 +19,7 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
 
     public List<AuthorDto> findAll() {
-        return authorRepository.findAll()
+        return authorRepository.findAllAuthorDetails()
                 .stream()
                 .map(authorDtoMapper::toAuthorDto)
                 .sorted(Comparator.comparing(AuthorDto::getDisplayName))

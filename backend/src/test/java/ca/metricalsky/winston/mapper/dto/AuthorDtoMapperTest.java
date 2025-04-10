@@ -22,18 +22,21 @@ public class AuthorDtoMapperTest {
                 .hasFieldOrPropertyWithValue("displayName", author.getDisplayName())
                 .hasFieldOrPropertyWithValue("channelUrl", author.getChannelUrl())
                 .hasFieldOrPropertyWithValue("profileImageUrl", author.getProfileImageUrl());
+        assertThat(authorDto.getStatistics())
+                .isNull();
     }
 
     @Test
     void toAuthorDto_nullAuthor() {
-        var authorDto = authorDtoMapper.toAuthorDto(null);
+        var authorDto = authorDtoMapper.toAuthorDto((Author) null);
         assertThat(authorDto).isNull();
     }
 
     @Test
     void toAuthorDto_emptyAuthor() {
         var authorDto = authorDtoMapper.toAuthorDto(new Author());
-        assertThat(authorDto).hasNoNullFieldsOrProperties();
+        assertThat(authorDto)
+                .hasNoNullFieldsOrPropertiesExcept("statistics");
     }
 
     @ParameterizedTest

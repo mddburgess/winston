@@ -3,10 +3,11 @@ import {Col, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";
 import {Link} from "react-router";
+import {ChatFill, ChatQuoteFill, Youtube} from "react-bootstrap-icons";
 
 export const AuthorsRoute = () => {
 
-    const { data } = useListAuthorsQuery()
+    const {data} = useListAuthorsQuery()
 
     const pageSize = 100;
     const [page, setPage] = useState(1);
@@ -40,9 +41,30 @@ export const AuthorsRoute = () => {
             <ListGroup className={"mb-2"}>
                 {displayedAuthors.map((author) => (
                     <ListGroupItem key={author.id}>
-                        <Link to={`/authors/${author.id}`}>
-                            {author.displayName}
-                        </Link>
+                        <Row>
+                            <Col>
+                                <Link to={`/authors/${author.id}`}>
+                                    {author.displayName}
+                                </Link>
+                            </Col>
+
+                            {author.statistics && (
+                                <>
+                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
+                                        <Youtube className={"me-2"}/>
+                                        {author.statistics.commentedVideos}
+                                    </Col>
+                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
+                                        <ChatFill className={"me-2"}/>
+                                        {author.statistics.totalComments}
+                                    </Col>
+                                    <Col xs={"auto"} className={"align-items-center d-flex"}>
+                                        <ChatQuoteFill className={"me-2"}/>
+                                        {author.statistics.totalReplies}
+                                    </Col>
+                                </>
+                            )}
+                        </Row>
                     </ListGroupItem>
                 ))}
             </ListGroup>
