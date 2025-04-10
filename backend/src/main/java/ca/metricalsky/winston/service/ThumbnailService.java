@@ -41,6 +41,11 @@ public class ThumbnailService {
         return getOrFetchThumbnail(videoId, lookup);
     }
 
+    public byte[] getAuthorThumbnail(String authorId) {
+        var lookup = thumbnailRepository.lookupByAuthorId(authorId);
+        return getOrFetchThumbnail(authorId, lookup);
+    }
+
     private byte[] getOrFetchThumbnail(String id, ThumbnailLookup lookup) {
         if (lookup.getThumbnail().isEmpty()) {
             log.info("No cached thumbnail found for ID '{}', fetching", id);

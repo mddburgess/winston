@@ -6,6 +6,7 @@ import ca.metricalsky.winston.entity.view.AuthorDetails;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -28,14 +29,17 @@ public abstract class AuthorDtoMapper {
     }
 
     @Mapping(target = ".", source = "author")
-    @Mapping(target = "displayName", source = "author")
+    @Mapping(target = "displayName", source = "author", qualifiedByName = "mapDisplayName")
+    @Mapping(target = "profileImageUrl", source = "author", qualifiedByName = "mapProfileImageUrl")
     @Mapping(target = "statistics", source = ".")
     public abstract AuthorDto toAuthorDto(AuthorDetails authorDetails);
 
-    @Mapping(target = "displayName", source = ".")
+    @Mapping(target = "displayName", source = ".", qualifiedByName = "mapDisplayName")
+    @Mapping(target = "profileImageUrl", source = ".", qualifiedByName = "mapProfileImageUrl")
     @Mapping(target = "statistics", ignore = true)
     abstract void mapToAuthorDto(Author author, @MappingTarget AuthorDto authorDto);
 
+    @Named("mapDisplayName")
     protected String mapDisplayName(Author author) {
         if (isNotBlank(author.getDisplayName())) {
             return author.getDisplayName();
@@ -47,5 +51,12 @@ public abstract class AuthorDtoMapper {
             }
         }
         return defaultIfBlank(author.getId(), "");
+    }
+
+    @Named("mapProfileImageUrl")
+    protected String mapProfileImageUrl(Author author) {
+        return author.getProfileImageUrl() != null
+                ? "/api/authors/" + author.getId() + "/thumbnail"
+                : "";
     }
 }

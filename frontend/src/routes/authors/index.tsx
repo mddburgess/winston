@@ -1,5 +1,5 @@
 import {useListAuthorsQuery} from "../../store/slices/api";
-import {Col, ListGroup, ListGroupItem, Row} from "react-bootstrap";
+import {Col, Image, ListGroup, ListGroupItem, Ratio, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";
 import {Link} from "react-router";
@@ -40,9 +40,21 @@ export const AuthorsRoute = () => {
             />
             <ListGroup className={"mb-2"}>
                 {displayedAuthors.map((author) => (
-                    <ListGroupItem key={author.id}>
+                    <ListGroupItem
+                        className={"py-0"}
+                        key={author.id}
+                    >
                         <Row>
-                            <Col>
+                            <Col xs={"auto"} className={"align-items-center d-flex pe-0"}>
+                                <Ratio aspectRatio={"1x1"} style={{ minWidth: "32px" }}>
+                                    <Image
+                                        className={"border"}
+                                        roundedCircle
+                                        src={author.profileImageUrl}
+                                    />
+                                </Ratio>
+                            </Col>
+                            <Col className={"py-2"}>
                                 <Link to={`/authors/${author.id}`}>
                                     {author.displayName}
                                 </Link>
