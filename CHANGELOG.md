@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clipboard icon on the channel page now copies the channel link to the clipboard. (mddburgess/winston#22)
 - Video card now shows the fetched comment and reply counts. (mddburgess/#20)
 - Show each author's comment statistics on the author list page. (mddburgess/winston#17)
+- Show each author's profile image on the author list page. (mddburgess/winston#17)
 
 ## [1.1.0] — 2025-04-05
 
