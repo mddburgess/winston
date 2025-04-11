@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show each author's comment statistics on the author list page. (mddburgess/winston#17)
 - Show each author's profile image on the author list page. (mddburgess/winston#17)
 
+### Fixed
+
+- Newly fetched videos no longer disappear after navigating away from the channel page. (mddburgess/winston#23)
+- Newly fetched comments no longer disappear after navigating away from the video page. (mddburgess/winston#23)
+
 ## [1.1.0] — 2025-04-05
 
 ### Added
