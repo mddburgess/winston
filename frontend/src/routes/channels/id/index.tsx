@@ -1,15 +1,13 @@
 import {Link, useParams} from "react-router";
-import {useFindChannelByIdQuery, useListVideosByChannelIdQuery} from "../../../store/slices/api";
+import {useFindChannelByIdQuery, useListVideosByChannelIdQuery, videosAdapter} from "../../../store/slices/api";
 import {useEffect, useMemo, useState} from "react";
-import {Breadcrumb, BreadcrumbItem, Col, Container, Pagination, Row} from "react-bootstrap";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
 import {VideoCards} from "./VideoCards";
 import {FetchVideosAlert} from "./FetchVideosAlert";
-import {useAppDispatch, useAppSelector} from "../../../store/hooks";
-import {DateTime} from "luxon";
+import {useAppDispatch} from "../../../store/hooks";
 import {initFetchStateForChannel} from "../../../store/slices/fetches";
 import {PaginationRow} from "../../../components/PaginationRow";
-import {descBy} from "../../../utils";
 
 export const ChannelsIdRoute = () => {
 
@@ -26,16 +24,13 @@ export const ChannelsIdRoute = () => {
         channel && dispatch(initFetchStateForChannel(channel))
     }, [channel])
 
-    const {data: videos} = useListVideosByChannelIdQuery(channelId!)
-    const fetchedVideos = useAppSelector(state => state.fetches.videos[channelId!]?.data)
-    const combinedVideos = useMemo(() => (fetchedVideos ?? []).concat(videos ?? [])
-        .sort(descBy(video => DateTime.fromISO(video.publishedAt).valueOf())),
-    [videos, fetchedVideos])
+    const {data: videos, isSuccess} = useListVideosByChannelIdQuery(channelId!)
+    const videoList = isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];
 
     const displayedVideos = useMemo(
-        () => combinedVideos.filter(video => video.title.toLowerCase().includes(search.toLowerCase()))
+        () => videoList.filter(video => video.title.toLowerCase().includes(search.toLowerCase()))
             .slice(pageSize * (page - 1), pageSize * page),
-        [combinedVideos, pageSize, page, search]
+        [videoList, pageSize, page, search]
     );
 
     return (
@@ -50,7 +45,7 @@ export const ChannelsIdRoute = () => {
             {channel && <FetchVideosAlert channel={channel}/>}
             <PaginationRow
                 name={"video"}
-                total={combinedVideos.length}
+                total={videoList.length}
                 pageSize={pageSize}
                 page={page}
                 setPage={setPage}
@@ -60,7 +55,7 @@ export const ChannelsIdRoute = () => {
             <VideoCards videos={displayedVideos}/>
             <PaginationRow
                 name={"video"}
-                total={combinedVideos.length}
+                total={videoList.length}
                 pageSize={pageSize}
                 page={page}
                 setPage={setPage}
