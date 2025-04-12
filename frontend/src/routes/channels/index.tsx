@@ -1,4 +1,4 @@
-import {channelsAdapter, useListChannelsQuery} from "../../store/slices/channels";
+import {selectAllChannels, useListChannelsQuery} from "../../store/slices/channels";
 import {ChannelCards} from "./ChannelCards";
 import {Button, Col, Row} from "react-bootstrap";
 import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
@@ -9,7 +9,7 @@ import {PaginationRow} from "../../components/PaginationRow";
 export const ChannelsRoute = () => {
 
     const { isSuccess, data } = useListChannelsQuery()
-    const channels = isSuccess ? channelsAdapter.getSelectors().selectAll(data) : [];
+    const channels = isSuccess ? selectAllChannels(data) : [];
 
     const [showModal, setShowModal] = useState(false);
 

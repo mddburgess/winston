@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Newly fetched channels no longer disappear after navigating away from the channel list page. (mddburgess/winston#23)
 - Newly fetched videos no longer disappear after navigating away from the channel page. (mddburgess/winston#23)
 - Newly fetched comments no longer disappear after navigating away from the video page. (mddburgess/winston#23)
 

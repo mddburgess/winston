@@ -2,7 +2,7 @@ import {apiSlice} from "./api";
 import {createEntityAdapter, EntityState} from "@reduxjs/toolkit";
 import {ChannelDto} from "../../model/ChannelDto";
 
-export const channelsAdapter = createEntityAdapter<ChannelDto>({
+const channelsAdapter = createEntityAdapter<ChannelDto>({
     sortComparer: (first, second) => first.title.localeCompare(second.title),
 })
 
@@ -25,3 +25,13 @@ export const {
     useListChannelsQuery,
     useFindChannelByIdQuery,
 } = channelsApi;
+
+export const {
+    selectAll: selectAllChannels,
+} = channelsAdapter.getSelectors();
+
+export const appendFetchedChannels = (channels: ChannelDto[]) => {
+    return channelsApi.util.updateQueryData('listChannels', undefined, (draft) => {
+        channelsAdapter.setMany(draft, channels);
+    })
+}
