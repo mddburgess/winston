@@ -1,4 +1,5 @@
-import {apiUtils, commentsAdapter, useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
+import {useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
+import {commentsAdapter, commentsApiUtils} from "../../../store/slices/comments";
 import {useAppDispatch} from "../../../store/hooks";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
@@ -21,7 +22,7 @@ export const FetchCommentsAction = ({videoId}: FetchVideosActionProps) => {
     const handleEvent = (event: FetchCommentsEvent) => {
         dispatch(fetchedComments(event));
         if (event.status !== 'FAILED') {
-            dispatch(apiUtils.updateQueryData("listCommentsByVideoId", videoId, draft => {
+            dispatch(commentsApiUtils.updateQueryData("listCommentsByVideoId", videoId, draft => {
                 commentsAdapter.addMany(draft, event.items);
             }))
         }

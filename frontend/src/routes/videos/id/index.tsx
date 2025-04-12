@@ -1,6 +1,7 @@
 import {Link, useParams} from "react-router";
-import {commentsAdapter, useFindVideoByIdQuery, useListCommentsByVideoIdQuery} from "../../../store/slices/api";
-import {Breadcrumb, BreadcrumbItem, Col, Container, Image, Row} from "react-bootstrap";
+import {commentsAdapter, useListCommentsByVideoIdQuery} from "../../../store/slices/comments";
+import {useFindVideoByIdQuery} from "../../../store/slices/videos";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {CommentList} from "../../../components/comments/CommentList";
 import {VideoDetails} from "./VideoDetails";
 import {PaginationRow} from "../../../components/PaginationRow";
@@ -8,8 +9,6 @@ import {useMemo, useState} from "react";
 import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 import {FetchCommentsAlert} from "./FetchCommentsAlert";
 import {useAppSelector} from "../../../store/hooks";
-import {DateTime} from "luxon";
-import {descBy} from "../../../utils";
 import {CommentsDisabledJumbotron} from "./CommentsDisabledJumbotron";
 
 export const VideosIdRoute = () => {

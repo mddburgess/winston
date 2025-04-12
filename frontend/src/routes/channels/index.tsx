@@ -1,4 +1,4 @@
-import {channelsAdapter, useListChannelsQuery} from "../../store/slices/api";
+import {channelsAdapter, useListChannelsQuery} from "../../store/slices/channels";
 import {ChannelCards} from "./ChannelCards";
 import {Button, Col, Row} from "react-bootstrap";
 import {ArrowDownRightCircleFill} from "react-bootstrap-icons";

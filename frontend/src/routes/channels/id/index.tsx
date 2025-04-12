@@ -1,5 +1,6 @@
 import {Link, useParams} from "react-router";
-import {useFindChannelByIdQuery, useListVideosByChannelIdQuery, videosAdapter} from "../../../store/slices/api";
+import {useFindChannelByIdQuery} from "../../../store/slices/channels";
+import {useListVideosByChannelIdQuery, videosAdapter} from "../../../store/slices/videos";
 import {useEffect, useMemo, useState} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {ChannelDetails} from "./ChannelDetails";
