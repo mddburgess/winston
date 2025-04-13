@@ -32,6 +32,16 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findAllWithContextByAuthorId(String authorId);
 
     @Query("""
+            SELECT c.id
+            FROM Comment c
+                LEFT JOIN Comment r ON c.id = r.parentId
+            WHERE c.videoId = :videoId
+            GROUP BY c.id
+            HAVING c.totalReplyCount > COUNT(r.id)
+            """)
+    List<String> findIdsMissingRepliesByVideoId(String videoId);
+
+    @Query("""
             SELECT
                 v.id AS videoId,
                 COUNT(c.id) AS commentsAndReplies,

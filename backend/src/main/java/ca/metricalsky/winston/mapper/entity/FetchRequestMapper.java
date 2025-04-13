@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Service
 @RequiredArgsConstructor
 public class FetchRequestMapper {
@@ -73,7 +75,13 @@ public class FetchRequestMapper {
     private FetchRequest repliesRequest(FetchReplies fetchReplies) {
         var fetchRequest = new FetchRequest();
         fetchRequest.setFetchType(FetchType.REPLIES);
-        fetchRequest.setObjectId(fetchReplies.getCommentId());
+        if (isNotBlank(fetchReplies.getCommentId())) {
+            fetchRequest.setMode("FOR_COMMENT");
+            fetchRequest.setObjectId(fetchReplies.getCommentId());
+        } else if (isNotBlank(fetchReplies.getVideoId())) {
+            fetchRequest.setMode("FOR_VIDEO");
+            fetchRequest.setObjectId(fetchReplies.getVideoId());
+        }
         return fetchRequest;
     }
 }
