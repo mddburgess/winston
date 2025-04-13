@@ -38,7 +38,7 @@ export const VideosIdRoute = () => {
     );
 
     const commentsDisabled = useMemo(
-        () => video?.commentsDisabled || fetchState?.error?.type === "/api/problem/comments-disabled",
+        () => video?.commentsDisabled,
         [video, fetchState]
     );
 

@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../../store/hooks";
 import { useFetchRepliesByCommentIdMutation} from "../../../store/slices/api";
-import {FetchCommentsEvent} from "../../../model/events/FetchEvent";
+import {FetchCommentsEvent, FetchStatusEvent} from "../../../model/events/FetchEvent";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
 import {fetchedReplies} from "../../../store/slices/fetches";
@@ -18,16 +18,20 @@ export const FetchRepliesAction = ({commentId}: FetchRepliesActionProps) => {
         fetchRepliesByCommentId({subscriptionId, commentId});
     }
 
-    const handleEvent = (event: FetchCommentsEvent) => {
+    const handleDataEvent = (event: FetchCommentsEvent) => {
         dispatch(fetchedReplies(event));
+    }
+
+    const handleStatusEvent = (statusEvent: FetchStatusEvent) => {
+        // no-op
     }
 
     return (
         <EventSourceProvider>
             <NotificationsSource
                 onSubscribed={handleSubscribed}
-                eventName={"fetch-replies"}
-                onEvent={handleEvent}
+                onDataEvent={handleDataEvent}
+                onStatusEvent={handleStatusEvent}
             />
         </EventSourceProvider>
     )

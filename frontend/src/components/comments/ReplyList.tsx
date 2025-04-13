@@ -1,4 +1,4 @@
-import {ListGroup, ListGroupItem, Spinner} from "react-bootstrap";
+import {ListGroup, ListGroupItem} from "react-bootstrap";
 import {ReplyListItem} from "./ReplyListItem";
 import {CommentDto} from "../../model/CommentDto";
 import {pluralize} from "../../utils";
@@ -20,10 +20,10 @@ export const ReplyList = ({ highlightAuthorId = "", ...props }: ReplyListProps) 
     const fetchState = useAppSelector(state => state.fetches.replies[props.commentId]);
 
     const firstReplyIds = props.replies.map(reply => reply.id);
-    const moreReplies = useMemo(
+    const moreReplies: CommentDto[] = []; /* useMemo(
         () => (fetchState?.data ?? []).filter(reply => !firstReplyIds.includes(reply.id)),
         [fetchState, firstReplyIds]
-    );
+    ); */
 
     let moreRepliesElement = (<></>);
     if (fetchState?.status === 'COMPLETED') {

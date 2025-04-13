@@ -2,11 +2,12 @@ import {useEventSource, useEventSourceListener} from "react-sse-hooks";
 import {useEffect} from "react";
 import {SubscriptionEvent} from "../model/events/SubscriptionEvent";
 import {Spinner} from "react-bootstrap";
+import {FetchStatusEvent} from "../model/events/FetchEvent";
 
 type NotificationsSourceProps = {
     onSubscribed: (subscriptionId: string) => void,
-    eventName: string,
-    onEvent: (event: any) => void,
+    onDataEvent: (dataEvent: any) => void,
+    onStatusEvent: (statusEvent: FetchStatusEvent) => void,
 }
 
 export const NotificationsSource = (props: NotificationsSourceProps) => {
@@ -35,14 +36,26 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
         },
     }, [eventSource, props]);
 
-    useEventSourceListener<Parameters<typeof props.onEvent>[0]>({
+    useEventSourceListener<Parameters<typeof props.onDataEvent>[0]>({
         source: eventSource,
         startOnInit: true,
         event: {
-            name: props.eventName,
+            name: "fetch-data",
             listener: event => {
-                console.debug(`Received event of type '${props.eventName}':`, event);
-                props.onEvent(event.data)
+                console.debug(`Received event of type 'fetch-data':`, event);
+                props.onDataEvent(event.data)
+            }
+        }
+    }, [eventSource, props]);
+
+    useEventSourceListener<FetchStatusEvent>({
+        source: eventSource,
+        startOnInit: true,
+        event: {
+            name: "fetch-status",
+            listener: event => {
+                console.debug(`Received event of type 'fetch-status':`, event);
+                props.onStatusEvent(event.data)
             }
         }
     }, [eventSource, props]);
