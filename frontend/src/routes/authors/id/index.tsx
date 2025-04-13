@@ -1,6 +1,6 @@
 import {Link, useParams} from "react-router";
 import {Breadcrumb, BreadcrumbItem, Row} from "react-bootstrap";
-import {useFindAuthorDetailsByIdQuery} from "../../../store/slices/api";
+import {useFindAuthorDetailsByIdQuery} from "../../../store/slices/authors";
 import {VideoCommentsList} from "./VideoCommentsList";
 
 export const AuthorsIdRoute = () => {

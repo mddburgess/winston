@@ -1,6 +1,7 @@
 import {Link, useParams} from "react-router";
-import {useFindVideoByIdQuery, useListCommentsByVideoIdQuery} from "../../../store/slices/api";
-import {Breadcrumb, BreadcrumbItem, Col, Container, Image, Row} from "react-bootstrap";
+import {commentsAdapter, useListCommentsByVideoIdQuery} from "../../../store/slices/comments";
+import {useFindVideoByIdQuery} from "../../../store/slices/videos";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {CommentList} from "../../../components/comments/CommentList";
 import {VideoDetails} from "./VideoDetails";
 import {PaginationRow} from "../../../components/PaginationRow";
@@ -8,8 +9,6 @@ import {useMemo, useState} from "react";
 import {NoCommentsJumbotron} from "./NoCommentsJumbotron";
 import {FetchCommentsAlert} from "./FetchCommentsAlert";
 import {useAppSelector} from "../../../store/hooks";
-import {DateTime} from "luxon";
-import {descBy} from "../../../utils";
 import {CommentsDisabledJumbotron} from "./CommentsDisabledJumbotron";
 
 export const VideosIdRoute = () => {
@@ -22,23 +21,20 @@ export const VideosIdRoute = () => {
 
     const {data: video} = useFindVideoByIdQuery(videoId!)
 
-    const {data: comments} = useListCommentsByVideoIdQuery(videoId!)
+    const {isSuccess, data: comments} = useListCommentsByVideoIdQuery(videoId!)
+    const commentsList = isSuccess ? commentsAdapter.getSelectors().selectAll(comments) : [];
+
     const fetchState = useAppSelector(state => state.fetches.comments[videoId!])
-    const combinedComments = useMemo(
-        () => (fetchState?.data ?? []).concat(comments ?? [])
-            .sort(descBy(comment => DateTime.fromISO(comment.publishedAt).valueOf())),
-        [comments, fetchState]
-    );
 
     const displayedComments = useMemo(
-        () => combinedComments.filter(comment =>
+        () => commentsList.filter(comment =>
             comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
             comment.text.toLowerCase().includes(search.toLowerCase()) ||
             comment.replies.filter(reply =>
                     reply.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
                     reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
             .slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [combinedComments, pageSize, page, search]
+        [commentsList, pageSize, page, search]
     );
 
     const commentsDisabled = useMemo(
@@ -62,14 +58,14 @@ export const VideosIdRoute = () => {
                 </>}
             </Breadcrumb>
             {video && <VideoDetails video={video}/>}
-            {video && !commentsDisabled && (combinedComments?.length ?? 0) == 0 && <NoCommentsJumbotron video={video}/>}
+            {video && !commentsDisabled && commentsList.length == 0 && <NoCommentsJumbotron video={video}/>}
             {video && <FetchCommentsAlert video={video}/>}
             {commentsDisabled && <CommentsDisabledJumbotron/>}
-            {(combinedComments?.length ?? 0) > 0 && (
+            {commentsList.length > 0 && (
                 <>
                     <PaginationRow
                         name={"comment"}
-                        total={combinedComments?.length ?? 0}
+                        total={commentsList.length}
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}
@@ -77,9 +73,9 @@ export const VideosIdRoute = () => {
                         setSearch={setSearch}
                     />
                     <CommentList comments={displayedComments}/>
-                    {(combinedComments?.length ?? 0) > pageSize && <PaginationRow
+                    {commentsList.length > pageSize && <PaginationRow
                         name={"comment"}
-                        total={combinedComments?.length ?? 0}
+                        total={commentsList.length}
                         pageSize={pageSize}
                         page={page}
                         setPage={setPage}

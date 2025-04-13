@@ -1,4 +1,4 @@
-import {useListAuthorsQuery} from "../../store/slices/api";
+import {useListAuthorsQuery} from "../../store/slices/authors";
 import {Col, Image, ListGroup, ListGroupItem, Ratio, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";

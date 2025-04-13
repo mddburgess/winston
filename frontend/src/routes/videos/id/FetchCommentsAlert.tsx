@@ -30,8 +30,8 @@ export const FetchCommentsAlert = ({video}: FetchCommentsAlertProps) => {
 
 const FetchingCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) => {
 
-    const commentCountLabel = fetchState.data.length === 0
-        ? "comments" : pluralize(fetchState.data.length, "comment");
+    const commentCountLabel = (fetchState.data?.length ?? 0) === 0
+        ? "comments" : pluralize(fetchState.data?.length ?? 0, "comment");
 
     return (
         <Alert className={"alert-secondary align-items-center d-flex"}>
@@ -51,7 +51,7 @@ const FetchingCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) 
 const FetchedCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) => (
     <Alert className={"alert-success align-items-center d-flex"}>
         <Col>
-            Fetched <strong>{pluralize(fetchState.data.length, "comment")}</strong> from YouTube.
+            Fetched <strong>{pluralize(fetchState.data?.length ?? 0, "comment")}</strong> from YouTube.
         </Col>
         <Col xs={"auto"}>
             <Button className={"align-items-center btn-outline-success d-flex"} disabled>

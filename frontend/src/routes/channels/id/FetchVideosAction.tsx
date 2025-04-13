@@ -1,6 +1,7 @@
 import {fetchedVideos} from "../../../store/slices/fetches";
 import {useAppDispatch} from "../../../store/hooks";
 import {useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
+import {videosAdapter, videosApiUtils} from "../../../store/slices/videos";
 import {NotificationsSource} from "../../../components/NotificationsSource";
 import {EventSourceProvider} from "react-sse-hooks";
 import {FetchVideosEvent} from "../../../model/events/FetchEvent";
@@ -21,6 +22,11 @@ export const FetchVideosAction = ({channelId, mode}: FetchVideosWidgetProps) => 
 
     const handleEvent = (event: FetchVideosEvent) => {
         dispatch(fetchedVideos(event));
+        if (event.status !== 'FAILED') {
+            dispatch(videosApiUtils.updateQueryData('listVideosByChannelId', channelId, (draft) => {
+                videosAdapter.setMany(draft, event.items)
+            }))
+        }
     }
 
     return (

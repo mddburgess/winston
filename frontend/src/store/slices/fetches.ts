@@ -9,7 +9,7 @@ export type FetchState<T> = {
     id: string;
     mode?: 'ALL' | 'LATEST';
     status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED' | 'FAILED';
-    data: T[];
+    data?: T[];
     error?: ProblemDetail;
 }
 
@@ -48,14 +48,12 @@ export const fetchesSlice = createSlice({
             state.channel[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
-                data: []
             }
         },
         initFetchStateForChannel: (state, action: PayloadAction<ChannelDto>) => {
             state.videos[action.payload.id] = {
                 id: action.payload.id,
                 status: 'READY',
-                data: []
             }
         },
         requestedVideosForChannelId: (state, action: PayloadAction<FetchVideosRequest>) => {
@@ -63,7 +61,6 @@ export const fetchesSlice = createSlice({
                 id: action.payload.channelId,
                 mode: action.payload.mode,
                 status: 'REQUESTED',
-                data: []
             }
         },
         fetchedVideos: (state, action: PayloadAction<FetchVideosEvent>) => {
@@ -72,7 +69,6 @@ export const fetchesSlice = createSlice({
             state.videos[event.objectId] = {
                 id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items ?? []),
                 error: event.error,
             }
         },
@@ -80,7 +76,6 @@ export const fetchesSlice = createSlice({
             state.comments[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
-                data: []
             }
         },
         fetchedComments: (state, action: PayloadAction<FetchCommentsEvent>) => {
@@ -89,7 +84,6 @@ export const fetchesSlice = createSlice({
             state.comments[event.objectId] = {
                 id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items ?? []),
                 error: event.error,
             }
         },
