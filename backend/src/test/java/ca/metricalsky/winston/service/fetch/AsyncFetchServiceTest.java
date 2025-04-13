@@ -3,7 +3,8 @@ package ca.metricalsky.winston.service.fetch;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
-import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchDataEvent;
+import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
@@ -71,7 +72,7 @@ class AsyncFetchServiceTest {
 
         asyncFetchService.fetch(fetchRequestDto, ssePublisher);
 
-        verify(ssePublisher).publish(any(FetchEvent.class));
+        verify(ssePublisher).publish(any(FetchStatusEvent.class));
         verify(ssePublisher).completeWithError(exception);
     }
 

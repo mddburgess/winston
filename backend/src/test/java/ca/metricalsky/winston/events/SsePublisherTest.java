@@ -1,5 +1,7 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.service.fetch.FetchResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +50,8 @@ class SsePublisherTest {
 
     @Test
     void publishFetchEvent() throws Exception {
-        var fetchEvent = FetchEvent.data("type", "objectId", FetchStatus.COMPLETED, List.of(new Object()));
+        var fetchResult = new FetchResult<>(new FetchAction(), List.of(new Object()), null);
+        var fetchEvent = FetchDataEvent.of(fetchResult);
 
         ssePublisher.publish(fetchEvent);
 
@@ -57,7 +60,8 @@ class SsePublisherTest {
 
     @Test
     void publishFetchEvent_ioException() throws Exception {
-        var fetchEvent = FetchEvent.data("type", "objectId", FetchStatus.COMPLETED, List.of(new Object()));
+        var fetchResult = new FetchResult<>(new FetchAction(), List.of(new Object()), null);
+        var fetchEvent = FetchDataEvent.of(fetchResult);
         doThrow(IOException.class)
                 .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
 

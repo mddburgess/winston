@@ -4,8 +4,6 @@ import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.events.FetchEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
@@ -68,11 +66,5 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
                 .objectId(fetchAction.getObjectId())
                 .pageToken(youTubeResponse.getNextPageToken())
                 .build();
-    }
-
-    @Override
-    protected FetchEvent getFetchEvent(FetchResult<CommentDto> fetchResult) {
-        var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return FetchEvent.data("fetch-comments", fetchResult.objectId(), status, fetchResult.items());
     }
 }
