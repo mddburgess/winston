@@ -76,11 +76,11 @@ public class FetchRequestMapper {
         var fetchRequest = new FetchRequest();
         fetchRequest.setFetchType(FetchType.REPLIES);
         if (isNotBlank(fetchReplies.getCommentId())) {
-            fetchRequest.setMode("FOR_COMMENT");
             fetchRequest.setObjectId(fetchReplies.getCommentId());
+            fetchRequest.setMode("FOR_COMMENT");
         } else if (isNotBlank(fetchReplies.getVideoId())) {
-            fetchRequest.setMode("FOR_VIDEO");
             fetchRequest.setObjectId(fetchReplies.getVideoId());
+            fetchRequest.setMode("FOR_VIDEO");
         }
         return fetchRequest;
     }
