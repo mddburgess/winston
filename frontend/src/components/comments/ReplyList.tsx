@@ -3,7 +3,6 @@ import {ReplyListItem} from "./ReplyListItem";
 import {CommentDto} from "../../model/CommentDto";
 import {pluralize} from "../../utils";
 import {ReplyAll} from "react-bootstrap-icons";
-import {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {requestedRepliesForCommentId} from "../../store/slices/fetches";
 import {FetchRepliesAction} from "../../routes/videos/id/FetchRepliesAction";
@@ -19,16 +18,8 @@ export const ReplyList = ({ highlightAuthorId = "", ...props }: ReplyListProps) 
 
     const fetchState = useAppSelector(state => state.fetches.replies[props.commentId]);
 
-    const firstReplyIds = props.replies.map(reply => reply.id);
-    const moreReplies: CommentDto[] = []; /* useMemo(
-        () => (fetchState?.data ?? []).filter(reply => !firstReplyIds.includes(reply.id)),
-        [fetchState, firstReplyIds]
-    ); */
-
     let moreRepliesElement = (<></>);
-    if (fetchState?.status === 'COMPLETED') {
-        moreRepliesElement = (<ReplyListPart replies={moreReplies} highlightAuthorId={highlightAuthorId} />);
-    } else if (fetchState?.status === 'REQUESTED' || fetchState?.status === 'FETCHING') {
+    if (fetchState?.status === 'REQUESTED' || fetchState?.status === 'FETCHING') {
         moreRepliesElement = (<FetchingRepliesItem {...props} />);
     } else if (props.totalReplyCount > props.replies.length) {
         moreRepliesElement = (<MoreRepliesItem {...props} />);

@@ -1,5 +1,5 @@
 import {useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
-import {commentsAdapter, commentsApiUtils} from "../../../store/slices/comments";
+import {commentsAdapter, commentsApiUtils, repliesAdapter} from "../../../store/slices/comments";
 import {useAppDispatch} from "../../../store/hooks";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
@@ -22,7 +22,11 @@ export const FetchCommentsAction = ({videoId}: FetchVideosActionProps) => {
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
         dispatch(commentsApiUtils.updateQueryData("listCommentsByVideoId", videoId, draft => {
-            commentsAdapter.addMany(draft, event.items);
+            const comments = event.items.map(comment => ({
+                ...comment,
+                replies: repliesAdapter.addMany(repliesAdapter.getInitialState(), comment.replies)
+            }))
+            commentsAdapter.addMany(draft, comments);
         }))
         dispatch(fetchedComments(event));
     }
