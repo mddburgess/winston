@@ -4,7 +4,7 @@ import {CommentDto} from "../../model/CommentDto";
 import {pluralize} from "../../utils";
 import {ReplyAll} from "react-bootstrap-icons";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {requestedRepliesForCommentId} from "../../store/slices/fetches";
+import {requestedRepliesForId} from "../../store/slices/fetches";
 import {FetchRepliesAction} from "../../routes/videos/id/FetchRepliesAction";
 
 type ReplyListProps = {
@@ -46,7 +46,7 @@ const MoreRepliesItem = ({ commentId, totalReplyCount, replies }: ReplyListProps
     return (
         <ListGroupItem key={"more"} className={"align-items-center d-flex"}>
             <ReplyAll className={"me-2"}/>
-            <a className={"small"} onClick={() => dispatch(requestedRepliesForCommentId(commentId))}>
+            <a className={"small"} onClick={() => dispatch(requestedRepliesForId(commentId))}>
                 {pluralize(totalReplyCount - replies.length, "more reply...", "more replies...")}
             </a>
         </ListGroupItem>

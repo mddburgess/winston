@@ -93,7 +93,7 @@ export const fetchesSlice = createSlice({
                 count: fetchState.count + event.items.length,
             }
         },
-        requestedRepliesForCommentId: (state, action: PayloadAction<string>) => {
+        requestedRepliesForId: (state, action: PayloadAction<string>) => {
             state.replies[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
@@ -128,7 +128,7 @@ export const {
     fetchedVideos,
     requestedCommentsForVideoId,
     fetchedComments,
-    requestedRepliesForCommentId,
+    requestedRepliesForId,
     fetchedReplies,
     updateFetchStatus,
 } = fetchesSlice.actions;
