@@ -3,8 +3,6 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.events.FetchEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
@@ -78,11 +76,5 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
                 .publishedAfter(fetchAction.getPublishedAfter())
                 .publishedBefore(nextPublishedBefore)
                 .build();
-    }
-
-    @Override
-    protected FetchEvent getFetchEvent(FetchResult<VideoDto> fetchResult) {
-        var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return FetchEvent.data("fetch-videos", fetchResult.objectId(), status, fetchResult.items());
     }
 }

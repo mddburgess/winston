@@ -4,7 +4,7 @@ import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.entity.Channel;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
-import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
@@ -46,7 +46,7 @@ class FetchChannelActionHandlerTest {
     @Mock
     private SsePublisher ssePublisher;
     @Captor
-    private ArgumentCaptor<FetchEvent> fetchEvent;
+    private ArgumentCaptor<FetchDataEvent> fetchDataEvent;
 
     @Test
     void fetch() {
@@ -68,13 +68,11 @@ class FetchChannelActionHandlerTest {
 
         verify(channelRepository).save(any(Channel.class));
         verify(fetchActionService).actionCompleted(fetchAction, channelListResponse.getItems().size());
-        verify(ssePublisher).publish(fetchEvent.capture());
+        verify(ssePublisher).publish(fetchDataEvent.capture());
 
-        assertThat(fetchEvent.getValue())
-                .hasFieldOrPropertyWithValue("type", "fetch-channels")
-                .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE)
-                .hasFieldOrPropertyWithValue("status", FetchStatus.COMPLETED);
-        assertThat(fetchEvent.getValue().items()).hasSize(channelListResponse.getItems().size());
+        assertThat(fetchDataEvent.getValue())
+                .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE);
+        assertThat(fetchDataEvent.getValue().items()).hasSize(channelListResponse.getItems().size());
     }
 
     @Test

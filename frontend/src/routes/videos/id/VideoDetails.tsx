@@ -4,6 +4,7 @@ import {Date} from "../../../components/Date";
 import {ArrowUpLeftCircleFill, PersonVideo3} from "react-bootstrap-icons";
 import {CopyToClipboard} from "../../../components/CopyToClipboard";
 import {CommentCounts} from "../../../components/comments/CommentCounts";
+import {FetchVideoRepliesButton} from "./FetchVideoRepliesButton";
 
 type VideoDetailsProps = {
     video: VideoWithChannelDto;
@@ -40,6 +41,11 @@ export const VideoDetails = ({video}: VideoDetailsProps) => (
                     replies={video.replyCount}
                     totalReplies={video.totalReplyCount}
                 />
+                {video.totalReplyCount > video.replyCount && (
+                    <Col xs={"auto"}>
+                        <FetchVideoRepliesButton videoId={video.id}/>
+                    </Col>
+                )}
             </Row>
             <Row>
                 <Col className={"small"}>

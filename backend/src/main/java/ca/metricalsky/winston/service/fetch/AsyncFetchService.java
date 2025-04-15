@@ -1,8 +1,7 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.service.fetch.request.FetchRequestHandlerFactory;
@@ -23,22 +22,13 @@ public class AsyncFetchService {
         try {
             fetchRequestHandlerFactory.getHandler(fetchRequest)
                     .fetch(fetchRequest, ssePublisher);
+            ssePublisher.publish(FetchStatusEvent.completed());
             ssePublisher.complete();
         } catch (RuntimeException ex) {
             if (ssePublisher.isOpen()) {
-                ssePublisher.publish(getFetchErrorEvent(fetchRequest, ex));
+                ssePublisher.publish(FetchStatusEvent.failed(ex));
                 ssePublisher.completeWithError(ex);
             }
         }
-    }
-
-    private static FetchEvent getFetchErrorEvent(FetchRequest fetchRequest, Throwable ex) {
-        var type = switch (fetchRequest.getFetchType()) {
-            case CHANNELS -> "fetch-channels";
-            case VIDEOS -> "fetch-videos";
-            case COMMENTS -> "fetch-comments";
-            case REPLIES -> "fetch-replies";
-        };
-        return FetchEvent.error(type, fetchRequest.getObjectId(), ex);
     }
 }

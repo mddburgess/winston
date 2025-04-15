@@ -1,5 +1,5 @@
 import {Link, useParams} from "react-router";
-import {commentsAdapter, useListCommentsByVideoIdQuery} from "../../../store/slices/comments";
+import {commentsAdapter, repliesAdapter, useListCommentsByVideoIdQuery} from "../../../store/slices/comments";
 import {useFindVideoByIdQuery} from "../../../store/slices/videos";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {CommentList} from "../../../components/comments/CommentList";
@@ -30,7 +30,7 @@ export const VideosIdRoute = () => {
         () => commentsList.filter(comment =>
             comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
             comment.text.toLowerCase().includes(search.toLowerCase()) ||
-            comment.replies.filter(reply =>
+            repliesAdapter.getSelectors().selectAll(comment.replies).filter(reply =>
                     reply.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
                     reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
             .slice(pageSize * (page - 1), pageSize * page) ?? [],
@@ -38,7 +38,7 @@ export const VideosIdRoute = () => {
     );
 
     const commentsDisabled = useMemo(
-        () => video?.commentsDisabled || fetchState?.error?.type === "/api/problem/comments-disabled",
+        () => video?.commentsDisabled,
         [video, fetchState]
     );
 

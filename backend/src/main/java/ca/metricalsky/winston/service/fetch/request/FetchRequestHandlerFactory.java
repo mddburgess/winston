@@ -9,8 +9,17 @@ import org.springframework.stereotype.Service;
 public class FetchRequestHandlerFactory {
 
     private final DefaultFetchRequestHandler defaultFetchRequestHandler;
+    private final FetchVideoRepliesRequestHandler fetchVideoRepliesRequestHandler;
 
     public FetchRequestHandler getHandler(FetchRequest fetchRequest) {
-        return defaultFetchRequestHandler;
+        return switch (fetchRequest.getFetchType()) {
+            case CHANNELS, VIDEOS, COMMENTS -> defaultFetchRequestHandler;
+            case REPLIES -> {
+                if ("FOR_VIDEO".equals(fetchRequest.getMode())) {
+                    yield fetchVideoRepliesRequestHandler;
+                }
+                yield defaultFetchRequestHandler;
+            }
+        };
     }
 }

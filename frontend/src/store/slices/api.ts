@@ -74,6 +74,18 @@ export const apiSlice = createApi({
                 }
             })
         }),
+        fetchRepliesByVideoId: builder.mutation<undefined, FetchCommentsRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: "POST",
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    replies: {
+                        videoId: request.videoId
+                    }
+                }
+            })
+        })
     })
 });
 
@@ -82,4 +94,5 @@ export const {
     useFetchVideosByChannelIdMutation,
     useFetchCommentsByVideoIdMutation,
     useFetchRepliesByCommentIdMutation,
+    useFetchRepliesByVideoIdMutation,
 } = apiSlice

@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.VideoRepository;
@@ -49,7 +49,7 @@ class FetchVideosActionHandlerTest {
     @Mock
     private SsePublisher ssePublisher;
     @Captor
-    private ArgumentCaptor<FetchEvent> fetchEvent;
+    private ArgumentCaptor<FetchDataEvent> fetchDataEvent;
 
     @Test
     void fetch() {
@@ -71,13 +71,11 @@ class FetchVideosActionHandlerTest {
 
         verify(videoRepository).saveAll(anyList());
         verify(fetchActionService).actionCompleted(fetchAction, 1);
-        verify(ssePublisher).publish(fetchEvent.capture());
+        verify(ssePublisher).publish(fetchDataEvent.capture());
 
-        assertThat(fetchEvent.getValue())
-                .hasFieldOrPropertyWithValue("type", "fetch-videos")
-                .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID)
-                .hasFieldOrPropertyWithValue("status", FetchStatus.COMPLETED);
-        assertThat(fetchEvent.getValue().items())
+        assertThat(fetchDataEvent.getValue())
+                .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID);
+        assertThat(fetchDataEvent.getValue().items())
                 .hasSize(1)
                 .first()
                 .hasFieldOrPropertyWithValue("id", VIDEO_ID);

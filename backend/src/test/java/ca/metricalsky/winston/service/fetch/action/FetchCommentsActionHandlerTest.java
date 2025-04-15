@@ -4,7 +4,7 @@ import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.entity.Video;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.events.FetchEvent;
+import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.VideoRepository;
@@ -53,7 +53,7 @@ class FetchCommentsActionHandlerTest {
     @Mock
     private SsePublisher ssePublisher;
     @Captor
-    private ArgumentCaptor<FetchEvent> fetchEvent;
+    private ArgumentCaptor<FetchDataEvent> fetchDataEvent;
 
     @Test
     void fetch() {
@@ -74,13 +74,11 @@ class FetchCommentsActionHandlerTest {
 
         verify(commentService).saveAll(anyList());
         verify(fetchActionService).actionCompleted(fetchAction, commentThreadListResponse.getItems().size());
-        verify(ssePublisher).publish(fetchEvent.capture());
+        verify(ssePublisher).publish(fetchDataEvent.capture());
 
-        assertThat(fetchEvent.getValue())
-                .hasFieldOrPropertyWithValue("type", "fetch-comments")
-                .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
-                .hasFieldOrPropertyWithValue("status", FetchStatus.COMPLETED);
-        assertThat(fetchEvent.getValue().items())
+        assertThat(fetchDataEvent.getValue())
+                .hasFieldOrPropertyWithValue("objectId", VIDEO_ID);
+        assertThat(fetchDataEvent.getValue().items())
                 .hasSize(commentThreadListResponse.getItems().size())
                 .first()
                 .hasFieldOrPropertyWithValue("id", COMMENT_ID);

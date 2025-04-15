@@ -3,8 +3,6 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.ChannelDto;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.events.FetchEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
@@ -14,7 +12,6 @@ import ca.metricalsky.winston.service.fetch.FetchResult;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -50,11 +47,5 @@ public class FetchChannelActionHandler extends FetchActionHandler<ChannelDto> {
         channelRepository.save(channelEntity);
         var channelDto = channelDtoMapper.fromEntity(channelEntity);
         return new FetchResult<>(fetchAction, channelDto, null);
-    }
-
-    @Override
-    protected FetchEvent getFetchEvent(FetchResult<ChannelDto> fetchResult) {
-        var status = fetchResult.hasNextFetchAction() ? FetchStatus.FETCHING : FetchStatus.COMPLETED;
-        return FetchEvent.data("fetch-channels", fetchResult.objectId(), status, fetchResult.items());
     }
 }

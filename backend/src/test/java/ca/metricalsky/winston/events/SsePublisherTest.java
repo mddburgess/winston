@@ -1,5 +1,7 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.service.fetch.FetchResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,23 +50,31 @@ class SsePublisherTest {
     }
 
     @Test
-    void publishFetchEvent() throws Exception {
-        var fetchEvent = FetchEvent.data("type", "objectId", FetchStatus.COMPLETED, List.of(new Object()));
+    void publishSubscriptionEvent() throws Exception {
+        var subscriptionEvent = new SubscriptionEvent(true, UUID.randomUUID());
 
-        ssePublisher.publish(fetchEvent);
+        ssePublisher.publish(subscriptionEvent);
 
         verify(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
     }
 
     @Test
-    void publishFetchEvent_ioException() throws Exception {
-        var fetchEvent = FetchEvent.data("type", "objectId", FetchStatus.COMPLETED, List.of(new Object()));
-        doThrow(IOException.class)
-                .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
+    void publishFetchDataEvent() throws Exception {
+        var fetchResult = new FetchResult<>(new FetchAction(), List.of(new Object()), null);
+        var fetchDataEvent = FetchDataEvent.of(fetchResult);
 
-        assertThatThrownBy(() -> ssePublisher.publish(fetchEvent))
-                .isExactlyInstanceOf(PublisherException.class)
-                .hasCauseExactlyInstanceOf(IOException.class);
+        ssePublisher.publish(fetchDataEvent);
+
+        verify(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
+    }
+
+    @Test
+    void publishFetchStatusEvent() throws Exception {
+        var fetchStatusEvent = FetchStatusEvent.completed();
+
+        ssePublisher.publish(fetchStatusEvent);
+
+        verify(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
     }
 
     @Test
@@ -76,12 +87,12 @@ class SsePublisherTest {
     }
 
     @Test
-    void publishProblemDetail_ioException() throws Exception {
-        var problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+    void publish_ioException() throws Exception {
+        var fetchStatusEvent = FetchStatusEvent.completed();
         doThrow(IOException.class)
                 .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
 
-        assertThatThrownBy(() -> ssePublisher.publish(problemDetail))
+        assertThatThrownBy(() -> ssePublisher.publish(fetchStatusEvent))
                 .isExactlyInstanceOf(PublisherException.class)
                 .hasCauseExactlyInstanceOf(IOException.class);
     }

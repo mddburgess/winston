@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - New fetch operation to fetch replies by parent comment ID. (mddburgess/winston#8)
 - Clipboard icon on the video page to copy the video link to the clipboard. (mddburgess/winston#22)
+- New fetch operation to fetch all replies to comments on a video. (mddburgess/winston#27)
+- Button on the video page to fetch all replies to comments for that video. (mddburgess/winston#27)
 
 ### Changed
 
