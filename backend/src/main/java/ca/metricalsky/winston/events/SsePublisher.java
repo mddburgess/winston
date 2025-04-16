@@ -46,11 +46,18 @@ public class SsePublisher {
                 .data(subscriptionEvent, MediaType.APPLICATION_JSON));
     }
 
-    public void publish(FetchEvent fetchEvent) {
+    public void publish(FetchDataEvent fetchDataEvent) {
         publish(SseEmitter.event()
                 .id(UUID.randomUUID().toString())
-                .name(fetchEvent.type())
-                .data(fetchEvent, MediaType.APPLICATION_JSON));
+                .name("fetch-data")
+                .data(fetchDataEvent, MediaType.APPLICATION_JSON));
+    }
+
+    public void publish(FetchStatusEvent fetchStatusEvent) {
+        publish(SseEmitter.event()
+                .id(UUID.randomUUID().toString())
+                .name("fetch-status")
+                .data(fetchStatusEvent, MediaType.APPLICATION_JSON));
     }
 
     public void publish(ProblemDetail error) {

@@ -5,21 +5,21 @@ import {ProblemDetail} from "./ProblemDetail";
 
 
 type FetchDataEvent<T> = {
-    status: 'FETCHING' | 'COMPLETED';
+    objectId: string;
     items: T[];
-    error: undefined;
 }
 
-type FetchErrorEvent = {
+export type FetchChannelEvent = FetchDataEvent<ChannelDto>;
+export type FetchVideosEvent = FetchDataEvent<VideoWithChannelIdDto>;
+export type FetchCommentsEvent = FetchDataEvent<CommentDto>;
+
+type FetchCompletedEvent = {
+    status: 'COMPLETED';
+}
+
+type FetchFailedEvent = {
     status: 'FAILED';
-    items: undefined;
     error: ProblemDetail;
 }
 
-type FetchEvent<T> = {
-    objectId: string;
-} & (FetchDataEvent<T> | FetchErrorEvent);
-
-export type FetchChannelEvent = FetchEvent<ChannelDto>;
-export type FetchVideosEvent = FetchEvent<VideoWithChannelIdDto>;
-export type FetchCommentsEvent = FetchEvent<CommentDto>;
+export type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;

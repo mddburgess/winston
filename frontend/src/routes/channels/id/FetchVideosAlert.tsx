@@ -1,11 +1,10 @@
-import {Alert, Button, ButtonGroup, Col, Dropdown, SplitButton} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Col, Dropdown} from "react-bootstrap";
 import {Date} from "../../../components/Date";
 import {ArrowDownRightCircleFill, ArrowRepeat, CheckCircleFill} from "react-bootstrap-icons";
 import {ChannelDto} from "../../../model/ChannelDto";
 import {FetchVideosAction} from "./FetchVideosAction";
 import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {FetchState, requestedVideosForChannelId} from "../../../store/slices/fetches";
-import {VideoWithChannelIdDto} from "../../../model/VideoDto";
 import {pluralize} from "../../../utils";
 
 type FetchVideosAlertProps = {
@@ -13,7 +12,7 @@ type FetchVideosAlertProps = {
 }
 
 type AlertBodyProps = FetchVideosAlertProps & {
-    fetchState: FetchState<VideoWithChannelIdDto>
+    fetchState: FetchState
 }
 
 export const FetchVideosAlert = ({channel}: FetchVideosAlertProps) => {
@@ -70,8 +69,7 @@ const FetchAvailableBody = ({channel}: FetchVideosAlertProps) => {
 
 const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
 
-    const videoCountLabel = fetchState.data.length === 0
-        ? "latest videos" : pluralize(fetchState.data.length, "video");
+    const videoCountLabel = (fetchState.count) === 0 ? "latest videos" : pluralize(fetchState.count, "video");
 
     return (
         <Alert className={"d-flex align-items-center alert-secondary"}>
@@ -91,7 +89,7 @@ const FetchRequestedBody = ({channel, fetchState}: AlertBodyProps) => {
 const FetchCompletedBody = ({fetchState}: AlertBodyProps) => (
     <Alert className={"d-flex align-items-center alert-success"}>
         <Col>
-            Fetched <strong>{pluralize(fetchState.data.length, "video")}</strong> from YouTube.
+            Fetched <strong>{pluralize(fetchState.count, "video")}</strong> from YouTube.
         </Col>
         <Col xs={"auto"}>
             <Button className={"d-flex align-items-center btn-outline-success"} disabled={true}>

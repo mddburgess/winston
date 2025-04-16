@@ -1,9 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {ChannelDto} from "../../model/ChannelDto";
-import {VideoWithChannelIdDto, VideoWithChannelDto} from "../../model/VideoDto";
-import {CommentDto} from "../../model/CommentDto";
-import {AuthorDetailsResponse} from "../../model/authors/AuthorDetailsResponse";
-import {AuthorListResponse} from "../../model/authors/AuthorListResponse";
+import {FetchLimits} from "../../model/FetchLimits";
 
 type FetchRequest = {
     subscriptionId: string;
@@ -22,30 +18,18 @@ type FetchCommentsRequest = FetchRequest & {
     videoId: string;
 }
 
+type FetchRepliesRequest = FetchRequest & {
+    commentId: string;
+}
+
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({baseUrl: "/api"}),
+    tagTypes: ["fetchLimits"],
     endpoints: builder => ({
-        listChannels: builder.query<ChannelDto[], void>({
-            query: () => "/channels"
-        }),
-        findChannelById: builder.query<ChannelDto, string>({
-            query: (channelId) => `/channels/${channelId}`
-        }),
-        listVideosByChannelId: builder.query<VideoWithChannelIdDto[], string>({
-            query: (channelId) => `/channels/${channelId}/videos`
-        }),
-        findVideoById: builder.query<VideoWithChannelDto, string>({
-            query: (videoId) => `/videos/${videoId}`
-        }),
-        listCommentsByVideoId: builder.query<CommentDto[], string>({
-            query: (videoId) => `/videos/${videoId}/comments`
-        }),
-        listAuthors: builder.query<AuthorListResponse, void>({
-            query: () => "/authors"
-        }),
-        findAuthorDetailsById: builder.query<AuthorDetailsResponse, string>({
-            query: (authorId) => `/authors/${authorId}`
+        getFetchLimits: builder.query<FetchLimits, void>({
+            query: () => `/fetch/limits`,
+            providesTags: ["fetchLimits"],
         }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
@@ -83,19 +67,41 @@ export const apiSlice = createApi({
                     }
                 }
             })
+        }),
+        fetchRepliesByCommentId: builder.mutation<undefined, FetchRepliesRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: "POST",
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    replies: {
+                        commentId: request.commentId
+                    }
+                }
+            })
+        }),
+        fetchRepliesByVideoId: builder.mutation<undefined, FetchCommentsRequest>({
+            query: (request) => ({
+                url: `/fetch`,
+                method: "POST",
+                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                body: {
+                    replies: {
+                        videoId: request.videoId
+                    }
+                }
+            })
         })
     })
 });
 
 export const {
-    useListChannelsQuery,
-    useFindChannelByIdQuery,
-    useListVideosByChannelIdQuery,
-    useFindVideoByIdQuery,
-    useListCommentsByVideoIdQuery,
-    useListAuthorsQuery,
-    useFindAuthorDetailsByIdQuery,
+    useGetFetchLimitsQuery,
     useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
     useFetchCommentsByVideoIdMutation,
+    useFetchRepliesByCommentIdMutation,
+    useFetchRepliesByVideoIdMutation,
 } = apiSlice
+
+export const invalidateFetchLimits = () => apiSlice.util.invalidateTags(["fetchLimits"]);

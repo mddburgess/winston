@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.service.fetch;
+package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.VideoDto;
@@ -7,27 +7,38 @@ import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.service.fetch.FetchActionService;
+import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
 @Service
-@RequiredArgsConstructor
-public class FetchVideosActionHandler implements FetchActionHandler<VideoDto> {
+public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
 
     private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
     private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
+
     private final VideoRepository videoRepository;
     private final YouTubeClientAdapter youTubeClientAdapter;
 
+    public FetchVideosActionHandler(
+            FetchActionService fetchActionService,
+            VideoRepository videoRepository,
+            YouTubeClientAdapter youTubeClientAdapter
+    ) {
+        super(fetchActionService);
+        this.videoRepository = videoRepository;
+        this.youTubeClientAdapter = youTubeClientAdapter;
+    }
+
     @Override
-    public FetchResult<VideoDto> fetch(FetchAction fetchAction) {
+    protected FetchResult<VideoDto> doFetch(FetchAction fetchAction) {
         var activityListResponse = youTubeClientAdapter.getActivities(fetchAction);
         var videoEntities = activityListResponse.getItems()
                 .stream()

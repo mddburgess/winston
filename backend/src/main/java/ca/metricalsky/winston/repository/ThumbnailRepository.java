@@ -24,4 +24,12 @@ public interface ThumbnailRepository extends JpaRepository<Thumbnail, String> {
             WHERE v.id = :videoId
             """)
     ThumbnailLookup lookupByVideoId(String videoId);
+
+    @Query("""
+            SELECT a.profileImageUrl AS thumbnailUrl, t AS thumbnail
+            FROM Author a
+                LEFT JOIN Thumbnail t ON a.id = t.id
+            WHERE a.id = :authorId
+            """)
+    ThumbnailLookup lookupByAuthorId(String authorId);
 }

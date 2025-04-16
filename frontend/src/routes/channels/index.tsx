@@ -1,4 +1,4 @@
-import {useListChannelsQuery} from "../../store/slices/api";
+import {selectAllChannels, useListChannelsQuery} from "../../store/slices/channels";
 import {ChannelCards} from "./ChannelCards";
 import {Button, Col, Row} from "react-bootstrap";
 import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
@@ -8,13 +8,15 @@ import {PaginationRow} from "../../components/PaginationRow";
 
 export const ChannelsRoute = () => {
 
-    const { data: channels } = useListChannelsQuery()
+    const { isSuccess, data } = useListChannelsQuery()
+    const channels = isSuccess ? selectAllChannels(data) : [];
+
     const [showModal, setShowModal] = useState(false);
 
     const pageSize = 12;
     const [page, setPage] = useState(1);
     const displayedChannels = useMemo(
-        () => channels?.slice(pageSize * (page - 1), pageSize * page) ?? [],
+        () => channels.slice(pageSize * (page - 1), pageSize * page) ?? [],
         [channels, pageSize, page]
     );
 
@@ -38,7 +40,7 @@ export const ChannelsRoute = () => {
             </Row>
             <PaginationRow
                 name={"channel"}
-                total={channels?.length ?? 0}
+                total={channels.length}
                 pageSize={pageSize}
                 page={page}
                 setPage={setPage}

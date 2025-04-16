@@ -1,9 +1,10 @@
-import {fetchedVideos} from "../../../store/slices/fetches";
+import {fetchedVideos, updateFetchStatus} from "../../../store/slices/fetches";
 import {useAppDispatch} from "../../../store/hooks";
-import {useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
+import {invalidateFetchLimits, useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
+import {videosAdapter, videosApiUtils} from "../../../store/slices/videos";
 import {NotificationsSource} from "../../../components/NotificationsSource";
 import {EventSourceProvider} from "react-sse-hooks";
-import {FetchVideosEvent} from "../../../model/events/FetchEvent";
+import {FetchStatusEvent, FetchVideosEvent} from "../../../model/events/FetchEvent";
 
 type FetchVideosWidgetProps = {
     channelId: string,
@@ -19,16 +20,28 @@ export const FetchVideosAction = ({channelId, mode}: FetchVideosWidgetProps) => 
         fetchVideosByChannelId({ subscriptionId, channelId, mode });
     }
 
-    const handleEvent = (event: FetchVideosEvent) => {
+    const handleDataEvent = (event: FetchVideosEvent) => {
+        dispatch(videosApiUtils.updateQueryData('listVideosByChannelId', channelId, (draft) => {
+            videosAdapter.setMany(draft, event.items)
+        }))
         dispatch(fetchedVideos(event));
+    }
+
+    const handleStatusEvent = (event: FetchStatusEvent) => {
+        dispatch(updateFetchStatus({
+            fetchType: "videos",
+            objectId: channelId,
+            status: event.status,
+        }))
+        dispatch(invalidateFetchLimits());
     }
 
     return (
         <EventSourceProvider>
             <NotificationsSource
                 onSubscribed={handleSubscribed}
-                eventName={"fetch-videos"}
-                onEvent={handleEvent}
+                onDataEvent={handleDataEvent}
+                onStatusEvent={handleStatusEvent}
             />
         </EventSourceProvider>
     )

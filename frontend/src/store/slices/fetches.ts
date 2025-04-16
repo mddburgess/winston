@@ -1,27 +1,26 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {VideoWithChannelIdDto} from "../../model/VideoDto";
 import {ChannelDto} from "../../model/ChannelDto";
-import {CommentDto} from "../../model/CommentDto";
 import {FetchCommentsEvent, FetchVideosEvent} from "../../model/events/FetchEvent";
-import {ProblemDetail} from "../../model/events/ProblemDetail";
 
-export type FetchState<T> = {
+export type FetchState = {
     id: string;
     mode?: 'ALL' | 'LATEST';
     status: 'READY' | 'REQUESTED' | 'FETCHING' | 'COMPLETED' | 'FAILED';
-    data: T[];
-    error?: ProblemDetail;
+    count: number
 }
 
 type FetchStates = {
     channel: {
-        [id: string]: FetchState<ChannelDto>;
+        [id: string]: FetchState;
     },
     videos: {
-        [id: string]: FetchState<VideoWithChannelIdDto>;
+        [id: string]: FetchState;
     },
     comments: {
-        [id: string]: FetchState<CommentDto>;
+        [id: string]: FetchState;
+    },
+    replies: {
+        [id: string]: FetchState;
     }
 }
 
@@ -29,11 +28,18 @@ const initialState: FetchStates = {
     channel: {},
     videos: {},
     comments: {},
+    replies: {},
 }
 
 type FetchVideosRequest = {
     channelId: string;
     mode: 'ALL' | 'LATEST';
+}
+
+type UpdateFetchStatus = {
+    fetchType: keyof FetchStates;
+    objectId: string;
+    status: 'COMPLETED' | 'FAILED';
 }
 
 export const fetchesSlice = createSlice({
@@ -44,14 +50,14 @@ export const fetchesSlice = createSlice({
             state.channel[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
-                data: []
+                count: 0
             }
         },
         initFetchStateForChannel: (state, action: PayloadAction<ChannelDto>) => {
             state.videos[action.payload.id] = {
                 id: action.payload.id,
                 status: 'READY',
-                data: []
+                count: 0
             }
         },
         requestedVideosForChannelId: (state, action: PayloadAction<FetchVideosRequest>) => {
@@ -59,7 +65,7 @@ export const fetchesSlice = createSlice({
                 id: action.payload.channelId,
                 mode: action.payload.mode,
                 status: 'REQUESTED',
-                data: []
+                count: 0
             }
         },
         fetchedVideos: (state, action: PayloadAction<FetchVideosEvent>) => {
@@ -67,16 +73,15 @@ export const fetchesSlice = createSlice({
             const fetchState = state.videos[event.objectId];
             state.videos[event.objectId] = {
                 id: event.objectId,
-                status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items ?? []),
-                error: event.error,
+                status: 'FETCHING',
+                count: fetchState.count + event.items.length,
             }
         },
         requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
             state.comments[action.payload] = {
                 id: action.payload,
                 status: 'REQUESTED',
-                data: []
+                count: 0
             }
         },
         fetchedComments: (state, action: PayloadAction<FetchCommentsEvent>) => {
@@ -84,9 +89,33 @@ export const fetchesSlice = createSlice({
             const fetchState = state.comments[event.objectId];
             state.comments[event.objectId] = {
                 id: event.objectId,
+                status: 'FETCHING',
+                count: fetchState.count + event.items.length,
+            }
+        },
+        requestedRepliesForId: (state, action: PayloadAction<string>) => {
+            state.replies[action.payload] = {
+                id: action.payload,
+                status: 'REQUESTED',
+                count: 0
+            }
+        },
+        fetchedReplies: (state, action: PayloadAction<FetchCommentsEvent>) => {
+            const event = action.payload;
+            const fetchState = state.replies[event.objectId];
+            state.replies[event.objectId] = {
+                id: event.objectId,
+                status: 'FETCHING',
+                count: fetchState.count + event.items.length,
+            }
+        },
+        updateFetchStatus: (state, action: PayloadAction<UpdateFetchStatus>) => {
+            const event = action.payload;
+            const fetchState = state[event.fetchType][event.objectId];
+            state[event.fetchType][event.objectId] = {
+                id: event.objectId,
                 status: event.status,
-                data: (fetchState?.data ?? []).concat(event.items ?? []),
-                error: event.error,
+                count: fetchState.count
             }
         }
     }
@@ -99,6 +128,9 @@ export const {
     fetchedVideos,
     requestedCommentsForVideoId,
     fetchedComments,
+    requestedRepliesForId,
+    fetchedReplies,
+    updateFetchStatus,
 } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;

@@ -2,6 +2,7 @@ package ca.metricalsky.winston.mapper.entity;
 
 import ca.metricalsky.winston.dto.fetch.FetchChannel;
 import ca.metricalsky.winston.dto.fetch.FetchComments;
+import ca.metricalsky.winston.dto.fetch.FetchReplies;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
@@ -12,6 +13,8 @@ import ca.metricalsky.winston.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,9 @@ public class FetchRequestMapper {
         }
         if (fetchRequestDto.getComments() != null) {
             return commentsRequest(fetchRequestDto.getComments());
+        }
+        if (fetchRequestDto.getReplies() != null) {
+            return repliesRequest(fetchRequestDto.getReplies());
         }
         throw new AppException(HttpStatus.BAD_REQUEST, "The request is syntactically invalid and cannot be processed.");
     }
@@ -63,6 +69,19 @@ public class FetchRequestMapper {
         var fetchRequest = new FetchRequest();
         fetchRequest.setFetchType(FetchType.COMMENTS);
         fetchRequest.setObjectId(fetchComments.getVideoId());
+        return fetchRequest;
+    }
+
+    private FetchRequest repliesRequest(FetchReplies fetchReplies) {
+        var fetchRequest = new FetchRequest();
+        fetchRequest.setFetchType(FetchType.REPLIES);
+        if (isNotBlank(fetchReplies.getCommentId())) {
+            fetchRequest.setObjectId(fetchReplies.getCommentId());
+            fetchRequest.setMode("FOR_COMMENT");
+        } else if (isNotBlank(fetchReplies.getVideoId())) {
+            fetchRequest.setObjectId(fetchReplies.getVideoId());
+            fetchRequest.setMode("FOR_VIDEO");
+        }
         return fetchRequest;
     }
 }

@@ -1,12 +1,12 @@
 import {Col, ListGroupItem, Row} from "react-bootstrap";
 import {ReplyList} from "./ReplyList";
 import {Link} from "react-router";
-import {CommentDto} from "../../model/CommentDto";
+import {CommentState, repliesAdapter} from "../../store/slices/comments";
 import {Date} from "../Date";
 import {HtmlText} from "../HtmlText";
 
 type CommentListItemProps = {
-    comment: CommentDto,
+    comment: CommentState,
     highlightAuthorId?: string
 }
 
@@ -32,8 +32,9 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: CommentList
             </Row>
             <Row>
                 <ReplyList
+                    commentId={comment.id}
                     totalReplyCount={comment.totalReplyCount}
-                    replies={comment.replies}
+                    replies={repliesAdapter.getSelectors().selectAll(comment.replies)}
                     highlightAuthorId={highlightAuthorId}
                 />
             </Row>
