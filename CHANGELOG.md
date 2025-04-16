@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed bug preventing comments from showing on the author details page. (mddburgess/winston#38)
+- Page number is no longer reset when leaving and returning to a paginated view. (mddburgess/winston#21)
 
 ## [1.2.0] — 2025-04-15
 
