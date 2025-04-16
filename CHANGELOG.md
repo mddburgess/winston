@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clipboard icon on the video page to copy the video link to the clipboard. (mddburgess/winston#22)
 - New fetch operation to fetch all replies to comments on a video. (mddburgess/winston#27)
 - Button on the video page to fetch all replies to comments for that video. (mddburgess/winston#27)
+- Remaining quota label to the header dropdown menu. (mddburgess/winston#35)
 
 ### Changed
 
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Video card now shows the fetched comment and reply counts. (mddburgess/#20)
 - Show each author's comment statistics on the author list page. (mddburgess/winston#17)
 - Show each author's profile image on the author list page. (mddburgess/winston#17)
+- Menu bar in header is now a dropdown menu. (mddburgess/winston#35)
 
 ### Fixed
 

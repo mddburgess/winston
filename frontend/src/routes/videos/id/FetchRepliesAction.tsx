@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../../store/hooks";
-import { useFetchRepliesByCommentIdMutation} from "../../../store/slices/api";
+import {invalidateFetchLimits, useFetchRepliesByCommentIdMutation} from "../../../store/slices/api";
 import {FetchCommentsEvent, FetchStatusEvent} from "../../../model/events/FetchEvent";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
@@ -39,6 +39,7 @@ export const FetchRepliesAction = ({commentId}: FetchRepliesActionProps) => {
             objectId: commentId,
             status: event.status,
         }))
+        dispatch(invalidateFetchLimits());
     }
 
     return (

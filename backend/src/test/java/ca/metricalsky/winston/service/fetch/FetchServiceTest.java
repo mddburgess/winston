@@ -3,7 +3,6 @@ package ca.metricalsky.winston.service.fetch;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
-import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
@@ -25,10 +24,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AsyncFetchServiceTest {
+class FetchServiceTest {
 
     @InjectMocks
-    private AsyncFetchService asyncFetchService;
+    private FetchService fetchService;
 
     @Mock
     private FetchRequestHandler fetchRequestHandler;
@@ -40,7 +39,7 @@ class AsyncFetchServiceTest {
     private SsePublisher ssePublisher;
 
     @Test
-    void fetch() {
+    void fetchAsync() {
         var fetchRequestDto = new FetchRequestDto();
         var fetchRequest = new FetchRequest();
 
@@ -49,14 +48,14 @@ class AsyncFetchServiceTest {
         when(fetchRequestHandlerFactory.getHandler(fetchRequest))
                 .thenReturn(fetchRequestHandler);
 
-        asyncFetchService.fetch(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
 
         verify(fetchRequestHandler).fetch(fetchRequest, ssePublisher);
         verify(ssePublisher).complete();
     }
 
     @Test
-    void fetch_actionFailed() {
+    void fetchAsync_actionFailed() {
         var fetchRequestDto = new FetchRequestDto();
         var fetchRequest = FetchRequest.builder().fetchType(FetchType.CHANNELS).build();
         var exception = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
@@ -70,14 +69,14 @@ class AsyncFetchServiceTest {
         when(ssePublisher.isOpen())
                 .thenReturn(true);
 
-        asyncFetchService.fetch(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
 
         verify(ssePublisher).publish(any(FetchStatusEvent.class));
         verify(ssePublisher).completeWithError(exception);
     }
 
     @Test
-    void fetch_publisherClosed() {
+    void fetchAsync_publisherClosed() {
         var fetchRequestDto = new FetchRequestDto();
         var fetchRequest = FetchRequest.builder().fetchType(FetchType.CHANNELS).build();
         var exception = new PublisherException("");
@@ -91,7 +90,7 @@ class AsyncFetchServiceTest {
         when(ssePublisher.isOpen())
                 .thenReturn(false);
 
-        asyncFetchService.fetch(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
 
         verifyNoMoreInteractions(ssePublisher);
     }

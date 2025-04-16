@@ -4,20 +4,29 @@ import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
+import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.request.FetchRequestHandlerFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+
 @Service
 @RequiredArgsConstructor
-public class AsyncFetchService {
+public class FetchService {
 
     private final FetchRequestHandlerFactory fetchRequestHandlerFactory;
     private final FetchRequestMapper fetchRequestMapper;
+    private final YouTubeRequestRepository youTubeRequestRepository;
+
+    @Value("${youtube.quota.daily}")
+    private int dailyQuota;
 
     @Async
-    public void fetch(FetchRequestDto fetchRequestDto, SsePublisher ssePublisher) {
+    public void fetchAsync(FetchRequestDto fetchRequestDto, SsePublisher ssePublisher) {
         var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
         try {
             fetchRequestHandlerFactory.getHandler(fetchRequest)
@@ -30,5 +39,10 @@ public class AsyncFetchService {
                 ssePublisher.completeWithError(ex);
             }
         }
+    }
+
+    public int getRemainingQuota() {
+        var startOfToday = LocalDate.now().atStartOfDay().atOffset(ZoneOffset.UTC);
+        return dailyQuota - youTubeRequestRepository.countAllByRequestedAtAfter(startOfToday);
     }
 }

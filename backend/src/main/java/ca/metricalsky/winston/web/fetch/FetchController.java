@@ -1,12 +1,14 @@
 package ca.metricalsky.winston.web.fetch;
 
+import ca.metricalsky.winston.dto.fetch.FetchLimitsResponse;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.service.NotificationsService;
-import ca.metricalsky.winston.service.fetch.AsyncFetchService;
+import ca.metricalsky.winston.service.fetch.FetchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,7 +22,7 @@ import java.util.UUID;
 public class FetchController {
 
     private final NotificationsService notificationsService;
-    private final AsyncFetchService asyncFetchService;
+    private final FetchService fetchService;
 
     @PostMapping("/api/fetch")
     public ResponseEntity<SseEmitter> fetch(
@@ -31,12 +33,18 @@ public class FetchController {
                 ? notificationsService.openSubscription()
                 : notificationsService.requireSubscription(subscriptionId);
 
-        asyncFetchService.fetch(request, ssePublisher);
+        fetchService.fetchAsync(request, ssePublisher);
 
         return subscriptionId == null
                 ? ResponseEntity.status(HttpStatus.OK)
                         .contentType(MediaType.TEXT_EVENT_STREAM)
                         .body(ssePublisher.getSseEmitter())
                 : ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/api/fetch/limits")
+    public FetchLimitsResponse getFetchLimits() {
+        var remainingQuota = fetchService.getRemainingQuota();
+        return new FetchLimitsResponse(remainingQuota);
     }
 }

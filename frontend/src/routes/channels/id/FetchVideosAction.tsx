@@ -1,6 +1,6 @@
 import {fetchedVideos, updateFetchStatus} from "../../../store/slices/fetches";
 import {useAppDispatch} from "../../../store/hooks";
-import {useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
+import {invalidateFetchLimits, useFetchVideosByChannelIdMutation} from "../../../store/slices/api";
 import {videosAdapter, videosApiUtils} from "../../../store/slices/videos";
 import {NotificationsSource} from "../../../components/NotificationsSource";
 import {EventSourceProvider} from "react-sse-hooks";
@@ -33,6 +33,7 @@ export const FetchVideosAction = ({channelId, mode}: FetchVideosWidgetProps) => 
             objectId: channelId,
             status: event.status,
         }))
+        dispatch(invalidateFetchLimits());
     }
 
     return (

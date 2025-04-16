@@ -1,4 +1,4 @@
-import {useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
+import {invalidateFetchLimits, useFetchCommentsByVideoIdMutation} from "../../../store/slices/api";
 import {commentsAdapter, commentsApiUtils, repliesAdapter} from "../../../store/slices/comments";
 import {useAppDispatch} from "../../../store/hooks";
 import {EventSourceProvider} from "react-sse-hooks";
@@ -44,6 +44,7 @@ export const FetchCommentsAction = ({videoId}: FetchVideosActionProps) => {
                 }))
             }
         }
+        dispatch(invalidateFetchLimits());
     }
 
     return (
