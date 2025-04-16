@@ -1,5 +1,5 @@
 import { useAppDispatch } from "../../../store/hooks";
-import {useFetchRepliesByVideoIdMutation} from "../../../store/slices/api";
+import {invalidateFetchLimits, useFetchRepliesByVideoIdMutation} from "../../../store/slices/api";
 import {FetchCommentsEvent, FetchStatusEvent} from "../../../model/events/FetchEvent";
 import {EventSourceProvider} from "react-sse-hooks";
 import {NotificationsSource} from "../../../components/NotificationsSource";
@@ -38,6 +38,7 @@ export const FetchVideoRepliesAction = ({videoId}: FetchRepliesActionProps) => {
             objectId: videoId,
             status: event.status,
         }))
+        dispatch(invalidateFetchLimits());
     }
 
     return (

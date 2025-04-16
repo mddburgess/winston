@@ -1,4 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {FetchLimits} from "../../model/FetchLimits";
 
 type FetchRequest = {
     subscriptionId: string;
@@ -24,7 +25,12 @@ type FetchRepliesRequest = FetchRequest & {
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({baseUrl: "/api"}),
+    tagTypes: ["fetchLimits"],
     endpoints: builder => ({
+        getFetchLimits: builder.query<FetchLimits, void>({
+            query: () => `/fetch/limits`,
+            providesTags: ["fetchLimits"],
+        }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
                 url: `/fetch`,
@@ -90,9 +96,12 @@ export const apiSlice = createApi({
 });
 
 export const {
+    useGetFetchLimitsQuery,
     useFetchChannelByHandleMutation,
     useFetchVideosByChannelIdMutation,
     useFetchCommentsByVideoIdMutation,
     useFetchRepliesByCommentIdMutation,
     useFetchRepliesByVideoIdMutation,
 } = apiSlice
+
+export const invalidateFetchLimits = () => apiSlice.util.invalidateTags(["fetchLimits"]);

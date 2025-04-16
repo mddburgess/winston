@@ -1,4 +1,4 @@
-import {useFetchChannelByHandleMutation} from "../../store/slices/api";
+import {invalidateFetchLimits, useFetchChannelByHandleMutation} from "../../store/slices/api";
 import {NotificationsSource} from "../../components/NotificationsSource";
 import {useNavigate} from "react-router";
 import {EventSourceProvider} from "react-sse-hooks";
@@ -23,6 +23,7 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
 
     const handleDataEvent = (event: FetchChannelEvent) => {
         dispatch(appendFetchedChannels(event.items));
+        dispatch(invalidateFetchLimits());
         if (event.items.length > 0) {
             navigate(`/channels/${event.items[0].id}`);
         }
