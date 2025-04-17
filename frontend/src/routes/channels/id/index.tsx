@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router";
+import {Link, useParams, useSearchParams} from "react-router";
 import {useFindChannelByIdQuery} from "../../../store/slices/channels";
 import {useListVideosByChannelIdQuery, videosAdapter} from "../../../store/slices/videos";
 import {useEffect, useMemo, useState} from "react";
@@ -13,10 +13,11 @@ import {PaginationRow} from "../../../components/PaginationRow";
 export const ChannelsIdRoute = () => {
 
     const {channelId} = useParams()
+    const [searchParams, setSearchParams] = useSearchParams()
+
     const dispatch = useAppDispatch()
 
     const pageSize = 24;
-    const [page, setPage] = useState(1);
 
     const [search, setSearch] = useState("");
 
@@ -29,9 +30,12 @@ export const ChannelsIdRoute = () => {
     const videoList = isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];
 
     const displayedVideos = useMemo(
-        () => videoList.filter(video => video.title.toLowerCase().includes(search.toLowerCase()))
-            .slice(pageSize * (page - 1), pageSize * page),
-        [videoList, pageSize, page, search]
+        () => {
+            const page = parseInt(searchParams.get("p") ?? "1")
+            return videoList.filter(video => video.title.toLowerCase().includes(search.toLowerCase()))
+                .slice(pageSize * (page - 1), pageSize * page)
+        },
+        [videoList, pageSize, searchParams, search]
     );
 
     return (
@@ -48,8 +52,8 @@ export const ChannelsIdRoute = () => {
                 name={"video"}
                 total={videoList.length}
                 pageSize={pageSize}
-                page={page}
-                setPage={setPage}
+                page={parseInt(searchParams.get("p") ?? "1")}
+                setPage={(page) => setSearchParams({ p: `${page}` })}
                 search={search}
                 setSearch={setSearch}
             />
@@ -58,8 +62,8 @@ export const ChannelsIdRoute = () => {
                 name={"video"}
                 total={videoList.length}
                 pageSize={pageSize}
-                page={page}
-                setPage={setPage}
+                page={parseInt(searchParams.get("p") ?? "1")}
+                setPage={(page) => setSearchParams({ p: `${page}` })}
             />
         </>
     )

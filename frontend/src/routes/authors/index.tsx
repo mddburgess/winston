@@ -2,22 +2,26 @@ import {useListAuthorsQuery} from "../../store/slices/authors";
 import {Col, Image, ListGroup, ListGroupItem, Ratio, Row} from "react-bootstrap";
 import {PaginationRow} from "../../components/PaginationRow";
 import {useMemo, useState} from "react";
-import {Link} from "react-router";
+import {Link, useSearchParams} from "react-router";
 import {AuthorStatistics} from "./AuthorStatistics";
 
 export const AuthorsRoute = () => {
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const {data} = useListAuthorsQuery()
 
     const pageSize = 100;
-    const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
     const displayedAuthors = useMemo(
-        () => data?.authors
-            .filter(author => author.displayName.toLowerCase().includes(search.toLowerCase()))
-            .slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [data, pageSize, page, search]
+        () => {
+            const page = parseInt(searchParams.get("p") ?? "1")
+            return data?.authors
+                .filter(author => author.displayName.toLowerCase().includes(search.toLowerCase()))
+                .slice(pageSize * (page - 1), pageSize * page) ?? []
+        },
+        [data, pageSize, searchParams, search]
     )
 
     return (
@@ -33,8 +37,8 @@ export const AuthorsRoute = () => {
                 name={"author"}
                 total={data?.results ?? 0}
                 pageSize={pageSize}
-                page={page}
-                setPage={setPage}
+                page={parseInt(searchParams.get("p") ?? "1")}
+                setPage={(page) => setSearchParams({ p: `${page}` })}
                 search={search}
                 setSearch={setSearch}
             />
@@ -68,8 +72,8 @@ export const AuthorsRoute = () => {
                 name={"author"}
                 total={data?.results ?? 0}
                 pageSize={pageSize}
-                page={page}
-                setPage={setPage}
+                page={parseInt(searchParams.get("p") ?? "1")}
+                setPage={(page) => setSearchParams({ p: `${page}` })}
             />
         </>
     )

@@ -5,8 +5,11 @@ import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
 import {useMemo, useState} from "react";
 import {FetchChannelModal} from "./FetchChannelModal";
 import {PaginationRow} from "../../components/PaginationRow";
+import {useSearchParams} from "react-router";
 
 export const ChannelsRoute = () => {
+
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const { isSuccess, data } = useListChannelsQuery()
     const channels = isSuccess ? selectAllChannels(data) : [];
@@ -14,10 +17,12 @@ export const ChannelsRoute = () => {
     const [showModal, setShowModal] = useState(false);
 
     const pageSize = 12;
-    const [page, setPage] = useState(1);
     const displayedChannels = useMemo(
-        () => channels.slice(pageSize * (page - 1), pageSize * page) ?? [],
-        [channels, pageSize, page]
+        () => {
+            const page = parseInt(searchParams.get("p") ?? "1")
+            return channels.slice(pageSize * (page - 1), pageSize * page) ?? []
+        },
+        [channels, pageSize, searchParams]
     );
 
     return (
@@ -42,8 +47,8 @@ export const ChannelsRoute = () => {
                 name={"channel"}
                 total={channels.length}
                 pageSize={pageSize}
-                page={page}
-                setPage={setPage}
+                page={parseInt(searchParams.get("p") ?? "1")}
+                setPage={(page) => setSearchParams({ p: `${page}` })}
             />
             <ChannelCards channels={displayedChannels} />
             <FetchChannelModal show={showModal} setShow={setShowModal} />

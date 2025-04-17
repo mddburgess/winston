@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router";
+import {Link, useParams, useSearchParams} from "react-router";
 import {commentsAdapter, repliesAdapter, useListCommentsByVideoIdQuery} from "../../../store/slices/comments";
 import {useFindVideoByIdQuery} from "../../../store/slices/videos";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
@@ -13,6 +13,7 @@ import {CommentsDisabledJumbotron} from "./CommentsDisabledJumbotron";
 
 export const VideosIdRoute = () => {
     const {videoId} = useParams();
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const pageSize = 50;
     const [page, setPage] = useState(1);
@@ -27,13 +28,16 @@ export const VideosIdRoute = () => {
     const fetchState = useAppSelector(state => state.fetches.comments[videoId!])
 
     const displayedComments = useMemo(
-        () => commentsList.filter(comment =>
-            comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
-            comment.text.toLowerCase().includes(search.toLowerCase()) ||
-            repliesAdapter.getSelectors().selectAll(comment.replies).filter(reply =>
+        () => {
+            const page = parseInt(searchParams.get("p") ?? "1")
+            return commentsList.filter(comment =>
+                comment.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
+                comment.text.toLowerCase().includes(search.toLowerCase()) ||
+                repliesAdapter.getSelectors().selectAll(comment.replies).filter(reply =>
                     reply.author.displayName.toLowerCase().includes(search.toLowerCase()) ||
                     reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
-            .slice(pageSize * (page - 1), pageSize * page) ?? [],
+                .slice(pageSize * (page - 1), pageSize * page) ?? []
+        },
         [commentsList, pageSize, page, search]
     );
 
@@ -67,8 +71,8 @@ export const VideosIdRoute = () => {
                         name={"comment"}
                         total={commentsList.length}
                         pageSize={pageSize}
-                        page={page}
-                        setPage={setPage}
+                        page={parseInt(searchParams.get("p") ?? "1")}
+                        setPage={(page) => setSearchParams({ p: `${page}` })}
                         search={search}
                         setSearch={setSearch}
                     />
@@ -77,8 +81,8 @@ export const VideosIdRoute = () => {
                         name={"comment"}
                         total={commentsList.length}
                         pageSize={pageSize}
-                        page={page}
-                        setPage={setPage}
+                        page={parseInt(searchParams.get("p") ?? "1")}
+                        setPage={(page) => setSearchParams({ p: `${page}` })}
                     />}
                 </>
             )}
