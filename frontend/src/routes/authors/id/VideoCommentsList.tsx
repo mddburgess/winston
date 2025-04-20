@@ -8,6 +8,7 @@ import {DateTime} from "luxon";
 import {descBy} from "../../../utils";
 import {AuthorDto} from "../../../model/authors/AuthorDto";
 import {AuthorDetailsResponse} from "../../../model/authors/AuthorDetailsResponse";
+import {CommentState, repliesAdapter} from "../../../store/slices/comments";
 
 type VideoCommentsListProps = AuthorDetailsResponse;
 
@@ -35,15 +36,22 @@ type VideoCommentsListItemProps = {
     comments: CommentDto[];
 }
 
-const VideoCommentsListItem = ({author, video, comments}: VideoCommentsListItemProps) => (
-    <Row>
-        <Col xs={"auto"} lg={3} xxl={2}>
-            <div className={"mb-3"}>
-                <VideoCard video={video}/>
-            </div>
-        </Col>
-        <Col xs={"auto"} lg={9} xxl={10}>
-            <CommentList comments={comments} highlightAuthorId={author.id} />
-        </Col>
-    </Row>
-)
+const VideoCommentsListItem = ({author, video, comments}: VideoCommentsListItemProps) => {
+    const commentList: CommentState[] = comments.map(comment => ({
+        ...comment,
+        replies: repliesAdapter.addMany(repliesAdapter.getInitialState(), comment.replies)
+    }))
+
+    return (
+        <Row>
+            <Col xs={"auto"} lg={3} xxl={2}>
+                <div className={"mb-3"}>
+                    <VideoCard video={video}/>
+                </div>
+            </Col>
+            <Col xs={"auto"} lg={9} xxl={10}>
+                <CommentList comments={commentList} highlightAuthorId={author.id}/>
+            </Col>
+        </Row>
+    );
+}
