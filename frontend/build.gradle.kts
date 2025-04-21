@@ -28,8 +28,13 @@ tasks {
         dependsOn("npmCheckUpdates")
     }
 
-    register<NpmTask>("assemble") {
+    register<NpmTask>("compileTypescript") {
         dependsOn("npmInstall")
+        npmCommand.addAll("run", "compile")
+    }
+
+    register<NpmTask>("assemble") {
+        dependsOn("compileTypescript")
         inputs.files(
             fileTree("node_modules"),
             fileTree("src"),
@@ -41,7 +46,7 @@ tasks {
     }
 
     register<NpmTask>("test") {
-        dependsOn("npmInstall")
+        dependsOn("compileTypescript")
         npmCommand.addAll("test")
     }
 
