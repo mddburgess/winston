@@ -10,6 +10,7 @@ version = rootProject.version
 
 node {
     download.set(true)
+    version.set("23.11.0")
     workDir.set(file("$rootDir/.gradle/nodejs"))
 }
 
@@ -33,6 +34,11 @@ tasks {
         npmCommand.addAll("run", "compile")
     }
 
+    register<NpmTask>("lint") {
+        dependsOn("npmInstall")
+        npmCommand.addAll("run", "lint")
+    }
+
     register<NpmTask>("assemble") {
         dependsOn("compileTypescript")
         inputs.files(
@@ -51,7 +57,7 @@ tasks {
     }
 
     register<DefaultTask>("check") {
-        dependsOn("test")
+        dependsOn("lint", "test")
     }
 
     register<DefaultTask>("build") {
