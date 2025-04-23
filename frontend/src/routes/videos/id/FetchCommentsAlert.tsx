@@ -41,7 +41,7 @@ const FetchingCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) 
     </Alert>
 )
 
-const FetchedCommentsAlert = ({video, fetchState}: FetchingCommentsAlertProps) => (
+const FetchedCommentsAlert = ({fetchState}: FetchingCommentsAlertProps) => (
     <Alert className={"alert-success align-items-center d-flex"}>
         <Col>
             Fetched <strong>{pluralize(fetchState.count, "comment")}</strong> from YouTube.

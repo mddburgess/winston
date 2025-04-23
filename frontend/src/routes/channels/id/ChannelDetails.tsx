@@ -22,7 +22,7 @@ export const ChannelDetails = ({channel}: ChannelDetailsProps) => (
                 {channel.title}
             </p>
             <p className={"align-items-center d-flex h6"}>
-                <a href={`https://www.youtube.com/${channel.customUrl}`} target={"_blank"}>
+                <a href={`https://www.youtube.com/${channel.customUrl}`} target={"_blank"} rel={"noreferrer"}>
                     {channel.customUrl}
                 </a>
                 <CopyToClipboard text={`https://www.youtube.com/${channel.customUrl}`}/>

@@ -23,7 +23,9 @@ export const ChannelsIdRoute = () => {
 
     const {data: channel} = useFindChannelByIdQuery(channelId!)
     useEffect(() => {
-        channel && dispatch(initFetchStateForChannel(channel))
+        if (channel) {
+            dispatch(initFetchStateForChannel(channel))
+        }
     }, [channel])
 
     const {data: videos, isSuccess} = useListVideosByChannelIdQuery(channelId!)

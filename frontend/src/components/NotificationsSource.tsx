@@ -4,13 +4,13 @@ import {SubscriptionEvent} from "../model/events/SubscriptionEvent";
 import {Spinner} from "react-bootstrap";
 import {FetchStatusEvent} from "../model/events/FetchEvent";
 
-type NotificationsSourceProps = {
+type NotificationsSourceProps<T> = {
     onSubscribed: (subscriptionId: string) => void,
-    onDataEvent: (dataEvent: any) => void,
+    onDataEvent: (dataEvent: T) => void,
     onStatusEvent: (statusEvent: FetchStatusEvent) => void,
 }
 
-export const NotificationsSource = (props: NotificationsSourceProps) => {
+export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
 
     const eventSource = useEventSource({ source: `/api/notifications` });
 
@@ -36,7 +36,7 @@ export const NotificationsSource = (props: NotificationsSourceProps) => {
         },
     }, [eventSource, props]);
 
-    useEventSourceListener<Parameters<typeof props.onDataEvent>[0]>({
+    useEventSourceListener<T>({
         source: eventSource,
         startOnInit: true,
         event: {

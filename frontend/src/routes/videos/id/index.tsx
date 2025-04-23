@@ -16,7 +16,6 @@ export const VideosIdRoute = () => {
     const [searchParams, setSearchParams] = useSearchParams()
 
     const pageSize = 50;
-    const [page, setPage] = useState(1);
 
     const [search, setSearch] = useState("");
 
@@ -38,7 +37,7 @@ export const VideosIdRoute = () => {
                     reply.text.toLowerCase().includes(search.toLowerCase())).length > 0)
                 .slice(pageSize * (page - 1), pageSize * page) ?? []
         },
-        [commentsList, pageSize, page, search]
+        [commentsList, pageSize, searchParams, search]
     );
 
     const commentsDisabled = useMemo(

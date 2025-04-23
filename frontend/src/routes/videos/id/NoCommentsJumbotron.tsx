@@ -14,7 +14,7 @@ export const NoCommentsJumbotron = ({video}: NoCommentsJumbotronProps) => {
         <Row className={"border border-dashed mx-0 my-3 p-5 rounded-3"}>
             <Col className={"text-center"}>
                 <h2 className={"mb-4"}>
-                    Comments haven't been fetched yet
+                    Comments haven&apos;t been fetched yet
                 </h2>
                 <Button onClick={() => dispatch(requestedCommentsForVideoId(video.id))}>
                     <span className={"align-items-center d-flex"}>
