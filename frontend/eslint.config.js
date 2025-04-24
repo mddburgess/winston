@@ -10,7 +10,11 @@ export default defineConfig([
             "**/*.{ts,tsx}"
         ],
         languageOptions: {
-            globals: globals.browser
+            globals: globals.browser,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            }
         },
         settings: {
             react: {
@@ -20,7 +24,7 @@ export default defineConfig([
     },
 
     javascript.configs.recommended,
-    typescript.configs.recommended,
+    typescript.configs.recommendedTypeChecked,
     react.configs.flat.recommended,
     react.configs.flat["jsx-runtime"],
 ]);

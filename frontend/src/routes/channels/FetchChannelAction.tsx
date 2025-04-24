@@ -18,14 +18,14 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
     const [fetchChannelsByHandle] = useFetchChannelByHandleMutation();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchChannelsByHandle({ subscriptionId, channelHandle });
+        void fetchChannelsByHandle({ subscriptionId, channelHandle })
     }
 
     const handleDataEvent = (event: FetchChannelEvent) => {
         dispatch(appendFetchedChannels(event.items));
         dispatch(invalidateFetchLimits());
         if (event.items.length > 0) {
-            navigate(`/channels/${event.items[0].id}`);
+            void navigate(`/channels/${event.items[0].id}`);
         }
     }
 

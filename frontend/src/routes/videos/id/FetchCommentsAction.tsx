@@ -17,7 +17,7 @@ export const FetchCommentsAction = ({videoId}: FetchVideosActionProps) => {
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchCommentsByVideoId({subscriptionId, videoId});
+        void fetchCommentsByVideoId({subscriptionId, videoId});
     }
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
