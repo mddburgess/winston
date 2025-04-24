@@ -9,4 +9,4 @@ export type ChannelDto = {
     videoCount: number;
     publishedAt: string;
     lastFetchedAt: string;
-}
+};

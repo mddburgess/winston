@@ -1,9 +1,9 @@
-import {sanitize} from "dompurify";
+import { sanitize } from "dompurify";
 
 type HtmlTextProps = {
-    text: string,
-}
+    text: string;
+};
 
-export const HtmlText = ({text}: HtmlTextProps) => (
-    <span dangerouslySetInnerHTML={{ __html: sanitize(text) }}/>
+export const HtmlText = ({ text }: HtmlTextProps) => (
+    <span dangerouslySetInnerHTML={{ __html: sanitize(text) }} />
 );

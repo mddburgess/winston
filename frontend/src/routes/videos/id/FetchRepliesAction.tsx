@@ -1,46 +1,71 @@
 import { useAppDispatch } from "../../../store/hooks";
-import {invalidateFetchLimits, useFetchRepliesByCommentIdMutation} from "../../../store/slices/api";
-import {FetchCommentsEvent, FetchStatusEvent} from "../../../model/events/FetchEvent";
-import {EventSourceProvider} from "react-sse-hooks";
-import {NotificationsSource} from "../../../components/NotificationsSource";
-import {fetchedReplies, updateFetchStatus} from "../../../store/slices/fetches";
-import {commentsAdapter, commentsApiUtils, repliesAdapter} from "../../../store/slices/comments";
+import {
+    invalidateFetchLimits,
+    useFetchRepliesByCommentIdMutation,
+} from "../../../store/slices/api";
+import {
+    FetchCommentsEvent,
+    FetchStatusEvent,
+} from "../../../model/events/FetchEvent";
+import { EventSourceProvider } from "react-sse-hooks";
+import { NotificationsSource } from "../../../components/NotificationsSource";
+import {
+    fetchedReplies,
+    updateFetchStatus,
+} from "../../../store/slices/fetches";
+import {
+    commentsAdapter,
+    commentsApiUtils,
+    repliesAdapter,
+} from "../../../store/slices/comments";
 
 type FetchRepliesActionProps = {
     commentId: string;
-}
+};
 
-export const FetchRepliesAction = ({commentId}: FetchRepliesActionProps) => {
-
+export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
     const [fetchRepliesByCommentId] = useFetchRepliesByCommentIdMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchRepliesByCommentId({subscriptionId, commentId});
-    }
+        void fetchRepliesByCommentId({ subscriptionId, commentId });
+    };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
         dispatch(fetchedReplies(event));
         if (event.items.length > 0) {
             const videoId = event.items[0].videoId;
-            dispatch(commentsApiUtils.updateQueryData("listCommentsByVideoId", videoId, draft => {
-                const comment = commentsAdapter.getSelectors().selectById(draft, commentId)
-                commentsAdapter.setOne(draft, {
-                    ...comment,
-                    replies: repliesAdapter.addMany(comment.replies, event.items)
-                })
-            }))
+            dispatch(
+                commentsApiUtils.updateQueryData(
+                    "listCommentsByVideoId",
+                    videoId,
+                    (draft) => {
+                        const comment = commentsAdapter
+                            .getSelectors()
+                            .selectById(draft, commentId);
+                        commentsAdapter.setOne(draft, {
+                            ...comment,
+                            replies: repliesAdapter.addMany(
+                                comment.replies,
+                                event.items,
+                            ),
+                        });
+                    },
+                ),
+            );
         }
-    }
+    };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(updateFetchStatus({
-            fetchType: "replies",
-            objectId: commentId,
-            status: event.status,
-        }))
+        dispatch(
+            updateFetchStatus({
+                fetchType: "replies",
+                objectId: commentId,
+                status: event.status,
+            }),
+        );
         dispatch(invalidateFetchLimits());
-    }
+    };
 
     return (
         <EventSourceProvider>
@@ -50,5 +75,5 @@ export const FetchRepliesAction = ({commentId}: FetchRepliesActionProps) => {
                 onStatusEvent={handleStatusEvent}
             />
         </EventSourceProvider>
-    )
-}
+    );
+};

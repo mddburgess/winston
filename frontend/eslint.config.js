@@ -6,21 +6,19 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
     {
-        files: [
-            "**/*.{ts,tsx}"
-        ],
+        files: ["**/*.{ts,tsx}"],
         languageOptions: {
             globals: globals.browser,
             parserOptions: {
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-            }
+            },
         },
         settings: {
             react: {
                 version: "detect",
-            }
-        }
+            },
+        },
     },
 
     javascript.configs.recommended,

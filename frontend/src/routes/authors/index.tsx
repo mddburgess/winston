@@ -1,36 +1,43 @@
-import {useListAuthorsQuery} from "../../store/slices/authors";
-import {Col, Image, ListGroup, ListGroupItem, Ratio, Row} from "react-bootstrap";
-import {PaginationRow} from "../../components/PaginationRow";
-import {useMemo, useState} from "react";
-import {Link, useSearchParams} from "react-router";
-import {AuthorStatistics} from "./AuthorStatistics";
+import { useListAuthorsQuery } from "../../store/slices/authors";
+import {
+    Col,
+    Image,
+    ListGroup,
+    ListGroupItem,
+    Ratio,
+    Row,
+} from "react-bootstrap";
+import { PaginationRow } from "../../components/PaginationRow";
+import { useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router";
+import { AuthorStatistics } from "./AuthorStatistics";
 
 export const AuthorsRoute = () => {
-
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const {data} = useListAuthorsQuery()
+    const { data } = useListAuthorsQuery();
 
     const pageSize = 100;
     const [search, setSearch] = useState("");
 
-    const displayedAuthors = useMemo(
-        () => {
-            const page = parseInt(searchParams.get("p") ?? "1")
-            return data?.authors
-                .filter(author => author.displayName.toLowerCase().includes(search.toLowerCase()))
+    const displayedAuthors = useMemo(() => {
+        const page = parseInt(searchParams.get("p") ?? "1");
+        return (
+            data?.authors
+                .filter((author) =>
+                    author.displayName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()),
+                )
                 .slice(pageSize * (page - 1), pageSize * page) ?? []
-        },
-        [data, pageSize, searchParams, search]
-    )
+        );
+    }, [data, pageSize, searchParams, search]);
 
     return (
         <>
             <Row className={"mb-2"}>
                 <Col className={"align-items-center d-flex"}>
-                    <p className={"h1 m-0"}>
-                        Authors
-                    </p>
+                    <p className={"h1 m-0"}>Authors</p>
                 </Col>
             </Row>
             <PaginationRow
@@ -44,13 +51,16 @@ export const AuthorsRoute = () => {
             />
             <ListGroup className={"mb-2"}>
                 {displayedAuthors.map((author) => (
-                    <ListGroupItem
-                        className={"py-0"}
-                        key={author.id}
-                    >
+                    <ListGroupItem className={"py-0"} key={author.id}>
                         <Row>
-                            <Col xs={"auto"} className={"align-items-center d-flex pe-0"}>
-                                <Ratio aspectRatio={"1x1"} style={{ minWidth: "32px" }}>
+                            <Col
+                                xs={"auto"}
+                                className={"align-items-center d-flex pe-0"}
+                            >
+                                <Ratio
+                                    aspectRatio={"1x1"}
+                                    style={{ minWidth: "32px" }}
+                                >
                                     <Image
                                         className={"border"}
                                         roundedCircle
@@ -63,7 +73,7 @@ export const AuthorsRoute = () => {
                                     {author.displayName}
                                 </Link>
                             </Col>
-                            <AuthorStatistics author={author}/>
+                            <AuthorStatistics author={author} />
                         </Row>
                     </ListGroupItem>
                 ))}
@@ -76,5 +86,5 @@ export const AuthorsRoute = () => {
                 setPage={(page) => setSearchParams({ p: `${page}` })}
             />
         </>
-    )
-}
+    );
+};

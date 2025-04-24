@@ -29,13 +29,18 @@ tasks {
         dependsOn("npmCheckUpdates")
     }
 
+    register<NpmTask>("format") {
+        dependsOn(npmInstall)
+        npmCommand.addAll("run", "format")
+    }
+
     register<NpmTask>("compileTypescript") {
-        dependsOn("npmInstall")
+        dependsOn("format")
         npmCommand.addAll("run", "compile")
     }
 
     register<NpmTask>("lint") {
-        dependsOn("npmInstall")
+        dependsOn("format")
         npmCommand.addAll("run", "lint")
     }
 

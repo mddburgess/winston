@@ -1,39 +1,49 @@
-import {apiSlice} from "./api";
-import {createEntityAdapter, EntityState} from "@reduxjs/toolkit";
-import {CommentDto} from "../../model/CommentDto";
-import {ascBy} from "../../utils";
-import {DateTime} from "luxon";
+import { apiSlice } from "./api";
+import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
+import { CommentDto } from "../../model/CommentDto";
+import { ascBy } from "../../utils";
+import { DateTime } from "luxon";
 
-export type CommentState = Omit<CommentDto, 'replies'> & {
+export type CommentState = Omit<CommentDto, "replies"> & {
     replies: EntityState<CommentDto, string>;
-}
+};
 
 export const commentsAdapter = createEntityAdapter<CommentState>({
-    sortComparer: ascBy(comment => DateTime.fromISO(comment.publishedAt).valueOf()),
-})
+    sortComparer: ascBy((comment) =>
+        DateTime.fromISO(comment.publishedAt).valueOf(),
+    ),
+});
 
 export const repliesAdapter = createEntityAdapter<CommentDto>({
-    sortComparer: ascBy(comment => DateTime.fromISO(comment.publishedAt).valueOf()),
-})
+    sortComparer: ascBy((comment) =>
+        DateTime.fromISO(comment.publishedAt).valueOf(),
+    ),
+});
 
 export const commentsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        listCommentsByVideoId: builder.query<EntityState<CommentState, string>, string>({
+        listCommentsByVideoId: builder.query<
+            EntityState<CommentState, string>,
+            string
+        >({
             query: (videoId) => `/videos/${videoId}/comments`,
             transformResponse: (response: CommentDto[]) => {
-                const comments = response.map(comment => ({
+                const comments = response.map((comment) => ({
                     ...comment,
-                    replies: repliesAdapter.addMany(repliesAdapter.getInitialState(), comment.replies)
-                }))
-                return commentsAdapter.addMany(commentsAdapter.getInitialState(), comments);
-            }
+                    replies: repliesAdapter.addMany(
+                        repliesAdapter.getInitialState(),
+                        comment.replies,
+                    ),
+                }));
+                return commentsAdapter.addMany(
+                    commentsAdapter.getInitialState(),
+                    comments,
+                );
+            },
         }),
-
     }),
-    overrideExisting: 'throw'
-})
+    overrideExisting: "throw",
+});
 
-export const {
-    useListCommentsByVideoIdQuery,
-    util: commentsApiUtils,
-} = commentsApi;
+export const { useListCommentsByVideoIdQuery, util: commentsApiUtils } =
+    commentsApi;

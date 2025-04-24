@@ -1,14 +1,14 @@
-import {AppRoutes} from "./routes";
-import {Header} from "./Header";
-import {Footer} from "./Footer";
-import {Container} from "react-bootstrap";
+import { AppRoutes } from "./routes";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { Container } from "react-bootstrap";
 
 export const App = () => (
     <>
         <Container>
-            <Header/>
-            <AppRoutes/>
+            <Header />
+            <AppRoutes />
         </Container>
-        <Footer/>
+        <Footer />
     </>
 );
