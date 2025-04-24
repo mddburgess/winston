@@ -16,7 +16,7 @@ export const FetchRepliesAction = ({commentId}: FetchRepliesActionProps) => {
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchRepliesByCommentId({subscriptionId, commentId});
+        void fetchRepliesByCommentId({subscriptionId, commentId});
     }
 
     const handleDataEvent = (event: FetchCommentsEvent) => {

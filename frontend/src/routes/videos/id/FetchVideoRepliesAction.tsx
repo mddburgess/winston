@@ -16,7 +16,7 @@ export const FetchVideoRepliesAction = ({videoId}: FetchRepliesActionProps) => {
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchRepliesByVideoId({subscriptionId, videoId});
+        void fetchRepliesByVideoId({subscriptionId, videoId});
     }
 
     const handleDataEvent = (event: FetchCommentsEvent) => {

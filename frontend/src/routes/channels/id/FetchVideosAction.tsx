@@ -17,7 +17,7 @@ export const FetchVideosAction = ({channelId, mode}: FetchVideosWidgetProps) => 
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        fetchVideosByChannelId({ subscriptionId, channelId, mode });
+        void fetchVideosByChannelId({ subscriptionId, channelId, mode });
     }
 
     const handleDataEvent = (event: FetchVideosEvent) => {
