@@ -1,9 +1,9 @@
-import {ChannelDto} from "./ChannelDto";
+import { ChannelDto } from "./ChannelDto";
 
 type VideoDto = {
     id: string;
     channelId: string;
-    channel: ChannelDto
+    channel: ChannelDto;
     title: string;
     description: string;
     thumbnailUrl: string;
@@ -13,8 +13,8 @@ type VideoDto = {
     commentsDisabled: boolean;
     publishedAt: string;
     lastFetchedAt: string;
-}
+};
 
-export type VideoWithChannelIdDto = Omit<VideoDto, 'channel'>
+export type VideoWithChannelIdDto = Omit<VideoDto, "channel">;
 
-export type VideoWithChannelDto = Omit<VideoDto, 'channelId'>
+export type VideoWithChannelDto = Omit<VideoDto, "channelId">;

@@ -1,4 +1,4 @@
 export type SubscriptionEvent = {
-    connected: boolean,
-    subscriptionId: string,
-}
+    connected: boolean;
+    subscriptionId: string;
+};

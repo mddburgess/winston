@@ -4,4 +4,4 @@ export type ProblemDetail = {
     status: number;
     detail?: string;
     instance?: string;
-}
+};

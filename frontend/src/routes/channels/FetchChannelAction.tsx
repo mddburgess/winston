@@ -1,25 +1,32 @@
-import {invalidateFetchLimits, useFetchChannelByHandleMutation} from "../../store/slices/api";
-import {NotificationsSource} from "../../components/NotificationsSource";
-import {useNavigate} from "react-router";
-import {EventSourceProvider} from "react-sse-hooks";
-import {FetchChannelEvent, FetchStatusEvent} from "../../model/events/FetchEvent";
-import {useAppDispatch} from "../../store/hooks";
-import {appendFetchedChannels} from "../../store/slices/channels";
-import {updateFetchStatus} from "../../store/slices/fetches";
+import {
+    invalidateFetchLimits,
+    useFetchChannelByHandleMutation,
+} from "../../store/slices/api";
+import { NotificationsSource } from "../../components/NotificationsSource";
+import { useNavigate } from "react-router";
+import { EventSourceProvider } from "react-sse-hooks";
+import {
+    FetchChannelEvent,
+    FetchStatusEvent,
+} from "../../model/events/FetchEvent";
+import { useAppDispatch } from "../../store/hooks";
+import { appendFetchedChannels } from "../../store/slices/channels";
+import { updateFetchStatus } from "../../store/slices/fetches";
 type FetchChannelActionProps = {
-    channelHandle: string
-}
+    channelHandle: string;
+};
 
-export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => {
-
+export const FetchChannelAction = ({
+    channelHandle,
+}: FetchChannelActionProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const [fetchChannelsByHandle] = useFetchChannelByHandleMutation();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchChannelsByHandle({ subscriptionId, channelHandle })
-    }
+        void fetchChannelsByHandle({ subscriptionId, channelHandle });
+    };
 
     const handleDataEvent = (event: FetchChannelEvent) => {
         dispatch(appendFetchedChannels(event.items));
@@ -27,15 +34,17 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
         if (event.items.length > 0) {
             void navigate(`/channels/${event.items[0].id}`);
         }
-    }
+    };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(updateFetchStatus({
-            fetchType: "channel",
-            objectId: channelHandle,
-            status: event.status
-        }));
-    }
+        dispatch(
+            updateFetchStatus({
+                fetchType: "channel",
+                objectId: channelHandle,
+                status: event.status,
+            }),
+        );
+    };
 
     return (
         <EventSourceProvider>
@@ -46,4 +55,4 @@ export const FetchChannelAction = ({channelHandle}: FetchChannelActionProps) => 
             />
         </EventSourceProvider>
     );
-}
+};

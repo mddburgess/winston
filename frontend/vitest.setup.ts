@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom";
-import {backend} from "./src/mocks/backend";
+import { backend } from "./src/mocks/backend";
 
 beforeAll(() => {
     backend.listen({
-        onUnhandledRequest: "error"
+        onUnhandledRequest: "error",
     });
 });
 
