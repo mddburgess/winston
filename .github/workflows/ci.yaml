@@ -99,11 +99,11 @@ jobs:
       - name: Install dependencies
         run: cd frontend && npm ci
       - name: Lint frontend
-        run: npm run lint:report
+        run: cd frontend && npm run lint:report
         continue-on-error: true
       - name: Annotate pull request
         uses: enso-org/eslint-annotate-action@v3
         with:
           check-name: eslint
           markdown-report-on-step-summary: true
-          report-json: eslint-report.json
+          report-json: frontend/eslint-report.json
