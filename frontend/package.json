@@ -9,6 +9,7 @@
         "compile": "tsc --noEmit",
         "format": "prettier . --write",
         "lint": "eslint src",
+        "lint:report": "eslint -o eslint-report.json -f json src",
         "start": "parcel --no-cache",
         "test": "vitest --dom --coverage --no-watch"
     },

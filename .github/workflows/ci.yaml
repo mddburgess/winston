@@ -82,3 +82,27 @@ jobs:
         with:
           name: backend-build-reports
           path: backend/build/reports
+
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: npm
+      - name: Install dependencies
+        run: cd frontend && npm ci
+      - name: Lint frontend
+        run: npm run lint:report
+        continue-on-error: true
+      - name: Annotate pull request
+        uses: enso-org/eslint-annotate-action@v3
+        with:
+          check-name: eslint
+          markdown-report-on-step-summary: true
+          report-json: eslint-report.json
