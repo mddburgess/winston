@@ -8,7 +8,7 @@ type PaginationContextProps<T> = {
     children: (pageItems: PageInfo<T>) => ReactNode;
 };
 
-type PageInfo<T> = {
+export type PageInfo<T> = {
     pageNumber: number;
     setPageNumber: (pageNumber: number) => void;
     pageSize: number;

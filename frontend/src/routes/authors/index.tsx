@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import { PaginationRow } from "../../components/PaginationRow";
 import { useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { AuthorStatistics } from "./AuthorStatistics";
 import { PaginationContext } from "../../components/PaginationContext";
 
