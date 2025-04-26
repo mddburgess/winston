@@ -5,24 +5,15 @@ import {
 import { ChannelCards } from "./ChannelCards";
 import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FetchChannelModal } from "./FetchChannelModal";
 import { PaginationRow } from "../../components/PaginationRow";
-import { useSearchParams } from "react-router";
+import { PaginationContext } from "../../components/PaginationContext";
 
 export const ChannelsRoute = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-
     const { isSuccess, data } = useListChannelsQuery();
     const channels = isSuccess ? selectAllChannels(data) : [];
-
     const [showModal, setShowModal] = useState(false);
-
-    const pageSize = 12;
-    const displayedChannels = useMemo(() => {
-        const page = parseInt(searchParams.get("p") ?? "1");
-        return channels.slice(pageSize * (page - 1), pageSize * page) ?? [];
-    }, [channels, pageSize, searchParams]);
 
     return (
         <>
@@ -40,14 +31,26 @@ export const ChannelsRoute = () => {
                     </Button>
                 </Col>
             </Row>
-            <PaginationRow
-                name={"channel"}
-                total={channels.length}
-                pageSize={pageSize}
-                page={parseInt(searchParams.get("p") ?? "1")}
-                setPage={(page) => setSearchParams({ p: `${page}` })}
-            />
-            <ChannelCards channels={displayedChannels} />
+            <PaginationContext pageSize={12} items={channels}>
+                {({
+                    pageNumber,
+                    setPageNumber,
+                    pageSize,
+                    pageItems,
+                    totalItemCount,
+                }) => (
+                    <>
+                        <PaginationRow
+                            name={"channel"}
+                            total={totalItemCount}
+                            pageSize={pageSize}
+                            page={pageNumber}
+                            setPage={setPageNumber}
+                        />
+                        <ChannelCards channels={pageItems} />
+                    </>
+                )}
+            </PaginationContext>
             <FetchChannelModal show={showModal} setShow={setShowModal} />
         </>
     );

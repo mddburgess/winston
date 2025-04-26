@@ -1,4 +1,4 @@
-import { ascBy, descBy, pluralize } from "./index";
+import { ascBy, descBy, parseIntOrDefault, pluralize } from "./index";
 
 describe("ascBy()", () => {
     it("sorts values in ascending order by the specified property", () => {
@@ -19,6 +19,32 @@ describe("descBy()", () => {
             "apple",
             "pear",
         ]);
+    });
+});
+
+describe("parseIntOrDefault()", () => {
+    it("returns the parsed value when it is a positive number", () => {
+        expect(parseIntOrDefault("10", 1)).toBe(10);
+    });
+
+    it("returns the parsed value when it is a negative number", () => {
+        expect(parseIntOrDefault("-10", 1)).toBe(-10);
+    });
+
+    it("returns the parsed value when it is 0", () => {
+        expect(parseIntOrDefault("0", 1)).toBe(0);
+    });
+
+    it("returns the default value when the input value is not a number", () => {
+        expect(parseIntOrDefault("string", 1)).toBe(1);
+    });
+
+    it("returns the default value when the input value is null", () => {
+        expect(parseIntOrDefault(null, 1)).toBe(1);
+    });
+
+    it("returns the default value when the input value is undefined", () => {
+        expect(parseIntOrDefault(undefined, 1)).toBe(1);
     });
 });
 
