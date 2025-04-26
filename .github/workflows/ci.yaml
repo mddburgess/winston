@@ -106,5 +106,4 @@ jobs:
         uses: enso-org/eslint-annotate-action@v3
         with:
           check-name: eslint
-          markdown-report-on-step-summary: true
           report-json: frontend/eslint-report.json
