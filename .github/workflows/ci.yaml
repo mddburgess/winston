@@ -90,13 +90,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Change directory
+        run: cd frontend
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: latest
           cache: npm
       - name: Install dependencies
-        run: cd frontend && npm ci
+        run: npm ci
       - name: Lint frontend
         run: npm run lint:report
         continue-on-error: true
