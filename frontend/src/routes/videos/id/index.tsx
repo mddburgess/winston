@@ -15,6 +15,7 @@ import { FetchCommentsAlert } from "./FetchCommentsAlert";
 import { useAppSelector } from "../../../store/hooks";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
 import { PaginationContext } from "../../../components/PaginationContext";
+import { sumBy } from "../../../utils";
 
 export const VideosIdRoute = () => {
     const { videoId } = useParams();
@@ -58,6 +59,14 @@ export const VideosIdRoute = () => {
         [commentsList, search],
     );
 
+    const replyCount = sumBy(commentsList, (comment) =>
+        repliesAdapter.getSelectors().selectTotal(comment.replies),
+    );
+    const totalReplyCount = sumBy(
+        commentsList,
+        (comment) => comment.totalReplyCount,
+    );
+
     const commentsDisabled = useMemo(
         () => video?.commentsDisabled,
         [video, fetchState],
@@ -81,7 +90,14 @@ export const VideosIdRoute = () => {
                     </>
                 )}
             </Breadcrumb>
-            {video && <VideoDetails video={video} />}
+            {video && (
+                <VideoDetails
+                    video={video}
+                    commentCount={commentsList.length}
+                    replyCount={replyCount}
+                    totalReplyCount={totalReplyCount}
+                />
+            )}
             {video && !commentsDisabled && commentsList.length == 0 && (
                 <NoCommentsJumbotron video={video} />
             )}

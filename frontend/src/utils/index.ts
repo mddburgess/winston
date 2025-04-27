@@ -26,3 +26,7 @@ export const pluralize = (
 ) => {
     return `${count} ` + (count === 1 ? single : plural);
 };
+
+export const sumBy = <T>(items: T[], selector: (item: T) => number) => {
+    return items.map(selector).reduce((acc, next) => acc + next, 0);
+};
