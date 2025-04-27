@@ -8,9 +8,17 @@ import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
 
 type VideoDetailsProps = {
     video: VideoWithChannelDto;
+    commentCount: number;
+    replyCount: number;
+    totalReplyCount: number;
 };
 
-export const VideoDetails = ({ video }: VideoDetailsProps) => (
+export const VideoDetails = ({
+    video,
+    commentCount,
+    replyCount,
+    totalReplyCount,
+}: VideoDetailsProps) => (
     <Row className={"bg-body-tertiary border mx-0 my-3 rounded-3"}>
         <Col xs={12} sm={3} className={"p-0"}>
             <Ratio aspectRatio={"4x3"}>
@@ -36,10 +44,13 @@ export const VideoDetails = ({ video }: VideoDetailsProps) => (
                     <Date date={video.publishedAt} />
                 </Col>
                 <CommentCounts
-                    comments={video.commentCount}
+                    comments={Math.max(video.commentCount, commentCount)}
                     commentsDisabled={video.commentsDisabled}
-                    replies={video.replyCount}
-                    totalReplies={video.totalReplyCount}
+                    replies={Math.max(video.replyCount, replyCount)}
+                    totalReplies={Math.max(
+                        video.totalReplyCount,
+                        totalReplyCount,
+                    )}
                 />
                 {video.totalReplyCount > video.replyCount && (
                     <Col xs={"auto"}>

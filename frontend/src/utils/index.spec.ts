@@ -1,4 +1,4 @@
-import { ascBy, descBy, parseIntOrDefault, pluralize } from "./index";
+import { ascBy, descBy, parseIntOrDefault, pluralize, sumBy } from "./index";
 
 describe("ascBy()", () => {
     it("sorts values in ascending order by the specified property", () => {
@@ -63,5 +63,25 @@ describe("pluralize()", () => {
 
     it("returns custom plural value when it is specified", () => {
         expect(pluralize(2, "reply", "replies")).toBe("2 replies");
+    });
+});
+
+describe("sumBy()", () => {
+    type Item = {
+        property: number;
+    };
+
+    it("returns the sum of a list of items using a property selector", () => {
+        const items: Item[] = [
+            { property: 1 },
+            { property: 4 },
+            { property: 9 },
+        ];
+        expect(sumBy(items, (item) => item.property)).toBe(14);
+    });
+
+    it("returns 0 for an empty list", () => {
+        const items: Item[] = [];
+        expect(sumBy(items, (item) => item.property)).toBe(0);
     });
 });
