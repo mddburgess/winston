@@ -25,6 +25,14 @@ export const PaginationRow = (props: PaginationRowProps) => {
             {totalPages >= 2 && (
                 <MultiPagePaginationRow {...props} totalPages={totalPages} />
             )}
+            {props.setSearch && (
+                <Col xs={"auto"}>
+                    <SearchControl
+                        value={props.search}
+                        setValue={props.setSearch}
+                    />
+                </Col>
+            )}
         </Row>
     );
 };
@@ -34,14 +42,6 @@ const SinglePagePaginationRow = (props: PaginationRowProps) => (
         <Col className={"align-items-center d-flex"}>
             {pluralize(props.total, props.name)}
         </Col>
-        {props.setSearch && (
-            <Col xs={"auto"}>
-                <SearchControl
-                    value={props.search}
-                    setValue={props.setSearch}
-                />
-            </Col>
-        )}
     </>
 );
 
@@ -99,14 +99,6 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
                     />
                 </Pagination>
             </Col>
-            {props.setSearch && (
-                <Col xs={"auto"}>
-                    <SearchControl
-                        value={props.search}
-                        setValue={props.setSearch}
-                    />
-                </Col>
-            )}
         </>
     );
 };
