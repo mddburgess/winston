@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Comment and reply counts on the video details page now update in real time when comments and replies are fetched.
   (mddburgess/winston#43)
+- Fixed N+1 query bug causing the comments API to execute slowly. (mddburgess/winston#44)
 
 ## [1.2.1] — 2025-04-16
 

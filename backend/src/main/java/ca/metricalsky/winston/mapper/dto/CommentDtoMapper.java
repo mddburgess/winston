@@ -20,10 +20,18 @@ public abstract class CommentDtoMapper {
         }
 
         var commentDto = new CommentDto();
-        mapToCommentDto(comment, commentDto);
+        if (comment.getParentId() != null) {
+            mapReplyToCommentDto(comment, commentDto);
+        } else {
+            mapCommentToCommentDto(comment, commentDto);
+        }
         return commentDto;
     }
 
     @Mapping(target = "text", source = "textDisplay")
-    abstract void mapToCommentDto(Comment comment, @MappingTarget CommentDto commentDto);
+    abstract void mapCommentToCommentDto(Comment comment, @MappingTarget CommentDto commentDto);
+
+    @Mapping(target = "text", source = "textDisplay")
+    @Mapping(target = "replies", ignore = true)
+    abstract void mapReplyToCommentDto(Comment reply, @MappingTarget CommentDto replyDto);
 }
