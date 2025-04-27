@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useFindChannelByIdQuery } from "../../../store/slices/channels";
 import {
     useListVideosByChannelIdQuery,
@@ -12,14 +12,12 @@ import { FetchVideosAlert } from "./FetchVideosAlert";
 import { useAppDispatch } from "../../../store/hooks";
 import { initFetchStateForChannel } from "../../../store/slices/fetches";
 import { PaginationRow } from "../../../components/PaginationRow";
+import { PaginationContext } from "../../../components/PaginationContext";
 
 export const ChannelsIdRoute = () => {
     const { channelId } = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
 
     const dispatch = useAppDispatch();
-
-    const pageSize = 24;
 
     const [search, setSearch] = useState("");
 
@@ -37,14 +35,11 @@ export const ChannelsIdRoute = () => {
         ? videosAdapter.getSelectors().selectAll(videos)
         : [];
 
-    const displayedVideos = useMemo(() => {
-        const page = parseInt(searchParams.get("p") ?? "1");
-        return videoList
-            .filter((video) =>
-                video.title.toLowerCase().includes(search.toLowerCase()),
-            )
-            .slice(pageSize * (page - 1), pageSize * page);
-    }, [videoList, pageSize, searchParams, search]);
+    const filteredVideoList = useMemo(() => {
+        return videoList.filter((video) =>
+            video.title.toLowerCase().includes(search.toLowerCase()),
+        );
+    }, [videoList, search]);
 
     return (
         <>
@@ -60,23 +55,38 @@ export const ChannelsIdRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel} />}
             {channel && <FetchVideosAlert channel={channel} />}
-            <PaginationRow
-                name={"video"}
-                total={videoList.length}
-                pageSize={pageSize}
-                page={parseInt(searchParams.get("p") ?? "1")}
-                setPage={(page) => setSearchParams({ p: `${page}` })}
-                search={search}
-                setSearch={setSearch}
-            />
-            <VideoCards videos={displayedVideos} />
-            <PaginationRow
-                name={"video"}
-                total={videoList.length}
-                pageSize={pageSize}
-                page={parseInt(searchParams.get("p") ?? "1")}
-                setPage={(page) => setSearchParams({ p: `${page}` })}
-            />
+            <PaginationContext pageSize={24} items={filteredVideoList}>
+                {({
+                    pageNumber,
+                    setPageNumber,
+                    pageSize,
+                    pageCount,
+                    pageItems,
+                    totalItemCount,
+                }) => (
+                    <>
+                        <PaginationRow
+                            name={"video"}
+                            total={totalItemCount}
+                            pageSize={pageSize}
+                            page={pageNumber}
+                            setPage={setPageNumber}
+                            search={search}
+                            setSearch={setSearch}
+                        />
+                        <VideoCards videos={pageItems} />
+                        {pageCount > 1 && (
+                            <PaginationRow
+                                name={"video"}
+                                total={totalItemCount}
+                                pageSize={pageSize}
+                                page={pageNumber}
+                                setPage={setPageNumber}
+                            />
+                        )}
+                    </>
+                )}
+            </PaginationContext>
         </>
     );
 };

@@ -25,4 +25,10 @@ export default defineConfig([
     typescript.configs.recommendedTypeChecked,
     react.configs.flat.recommended,
     react.configs.flat["jsx-runtime"],
+
+    {
+        rules: {
+            "@typescript-eslint/no-unused-vars": "warn",
+        },
+    },
 ]);

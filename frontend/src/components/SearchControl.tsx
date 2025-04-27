@@ -1,5 +1,6 @@
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { Search, XCircleFill } from "react-bootstrap-icons";
+import { ChangeEvent } from "react";
 
 type SearchControlProps = {
     value?: string;
@@ -11,7 +12,7 @@ export const SearchControl = ({ value, setValue }: SearchControlProps) => {
         return <></>;
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         setValue(event.target.value);
     };

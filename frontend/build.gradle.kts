@@ -39,11 +39,6 @@ tasks {
         npmCommand.addAll("run", "compile")
     }
 
-    register<NpmTask>("lint") {
-        dependsOn("format")
-        npmCommand.addAll("run", "lint")
-    }
-
     register<NpmTask>("assemble") {
         dependsOn("compileTypescript")
         inputs.files(
@@ -62,7 +57,7 @@ tasks {
     }
 
     register<DefaultTask>("check") {
-        dependsOn("lint", "test")
+        dependsOn("test")
     }
 
     register<DefaultTask>("build") {

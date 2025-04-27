@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useParams } from "react-router";
 import {
     commentsAdapter,
     repliesAdapter,
@@ -14,12 +14,10 @@ import { NoCommentsJumbotron } from "./NoCommentsJumbotron";
 import { FetchCommentsAlert } from "./FetchCommentsAlert";
 import { useAppSelector } from "../../../store/hooks";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
+import { PaginationContext } from "../../../components/PaginationContext";
 
 export const VideosIdRoute = () => {
     const { videoId } = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const pageSize = 50;
 
     const [search, setSearch] = useState("");
 
@@ -36,34 +34,29 @@ export const VideosIdRoute = () => {
         (state) => state.fetches.comments[videoId!],
     );
 
-    const displayedComments = useMemo(() => {
-        const page = parseInt(searchParams.get("p") ?? "1");
-        return (
-            commentsList
-                .filter(
-                    (comment) =>
-                        comment.author.displayName
-                            .toLowerCase()
-                            .includes(search.toLowerCase()) ||
-                        comment.text
-                            .toLowerCase()
-                            .includes(search.toLowerCase()) ||
-                        repliesAdapter
-                            .getSelectors()
-                            .selectAll(comment.replies)
-                            .filter(
-                                (reply) =>
-                                    reply.author.displayName
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase()) ||
-                                    reply.text
-                                        .toLowerCase()
-                                        .includes(search.toLowerCase()),
-                            ).length > 0,
-                )
-                .slice(pageSize * (page - 1), pageSize * page) ?? []
-        );
-    }, [commentsList, pageSize, searchParams, search]);
+    const filteredComments = useMemo(
+        () =>
+            commentsList.filter(
+                (comment) =>
+                    comment.author.displayName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                    comment.text.toLowerCase().includes(search.toLowerCase()) ||
+                    repliesAdapter
+                        .getSelectors()
+                        .selectAll(comment.replies)
+                        .filter(
+                            (reply) =>
+                                reply.author.displayName
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase()) ||
+                                reply.text
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase()),
+                        ).length > 0,
+            ),
+        [commentsList, search],
+    );
 
     const commentsDisabled = useMemo(
         () => video?.commentsDisabled,
@@ -95,29 +88,38 @@ export const VideosIdRoute = () => {
             {video && <FetchCommentsAlert video={video} />}
             {commentsDisabled && <CommentsDisabledJumbotron />}
             {commentsList.length > 0 && (
-                <>
-                    <PaginationRow
-                        name={"comment"}
-                        total={commentsList.length}
-                        pageSize={pageSize}
-                        page={parseInt(searchParams.get("p") ?? "1")}
-                        setPage={(page) => setSearchParams({ p: `${page}` })}
-                        search={search}
-                        setSearch={setSearch}
-                    />
-                    <CommentList comments={displayedComments} />
-                    {commentsList.length > pageSize && (
-                        <PaginationRow
-                            name={"comment"}
-                            total={commentsList.length}
-                            pageSize={pageSize}
-                            page={parseInt(searchParams.get("p") ?? "1")}
-                            setPage={(page) =>
-                                setSearchParams({ p: `${page}` })
-                            }
-                        />
+                <PaginationContext pageSize={50} items={filteredComments}>
+                    {({
+                        pageNumber,
+                        setPageNumber,
+                        pageSize,
+                        pageCount,
+                        pageItems,
+                        totalItemCount,
+                    }) => (
+                        <>
+                            <PaginationRow
+                                name={"comment"}
+                                total={totalItemCount}
+                                pageSize={pageSize}
+                                page={pageNumber}
+                                setPage={setPageNumber}
+                                search={search}
+                                setSearch={setSearch}
+                            />
+                            <CommentList comments={pageItems} />
+                            {pageCount > 1 && (
+                                <PaginationRow
+                                    name={"comment"}
+                                    total={totalItemCount}
+                                    pageSize={pageSize}
+                                    page={pageNumber}
+                                    setPage={setPageNumber}
+                                />
+                            )}
+                        </>
                     )}
-                </>
+                </PaginationContext>
             )}
         </>
     );
