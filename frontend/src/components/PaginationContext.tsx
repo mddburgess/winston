@@ -23,7 +23,11 @@ export const PaginationContext = <T,>({
     children,
 }: PaginationContextProps<T>) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const pageNumber = parseIntOrDefault(searchParams.get("p"), 1);
+    const pageCount = Math.ceil(items.length / pageSize);
+    const pageNumber = Math.max(
+        1,
+        Math.min(parseIntOrDefault(searchParams.get("p"), 1), pageCount),
+    );
     const pageItems = useMemo(() => {
         const firstIndex = pageSize * (pageNumber - 1);
         const lastIndex = pageSize * pageNumber;
