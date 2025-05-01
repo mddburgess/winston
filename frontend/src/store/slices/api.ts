@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { FetchLimits } from "../../model/FetchLimits";
+import { api } from "../../utils/links";
 
 type FetchRequest = {
     subscriptionId: string;
@@ -28,12 +29,12 @@ export const apiSlice = createApi({
     tagTypes: ["fetchLimits"],
     endpoints: (builder) => ({
         getFetchLimits: builder.query<FetchLimits, void>({
-            query: () => `/fetch/limits`,
+            query: api.fetch.limits.get,
             providesTags: ["fetchLimits"],
         }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.fetch.post(),
                 method: `POST`,
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -46,7 +47,7 @@ export const apiSlice = createApi({
         fetchVideosByChannelId: builder.mutation<undefined, FetchVideosRequest>(
             {
                 query: (request) => ({
-                    url: `/fetch`,
+                    url: api.fetch.post(),
                     method: "POST",
                     headers: [
                         ["X-Notify-Subscription", request.subscriptionId],
@@ -65,7 +66,7 @@ export const apiSlice = createApi({
             FetchCommentsRequest
         >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -80,7 +81,7 @@ export const apiSlice = createApi({
             FetchRepliesRequest
         >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -95,7 +96,7 @@ export const apiSlice = createApi({
             FetchCommentsRequest
         >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {

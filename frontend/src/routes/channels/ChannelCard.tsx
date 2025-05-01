@@ -7,6 +7,7 @@ import {
     Youtube,
 } from "react-bootstrap-icons";
 import { Date } from "../../components/Date";
+import { routes } from "../../utils/links";
 
 type ChannelCardProps = {
     channel: ChannelDto;
@@ -26,7 +27,7 @@ export const ChannelCard = ({ channel }: ChannelCardProps) => (
                     </Col>
                     <Col className={"col-10 col-md-9"}>
                         <p className={"fs-5 mb-1"}>
-                            <Link to={`/channels/${channel.id}`}>
+                            <Link to={routes.channels.details(channel)}>
                                 {channel.title}
                             </Link>
                         </p>

@@ -33,8 +33,8 @@ public class ChannelService {
                 .toList();
     }
 
-    public Optional<ChannelDto> findById(String channelId) {
-        return channelRepository.findById(channelId)
+    public Optional<ChannelDto> findByHandle(String channelHandle) {
+        return channelRepository.findByCustomUrl(channelHandle)
                 .map(channelDtoMapper::fromEntity);
     }
 

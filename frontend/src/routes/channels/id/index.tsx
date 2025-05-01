@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router";
-import { useFindChannelByIdQuery } from "../../../store/slices/channels";
+import { useFindChannelByHandleQuery } from "../../../store/slices/channels";
 import {
-    useListVideosByChannelIdQuery,
+    useListVideosByChannelHandleQuery,
     videosAdapter,
 } from "../../../store/slices/videos";
 import { useEffect, useMemo, useState } from "react";
@@ -13,23 +13,24 @@ import { useAppDispatch } from "../../../store/hooks";
 import { initFetchStateForChannel } from "../../../store/slices/fetches";
 import { PaginationRow } from "../../../components/PaginationRow";
 import { PaginationContext } from "../../../components/PaginationContext";
+import { routes } from "../../../utils/links";
 
-export const ChannelsIdRoute = () => {
-    const { channelId } = useParams();
+export const ChannelDetailsRoute = () => {
+    const { channelHandle } = useParams();
 
     const dispatch = useAppDispatch();
 
     const [search, setSearch] = useState("");
 
-    const { data: channel } = useFindChannelByIdQuery(channelId!);
+    const { data: channel } = useFindChannelByHandleQuery(channelHandle!);
     useEffect(() => {
         if (channel) {
             dispatch(initFetchStateForChannel(channel));
         }
     }, [channel]);
 
-    const { data: videos, isSuccess } = useListVideosByChannelIdQuery(
-        channelId!,
+    const { data: videos, isSuccess } = useListVideosByChannelHandleQuery(
+        channelHandle!,
     );
     const videoList = isSuccess
         ? videosAdapter.getSelectors().selectAll(videos)
@@ -44,7 +45,7 @@ export const ChannelsIdRoute = () => {
     return (
         <>
             <Breadcrumb>
-                <BreadcrumbItem linkAs={Link} linkProps={{ to: "/" }}>
+                <BreadcrumbItem linkAs={Link} linkProps={{ to: routes.home }}>
                     Channels
                 </BreadcrumbItem>
                 {channel && (

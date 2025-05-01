@@ -6,6 +6,7 @@ import {
 } from "../../model/VideoDto";
 import { descBy } from "../../utils";
 import { DateTime } from "luxon";
+import { api } from "../../utils/links";
 
 export const videosAdapter = createEntityAdapter<VideoWithChannelIdDto>({
     sortComparer: descBy((video) =>
@@ -15,11 +16,11 @@ export const videosAdapter = createEntityAdapter<VideoWithChannelIdDto>({
 
 const videosApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        listVideosByChannelId: builder.query<
+        listVideosByChannelHandle: builder.query<
             EntityState<VideoWithChannelIdDto, string>,
             string
         >({
-            query: (channelId) => `/channels/${channelId}/videos`,
+            query: api.channels.handle.videos.get,
             transformResponse: (response: VideoWithChannelIdDto[]) => {
                 return videosAdapter.addMany(
                     videosAdapter.getInitialState(),
@@ -28,14 +29,14 @@ const videosApi = apiSlice.injectEndpoints({
             },
         }),
         findVideoById: builder.query<VideoWithChannelDto, string>({
-            query: (videoId) => `/videos/${videoId}`,
+            query: api.videos.id.get,
         }),
     }),
     overrideExisting: "throw",
 });
 
 export const {
-    useListVideosByChannelIdQuery,
+    useListVideosByChannelHandleQuery,
     useFindVideoByIdQuery,
     util: videosApiUtils,
 } = videosApi;

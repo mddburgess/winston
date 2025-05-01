@@ -10,7 +10,7 @@ import { FetchChannelModal } from "./FetchChannelModal";
 import { PaginationRow } from "../../components/PaginationRow";
 import { PaginationContext } from "../../components/PaginationContext";
 
-export const ChannelsRoute = () => {
+export const ChannelListRoute = () => {
     const { isSuccess, data } = useListChannelsQuery();
     const channels = isSuccess ? selectAllChannels(data) : [];
     const [showModal, setShowModal] = useState(false);

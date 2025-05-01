@@ -16,8 +16,9 @@ import { useAppSelector } from "../../../store/hooks";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
 import { PaginationContext } from "../../../components/PaginationContext";
 import { sumBy } from "../../../utils";
+import { routes } from "../../../utils/links";
 
-export const VideosIdRoute = () => {
+export const VideoDetailsRoute = () => {
     const { videoId } = useParams();
 
     const [search, setSearch] = useState("");
@@ -75,18 +76,20 @@ export const VideosIdRoute = () => {
     return (
         <>
             <Breadcrumb>
-                <BreadcrumbItem linkAs={Link} linkProps={{ to: "/" }}>
+                <BreadcrumbItem linkAs={Link} linkProps={{ to: routes.home }}>
                     Channels
                 </BreadcrumbItem>
                 {video && (
                     <>
                         <BreadcrumbItem
                             linkAs={Link}
-                            linkProps={{ to: `/channels/${video?.channel.id}` }}
+                            linkProps={{
+                                to: routes.channels.details(video.channel),
+                            }}
                         >
-                            {video?.channel.title}
+                            {video.channel.title}
                         </BreadcrumbItem>
-                        <BreadcrumbItem active>{video?.title}</BreadcrumbItem>
+                        <BreadcrumbItem active>{video.title}</BreadcrumbItem>
                     </>
                 )}
             </Breadcrumb>

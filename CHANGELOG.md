@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Show the channel handle in the channel details URI instead of the channel ID. (mddburgess/winston#50)
+- Show the author handle in the author details URI instead of the author ID. (mddburgess/winston#50)
+
 ### Fixed
 
 - Comment and reply counts on the video details page now update in real time when comments and replies are fetched.

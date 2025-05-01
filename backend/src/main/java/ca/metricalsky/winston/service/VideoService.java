@@ -33,9 +33,9 @@ public class VideoService {
     }
 
     @Transactional(readOnly = true)
-    public List<VideoDto> findAllByChannelId(String channelId) {
-        var commentCounts = commentService.getCommentCountsByChannelId(channelId);
-        return videoRepository.findAllByChannelIdOrderByPublishedAtDesc(channelId)
+    public List<VideoDto> findAllByChannelHandle(String channelHandle) {
+        var commentCounts = commentService.getCommentCountsByChannelId(channelHandle);
+        return videoRepository.findAllByChannelHandle(channelHandle)
                 .stream()
                 .map(videoDtoMapper::fromEntity)
                 .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))

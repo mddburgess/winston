@@ -28,9 +28,9 @@ public class ChannelController {
         return channelService.findAll();
     }
 
-    @GetMapping("/{channelId}")
-    public ChannelDto findById(@PathVariable String channelId) {
-        return channelService.findById(channelId).orElseThrow(() ->
+    @GetMapping("/{channelHandle}")
+    public ChannelDto findByHandle(@PathVariable String channelHandle) {
+        return channelService.findByHandle(channelHandle).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "The requested channel was not found."));
     }
 }

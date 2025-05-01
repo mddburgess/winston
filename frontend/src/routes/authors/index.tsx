@@ -12,8 +12,9 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { AuthorStatistics } from "./AuthorStatistics";
 import { PaginationContext } from "../../components/PaginationContext";
+import { routes } from "../../utils/links";
 
-export const AuthorsRoute = () => {
+export const AuthorListRoute = () => {
     const { data } = useListAuthorsQuery();
     const [search, setSearch] = useState("");
     const filteredAuthors = useMemo(
@@ -75,7 +76,11 @@ export const AuthorsRoute = () => {
                                             </Ratio>
                                         </Col>
                                         <Col className={"py-2"}>
-                                            <Link to={`/authors/${author.id}`}>
+                                            <Link
+                                                to={routes.authors.details(
+                                                    author,
+                                                )}
+                                            >
                                                 {author.displayName}
                                             </Link>
                                         </Col>

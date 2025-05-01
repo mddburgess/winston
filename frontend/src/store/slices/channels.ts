@@ -1,6 +1,7 @@
 import { apiSlice } from "./api";
 import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
 import { ChannelDto } from "../../model/ChannelDto";
+import { api } from "../../utils/links";
 
 const channelsAdapter = createEntityAdapter<ChannelDto>({
     sortComparer: (first, second) => first.title.localeCompare(second.title),
@@ -9,7 +10,7 @@ const channelsAdapter = createEntityAdapter<ChannelDto>({
 const channelsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         listChannels: builder.query<EntityState<ChannelDto, string>, void>({
-            query: () => "/channels",
+            query: api.channels.get,
             transformResponse: (response: ChannelDto[]) => {
                 return channelsAdapter.addMany(
                     channelsAdapter.getInitialState(),
@@ -17,14 +18,15 @@ const channelsApi = apiSlice.injectEndpoints({
                 );
             },
         }),
-        findChannelById: builder.query<ChannelDto, string>({
-            query: (channelId) => `/channels/${channelId}`,
+        findChannelByHandle: builder.query<ChannelDto, string>({
+            query: api.channels.handle.get,
         }),
     }),
     overrideExisting: "throw",
 });
 
-export const { useListChannelsQuery, useFindChannelByIdQuery } = channelsApi;
+export const { useListChannelsQuery, useFindChannelByHandleQuery } =
+    channelsApi;
 
 export const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
 

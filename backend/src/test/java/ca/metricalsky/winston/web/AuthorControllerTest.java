@@ -67,7 +67,7 @@ class AuthorControllerTest {
 
     @Test
     void findAuthorDetails() throws Exception {
-        when(authorService.findById(AUTHOR_ID))
+        when(authorService.findByHandle(AUTHOR_ID))
                 .thenReturn(Optional.of(buildAuthorDto()));
         when(commentService.findAllWithContextByAuthorId(AUTHOR_ID))
                 .thenReturn(List.of(buildCommentDto()));
@@ -88,7 +88,7 @@ class AuthorControllerTest {
 
     @Test
     void findAuthorDetails_authorNotFound() throws Exception {
-        when(authorService.findById(AUTHOR_ID))
+        when(authorService.findByHandle(AUTHOR_ID))
                 .thenReturn(Optional.empty());
 
         mvc.perform(get("/api/authors/{authorId}", AUTHOR_ID))

@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 class AuthorServiceTest {
 
     private static final String AUTHOR_ID = "authorId";
+    private static final String AUTHOR_DISPLAY_NAME = "authorDisplayName";
 
     @InjectMocks
     private AuthorService authorService;
@@ -54,24 +55,25 @@ class AuthorServiceTest {
     }
 
     @Test
-    void findById() {
+    void findByHandle() {
         var author = new Author();
         author.setId(AUTHOR_ID);
-        when(authorRepository.findById(AUTHOR_ID))
+        author.setDisplayName(AUTHOR_DISPLAY_NAME);
+        when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.of(author));
 
-        var authorDto = authorService.findById(AUTHOR_ID);
+        var authorDto = authorService.findByHandle(AUTHOR_DISPLAY_NAME);
 
         assertThat(authorDto).isPresent()
                 .get().hasFieldOrPropertyWithValue("id", AUTHOR_ID);
     }
 
     @Test
-    void findById_notFound() {
-        when(authorRepository.findById(AUTHOR_ID))
+    void findByHandle_notFound() {
+        when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
 
-        var authorDto = authorService.findById(AUTHOR_ID);
+        var authorDto = authorService.findByHandle(AUTHOR_DISPLAY_NAME);
 
         assertThat(authorDto).isEmpty();
     }

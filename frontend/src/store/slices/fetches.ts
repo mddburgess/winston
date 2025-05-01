@@ -14,16 +14,16 @@ export type FetchState = {
 
 type FetchStates = {
     channel: {
-        [id: string]: FetchState;
+        [id: string]: FetchState | undefined;
     };
     videos: {
-        [id: string]: FetchState;
+        [id: string]: FetchState | undefined;
     };
     comments: {
-        [id: string]: FetchState;
+        [id: string]: FetchState | undefined;
     };
     replies: {
-        [id: string]: FetchState;
+        [id: string]: FetchState | undefined;
     };
 };
 
@@ -83,7 +83,7 @@ export const fetchesSlice = createSlice({
             state.videos[event.objectId] = {
                 id: event.objectId,
                 status: "FETCHING",
-                count: fetchState.count + event.items.length,
+                count: (fetchState?.count ?? 0) + event.items.length,
             };
         },
         requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
@@ -99,7 +99,7 @@ export const fetchesSlice = createSlice({
             state.comments[event.objectId] = {
                 id: event.objectId,
                 status: "FETCHING",
-                count: fetchState.count + event.items.length,
+                count: (fetchState?.count ?? 0) + event.items.length,
             };
         },
         requestedRepliesForId: (state, action: PayloadAction<string>) => {
@@ -115,7 +115,7 @@ export const fetchesSlice = createSlice({
             state.replies[event.objectId] = {
                 id: event.objectId,
                 status: "FETCHING",
-                count: fetchState.count + event.items.length,
+                count: (fetchState?.count ?? 0) + event.items.length,
             };
         },
         updateFetchStatus: (
@@ -127,7 +127,7 @@ export const fetchesSlice = createSlice({
             state[event.fetchType][event.objectId] = {
                 id: event.objectId,
                 status: event.status,
-                count: fetchState.count,
+                count: fetchState?.count ?? 0,
             };
         },
     },

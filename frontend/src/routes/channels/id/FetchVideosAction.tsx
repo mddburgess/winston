@@ -34,7 +34,7 @@ export const FetchVideosAction = ({
     const handleDataEvent = (event: FetchVideosEvent) => {
         dispatch(
             videosApiUtils.updateQueryData(
-                "listVideosByChannelId",
+                "listVideosByChannelHandle",
                 channelId,
                 (draft) => {
                     videosAdapter.setMany(draft, event.items);

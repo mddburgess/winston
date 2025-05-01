@@ -3,6 +3,7 @@ import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
 import { CommentDto } from "../../model/CommentDto";
 import { ascBy } from "../../utils";
 import { DateTime } from "luxon";
+import { api } from "../../utils/links";
 
 export type CommentState = Omit<CommentDto, "replies"> & {
     replies: EntityState<CommentDto, string>;
@@ -26,7 +27,7 @@ export const commentsApi = apiSlice.injectEndpoints({
             EntityState<CommentState, string>,
             string
         >({
-            query: (videoId) => `/videos/${videoId}/comments`,
+            query: api.videos.id.comments.get,
             transformResponse: (response: CommentDto[]) => {
                 const comments = response.map((comment) => ({
                     ...comment,

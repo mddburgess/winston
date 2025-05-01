@@ -7,9 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, String> {
+
+    Optional<Author> findByChannelUrl(String channelUrl);
+
+    Optional<Author> findByDisplayName(String displayName);
 
     @Query("""
             SELECT
