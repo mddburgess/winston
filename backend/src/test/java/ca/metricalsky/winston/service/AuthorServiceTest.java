@@ -63,8 +63,8 @@ class AuthorServiceTest {
 
         var authorDto = authorService.findByHandle(AUTHOR_DISPLAY_NAME);
 
-        assertThat(authorDto).isPresent()
-                .get().hasFieldOrPropertyWithValue("id", AUTHOR_ID);
+        assertThat(authorDto).get()
+                .hasFieldOrPropertyWithValue("id", AUTHOR_ID);
 
         verifyNoMoreInteractions(authorRepository);
     }
@@ -78,8 +78,8 @@ class AuthorServiceTest {
 
         var authorDto = authorService.findByHandle(AUTHOR_DISPLAY_NAME);
 
-        assertThat(authorDto).isPresent()
-                .get().hasFieldOrPropertyWithValue("id", AUTHOR_ID);
+        assertThat(authorDto).get()
+                .hasFieldOrPropertyWithValue("id", AUTHOR_ID);
 
         verifyNoMoreInteractions(authorRepository);
     }
@@ -95,8 +95,8 @@ class AuthorServiceTest {
 
         var authorDto = authorService.findByHandle(AUTHOR_DISPLAY_NAME);
 
-        assertThat(authorDto).isPresent()
-                .get().hasFieldOrPropertyWithValue("id", AUTHOR_ID);
+        assertThat(authorDto).get()
+                .hasFieldOrPropertyWithValue("id", AUTHOR_ID);
     }
 
     @Test
