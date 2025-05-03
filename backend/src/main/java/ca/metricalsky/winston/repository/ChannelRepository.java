@@ -19,7 +19,7 @@ public interface ChannelRepository extends JpaRepository<Channel, String> {
     @Override
     @NonNull
     @EntityGraph(attributePaths = {"topics", "keywords"})
-    Optional<Channel> findById(@NonNull String channelId);
+    Optional<Channel> findById(@NonNull String id);
 
     @EntityGraph(attributePaths = {"topics", "keywords"})
     Optional<Channel> findByCustomUrl(String customUrl);
