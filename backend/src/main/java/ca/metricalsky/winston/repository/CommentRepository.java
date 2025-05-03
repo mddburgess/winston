@@ -47,12 +47,13 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
                 COUNT(c.id) AS commentsAndReplies,
                 COUNT(c.parentId) AS replies,
                 COALESCE(SUM(c.totalReplyCount), 0) AS totalReplies
-            FROM Video v
+            FROM Channel ch
+                JOIN Video v ON ch.id = v.channelId
                 JOIN Comment c ON v.id = c.videoId
-            WHERE v.channelId = :channelId
+            WHERE ch.customUrl = :channelCustomUrl
             GROUP BY v.id
             """)
-    List<CommentCount> countCommentsForChannelIdGroupByVideoId(String channelId);
+    List<CommentCount> countCommentsByChannelCustomUrl(String channelCustomUrl);
 
     @Query("""
             SELECT

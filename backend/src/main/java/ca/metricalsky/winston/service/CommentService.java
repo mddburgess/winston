@@ -61,8 +61,8 @@ public class CommentService {
                 : List.of(comment);
     }
 
-    public Map<String, CommentCount> getCommentCountsByChannelId(String channelId) {
-        var counts = commentRepository.countCommentsForChannelIdGroupByVideoId(channelId)
+    public Map<String, CommentCount> getCommentCountsByChannelHandle(String channelHandle) {
+        var counts = commentRepository.countCommentsByChannelCustomUrl(channelHandle)
                 .stream()
                 .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
         return defaultedMap(counts, EMPTY_COUNT);

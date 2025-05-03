@@ -38,6 +38,11 @@ public class ChannelService {
                 .map(channelDtoMapper::fromEntity);
     }
 
+    public Optional<ChannelDto> findByHandle(String channelHandle) {
+        return channelRepository.findByCustomUrl(channelHandle)
+                .map(channelDtoMapper::fromEntity);
+    }
+
     public void requireChannelExists(String channelId) {
         if (!channelRepository.existsById(channelId)) {
             throw new AppException(HttpStatus.NOT_FOUND, "The requested channel was not found.");

@@ -12,6 +12,7 @@ import {
 import { useAppDispatch } from "../../store/hooks";
 import { appendFetchedChannels } from "../../store/slices/channels";
 import { updateFetchStatus } from "../../store/slices/fetches";
+import { routes } from "../../utils/links";
 type FetchChannelActionProps = {
     channelHandle: string;
 };
@@ -32,7 +33,7 @@ export const FetchChannelAction = ({
         dispatch(appendFetchedChannels(event.items));
         dispatch(invalidateFetchLimits());
         if (event.items.length > 0) {
-            void navigate(`/channels/${event.items[0].id}`);
+            void navigate(routes.channels.details(event.items[0]));
         }
     };
 

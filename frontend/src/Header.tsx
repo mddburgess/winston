@@ -2,6 +2,7 @@ import { EyeFill, List } from "react-bootstrap-icons";
 import { Dropdown, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router";
 import { RemainingQuota } from "./RemainingQuota";
+import { routes } from "./utils/links";
 
 export const Header = () => (
     <header
@@ -10,7 +11,7 @@ export const Header = () => (
         }
     >
         <a
-            href={"/"}
+            href={routes.home}
             className={
                 "d-flex align-items-center mb-0 me-auto link-body-emphasis text-decoration-none"
             }
@@ -20,10 +21,10 @@ export const Header = () => (
         </a>
         <Nav>
             <NavDropdown align={"end"} title={<List className={"mb-1"} />}>
-                <NavDropdown.Item as={Link} to={"/"}>
+                <NavDropdown.Item as={Link} to={routes.home}>
                     Channels
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to={"/authors"}>
+                <NavDropdown.Item as={Link} to={routes.authors.list}>
                     Authors
                 </NavDropdown.Item>
                 <NavDropdown.Divider />

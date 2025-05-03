@@ -1,13 +1,13 @@
 import { Link, useParams } from "react-router";
 import { Breadcrumb, BreadcrumbItem, Row } from "react-bootstrap";
-import { useFindAuthorDetailsByIdQuery } from "../../../store/slices/authors";
+import { useFindAuthorDetailsByHandleQuery } from "../../../store/slices/authors";
 import { VideoCommentsList } from "./VideoCommentsList";
+import { routes } from "../../../utils/links";
 
-export const AuthorsIdRoute = () => {
-    const { authorId } = useParams();
-    const { isSuccess, data: authorDetails } = useFindAuthorDetailsByIdQuery(
-        authorId!,
-    );
+export const AuthorDetailsRoute = () => {
+    const { authorHandle } = useParams();
+    const { isSuccess, data: authorDetails } =
+        useFindAuthorDetailsByHandleQuery(authorHandle!);
 
     return (
         isSuccess && (
@@ -15,7 +15,7 @@ export const AuthorsIdRoute = () => {
                 <Breadcrumb>
                     <BreadcrumbItem
                         linkAs={Link}
-                        linkProps={{ to: "/authors" }}
+                        linkProps={{ to: routes.authors.list }}
                     >
                         Authors
                     </BreadcrumbItem>

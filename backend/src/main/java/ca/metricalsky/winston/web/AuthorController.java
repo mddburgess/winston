@@ -29,12 +29,12 @@ public class AuthorController {
         return new AuthorListResponse(authors);
     }
 
-    @GetMapping("/api/authors/{authorId}")
-    public AuthorDetailsResponse findAuthorDetails(@PathVariable String authorId) {
+    @GetMapping("/api/authors/{authorHandle}")
+    public AuthorDetailsResponse findAuthorDetails(@PathVariable String authorHandle) {
 
-        var authorDto = authorService.findById(authorId)
+        var authorDto = authorService.findByHandle(authorHandle)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        var commentDtos = commentService.findAllWithContextByAuthorId(authorId);
+        var commentDtos = commentService.findAllWithContextByAuthorId(authorDto.getId());
 
         var videoIds = commentDtos.stream()
                 .map(CommentDto::getVideoId)

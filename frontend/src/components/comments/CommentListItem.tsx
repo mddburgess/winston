@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { CommentState, repliesAdapter } from "../../store/slices/comments";
 import { Date } from "../Date";
 import { HtmlText } from "../HtmlText";
+import { routes } from "../../utils/links";
 
 type CommentListItemProps = {
     comment: CommentState;
@@ -20,7 +21,7 @@ export const CommentListItem = ({
         <ListGroupItem key={comment.id}>
             <Row>
                 <Col xs={"auto"} className={"small"}>
-                    <Link to={`/authors/${comment.author.id}`}>
+                    <Link to={routes.authors.details(comment.author)}>
                         {comment.author.displayName}
                     </Link>
                 </Col>

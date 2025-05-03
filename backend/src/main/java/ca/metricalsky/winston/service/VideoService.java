@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.entity.view.VideoCount;
+import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -33,9 +33,9 @@ public class VideoService {
     }
 
     @Transactional(readOnly = true)
-    public List<VideoDto> findAllByChannelId(String channelId) {
-        var commentCounts = commentService.getCommentCountsByChannelId(channelId);
-        return videoRepository.findAllByChannelIdOrderByPublishedAtDesc(channelId)
+    public List<VideoDto> findAllByChannelHandle(String channelHandle) {
+        var commentCounts = commentService.getCommentCountsByChannelHandle(channelHandle);
+        return videoRepository.findAllByChannelHandle(channelHandle)
                 .stream()
                 .map(videoDtoMapper::fromEntity)
                 .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
@@ -47,7 +47,7 @@ public class VideoService {
     public VideoDto getById(String videoId) {
         var videoDto = videoRepository.findById(videoId)
                 .map(videoDtoMapper::fromEntity)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested video was not found."));
 
         var commentCount = commentService.getCommentCountByVideoId(videoId);
         videoDto.setCommentCount(commentCount.getComments());

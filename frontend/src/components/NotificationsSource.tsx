@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { SubscriptionEvent } from "../model/events/SubscriptionEvent";
 import { Spinner } from "react-bootstrap";
 import { FetchStatusEvent } from "../model/events/FetchEvent";
+import { api } from "../utils/links";
 
 type NotificationsSourceProps<T> = {
     onSubscribed: (subscriptionId: string) => void;
@@ -11,7 +12,9 @@ type NotificationsSourceProps<T> = {
 };
 
 export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
-    const eventSource = useEventSource({ source: `/api/notifications` });
+    const eventSource = useEventSource({
+        source: api.notifications.get(),
+    });
 
     useEffect(() => {
         eventSource.onerror = (event) => {

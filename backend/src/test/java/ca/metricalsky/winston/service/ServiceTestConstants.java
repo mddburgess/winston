@@ -4,8 +4,8 @@ import ca.metricalsky.winston.entity.view.CommentCount;
 
 import java.util.List;
 
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public final class ServiceTestConstants {
 
@@ -18,13 +18,13 @@ public final class ServiceTestConstants {
 
     }
 
-    private static CommentCount buildCommentCount() {
+    public static CommentCount buildCommentCount() {
         var commentCount = mock(CommentCount.class);
-        when(commentCount.getVideoId()).thenReturn(VIDEO_ID_WITH_COMMENTS);
-        when(commentCount.getComments()).thenCallRealMethod();
-        when(commentCount.getCommentsAndReplies()).thenReturn(3L);
-        when(commentCount.getReplies()).thenReturn(1L);
-        when(commentCount.getTotalReplies()).thenReturn(4L);
+        lenient().when(commentCount.getVideoId()).thenReturn(VIDEO_ID_WITH_COMMENTS);
+        lenient().when(commentCount.getComments()).thenCallRealMethod();
+        lenient().when(commentCount.getCommentsAndReplies()).thenReturn(3L);
+        lenient().when(commentCount.getReplies()).thenReturn(1L);
+        lenient().when(commentCount.getTotalReplies()).thenReturn(4L);
         return commentCount;
     }
 }
