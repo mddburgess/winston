@@ -64,7 +64,7 @@ class VideoServiceTest {
 
     @Test
     void findAllByChannelHandle() {
-        when(commentService.getCommentCountsByChannelId(CHANNEL_HANDLE))
+        when(commentService.getCommentCountsByChannelHandle(CHANNEL_HANDLE))
                 .thenReturn(COMMENT_COUNT_MAP);
         when(videoRepository.findAllByChannelHandle(CHANNEL_HANDLE))
                 .thenReturn(VIDEOS);

@@ -30,7 +30,7 @@ public class VideoController {
     @GetMapping("/api/videos/{videoId}")
     public VideoDto findById(@PathVariable String videoId) {
         var video = videoService.getById(videoId);
-        channelService.findByHandle(video.getChannelId()).ifPresent(channel -> {
+        channelService.findById(video.getChannelId()).ifPresent(channel -> {
             video.setChannel(channel);
             video.setChannelId(null);
         });
