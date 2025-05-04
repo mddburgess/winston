@@ -56,7 +56,7 @@ public abstract class AuthorDtoMapper {
     @Named("mapProfileImageUrl")
     protected String mapProfileImageUrl(Author author) {
         return author.getProfileImageUrl() != null
-                ? "/api/authors/" + author.getId() + "/thumbnail"
+                ? "/api/v1/authors/" + author.getId() + "/thumbnail"
                 : "";
     }
 }

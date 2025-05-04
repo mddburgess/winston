@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,19 +18,20 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/authors")
 public class AuthorController {
 
     private final AuthorService authorService;
     private final CommentService commentService;
     private final VideoService videoService;
 
-    @GetMapping("/api/authors")
+    @GetMapping
     public AuthorListResponse list() {
         var authors = authorService.findAll();
         return new AuthorListResponse(authors);
     }
 
-    @GetMapping("/api/authors/{authorHandle}")
+    @GetMapping("/{authorHandle}")
     public AuthorDetailsResponse findAuthorDetails(@PathVariable String authorHandle) {
 
         var authorDto = authorService.findByHandle(authorHandle)

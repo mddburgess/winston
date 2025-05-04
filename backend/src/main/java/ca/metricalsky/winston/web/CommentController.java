@@ -19,7 +19,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/api/videos/{videoId}/comments")
+    @GetMapping("/api/v1/videos/{videoId}/comments")
     public List<CommentDto> listByVideoId(@PathVariable String videoId) {
         return commentService.findAllByVideoId(videoId);
     }

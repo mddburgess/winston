@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -19,12 +20,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/fetch")
 public class FetchController {
 
     private final NotificationsService notificationsService;
     private final FetchService fetchService;
 
-    @PostMapping("/api/fetch")
+    @PostMapping
     public ResponseEntity<SseEmitter> fetch(
             @RequestHeader(value = "X-Notify-Subscription", required = false) UUID subscriptionId,
             @RequestBody FetchRequestDto request
@@ -42,7 +44,7 @@ public class FetchController {
                 : ResponseEntity.accepted().build();
     }
 
-    @GetMapping("/api/fetch/limits")
+    @GetMapping("/limits")
     public FetchLimitsResponse getFetchLimits() {
         var remainingQuota = fetchService.getRemainingQuota();
         return new FetchLimitsResponse(remainingQuota);

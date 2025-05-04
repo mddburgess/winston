@@ -23,7 +23,7 @@ public class VideoDtoMapperTest {
                 .hasFieldOrPropertyWithValue("channel", null)
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
-                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/videos/" + video.getId() + "/thumbnail")
+                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/v1/videos/" + video.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("commentCount", 0L)
                 .hasFieldOrPropertyWithValue("replyCount", 0L)
                 .hasFieldOrPropertyWithValue("totalReplyCount", 0L)

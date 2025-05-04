@@ -1,14 +1,14 @@
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-    http.get("/api/channels", () => {
+    http.get("/api/v1/channels", () => {
         return HttpResponse.json([
             {
                 id: "channel.1",
                 title: "channel.1.title",
                 description: "channel.1.description",
                 customUrl: "@channel1url",
-                thumbnailUrl: "/api/channels/1/thumbnail",
+                thumbnailUrl: "/api/v1/channels/1/thumbnail",
                 topics: ["https://en.wikipedia.org/wiki/Topic"],
                 keywords: ["keyword"],
                 videoCount: 1,

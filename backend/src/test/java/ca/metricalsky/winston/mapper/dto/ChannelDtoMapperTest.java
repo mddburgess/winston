@@ -23,7 +23,7 @@ public class ChannelDtoMapperTest {
                 .hasFieldOrPropertyWithValue("title", channel.getTitle())
                 .hasFieldOrPropertyWithValue("description", channel.getDescription())
                 .hasFieldOrPropertyWithValue("customUrl", channel.getCustomUrl())
-                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/channels/" + channel.getId() + "/thumbnail")
+                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/v1/channels/" + channel.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("videoCount", 0L)
                 .hasFieldOrPropertyWithValue("publishedAt", channel.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", channel.getLastFetchedAt());

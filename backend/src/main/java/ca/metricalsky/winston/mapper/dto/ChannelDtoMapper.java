@@ -29,7 +29,7 @@ public abstract class ChannelDtoMapper {
     @NonNull
     String getThumbnailUrl(Channel channel) {
         return channel.getThumbnailUrl() != null
-                ? "/api/channels/" + channel.getId() + "/thumbnail"
+                ? "/api/v1/channels/" + channel.getId() + "/thumbnail"
                 : "";
     }
 }
