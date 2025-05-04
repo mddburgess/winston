@@ -48,7 +48,7 @@ class AuthorControllerTest {
         when(authorService.findAll())
                 .thenReturn(List.of(buildAuthorDto()));
 
-        mvc.perform(get("/api/authors"))
+        mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.results").value(1))
                 .andExpect(jsonPath("$.authors", hasSize(1)))
@@ -60,7 +60,7 @@ class AuthorControllerTest {
         when(authorService.findAll())
                 .thenReturn(List.of());
 
-        mvc.perform(get("/api/authors"))
+        mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.results").value(0))
                 .andExpect(jsonPath("$.authors", hasSize(0)));
@@ -75,7 +75,7 @@ class AuthorControllerTest {
         when(videoService.getAllById(Set.of(VIDEO_ID)))
                 .thenReturn(List.of(buildVideoDto()));
 
-        mvc.perform(get("/api/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
+        mvc.perform(get("/api/v1/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author.id").value(AUTHOR_ID))
                 .andExpect(jsonPath("$.author.displayName").value(AUTHOR_DISPLAY_NAME))
@@ -93,7 +93,7 @@ class AuthorControllerTest {
         when(authorService.findByHandle(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
 
-        mvc.perform(get("/api/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
+        mvc.perform(get("/api/v1/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
                 .andExpect(status().isNotFound());
     }
 

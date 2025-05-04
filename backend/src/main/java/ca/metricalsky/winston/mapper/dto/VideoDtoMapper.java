@@ -30,7 +30,7 @@ public abstract class VideoDtoMapper {
 
     String getThumbnailUrl(Video video) {
         return video.getThumbnailUrl() != null
-                ? "/api/videos/" + video.getId() + "/thumbnail"
+                ? "/api/v1/videos/" + video.getId() + "/thumbnail"
                 : "";
     }
 }

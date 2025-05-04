@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/channels")
+@RequestMapping("/api/v1/channels")
 public class ChannelController {
 
     private final ChannelService channelService;

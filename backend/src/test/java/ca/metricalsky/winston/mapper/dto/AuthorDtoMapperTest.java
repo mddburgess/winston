@@ -21,7 +21,7 @@ public class AuthorDtoMapperTest {
                 .hasFieldOrPropertyWithValue("id", author.getId())
                 .hasFieldOrPropertyWithValue("displayName", author.getDisplayName())
                 .hasFieldOrPropertyWithValue("channelUrl", author.getChannelUrl())
-                .hasFieldOrPropertyWithValue("profileImageUrl", "/api/authors/" + author.getId() + "/thumbnail");
+                .hasFieldOrPropertyWithValue("profileImageUrl", "/api/v1/authors/" + author.getId() + "/thumbnail");
         assertThat(authorDto.getStatistics())
                 .isNull();
     }

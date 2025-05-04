@@ -15,17 +15,17 @@ public class ThumbnailController {
         this.thumbnailService = thumbnailService;
     }
 
-    @GetMapping(path = "/api/channels/{channelId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(path = "/api/v1/channels/{channelId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getChannelThumbnail(@PathVariable String channelId) {
         return thumbnailService.getChannelThumbnail(channelId);
     }
 
-    @GetMapping(path = "/api/videos/{videoId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(path = "/api/v1/videos/{videoId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getVideoThumbnail(@PathVariable String videoId) {
         return thumbnailService.getVideoThumbnail(videoId);
     }
 
-    @GetMapping(path = "/api/authors/{authorId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(path = "/api/v1/authors/{authorId}/thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getAuthorThumbnail(@PathVariable String authorId) {
         return thumbnailService.getAuthorThumbnail(authorId);
     }

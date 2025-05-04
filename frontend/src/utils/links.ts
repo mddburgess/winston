@@ -4,34 +4,34 @@ import { VideoWithChannelIdDto } from "../model/VideoDto";
 
 export const api = {
     authors: {
-        get: () => `/authors`,
+        get: () => `/v1/authors`,
         handle: {
-            get: (handle: string) => `/authors/${handle}`,
+            get: (handle: string) => `/v1/authors/${handle}`,
         },
     },
     fetch: {
-        post: () => `/fetch`,
+        post: () => `/v1/fetch`,
         limits: {
-            get: () => `/fetch/limits`,
+            get: () => `/v1/fetch/limits`,
         },
     },
     channels: {
-        get: () => `/channels`,
+        get: () => `/v1/channels`,
         handle: {
-            get: (handle: string) => `/channels/${handle}`,
+            get: (handle: string) => `/v1/channels/${handle}`,
             videos: {
-                get: (handle: string) => `/channels/${handle}/videos`,
+                get: (handle: string) => `/v1/channels/${handle}/videos`,
             },
         },
     },
     notifications: {
-        get: () => `/api/notifications`,
+        get: () => `/api/v1/notifications`,
     },
     videos: {
         id: {
-            get: (videoId: string) => `/videos/${videoId}`,
+            get: (videoId: string) => `/v1/videos/${videoId}`,
             comments: {
-                get: (videoId: string) => `/videos/${videoId}/comments`,
+                get: (videoId: string) => `/v1/videos/${videoId}/comments`,
             },
         },
     },

@@ -38,7 +38,7 @@ class ChannelControllerTest {
         when(channelService.findAll())
                 .thenReturn(List.of(buildChannelDto()));
 
-        mvc.perform(get("/api/channels")).andExpectAll(
+        mvc.perform(get("/api/v1/channels")).andExpectAll(
                 status().isOk(),
                 jsonPath("$", hasSize(1)),
                 jsonPath("$[0].id").value("channel.id"),
@@ -53,7 +53,7 @@ class ChannelControllerTest {
         when(channelService.findAll())
                 .thenReturn(List.of());
 
-        mvc.perform(get("/api/channels")).andExpectAll(
+        mvc.perform(get("/api/v1/channels")).andExpectAll(
                 status().isOk(),
                 jsonPath("$", hasSize(0))
         );
@@ -64,7 +64,7 @@ class ChannelControllerTest {
         when(channelService.findByHandle(CHANNEL_HANDLE))
                 .thenReturn(Optional.of(buildChannelDto()));
 
-        mvc.perform(get("/api/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
+        mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isOk(),
                 jsonPath("$.id").value("channel.id"),
                 jsonPath("$.title").value("channel.title"),
@@ -78,7 +78,7 @@ class ChannelControllerTest {
         when(channelService.findByHandle(CHANNEL_HANDLE))
                 .thenReturn(Optional.empty());
 
-        mvc.perform(get("/api/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
+        mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isNotFound(),
                 jsonPath("$.title").value("Not Found"),
                 jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()),

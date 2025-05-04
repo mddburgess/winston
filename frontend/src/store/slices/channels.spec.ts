@@ -25,7 +25,7 @@ describe("channelsApi", () => {
                     title: "channel.1.title",
                     description: "channel.1.description",
                     customUrl: "@channel1url",
-                    thumbnailUrl: "/api/channels/1/thumbnail",
+                    thumbnailUrl: "/api/v1/channels/1/thumbnail",
                     topics: ["https://en.wikipedia.org/wiki/Topic"],
                     keywords: ["keyword"],
                     videoCount: 1,
@@ -37,7 +37,7 @@ describe("channelsApi", () => {
 
         it("handles a 200 response with an empty list", async () => {
             backend.use(
-                http.get("/api/channels", () => {
+                http.get("/api/v1/channels", () => {
                     return HttpResponse.json([]);
                 }),
             );
@@ -68,7 +68,7 @@ describe("channelsApi", () => {
                         title: "channel.2.title",
                         description: "channel.2.description",
                         customUrl: "@channel2url",
-                        thumbnailUrl: "/api/channels/2/thumbnail",
+                        thumbnailUrl: "/api/v1/channels/2/thumbnail",
                         topics: ["https://en.wikipedia.org/wiki/Topic"],
                         keywords: ["keyword"],
                         videoCount: 1,
