@@ -5,6 +5,7 @@ import ca.metricalsky.winston.dto.author.AuthorDto;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.service.AuthorService;
+import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.VideoService;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ class AuthorControllerTest {
 
     @MockitoBean
     private AuthorService authorService;
+    @MockitoBean
+    private ChannelService channelService;
     @MockitoBean
     private CommentService commentService;
     @MockitoBean

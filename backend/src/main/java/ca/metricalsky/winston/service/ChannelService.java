@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.ChannelDto;
+import ca.metricalsky.winston.entity.Channel;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.repository.ChannelRepository;
@@ -22,11 +23,19 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
     private final VideoService videoService;
 
-    @Transactional(readOnly = true)
     public List<ChannelDto> findAll() {
+        var channels = channelRepository.findAll();
+        return populateVideoCounts(channels);
+    }
+
+    public List<ChannelDto> findAllById(Iterable<String> channelIds) {
+        var channels = channelRepository.findAllById(channelIds);
+        return populateVideoCounts(channels);
+    }
+
+    private List<ChannelDto> populateVideoCounts(List<Channel> channels) {
         var videoCounts = videoService.countAllByChannelId();
-        return channelRepository.findAll()
-                .stream()
+        return channels.stream()
                 .map(channelDtoMapper::fromEntity)
                 .peek(channelDto -> channelDto.setVideoCount(videoCounts.get(channelDto.getId())))
                 .sorted(Comparator.comparing(ChannelDto::getTitle))
