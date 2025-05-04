@@ -1,16 +1,12 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
-import { VideoWithChannelIdDto } from "../../../model/VideoDto";
+import type { VideoProps } from "../../../types";
 import { Link } from "react-router";
 import { ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Date } from "../../../components/Date";
 import { CommentCounts } from "../../../components/comments/CommentCounts";
 import { routes } from "../../../utils/links";
 
-type VideoCardProps = {
-    video: VideoWithChannelIdDto;
-};
-
-export const VideoCard = ({ video }: VideoCardProps) => (
+export const VideoCard = ({ video }: VideoProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>

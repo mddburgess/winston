@@ -1,12 +1,13 @@
 import { apiSlice } from "./api";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import { CommentDto } from "../../model/CommentDto";
+import type { EntityState } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import type { Comment, CommentListResponse } from "../../types";
 import { ascBy } from "../../utils";
 import { DateTime } from "luxon";
 import { api } from "../../utils/links";
 
-export type CommentState = Omit<CommentDto, "replies"> & {
-    replies: EntityState<CommentDto, string>;
+export type CommentState = Omit<Comment, "replies"> & {
+    replies: EntityState<Comment, string>;
 };
 
 export const commentsAdapter = createEntityAdapter<CommentState>({
@@ -15,7 +16,7 @@ export const commentsAdapter = createEntityAdapter<CommentState>({
     ),
 });
 
-export const repliesAdapter = createEntityAdapter<CommentDto>({
+export const repliesAdapter = createEntityAdapter<Comment>({
     sortComparer: ascBy((comment) =>
         DateTime.fromISO(comment.publishedAt).valueOf(),
     ),
@@ -28,7 +29,7 @@ export const commentsApi = apiSlice.injectEndpoints({
             string
         >({
             query: api.videos.id.comments.get,
-            transformResponse: (response: CommentDto[]) => {
+            transformResponse: (response: CommentListResponse) => {
                 const comments = response.map((comment) => ({
                     ...comment,
                     replies: repliesAdapter.addMany(

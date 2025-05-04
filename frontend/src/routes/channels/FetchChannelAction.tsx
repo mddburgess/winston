@@ -5,14 +5,12 @@ import {
 import { NotificationsSource } from "../../components/NotificationsSource";
 import { useNavigate } from "react-router";
 import { EventSourceProvider } from "react-sse-hooks";
-import {
-    FetchChannelEvent,
-    FetchStatusEvent,
-} from "../../model/events/FetchEvent";
+import type { FetchChannelEvent, FetchStatusEvent } from "../../types";
 import { useAppDispatch } from "../../store/hooks";
 import { appendFetchedChannels } from "../../store/slices/channels";
 import { updateFetchStatus } from "../../store/slices/fetches";
 import { routes } from "../../utils/links";
+
 type FetchChannelActionProps = {
     channelHandle: string;
 };

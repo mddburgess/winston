@@ -1,9 +1,9 @@
 import { render } from "@testing-library/react";
 import { AuthorStatistics } from "./AuthorStatistics";
-import { AuthorWithStatisticsDto } from "../../model/authors/AuthorDto";
+import type { AuthorWithStatistics } from "../../types";
 
 describe("AuthorStatistics", () => {
-    const author: AuthorWithStatisticsDto = {
+    const author: AuthorWithStatistics = {
         id: "authorId",
         displayName: "@displayName",
         channelUrl: "https://www.example.com/@channelUrl",

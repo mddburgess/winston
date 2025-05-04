@@ -1,29 +1,24 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ChannelDto } from "../../model/ChannelDto";
-import {
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type {
+    Channel,
     FetchCommentsEvent,
     FetchVideosEvent,
-} from "../../model/events/FetchEvent";
-
-export type FetchState = {
-    id: string;
-    mode?: "ALL" | "LATEST";
-    status: "READY" | "REQUESTED" | "FETCHING" | "COMPLETED" | "FAILED";
-    count: number;
-};
+    Maybe,
+} from "../../types";
 
 type FetchStates = {
     channel: {
-        [id: string]: FetchState | undefined;
+        [id: string]: Maybe<FetchState>;
     };
     videos: {
-        [id: string]: FetchState | undefined;
+        [id: string]: Maybe<FetchState>;
     };
     comments: {
-        [id: string]: FetchState | undefined;
+        [id: string]: Maybe<FetchState>;
     };
     replies: {
-        [id: string]: FetchState | undefined;
+        [id: string]: Maybe<FetchState>;
     };
 };
 
@@ -45,6 +40,13 @@ type UpdateFetchStatus = {
     status: "COMPLETED" | "FAILED";
 };
 
+export type FetchState = {
+    id: string;
+    mode?: "ALL" | "LATEST";
+    status: "READY" | "REQUESTED" | "FETCHING" | "COMPLETED" | "FAILED";
+    count: number;
+};
+
 export const fetchesSlice = createSlice({
     name: "fetches",
     initialState,
@@ -56,10 +58,7 @@ export const fetchesSlice = createSlice({
                 count: 0,
             };
         },
-        initFetchStateForChannel: (
-            state,
-            action: PayloadAction<ChannelDto>,
-        ) => {
+        initFetchStateForChannel: (state, action: PayloadAction<Channel>) => {
             state.videos[action.payload.id] = {
                 id: action.payload.id,
                 status: "READY",

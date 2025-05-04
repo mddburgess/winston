@@ -1,48 +1,24 @@
-import { VideoWithChannelIdDto } from "../../../model/VideoDto";
-import { CommentDto } from "../../../model/CommentDto";
+import type {
+    Author,
+    AuthorDetailsResponse,
+    Comment,
+    Video,
+} from "../../../types";
 import { Col, Row } from "react-bootstrap";
 import { VideoCard } from "../../channels/id/VideoCard";
 import { CommentList } from "../../../components/comments/CommentList";
 import { v4 as uuidv4 } from "uuid";
 import { DateTime } from "luxon";
 import { descBy } from "../../../utils";
-import { AuthorDto } from "../../../model/authors/AuthorDto";
-import { AuthorDetailsResponse } from "../../../model/authors/AuthorDetailsResponse";
-import { CommentState, repliesAdapter } from "../../../store/slices/comments";
+import type { CommentState } from "../../../store/slices/comments";
+import { repliesAdapter } from "../../../store/slices/comments";
 
 type VideoCommentsListProps = AuthorDetailsResponse;
 
-export const VideoCommentsList = ({
-    author,
-    videos,
-    comments,
-}: VideoCommentsListProps) => {
-    const videoCommentsList = [...videos]
-        .sort(descBy((video) => DateTime.fromISO(video.publishedAt).valueOf()))
-        .map((video) => ({
-            video: video,
-            comments: comments.filter(
-                (comment) => comment.videoId === video.id,
-            ),
-        }));
-
-    return (
-        <>
-            {videoCommentsList.map((videoComments) => (
-                <VideoCommentsListItem
-                    key={uuidv4()}
-                    author={author}
-                    {...videoComments}
-                />
-            ))}
-        </>
-    );
-};
-
 type VideoCommentsListItemProps = {
-    author: AuthorDto;
-    video: VideoWithChannelIdDto;
-    comments: CommentDto[];
+    author: Author;
+    video: Video;
+    comments: Comment[];
 };
 
 const VideoCommentsListItem = ({
@@ -72,5 +48,32 @@ const VideoCommentsListItem = ({
                 />
             </Col>
         </Row>
+    );
+};
+
+export const VideoCommentsList = ({
+    author,
+    videos,
+    comments,
+}: VideoCommentsListProps) => {
+    const videoCommentsList = [...videos]
+        .sort(descBy((video) => DateTime.fromISO(video.publishedAt).valueOf()))
+        .map((video) => ({
+            video: video,
+            comments: comments.filter(
+                (comment) => comment.videoId === video.id,
+            ),
+        }));
+
+    return (
+        <>
+            {videoCommentsList.map((videoComments) => (
+                <VideoCommentsListItem
+                    key={uuidv4()}
+                    author={author}
+                    {...videoComments}
+                />
+            ))}
+        </>
     );
 };

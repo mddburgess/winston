@@ -1,4 +1,4 @@
-import { VideoWithChannelDto } from "../../../model/VideoDto";
+import type { VideoWithChannelProps } from "../../../types";
 import { Col, Image, Ratio, Row } from "react-bootstrap";
 import { Date } from "../../../components/Date";
 import { ArrowUpLeftCircleFill, PersonVideo3 } from "react-bootstrap-icons";
@@ -6,8 +6,7 @@ import { CopyToClipboard } from "../../../components/CopyToClipboard";
 import { CommentCounts } from "../../../components/comments/CommentCounts";
 import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
 
-type VideoDetailsProps = {
-    video: VideoWithChannelDto;
+type VideoDetailsProps = VideoWithChannelProps & {
     commentCount: number;
     replyCount: number;
     totalReplyCount: number;

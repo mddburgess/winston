@@ -14,10 +14,7 @@ import {
     fetchedComments,
     updateFetchStatus,
 } from "../../../store/slices/fetches";
-import {
-    FetchCommentsEvent,
-    FetchStatusEvent,
-} from "../../../model/events/FetchEvent";
+import type { FetchCommentsEvent, FetchStatusEvent } from "../../../types";
 import { videosApiUtils } from "../../../store/slices/videos";
 
 type FetchVideosActionProps = {

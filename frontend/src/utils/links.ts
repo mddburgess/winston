@@ -1,6 +1,4 @@
-import { AuthorDto } from "../model/authors/AuthorDto";
-import { ChannelDto } from "../model/ChannelDto";
-import { VideoWithChannelIdDto } from "../model/VideoDto";
+import type { Author, Channel, Video } from "../types";
 
 export const api = {
     authors: {
@@ -41,16 +39,15 @@ export const routes = {
     home: `/`,
     authors: {
         list: `/authors`,
-        details: (author?: AuthorDto) =>
+        details: (author?: Author) =>
             `/authors/${author?.displayName ?? `:authorHandle`}`,
     },
     channels: {
         list: `/`,
-        details: (channel?: ChannelDto) =>
+        details: (channel?: Channel) =>
             `/channels/${channel?.customUrl ?? `:channelHandle`}`,
     },
     videos: {
-        details: (video?: VideoWithChannelIdDto) =>
-            `/videos/${video?.id ?? `:videoId`}`,
+        details: (video?: Video) => `/videos/${video?.id ?? `:videoId`}`,
     },
 };

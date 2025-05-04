@@ -1,4 +1,4 @@
-export type ChannelDto = {
+export type Channel = {
     id: string;
     title: string;
     description: string;
@@ -10,3 +10,15 @@ export type ChannelDto = {
     publishedAt: string;
     lastFetchedAt: string;
 };
+
+export type ChannelProps = {
+    channel: Channel;
+};
+
+export type ChannelListProps = {
+    channels: Channel[];
+};
+
+export type ChannelListResponse = Channel[];
+
+export type ChannelDetailResponse = Channel;

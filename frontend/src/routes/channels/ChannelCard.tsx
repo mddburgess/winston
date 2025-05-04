@@ -1,4 +1,4 @@
-import { ChannelDto } from "../../model/ChannelDto";
+import type { ChannelProps } from "../../types";
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router";
 import {
@@ -9,11 +9,7 @@ import {
 import { Date } from "../../components/Date";
 import { routes } from "../../utils/links";
 
-type ChannelCardProps = {
-    channel: ChannelDto;
-};
-
-export const ChannelCard = ({ channel }: ChannelCardProps) => (
+export const ChannelCard = ({ channel }: ChannelProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Card.Body className={"p-2"}>

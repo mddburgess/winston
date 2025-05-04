@@ -1,9 +1,8 @@
 import { useEventSource, useEventSourceListener } from "react-sse-hooks";
 import { useEffect } from "react";
-import { SubscriptionEvent } from "../model/events/SubscriptionEvent";
 import { Spinner } from "react-bootstrap";
-import { FetchStatusEvent } from "../model/events/FetchEvent";
 import { api } from "../utils/links";
+import type { FetchStatusEvent, SubscriptionEvent } from "../types";
 
 type NotificationsSourceProps<T> = {
     onSubscribed: (subscriptionId: string) => void;

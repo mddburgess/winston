@@ -1,34 +1,30 @@
 import { apiSlice } from "./api";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import {
-    VideoWithChannelDto,
-    VideoWithChannelIdDto,
-} from "../../model/VideoDto";
+import type { EntityState } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import type {
+    Video,
+    VideoDetailsResponse,
+    VideoListResponse,
+} from "../../types";
 import { descBy } from "../../utils";
 import { DateTime } from "luxon";
 import { api } from "../../utils/links";
 
-export const videosAdapter = createEntityAdapter<VideoWithChannelIdDto>({
-    sortComparer: descBy((video) =>
-        DateTime.fromISO(video.publishedAt).valueOf(),
-    ),
-});
-
 const videosApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         listVideosByChannelHandle: builder.query<
-            EntityState<VideoWithChannelIdDto, string>,
+            EntityState<Video, string>,
             string
         >({
             query: api.channels.handle.videos.get,
-            transformResponse: (response: VideoWithChannelIdDto[]) => {
+            transformResponse: (response: VideoListResponse) => {
                 return videosAdapter.addMany(
                     videosAdapter.getInitialState(),
                     response,
                 );
             },
         }),
-        findVideoById: builder.query<VideoWithChannelDto, string>({
+        findVideoById: builder.query<VideoDetailsResponse, string>({
             query: api.videos.id.get,
         }),
     }),
@@ -40,3 +36,9 @@ export const {
     useFindVideoByIdQuery,
     util: videosApiUtils,
 } = videosApi;
+
+export const videosAdapter = createEntityAdapter<Video>({
+    sortComparer: descBy((video) =>
+        DateTime.fromISO(video.publishedAt).valueOf(),
+    ),
+});

@@ -3,10 +3,7 @@ import {
     invalidateFetchLimits,
     useFetchRepliesByVideoIdMutation,
 } from "../../../store/slices/api";
-import {
-    FetchCommentsEvent,
-    FetchStatusEvent,
-} from "../../../model/events/FetchEvent";
+import type { FetchCommentsEvent, FetchStatusEvent } from "../../../types";
 import { EventSourceProvider } from "react-sse-hooks";
 import { NotificationsSource } from "../../../components/NotificationsSource";
 import { updateFetchStatus } from "../../../store/slices/fetches";

@@ -5,45 +5,18 @@ import {
     ArrowRepeat,
     CheckCircleFill,
 } from "react-bootstrap-icons";
-import { ChannelDto } from "../../../model/ChannelDto";
+import type { ChannelProps } from "../../../types";
 import { FetchVideosAction } from "./FetchVideosAction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-    FetchState,
-    requestedVideosForChannelId,
-} from "../../../store/slices/fetches";
+import type { FetchState } from "../../../store/slices/fetches";
+import { requestedVideosForChannelId } from "../../../store/slices/fetches";
 import { pluralize } from "../../../utils";
 
-type FetchVideosAlertProps = {
-    channel: ChannelDto;
-};
-
-type AlertBodyProps = FetchVideosAlertProps & {
+type AlertBodyProps = ChannelProps & {
     fetchState: FetchState;
 };
 
-export const FetchVideosAlert = ({ channel }: FetchVideosAlertProps) => {
-    const fetchState = useAppSelector(
-        (state) => state.fetches.videos[channel.id],
-    );
-    switch (fetchState?.status) {
-        case "COMPLETED":
-            return (
-                <FetchCompletedBody channel={channel} fetchState={fetchState} />
-            );
-        case "FETCHING":
-        case "REQUESTED":
-            return (
-                <FetchRequestedBody channel={channel} fetchState={fetchState} />
-            );
-        case "READY":
-            return <FetchAvailableBody channel={channel} />;
-        default:
-            return <></>;
-    }
-};
-
-const FetchAvailableBody = ({ channel }: FetchVideosAlertProps) => {
+const FetchAvailableBody = ({ channel }: ChannelProps) => {
     const dispatch = useAppDispatch();
     return (
         <Alert className={"d-flex align-items-center alert-primary"}>
@@ -136,3 +109,24 @@ const FetchCompletedBody = ({ fetchState }: AlertBodyProps) => (
         </Col>
     </Alert>
 );
+
+export const FetchVideosAlert = ({ channel }: ChannelProps) => {
+    const fetchState = useAppSelector(
+        (state) => state.fetches.videos[channel.id],
+    );
+    switch (fetchState?.status) {
+        case "COMPLETED":
+            return (
+                <FetchCompletedBody channel={channel} fetchState={fetchState} />
+            );
+        case "FETCHING":
+        case "REQUESTED":
+            return (
+                <FetchRequestedBody channel={channel} fetchState={fetchState} />
+            );
+        case "READY":
+            return <FetchAvailableBody channel={channel} />;
+        default:
+            return <></>;
+    }
+};

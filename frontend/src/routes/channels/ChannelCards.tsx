@@ -1,12 +1,8 @@
 import { Row } from "react-bootstrap";
-import { ChannelDto } from "../../model/ChannelDto";
+import type { ChannelListProps } from "../../types";
 import { ChannelCard } from "./ChannelCard";
 
-type ChannelCardsProps = {
-    channels?: ChannelDto[];
-};
-
-export const ChannelCards = ({ channels = [] }: ChannelCardsProps) => (
+export const ChannelCards = ({ channels }: ChannelListProps) => (
     <Row xs={1} md={2} lg={3} xxl={4} className={"px-2"}>
         {channels.map((channel) => (
             <ChannelCard key={channel.id} channel={channel} />
