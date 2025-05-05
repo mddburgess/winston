@@ -29,12 +29,12 @@ export const apiSlice = createApi({
     tagTypes: ["fetchLimits"],
     endpoints: (builder) => ({
         getFetchLimits: builder.query<FetchLimits, void>({
-            query: api.fetch.limits.get,
+            query: api.v1.fetch.limits.get,
             providesTags: ["fetchLimits"],
         }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
-                url: api.fetch.post(),
+                url: api.v1.fetch.post(),
                 method: `POST`,
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -47,7 +47,7 @@ export const apiSlice = createApi({
         fetchVideosByChannelId: builder.mutation<undefined, FetchVideosRequest>(
             {
                 query: (request) => ({
-                    url: api.fetch.post(),
+                    url: api.v1.fetch.post(),
                     method: "POST",
                     headers: [
                         ["X-Notify-Subscription", request.subscriptionId],
@@ -66,7 +66,7 @@ export const apiSlice = createApi({
             FetchCommentsRequest
         >({
             query: (request) => ({
-                url: api.fetch.post(),
+                url: api.v1.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -81,7 +81,7 @@ export const apiSlice = createApi({
             FetchRepliesRequest
         >({
             query: (request) => ({
-                url: api.fetch.post(),
+                url: api.v1.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
@@ -96,7 +96,7 @@ export const apiSlice = createApi({
             FetchCommentsRequest
         >({
             query: (request) => ({
-                url: api.fetch.post(),
+                url: api.v1.fetch.post(),
                 method: "POST",
                 headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {

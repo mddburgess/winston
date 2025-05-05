@@ -15,7 +15,7 @@ const channelsAdapter = createEntityAdapter<Channel>({
 const channelsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         listChannels: builder.query<EntityState<Channel, string>, void>({
-            query: api.channels.get,
+            query: api.v1.channels.get,
             transformResponse: (response: ChannelListResponse) => {
                 return channelsAdapter.addMany(
                     channelsAdapter.getInitialState(),
@@ -24,7 +24,7 @@ const channelsApi = apiSlice.injectEndpoints({
             },
         }),
         findChannelByHandle: builder.query<ChannelDetailResponse, string>({
-            query: api.channels.handle.get,
+            query: api.v1.channels.handle.get,
         }),
     }),
     overrideExisting: "throw",

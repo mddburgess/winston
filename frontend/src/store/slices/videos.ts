@@ -16,7 +16,7 @@ const videosApi = apiSlice.injectEndpoints({
             EntityState<Video, string>,
             string
         >({
-            query: api.channels.handle.videos.get,
+            query: api.v1.channels.handle.videos.get,
             transformResponse: (response: VideoListResponse) => {
                 return videosAdapter.addMany(
                     videosAdapter.getInitialState(),
@@ -25,7 +25,7 @@ const videosApi = apiSlice.injectEndpoints({
             },
         }),
         findVideoById: builder.query<VideoDetailsResponse, string>({
-            query: api.videos.id.get,
+            query: api.v1.videos.id.get,
         }),
     }),
     overrideExisting: "throw",

@@ -28,7 +28,7 @@ export const commentsApi = apiSlice.injectEndpoints({
             EntityState<CommentState, string>,
             string
         >({
-            query: api.videos.id.comments.get,
+            query: api.v1.videos.id.comments.get,
             transformResponse: (response: CommentListResponse) => {
                 const comments = response.map((comment) => ({
                     ...comment,

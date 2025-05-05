@@ -12,7 +12,7 @@ type NotificationsSourceProps<T> = {
 
 export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
     const eventSource = useEventSource({
-        source: api.notifications.get(),
+        source: api.v1.notifications.get(),
     });
 
     useEffect(() => {
