@@ -55,6 +55,7 @@ public class VideoService {
         return videoDto;
     }
 
+    @Deprecated(since = "1.3.0", forRemoval = true)
     public List<VideoDto> getAllById(Iterable<String> videoIds) {
         var videos = videoRepository.findAllById(videoIds);
         return populateCommentCounts(videos);

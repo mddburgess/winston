@@ -20,15 +20,6 @@ tasks {
         delete("dist")
     }
 
-    register<NpxTask>("npmCheckUpdates") {
-        command.set("npm-check-updates")
-        args.add("-u")
-    }
-
-    npmInstall {
-        dependsOn("npmCheckUpdates")
-    }
-
     register<NpmTask>("format") {
         dependsOn(npmInstall)
         npmCommand.addAll("run", "format")

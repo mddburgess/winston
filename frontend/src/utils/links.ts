@@ -35,6 +35,13 @@ export const api = {
             },
         },
     },
+    v2: {
+        authors: {
+            handle: {
+                get: (handle: string) => `/v2/authors/${handle}`,
+            },
+        },
+    },
 };
 
 export const routes = {

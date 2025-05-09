@@ -6,6 +6,22 @@ import { ascBy } from "../../utils";
 import { DateTime } from "luxon";
 import { api } from "../../utils/links";
 
+type ListCommentsByVideoIdAuthorParams = {
+    videoId: string;
+    authorHandle: string;
+};
+
+const responseTransformer = (response: CommentListResponse) => {
+    const comments = response.map((comment) => ({
+        ...comment,
+        replies: repliesAdapter.addMany(
+            repliesAdapter.getInitialState(),
+            comment.replies,
+        ),
+    }));
+    return commentsAdapter.addMany(commentsAdapter.getInitialState(), comments);
+};
+
 export type CommentState = Omit<Comment, "replies"> & {
     replies: EntityState<Comment, string>;
 };
@@ -29,23 +45,26 @@ export const commentsApi = apiSlice.injectEndpoints({
             string
         >({
             query: api.v1.videos.id.comments.get,
-            transformResponse: (response: CommentListResponse) => {
-                const comments = response.map((comment) => ({
-                    ...comment,
-                    replies: repliesAdapter.addMany(
-                        repliesAdapter.getInitialState(),
-                        comment.replies,
-                    ),
-                }));
-                return commentsAdapter.addMany(
-                    commentsAdapter.getInitialState(),
-                    comments,
-                );
-            },
+            transformResponse: responseTransformer,
+        }),
+        listCommentsByVideoIdAuthor: builder.query<
+            EntityState<CommentState, string>,
+            ListCommentsByVideoIdAuthorParams
+        >({
+            query: ({ videoId, authorHandle }) => ({
+                url: api.v1.videos.id.comments.get(videoId),
+                params: {
+                    author: authorHandle,
+                },
+            }),
+            transformResponse: responseTransformer,
         }),
     }),
     overrideExisting: "throw",
 });
 
-export const { useListCommentsByVideoIdQuery, util: commentsApiUtils } =
-    commentsApi;
+export const {
+    useListCommentsByVideoIdQuery,
+    useListCommentsByVideoIdAuthorQuery,
+    util: commentsApiUtils,
+} = commentsApi;

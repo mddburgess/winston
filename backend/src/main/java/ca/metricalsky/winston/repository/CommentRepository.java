@@ -22,6 +22,18 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
 
     @Query("""
             SELECT c FROM Comment c
+            WHERE c.videoId = :videoId
+            AND c.parentId IS NULL
+            AND (c.author.id = :authorId OR c.id IN (
+                SELECT r.parentId FROM Comment r
+                WHERE r.parentId IS NOT NULL AND r.videoId = :videoId AND r.author.id = :authorId
+            ))
+            """)
+    @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
+    List<Comment> findAllForVideoByAuthorId(String videoId, String authorId);
+
+    @Query("""
+            SELECT c FROM Comment c
             WHERE c.parentId IS NULL
             AND (c.author.id = :authorId OR c.id IN (
                 SELECT r.parentId FROM Comment r
@@ -29,6 +41,7 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
             ))
             """)
     @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
+    @Deprecated(since = "1.3.0", forRemoval = true)
     List<Comment> findAllWithContextByAuthorId(String authorId);
 
     @Query("""

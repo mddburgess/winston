@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,6 +87,16 @@ public class CommentService {
                 .toList();
     }
 
+    public List<CommentDto> findAllForVideoByAuthor(String videoId, String authorHandle) {
+        return authorRepository.findByDisplayName(authorHandle)
+                .map(author -> commentRepository.findAllForVideoByAuthorId(videoId, author.getId())
+                .stream()
+                .map(commentDtoMapper::fromEntity)
+                .toList())
+                .orElse(Collections.emptyList());
+    }
+
+    @Deprecated(since = "1.3.0", forRemoval = true)
     public List<CommentDto> findAllWithContextByAuthorId(String authorId) {
         return commentRepository.findAllWithContextByAuthorId(authorId)
                 .stream()

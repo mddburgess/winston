@@ -1,14 +1,14 @@
-import type { Comment } from "./comments";
+import type { Channel } from "./channels";
 import type { Video } from "./videos";
 
-export type Author = {
+type Author = {
     id: string;
     displayName: string;
     channelUrl: string;
     profileImageUrl: string;
 };
 
-export type AuthorWithStatistics = Author & {
+type AuthorWithStatistics = Author & {
     statistics: {
         commentedVideos: number;
         totalComments: number;
@@ -16,13 +16,25 @@ export type AuthorWithStatistics = Author & {
     };
 };
 
-export type AuthorListResponse = {
+type AuthorListResponse = {
     results: number;
     authors: AuthorWithStatistics[];
 };
 
-export type AuthorDetailsResponse = {
+type AuthorSummaryResponse = {
     author: Author;
-    comments: Comment[];
+    channels: Channel[];
     videos: Video[];
+};
+
+type AuthorHandleProps = {
+    authorHandle: string;
+};
+
+export type {
+    Author,
+    AuthorWithStatistics,
+    AuthorListResponse,
+    AuthorSummaryResponse,
+    AuthorHandleProps,
 };
