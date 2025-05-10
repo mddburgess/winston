@@ -1,6 +1,6 @@
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { ReplyListItem } from "./ReplyListItem";
-import { CommentDto } from "../../model/CommentDto";
+import type { CommentDto } from "../../model/CommentDto";
 import { pluralize } from "../../utils";
 import { ReplyAll } from "react-bootstrap-icons";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";

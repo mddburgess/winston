@@ -5,11 +5,11 @@ import {
     ArrowRepeat,
     CheckCircleFill,
 } from "react-bootstrap-icons";
-import { ChannelDto } from "../../../model/ChannelDto";
+import type { ChannelDto } from "../../../model/ChannelDto";
 import { FetchVideosAction } from "./FetchVideosAction";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
-    FetchState,
+    type FetchState,
     requestedVideosForChannelId,
 } from "../../../store/slices/fetches";
 import { pluralize } from "../../../utils";

@@ -1,4 +1,4 @@
-import { VideoWithChannelDto } from "../../../model/VideoDto";
+import type { VideoWithChannelDto } from "../../../model/VideoDto";
 import { Col, Image, Ratio, Row } from "react-bootstrap";
 import { Date } from "../../../components/Date";
 import { ArrowUpLeftCircleFill, PersonVideo3 } from "react-bootstrap-icons";

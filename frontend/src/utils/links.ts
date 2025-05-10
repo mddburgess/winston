@@ -1,6 +1,6 @@
-import { AuthorDto } from "../model/authors/AuthorDto";
-import { ChannelDto } from "../model/ChannelDto";
-import { VideoWithChannelIdDto } from "../model/VideoDto";
+import type { AuthorDto } from "../model/authors/AuthorDto";
+import type { ChannelDto } from "../model/ChannelDto";
+import type { VideoWithChannelIdDto } from "../model/VideoDto";
 
 export const api = {
     authors: {

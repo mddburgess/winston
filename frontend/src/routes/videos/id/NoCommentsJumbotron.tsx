@@ -2,7 +2,7 @@ import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch } from "../../../store/hooks";
 import { requestedCommentsForVideoId } from "../../../store/slices/fetches";
-import { VideoWithChannelDto } from "../../../model/VideoDto";
+import type { VideoWithChannelDto } from "../../../model/VideoDto";
 
 type NoCommentsJumbotronProps = {
     video: VideoWithChannelDto;

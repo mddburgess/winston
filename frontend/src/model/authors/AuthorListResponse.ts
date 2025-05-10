@@ -1,4 +1,4 @@
-import { AuthorWithStatisticsDto } from "./AuthorDto";
+import type { AuthorWithStatisticsDto } from "./AuthorDto";
 
 export type AuthorListResponse = {
     results: number;

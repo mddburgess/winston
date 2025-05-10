@@ -1,4 +1,4 @@
-import { OverlayTrigger, Tooltip, TooltipProps } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, type TooltipProps } from "react-bootstrap";
 import { DateTime } from "luxon";
 
 type DateProps = {

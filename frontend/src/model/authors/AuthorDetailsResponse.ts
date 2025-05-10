@@ -1,6 +1,6 @@
-import { VideoWithChannelIdDto } from "../VideoDto";
-import { AuthorDto } from "./AuthorDto";
-import { CommentDto } from "../CommentDto";
+import type { VideoWithChannelIdDto } from "../VideoDto";
+import type { AuthorDto } from "./AuthorDto";
+import type { CommentDto } from "../CommentDto";
 
 export type AuthorDetailsResponse = {
     author: AuthorDto;

@@ -1,4 +1,4 @@
-import { ChannelDto } from "../../../model/ChannelDto";
+import type { ChannelDto } from "../../../model/ChannelDto";
 import { Col, Image, Row } from "react-bootstrap";
 import { BadgeList } from "../../../components/BadgeList";
 import { CopyToClipboard } from "../../../components/CopyToClipboard";

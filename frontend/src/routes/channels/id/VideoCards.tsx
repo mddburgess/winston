@@ -1,4 +1,4 @@
-import { VideoWithChannelIdDto } from "../../../model/VideoDto";
+import type { VideoWithChannelIdDto } from "../../../model/VideoDto";
 import { Row } from "react-bootstrap";
 import { VideoCard } from "./VideoCard";
 

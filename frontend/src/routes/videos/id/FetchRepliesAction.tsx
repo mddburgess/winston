@@ -3,7 +3,7 @@ import {
     invalidateFetchLimits,
     useFetchRepliesByCommentIdMutation,
 } from "../../../store/slices/api";
-import {
+import type {
     FetchCommentsEvent,
     FetchStatusEvent,
 } from "../../../model/events/FetchEvent";

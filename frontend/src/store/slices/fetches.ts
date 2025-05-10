@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ChannelDto } from "../../model/ChannelDto";
-import {
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { ChannelDto } from "../../model/ChannelDto";
+import type {
     FetchCommentsEvent,
     FetchVideosEvent,
 } from "../../model/events/FetchEvent";

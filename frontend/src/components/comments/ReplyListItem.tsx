@@ -1,7 +1,7 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { ReplyFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { CommentDto } from "../../model/CommentDto";
+import type { CommentDto } from "../../model/CommentDto";
 import { Date } from "../Date";
 import { HtmlText } from "../HtmlText";
 import { routes } from "../../utils/links";

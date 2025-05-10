@@ -10,7 +10,7 @@ import {
 import { videosAdapter, videosApiUtils } from "../../../store/slices/videos";
 import { NotificationsSource } from "../../../components/NotificationsSource";
 import { EventSourceProvider } from "react-sse-hooks";
-import {
+import type {
     FetchStatusEvent,
     FetchVideosEvent,
 } from "../../../model/events/FetchEvent";

@@ -1,7 +1,7 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { ReplyList } from "./ReplyList";
 import { Link } from "react-router";
-import { CommentState, repliesAdapter } from "../../store/slices/comments";
+import { type CommentState, repliesAdapter } from "../../store/slices/comments";
 import { Date } from "../Date";
 import { HtmlText } from "../HtmlText";
 import { routes } from "../../utils/links";

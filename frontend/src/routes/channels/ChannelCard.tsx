@@ -1,4 +1,4 @@
-import { ChannelDto } from "../../model/ChannelDto";
+import type { ChannelDto } from "../../model/ChannelDto";
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { Link } from "react-router";
 import {

@@ -1,6 +1,6 @@
 import { apiSlice } from "./api";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import { ChannelDto } from "../../model/ChannelDto";
+import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
+import type { ChannelDto } from "../../model/ChannelDto";
 import { api } from "../../utils/links";
 
 const channelsAdapter = createEntityAdapter<ChannelDto>({

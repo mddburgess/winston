@@ -1,5 +1,5 @@
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { requestedChannelForHandle } from "../../store/slices/fetches";

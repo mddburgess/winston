@@ -1,5 +1,5 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
-import { VideoWithChannelIdDto } from "../../../model/VideoDto";
+import type { VideoWithChannelIdDto } from "../../../model/VideoDto";
 import { Link } from "react-router";
 import { ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Date } from "../../../components/Date";

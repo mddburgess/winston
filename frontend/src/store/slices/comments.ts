@@ -1,6 +1,6 @@
 import { apiSlice } from "./api";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import { CommentDto } from "../../model/CommentDto";
+import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
+import type { CommentDto } from "../../model/CommentDto";
 import { ascBy } from "../../utils";
 import { DateTime } from "luxon";
 import { api } from "../../utils/links";

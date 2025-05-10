@@ -1,11 +1,11 @@
 import {
     render,
     renderHook,
-    RenderHookOptions,
-    RenderOptions,
+    type RenderHookOptions,
+    type RenderOptions,
 } from "@testing-library/react";
-import { AppState, AppStore, setupStore } from "../store";
-import { PropsWithChildren, ReactElement } from "react";
+import { type AppState, type AppStore, setupStore } from "../store";
+import type { PropsWithChildren, ReactElement } from "react";
 import { Provider } from "react-redux";
 
 type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {

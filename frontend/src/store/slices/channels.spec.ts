@@ -1,7 +1,7 @@
 import { appendFetchedChannels, useListChannelsQuery } from "./channels";
 import { waitFor } from "@testing-library/react";
 import { createEntityAdapter } from "@reduxjs/toolkit";
-import { ChannelDto } from "../../model/ChannelDto";
+import type { ChannelDto } from "../../model/ChannelDto";
 import { http, HttpResponse } from "msw";
 import { backend } from "../../mocks/backend";
 import { renderHookWithProviders } from "../../utils/test-utils";

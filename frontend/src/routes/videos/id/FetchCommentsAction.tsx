@@ -14,7 +14,7 @@ import {
     fetchedComments,
     updateFetchStatus,
 } from "../../../store/slices/fetches";
-import {
+import type {
     FetchCommentsEvent,
     FetchStatusEvent,
 } from "../../../model/events/FetchEvent";

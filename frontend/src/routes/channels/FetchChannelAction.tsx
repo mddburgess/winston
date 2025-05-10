@@ -5,7 +5,7 @@ import {
 import { NotificationsSource } from "../../components/NotificationsSource";
 import { useNavigate } from "react-router";
 import { EventSourceProvider } from "react-sse-hooks";
-import {
+import type {
     FetchChannelEvent,
     FetchStatusEvent,
 } from "../../model/events/FetchEvent";

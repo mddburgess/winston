@@ -1,5 +1,5 @@
 import { Row } from "react-bootstrap";
-import { ChannelDto } from "../../model/ChannelDto";
+import type { ChannelDto } from "../../model/ChannelDto";
 import { ChannelCard } from "./ChannelCard";
 
 type ChannelCardsProps = {

@@ -1,6 +1,6 @@
 import { apiSlice } from "./api";
-import { createEntityAdapter, EntityState } from "@reduxjs/toolkit";
-import {
+import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
+import type {
     VideoWithChannelDto,
     VideoWithChannelIdDto,
 } from "../../model/VideoDto";

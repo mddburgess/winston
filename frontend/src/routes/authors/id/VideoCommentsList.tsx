@@ -1,14 +1,17 @@
-import { VideoWithChannelIdDto } from "../../../model/VideoDto";
-import { CommentDto } from "../../../model/CommentDto";
+import type { VideoWithChannelIdDto } from "../../../model/VideoDto";
+import type { CommentDto } from "../../../model/CommentDto";
 import { Col, Row } from "react-bootstrap";
 import { VideoCard } from "../../channels/id/VideoCard";
 import { CommentList } from "../../../components/comments/CommentList";
 import { v4 as uuidv4 } from "uuid";
 import { DateTime } from "luxon";
 import { descBy } from "../../../utils";
-import { AuthorDto } from "../../../model/authors/AuthorDto";
-import { AuthorDetailsResponse } from "../../../model/authors/AuthorDetailsResponse";
-import { CommentState, repliesAdapter } from "../../../store/slices/comments";
+import type { AuthorDto } from "../../../model/authors/AuthorDto";
+import type { AuthorDetailsResponse } from "../../../model/authors/AuthorDetailsResponse";
+import {
+    type CommentState,
+    repliesAdapter,
+} from "../../../store/slices/comments";
 
 type VideoCommentsListProps = AuthorDetailsResponse;
 
