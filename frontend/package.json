@@ -44,6 +44,7 @@
         "@vitest/eslint-plugin": "^1.1.44",
         "eslint": "^9.26.0",
         "eslint-config-prettier": "^10.1.5",
+        "eslint-import-resolver-vite": "^2.1.0",
         "eslint-plugin-import": "^2.31.0",
         "eslint-plugin-react": "^7.37.5",
         "globals": "^16.1.0",

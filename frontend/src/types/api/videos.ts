@@ -1,6 +1,6 @@
-import type { Channel } from "./channels";
+import type { Channel } from "#/types";
 
-export type Video = {
+type Video = {
     id: string;
     channelId: string;
     title: string;
@@ -14,22 +14,32 @@ export type Video = {
     lastFetchedAt: string;
 };
 
-export type VideoProps = {
+type VideoProps = {
     video: Video;
 };
 
-export type VideoListProps = {
+type VideoListProps = {
     videos: Video[];
 };
 
-export type VideoWithChannel = Omit<Video, "channelId"> & {
+type VideoWithChannel = Omit<Video, "channelId"> & {
     channel: Channel;
 };
 
-export type VideoWithChannelProps = {
+type VideoWithChannelProps = {
     video: VideoWithChannel;
 };
 
-export type VideoListResponse = Video[];
+type VideoListResponse = Video[];
 
-export type VideoDetailsResponse = VideoWithChannel;
+type VideoDetailsResponse = VideoWithChannel;
+
+export type {
+    Video,
+    VideoDetailsResponse,
+    VideoListProps,
+    VideoListResponse,
+    VideoProps,
+    VideoWithChannel,
+    VideoWithChannelProps,
+};

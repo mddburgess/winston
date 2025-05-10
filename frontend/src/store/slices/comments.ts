@@ -1,9 +1,9 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
-import { ascBy } from "../../utils";
-import { api } from "../../utils/links";
+import { ascBy } from "#/utils";
+import { api } from "#/utils/links";
 import { apiSlice } from "./api";
-import type { Comment, CommentListResponse } from "../../types";
+import type { Comment, CommentListResponse } from "#/types";
 import type { EntityState } from "@reduxjs/toolkit";
 
 type ListCommentsByVideoIdAuthorParams = {

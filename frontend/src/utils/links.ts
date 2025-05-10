@@ -1,6 +1,6 @@
-import type { Author, Channel, Video } from "../types";
+import type { Author, Channel, Video } from "#/types";
 
-export const api = {
+const api = {
     v1: {
         authors: {
             get: () => `/v1/authors`,
@@ -44,7 +44,7 @@ export const api = {
     },
 };
 
-export const routes = {
+const routes = {
     home: `/`,
     authors: {
         list: `/authors`,
@@ -60,3 +60,5 @@ export const routes = {
         details: (video?: Video) => `/videos/${video?.id ?? `:videoId`}`,
     },
 };
+
+export { api, routes };

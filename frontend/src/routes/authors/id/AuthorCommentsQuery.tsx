@@ -1,9 +1,9 @@
 import {
     commentsAdapter,
     useListCommentsByVideoIdAuthorQuery,
-} from "../../../store/slices/comments";
-import type { CommentState } from "../../../store/slices/comments";
-import type { AuthorHandleProps, VideoProps } from "../../../types";
+} from "#/store/slices/comments";
+import type { CommentState } from "#/store/slices/comments";
+import type { AuthorHandleProps, VideoProps } from "#/types";
 import type { ReactNode } from "react";
 
 type AuthorCommentsQueryProps = VideoProps &

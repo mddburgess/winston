@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { AuthorStatistics } from "./AuthorStatistics";
-import type { AuthorWithStatistics } from "../../types";
+import type { AuthorWithStatistics } from "#/types";
 
 describe("AuthorStatistics", () => {
     const author: AuthorWithStatistics = {

@@ -1,18 +1,18 @@
 import { useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
-import { CommentList } from "../../../components/comments/CommentList";
-import { PaginationContext } from "../../../components/PaginationContext";
-import { PaginationRow } from "../../../components/PaginationRow";
-import { useAppSelector } from "../../../store/hooks";
+import { CommentList } from "#/components/comments/CommentList";
+import { PaginationContext } from "#/components/PaginationContext";
+import { PaginationRow } from "#/components/PaginationRow";
+import { useAppSelector } from "#/store/hooks";
 import {
     commentsAdapter,
     repliesAdapter,
     useListCommentsByVideoIdQuery,
-} from "../../../store/slices/comments";
-import { useFindVideoByIdQuery } from "../../../store/slices/videos";
-import { sumBy } from "../../../utils";
-import { routes } from "../../../utils/links";
+} from "#/store/slices/comments";
+import { useFindVideoByIdQuery } from "#/store/slices/videos";
+import { sumBy } from "#/utils";
+import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
 import { FetchCommentsAlert } from "./FetchCommentsAlert";
 import { NoCommentsJumbotron } from "./NoCommentsJumbotron";

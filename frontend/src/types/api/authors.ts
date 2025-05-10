@@ -1,5 +1,4 @@
-import type { Channel } from "./channels";
-import type { Video } from "./videos";
+import type { Channel, Video } from "#/types";
 
 type Author = {
     id: string;

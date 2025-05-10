@@ -8,10 +8,10 @@ import {
     Row,
 } from "react-bootstrap";
 import { Link } from "react-router";
-import { PaginationContext } from "../../components/PaginationContext";
-import { PaginationRow } from "../../components/PaginationRow";
-import { useListAuthorsQuery } from "../../store/slices/authors";
-import { routes } from "../../utils/links";
+import { PaginationContext } from "#/components/PaginationContext";
+import { PaginationRow } from "#/components/PaginationRow";
+import { useListAuthorsQuery } from "#/store/slices/authors";
+import { routes } from "#/utils/links";
 import { AuthorStatistics } from "./AuthorStatistics";
 
 export const AuthorListRoute = () => {

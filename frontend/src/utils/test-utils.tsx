@@ -1,7 +1,7 @@
 import { render, renderHook } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { setupStore } from "../store";
-import type { AppState, AppStore } from "../store";
+import { setupStore } from "#/store";
+import type { AppState, AppStore } from "#/store";
 import type { RenderHookOptions, RenderOptions } from "@testing-library/react";
 import type { PropsWithChildren, ReactElement } from "react";
 
@@ -10,7 +10,7 @@ type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {
     store?: AppStore;
 };
 
-export const renderWithProviders = (
+const renderWithProviders = (
     ui: ReactElement,
     options: ExtendedRenderOptions = {},
 ) => {
@@ -38,7 +38,7 @@ type ExtendedRenderHookOptions<Props> = Omit<
     store?: AppStore;
 };
 
-export const renderHookWithProviders = <Props, Result>(
+const renderHookWithProviders = <Props, Result>(
     hook: (initialProps?: Props) => Result,
     options: ExtendedRenderHookOptions<Props> = {},
 ) => {
@@ -57,3 +57,5 @@ export const renderHookWithProviders = <Props, Result>(
         ...renderHook(hook, { wrapper, ...renderHookOptions }),
     };
 };
+
+export { renderHookWithProviders, renderWithProviders };

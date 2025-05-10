@@ -1,7 +1,4 @@
-import type { Channel } from "./channels";
-import type { Comment } from "./comments";
-import type { ProblemDetail } from "./errors";
-import type { Video } from "./videos";
+import type { Channel, Comment, ProblemDetail, Video } from "#/types";
 
 type FetchDataEvent<T> = {
     objectId: string;
@@ -17,12 +14,20 @@ type FetchFailedEvent = {
     error: ProblemDetail;
 };
 
-export type SubscriptionEvent = {
+type SubscriptionEvent = {
     connected: boolean;
     subscriptionId: string;
 };
 
-export type FetchChannelEvent = FetchDataEvent<Channel>;
-export type FetchCommentsEvent = FetchDataEvent<Comment>;
-export type FetchVideosEvent = FetchDataEvent<Video>;
-export type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;
+type FetchChannelEvent = FetchDataEvent<Channel>;
+type FetchCommentsEvent = FetchDataEvent<Comment>;
+type FetchVideosEvent = FetchDataEvent<Video>;
+type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;
+
+export type {
+    FetchChannelEvent,
+    FetchCommentsEvent,
+    FetchStatusEvent,
+    FetchVideosEvent,
+    SubscriptionEvent,
+};

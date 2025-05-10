@@ -1,5 +1,5 @@
-import { useFindAuthorSummaryByHandleQuery } from "../../../store/slices/authors";
-import type { AuthorHandleProps, AuthorSummaryResponse } from "../../../types";
+import { useFindAuthorSummaryByHandleQuery } from "#/store/slices/authors";
+import type { AuthorHandleProps, AuthorSummaryResponse } from "#/types";
 import type { ReactNode } from "react";
 
 type AuthorSummaryQueryProps = AuthorHandleProps & {

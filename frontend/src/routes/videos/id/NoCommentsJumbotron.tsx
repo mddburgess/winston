@@ -1,8 +1,8 @@
 import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
-import { useAppDispatch } from "../../../store/hooks";
-import { requestedCommentsForVideoId } from "../../../store/slices/fetches";
-import type { VideoWithChannelProps } from "../../../types";
+import { useAppDispatch } from "#/store/hooks";
+import { requestedCommentsForVideoId } from "#/store/slices/fetches";
+import type { VideoWithChannelProps } from "#/types";
 
 export const NoCommentsJumbotron = ({ video }: VideoWithChannelProps) => {
     const dispatch = useAppDispatch();

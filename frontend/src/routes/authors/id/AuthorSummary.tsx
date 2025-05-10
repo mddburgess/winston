@@ -9,7 +9,7 @@ import {
     Col,
     Row,
 } from "react-bootstrap";
-import { CommentList } from "../../../components/comments/CommentList";
+import { CommentList } from "#/components/comments/CommentList";
 import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
 import type {
     AuthorHandleProps,
@@ -17,7 +17,7 @@ import type {
     ChannelProps,
     VideoListProps,
     VideoProps,
-} from "../../../types";
+} from "#/types";
 
 type AuthorChannelSummaryProps = ChannelProps &
     VideoListProps &

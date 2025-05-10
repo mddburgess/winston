@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router";
-import { routes } from "../utils/links";
+import { routes } from "#/utils/links";
 import { AuthorListRoute } from "./authors";
 import { AuthorDetailsRoute } from "./authors/id";
 import { ChannelListRoute } from "./channels";

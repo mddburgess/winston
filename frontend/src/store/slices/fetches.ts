@@ -4,7 +4,7 @@ import type {
     FetchCommentsEvent,
     FetchVideosEvent,
     Maybe,
-} from "../../types";
+} from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {

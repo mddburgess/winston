@@ -1,11 +1,11 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { Link } from "react-router";
-import { repliesAdapter } from "../../store/slices/comments";
-import { routes } from "../../utils/links";
-import { Date } from "../Date";
-import { HtmlText } from "../HtmlText";
+import { Date } from "#/components/Date";
+import { HtmlText } from "#/components/HtmlText";
+import { repliesAdapter } from "#/store/slices/comments";
+import { routes } from "#/utils/links";
 import { ReplyList } from "./ReplyList";
-import type { CommentState } from "../../store/slices/comments";
+import type { CommentState } from "#/store/slices/comments";
 
 type CommentListItemProps = {
     comment: CommentState;

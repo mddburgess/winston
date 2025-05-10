@@ -1,7 +1,7 @@
 import { Col, Image, Row } from "react-bootstrap";
-import { BadgeList } from "../../../components/BadgeList";
-import { CopyToClipboard } from "../../../components/CopyToClipboard";
-import type { ChannelProps } from "../../../types";
+import { BadgeList } from "#/components/BadgeList";
+import { CopyToClipboard } from "#/components/CopyToClipboard";
+import type { ChannelProps } from "#/types";
 
 const topicTransformer = (topic: string) => {
     return topic

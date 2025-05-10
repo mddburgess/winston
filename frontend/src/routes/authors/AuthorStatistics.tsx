@@ -1,6 +1,6 @@
 import { Col } from "react-bootstrap";
 import { ChatFill, ChatQuoteFill, Youtube } from "react-bootstrap-icons";
-import type { AuthorWithStatistics } from "../../types";
+import type { AuthorWithStatistics } from "#/types";
 
 type AuthorStatisticsProps = {
     author: AuthorWithStatistics;

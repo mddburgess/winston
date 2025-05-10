@@ -1,6 +1,6 @@
-import type { Author } from "./authors";
+import type { Author } from "#/types";
 
-export type Comment = {
+type Comment = {
     id: string;
     videoId: string;
     author: Author;
@@ -12,4 +12,6 @@ export type Comment = {
     replies: Comment[];
 };
 
-export type CommentListResponse = Comment[];
+type CommentListResponse = Comment[];
+
+export type { Comment, CommentListResponse };

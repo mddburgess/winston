@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { api } from "../../utils/links";
-import type { FetchLimits } from "../../types";
+import { api } from "#/utils/links";
+import type { FetchLimits } from "#/types";
 
 type FetchRequest = {
     subscriptionId: string;

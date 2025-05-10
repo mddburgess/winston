@@ -1,11 +1,11 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
-import { api } from "../../utils/links";
+import { api } from "#/utils/links";
 import { apiSlice } from "./api";
 import type {
     Channel,
     ChannelDetailResponse,
     ChannelListResponse,
-} from "../../types";
+} from "#/types";
 import type { EntityState } from "@reduxjs/toolkit";
 
 const channelsAdapter = createEntityAdapter<Channel>({
