@@ -1,7 +1,7 @@
 import { Col, Pagination, Row } from "react-bootstrap";
-import type { ReactElement } from "react";
 import { pluralize } from "../utils";
 import { SearchControl } from "./SearchControl";
+import type { ReactElement } from "react";
 
 type PaginationRowProps = {
     name: string;

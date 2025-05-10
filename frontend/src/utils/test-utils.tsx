@@ -1,12 +1,9 @@
-import {
-    render,
-    renderHook,
-    type RenderHookOptions,
-    type RenderOptions,
-} from "@testing-library/react";
-import { type AppState, type AppStore, setupStore } from "../store";
-import type { PropsWithChildren, ReactElement } from "react";
+import { render, renderHook } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { setupStore } from "../store";
+import type { AppState, AppStore } from "../store";
+import type { RenderHookOptions, RenderOptions } from "@testing-library/react";
+import type { PropsWithChildren, ReactElement } from "react";
 
 type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {
     preloadedState?: Partial<AppState>;

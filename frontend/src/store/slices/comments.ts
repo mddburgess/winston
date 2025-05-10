@@ -1,9 +1,10 @@
-import { apiSlice } from "./api";
-import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
-import type { CommentDto } from "../../model/CommentDto";
-import { ascBy } from "../../utils";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
+import { ascBy } from "../../utils";
 import { api } from "../../utils/links";
+import { apiSlice } from "./api";
+import type { CommentDto } from "../../model/CommentDto";
+import type { EntityState } from "@reduxjs/toolkit";
 
 export type CommentState = Omit<CommentDto, "replies"> & {
     replies: EntityState<CommentDto, string>;

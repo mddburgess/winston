@@ -1,6 +1,6 @@
 import type { ChannelDto } from "../ChannelDto";
-import type { VideoWithChannelIdDto } from "../VideoDto";
 import type { CommentDto } from "../CommentDto";
+import type { VideoWithChannelIdDto } from "../VideoDto";
 import type { ProblemDetail } from "./ProblemDetail";
 
 type FetchDataEvent<T> = {

@@ -1,18 +1,16 @@
 import { Alert, Button, ButtonGroup, Col, Dropdown } from "react-bootstrap";
-import { Date } from "../../../components/Date";
 import {
     ArrowDownRightCircleFill,
     ArrowRepeat,
     CheckCircleFill,
 } from "react-bootstrap-icons";
-import type { ChannelDto } from "../../../model/ChannelDto";
-import { FetchVideosAction } from "./FetchVideosAction";
+import { Date } from "../../../components/Date";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-    type FetchState,
-    requestedVideosForChannelId,
-} from "../../../store/slices/fetches";
+import { requestedVideosForChannelId } from "../../../store/slices/fetches";
 import { pluralize } from "../../../utils";
+import { FetchVideosAction } from "./FetchVideosAction";
+import type { ChannelDto } from "../../../model/ChannelDto";
+import type { FetchState } from "../../../store/slices/fetches";
 
 type FetchVideosAlertProps = {
     channel: ChannelDto;

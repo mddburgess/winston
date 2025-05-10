@@ -1,3 +1,6 @@
+import { EventSourceProvider } from "react-sse-hooks";
+import { NotificationsSource } from "../../../components/NotificationsSource";
+import { useAppDispatch } from "../../../store/hooks";
 import {
     invalidateFetchLimits,
     useFetchCommentsByVideoIdMutation,
@@ -7,18 +10,15 @@ import {
     commentsApiUtils,
     repliesAdapter,
 } from "../../../store/slices/comments";
-import { useAppDispatch } from "../../../store/hooks";
-import { EventSourceProvider } from "react-sse-hooks";
-import { NotificationsSource } from "../../../components/NotificationsSource";
 import {
     fetchedComments,
     updateFetchStatus,
 } from "../../../store/slices/fetches";
+import { videosApiUtils } from "../../../store/slices/videos";
 import type {
     FetchCommentsEvent,
     FetchStatusEvent,
 } from "../../../model/events/FetchEvent";
-import { videosApiUtils } from "../../../store/slices/videos";
 
 type FetchVideosActionProps = {
     videoId: string;

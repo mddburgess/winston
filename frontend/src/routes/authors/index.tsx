@@ -1,4 +1,4 @@
-import { useListAuthorsQuery } from "../../store/slices/authors";
+import { useMemo, useState } from "react";
 import {
     Col,
     Image,
@@ -7,12 +7,12 @@ import {
     Ratio,
     Row,
 } from "react-bootstrap";
-import { PaginationRow } from "../../components/PaginationRow";
-import { useMemo, useState } from "react";
 import { Link } from "react-router";
-import { AuthorStatistics } from "./AuthorStatistics";
 import { PaginationContext } from "../../components/PaginationContext";
+import { PaginationRow } from "../../components/PaginationRow";
+import { useListAuthorsQuery } from "../../store/slices/authors";
 import { routes } from "../../utils/links";
+import { AuthorStatistics } from "./AuthorStatistics";
 
 export const AuthorListRoute = () => {
     const { data } = useListAuthorsQuery();

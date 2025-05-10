@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router";
+import { routes } from "../utils/links";
+import { AuthorListRoute } from "./authors";
+import { AuthorDetailsRoute } from "./authors/id";
 import { ChannelListRoute } from "./channels";
 import { ChannelDetailsRoute } from "./channels/id";
-import { AuthorDetailsRoute } from "./authors/id";
 import { VideoDetailsRoute } from "./videos/id";
-import { AuthorListRoute } from "./authors";
-import { routes } from "../utils/links";
 
 export const AppRoutes = () => (
     <Routes>

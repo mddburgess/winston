@@ -1,12 +1,13 @@
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { DateTime } from "luxon";
+import { descBy } from "../../utils";
+import { api } from "../../utils/links";
 import { apiSlice } from "./api";
-import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
 import type {
     VideoWithChannelDto,
     VideoWithChannelIdDto,
 } from "../../model/VideoDto";
-import { descBy } from "../../utils";
-import { DateTime } from "luxon";
-import { api } from "../../utils/links";
+import type { EntityState } from "@reduxjs/toolkit";
 
 export const videosAdapter = createEntityAdapter<VideoWithChannelIdDto>({
     sortComparer: descBy((video) =>

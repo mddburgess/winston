@@ -1,7 +1,8 @@
-import { apiSlice } from "./api";
-import { createEntityAdapter, type EntityState } from "@reduxjs/toolkit";
-import type { ChannelDto } from "../../model/ChannelDto";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 import { api } from "../../utils/links";
+import { apiSlice } from "./api";
+import type { ChannelDto } from "../../model/ChannelDto";
+import type { EntityState } from "@reduxjs/toolkit";
 
 const channelsAdapter = createEntityAdapter<ChannelDto>({
     sortComparer: (first, second) => first.title.localeCompare(second.title),

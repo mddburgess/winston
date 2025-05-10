@@ -1,11 +1,11 @@
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import { ReplyListItem } from "./ReplyListItem";
-import type { CommentDto } from "../../model/CommentDto";
-import { pluralize } from "../../utils";
 import { ReplyAll } from "react-bootstrap-icons";
+import { FetchRepliesAction } from "../../routes/videos/id/FetchRepliesAction";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { requestedRepliesForId } from "../../store/slices/fetches";
-import { FetchRepliesAction } from "../../routes/videos/id/FetchRepliesAction";
+import { pluralize } from "../../utils";
+import { ReplyListItem } from "./ReplyListItem";
+import type { CommentDto } from "../../model/CommentDto";
 
 type ReplyListProps = {
     commentId: string;

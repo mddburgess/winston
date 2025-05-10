@@ -1,19 +1,19 @@
+import { useEffect, useMemo, useState } from "react";
+import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
+import { PaginationContext } from "../../../components/PaginationContext";
+import { PaginationRow } from "../../../components/PaginationRow";
+import { useAppDispatch } from "../../../store/hooks";
 import { useFindChannelByHandleQuery } from "../../../store/slices/channels";
+import { initFetchStateForChannel } from "../../../store/slices/fetches";
 import {
     useListVideosByChannelHandleQuery,
     videosAdapter,
 } from "../../../store/slices/videos";
-import { useEffect, useMemo, useState } from "react";
-import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
-import { ChannelDetails } from "./ChannelDetails";
-import { VideoCards } from "./VideoCards";
-import { FetchVideosAlert } from "./FetchVideosAlert";
-import { useAppDispatch } from "../../../store/hooks";
-import { initFetchStateForChannel } from "../../../store/slices/fetches";
-import { PaginationRow } from "../../../components/PaginationRow";
-import { PaginationContext } from "../../../components/PaginationContext";
 import { routes } from "../../../utils/links";
+import { ChannelDetails } from "./ChannelDetails";
+import { FetchVideosAlert } from "./FetchVideosAlert";
+import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
     const { channelHandle } = useParams();
