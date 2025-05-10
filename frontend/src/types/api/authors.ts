@@ -33,8 +33,8 @@ type AuthorHandleProps = {
 
 export type {
     Author,
-    AuthorWithStatistics,
+    AuthorHandleProps,
     AuthorListResponse,
     AuthorSummaryResponse,
-    AuthorHandleProps,
+    AuthorWithStatistics,
 };

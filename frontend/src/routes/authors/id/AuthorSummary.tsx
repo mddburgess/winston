@@ -1,11 +1,5 @@
-import type {
-    AuthorHandleProps,
-    ChannelListProps,
-    ChannelProps,
-    VideoListProps,
-    VideoProps,
-} from "../../../types";
 import { groupBy } from "lodash";
+import { useContext } from "react";
 import {
     Accordion,
     AccordionBody,
@@ -15,9 +9,15 @@ import {
     Col,
     Row,
 } from "react-bootstrap";
-import { useContext } from "react";
-import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
 import { CommentList } from "../../../components/comments/CommentList";
+import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
+import type {
+    AuthorHandleProps,
+    ChannelListProps,
+    ChannelProps,
+    VideoListProps,
+    VideoProps,
+} from "../../../types";
 
 type AuthorChannelSummaryProps = ChannelProps &
     VideoListProps &

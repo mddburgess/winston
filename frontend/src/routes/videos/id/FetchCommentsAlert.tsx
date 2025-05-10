@@ -3,8 +3,8 @@ import { CheckCircleFill } from "react-bootstrap-icons";
 import { useAppSelector } from "../../../store/hooks";
 import { pluralize } from "../../../utils";
 import { FetchCommentsAction } from "./FetchCommentsAction";
-import type { VideoWithChannelProps } from "../../../types";
 import type { FetchState } from "../../../store/slices/fetches";
+import type { VideoWithChannelProps } from "../../../types";
 
 type FetchingCommentsAlertProps = VideoWithChannelProps & {
     fetchState: FetchState;

@@ -9,8 +9,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { requestedVideosForChannelId } from "../../../store/slices/fetches";
 import { pluralize } from "../../../utils";
 import { FetchVideosAction } from "./FetchVideosAction";
-import type { ChannelProps } from "../../../types";
 import type { FetchState } from "../../../store/slices/fetches";
+import type { ChannelProps } from "../../../types";
 
 type AlertBodyProps = ChannelProps & {
     fetchState: FetchState;

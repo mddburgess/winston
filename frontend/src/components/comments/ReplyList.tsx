@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { requestedRepliesForId } from "../../store/slices/fetches";
 import { pluralize } from "../../utils";
 import { ReplyListItem } from "./ReplyListItem";
-import type { CommentDto } from "../../model/CommentDto";
+import type { Comment } from "../../types";
 
 type ReplyListProps = {
     commentId: string;

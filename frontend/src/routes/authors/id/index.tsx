@@ -1,8 +1,8 @@
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
 import { routes } from "../../../utils/links";
-import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
 import { AuthorSummary } from "./AuthorSummary";
+import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
 
 export const AuthorDetailsRoute = () => {
     const { authorHandle } = useParams();
