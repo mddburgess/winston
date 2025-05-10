@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the channel handle in the channel details URI instead of the channel ID. (mddburgess/winston#50)
 - Show the author handle in the author details URI instead of the author ID. (mddburgess/winston#50)
 - Migrated build tool from Parcel to Vite. (mddburgess/winston#61)
-- Redesigned author details page to reduce the amount of data requested from the backend. (mddburgess/winston#60)
+- Redesigned author details page to reduce the amount of data requested from the backend. (mddburgess/winston#45)
 
 ### Deprecated
 
