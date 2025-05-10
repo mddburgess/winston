@@ -1,19 +1,15 @@
-import globals from "globals";
 import javascript from "@eslint/js";
-import typescript from "typescript-eslint";
+import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
+import globals from "globals";
+import typescript from "typescript-eslint";
 
-export default defineConfig([
+export default typescript.config(
     {
         files: ["**/*.{ts,tsx}"],
         languageOptions: {
             globals: globals.browser,
-            parserOptions: {
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
-            },
         },
     },
     {
@@ -21,9 +17,16 @@ export default defineConfig([
     },
     {
         extends: [typescript.configs.recommendedTypeChecked],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
         rules: {
-            "@typescript-eslint/consistent-type-exports": "warn",
-            "@typescript-eslint/consistent-type-imports": "warn",
+            "@typescript-eslint/consistent-type-exports": "error",
+            "@typescript-eslint/consistent-type-imports": "error",
+            "@typescript-eslint/no-import-type-side-effects": "error",
             "@typescript-eslint/no-unnecessary-condition": "warn",
             "@typescript-eslint/no-unused-vars": "warn",
         },
@@ -43,8 +46,8 @@ export default defineConfig([
                 { count: 1, exactCount: true, considerComments: true },
             ],
             "import/no-amd": "error",
-            "import/no-default-export": "warn",
             "import/no-commonjs": "error",
+            "import/no-default-export": "warn",
             "import/no-deprecated": "error",
             "import/no-empty-named-blocks": "error",
             "import/no-extraneous-dependencies": "error",
@@ -54,7 +57,26 @@ export default defineConfig([
             "import/no-nodejs-modules": "error",
             "import/no-self-import": "error",
             "import/no-useless-path-segments": "warn",
-            "import/unambiguous": "error",
+            "import/order": [
+                "warn",
+                {
+                    alphabetize: {
+                        order: "asc",
+                        orderImportKind: "asc",
+                        caseInsensitive: true,
+                    },
+                    groups: [
+                        "builtin",
+                        "external",
+                        "parent",
+                        "sibling",
+                        "index",
+                        "object",
+                        "type",
+                    ],
+                    named: true,
+                },
+            ],
         },
     },
     {
@@ -68,4 +90,8 @@ export default defineConfig([
             },
         },
     },
-]);
+    {
+        extends: [vitestPlugin.configs.recommended],
+        files: ["**/*.spec.{ts,tsx}"],
+    },
+);

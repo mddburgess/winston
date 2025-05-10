@@ -1,6 +1,6 @@
+import { api } from "../../utils/links";
 import { apiSlice } from "./api";
 import type { AuthorListResponse, AuthorSummaryResponse } from "../../types";
-import { api } from "../../utils/links";
 
 const authorsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

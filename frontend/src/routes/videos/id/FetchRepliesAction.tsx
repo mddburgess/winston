@@ -1,20 +1,20 @@
+import { EventSourceProvider } from "react-sse-hooks";
+import { NotificationsSource } from "../../../components/NotificationsSource";
 import { useAppDispatch } from "../../../store/hooks";
 import {
     invalidateFetchLimits,
     useFetchRepliesByCommentIdMutation,
 } from "../../../store/slices/api";
-import type { FetchCommentsEvent, FetchStatusEvent } from "../../../types";
-import { EventSourceProvider } from "react-sse-hooks";
-import { NotificationsSource } from "../../../components/NotificationsSource";
-import {
-    fetchedReplies,
-    updateFetchStatus,
-} from "../../../store/slices/fetches";
 import {
     commentsAdapter,
     commentsApiUtils,
     repliesAdapter,
 } from "../../../store/slices/comments";
+import {
+    fetchedReplies,
+    updateFetchStatus,
+} from "../../../store/slices/fetches";
+import type { FetchCommentsEvent, FetchStatusEvent } from "../../../types";
 
 type FetchRepliesActionProps = {
     commentId: string;

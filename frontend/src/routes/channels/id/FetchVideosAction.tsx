@@ -1,15 +1,15 @@
-import {
-    fetchedVideos,
-    updateFetchStatus,
-} from "../../../store/slices/fetches";
+import { EventSourceProvider } from "react-sse-hooks";
+import { NotificationsSource } from "../../../components/NotificationsSource";
 import { useAppDispatch } from "../../../store/hooks";
 import {
     invalidateFetchLimits,
     useFetchVideosByChannelIdMutation,
 } from "../../../store/slices/api";
+import {
+    fetchedVideos,
+    updateFetchStatus,
+} from "../../../store/slices/fetches";
 import { videosAdapter, videosApiUtils } from "../../../store/slices/videos";
-import { NotificationsSource } from "../../../components/NotificationsSource";
-import { EventSourceProvider } from "react-sse-hooks";
 import type { FetchStatusEvent, FetchVideosEvent } from "../../../types";
 
 type FetchVideosWidgetProps = {

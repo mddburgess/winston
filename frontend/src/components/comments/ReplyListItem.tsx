@@ -1,10 +1,10 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { ReplyFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import type { Comment } from "../../types";
+import { routes } from "../../utils/links";
 import { Date } from "../Date";
 import { HtmlText } from "../HtmlText";
-import { routes } from "../../utils/links";
+import type { Comment } from "../../types";
 
 type ReplyListItemProps = {
     reply: Comment;

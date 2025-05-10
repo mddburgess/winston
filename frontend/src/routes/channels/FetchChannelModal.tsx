@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
-import { ChangeEvent, FormEvent, useState } from "react";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { requestedChannelForHandle } from "../../store/slices/fetches";
 import { FetchChannelAction } from "./FetchChannelAction";
+import type { ChangeEvent, FormEvent } from "react";
 
 const handleRegex = /^@([A-Za-z0-9_\-.]{0,30})$/;
 const urlRegex =

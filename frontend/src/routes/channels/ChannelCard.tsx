@@ -1,13 +1,13 @@
-import type { ChannelProps } from "../../types";
 import { Card, Col, Image, Row } from "react-bootstrap";
-import { Link } from "react-router";
 import {
     ArrowDownRightCircle,
     ArrowUpLeftCircleFill,
     Youtube,
 } from "react-bootstrap-icons";
+import { Link } from "react-router";
 import { Date } from "../../components/Date";
 import { routes } from "../../utils/links";
+import type { ChannelProps } from "../../types";
 
 export const ChannelCard = ({ channel }: ChannelProps) => (
     <Col className={"g-2"}>

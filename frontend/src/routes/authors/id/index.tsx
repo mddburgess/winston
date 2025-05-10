@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
+import { Link, useParams } from "react-router";
 import { routes } from "../../../utils/links";
 import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
 import { AuthorSummary } from "./AuthorSummary";

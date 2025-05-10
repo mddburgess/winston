@@ -1,6 +1,6 @@
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { Search, XCircleFill } from "react-bootstrap-icons";
-import { ChangeEvent } from "react";
+import type { ChangeEvent } from "react";
 
 type SearchControlProps = {
     value?: string;

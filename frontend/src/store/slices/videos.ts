@@ -1,14 +1,14 @@
-import { apiSlice } from "./api";
-import type { EntityState } from "@reduxjs/toolkit";
 import { createEntityAdapter } from "@reduxjs/toolkit";
+import { DateTime } from "luxon";
+import { descBy } from "../../utils";
+import { api } from "../../utils/links";
+import { apiSlice } from "./api";
 import type {
     Video,
     VideoDetailsResponse,
     VideoListResponse,
 } from "../../types";
-import { descBy } from "../../utils";
-import { DateTime } from "luxon";
-import { api } from "../../utils/links";
+import type { EntityState } from "@reduxjs/toolkit";
 
 const videosApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({

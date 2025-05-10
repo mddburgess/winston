@@ -1,4 +1,3 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import type {
     Channel,
@@ -6,6 +5,7 @@ import type {
     FetchVideosEvent,
     Maybe,
 } from "../../types";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
     channel: {

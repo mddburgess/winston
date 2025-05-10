@@ -1,5 +1,5 @@
-import { EyeFill, List } from "react-bootstrap-icons";
 import { Dropdown, Nav, NavDropdown } from "react-bootstrap";
+import { EyeFill, List } from "react-bootstrap-icons";
 import { Link } from "react-router";
 import { RemainingQuota } from "./RemainingQuota";
 import { routes } from "./utils/links";

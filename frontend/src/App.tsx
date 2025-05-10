@@ -1,7 +1,7 @@
-import { AppRoutes } from "./routes";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
 import { Container } from "react-bootstrap";
+import { Footer } from "./Footer";
+import { Header } from "./Header";
+import { AppRoutes } from "./routes";
 
 export const App = () => (
     <>

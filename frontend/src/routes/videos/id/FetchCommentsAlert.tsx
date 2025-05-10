@@ -1,10 +1,10 @@
+import { Alert, Button, Col } from "react-bootstrap";
+import { CheckCircleFill } from "react-bootstrap-icons";
 import { useAppSelector } from "../../../store/hooks";
+import { pluralize } from "../../../utils";
+import { FetchCommentsAction } from "./FetchCommentsAction";
 import type { VideoWithChannelProps } from "../../../types";
 import type { FetchState } from "../../../store/slices/fetches";
-import { Alert, Button, Col } from "react-bootstrap";
-import { pluralize } from "../../../utils";
-import { CheckCircleFill } from "react-bootstrap-icons";
-import { FetchCommentsAction } from "./FetchCommentsAction";
 
 type FetchingCommentsAlertProps = VideoWithChannelProps & {
     fetchState: FetchState;
