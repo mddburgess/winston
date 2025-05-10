@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.VideoDto;
+import ca.metricalsky.winston.entity.Video;
 import ca.metricalsky.winston.entity.view.VideoCount;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -32,16 +32,14 @@ public class VideoService {
         return defaultedMap(counts, 0L);
     }
 
-    @Transactional(readOnly = true)
+    public List<VideoDto> findAllByAuthorHandle(String authorHandle) {
+        var videos = videoRepository.findAllByCommentAuthorDisplayName(authorHandle);
+        return populateCommentCounts(videos);
+    }
+
     public List<VideoDto> findAllByChannelHandle(String channelHandle) {
-        var commentCounts = commentService.getCommentCountsByChannelHandle(channelHandle);
-        return videoRepository.findAllByChannelHandle(channelHandle)
-                .stream()
-                .map(videoDtoMapper::fromEntity)
-                .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
-                .peek(video -> video.setReplyCount(commentCounts.get(video.getId()).getReplies()))
-                .peek(video -> video.setTotalReplyCount(commentCounts.get(video.getId()).getTotalReplies()))
-                .toList();
+        var videos = videoRepository.findAllByChannelHandle(channelHandle);
+        return populateCommentCounts(videos);
     }
 
     public VideoDto getById(String videoId) {
@@ -57,10 +55,18 @@ public class VideoService {
         return videoDto;
     }
 
+    @Deprecated(since = "1.3.0", forRemoval = true)
     public List<VideoDto> getAllById(Iterable<String> videoIds) {
+        var videos = videoRepository.findAllById(videoIds);
+        return populateCommentCounts(videos);
+    }
+
+    private List<VideoDto> populateCommentCounts(List<Video> videos) {
+        var videoIds = videos.stream()
+                .map(Video::getId)
+                .toList();
         var commentCounts = commentService.getCommentCountsByVideoIds(videoIds);
-        return videoRepository.findAllById(videoIds)
-                .stream()
+        return videos.stream()
                 .map(videoDtoMapper::fromEntity)
                 .peek(video -> video.setCommentCount(commentCounts.get(video.getId()).getComments()))
                 .peek(video -> video.setReplyCount(commentCounts.get(video.getId()).getReplies()))

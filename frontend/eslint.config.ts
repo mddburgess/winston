@@ -4,6 +4,7 @@ import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
 import globals from "globals";
 import typescript from "typescript-eslint";
+import viteConfig from "./vite.config";
 
 export default typescript.config(
     {
@@ -39,6 +40,7 @@ export default typescript.config(
         rules: {
             "import/consistent-type-specifier-style": "warn",
             "import/exports-last": "warn",
+            "import/extensions": "warn",
             "import/first": "warn",
             "import/group-exports": "warn",
             "import/newline-after-import": [
@@ -68,6 +70,7 @@ export default typescript.config(
                     groups: [
                         "builtin",
                         "external",
+                        "internal",
                         "parent",
                         "sibling",
                         "index",
@@ -77,6 +80,14 @@ export default typescript.config(
                     named: true,
                 },
             ],
+        },
+        settings: {
+            "import/internal-regex": "^#/",
+            "import/resolver": {
+                vite: {
+                    viteConfig,
+                },
+            },
         },
     },
     {

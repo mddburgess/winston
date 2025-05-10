@@ -1,36 +1,13 @@
 import { Alert, Button, Col } from "react-bootstrap";
 import { CheckCircleFill } from "react-bootstrap-icons";
-import { useAppSelector } from "../../../store/hooks";
-import { pluralize } from "../../../utils";
+import { useAppSelector } from "#/store/hooks";
+import { pluralize } from "#/utils";
 import { FetchCommentsAction } from "./FetchCommentsAction";
-import type { VideoWithChannelDto } from "../../../model/VideoDto";
-import type { FetchState } from "../../../store/slices/fetches";
+import type { FetchState } from "#/store/slices/fetches";
+import type { VideoWithChannelProps } from "#/types";
 
-type FetchCommentsAlertProps = {
-    video: VideoWithChannelDto;
-};
-
-type FetchingCommentsAlertProps = FetchCommentsAlertProps & {
+type FetchingCommentsAlertProps = VideoWithChannelProps & {
     fetchState: FetchState;
-};
-
-export const FetchCommentsAlert = ({ video }: FetchCommentsAlertProps) => {
-    const fetchState = useAppSelector(
-        (state) => state.fetches.comments[video.id],
-    );
-    switch (fetchState?.status) {
-        case "REQUESTED":
-        case "FETCHING":
-            return (
-                <FetchingCommentsAlert video={video} fetchState={fetchState} />
-            );
-        case "COMPLETED":
-            return (
-                <FetchedCommentsAlert video={video} fetchState={fetchState} />
-            );
-        default:
-            return <></>;
-    }
 };
 
 const FetchingCommentsAlert = ({
@@ -70,3 +47,22 @@ const FetchedCommentsAlert = ({ fetchState }: FetchingCommentsAlertProps) => (
         </Col>
     </Alert>
 );
+
+export const FetchCommentsAlert = ({ video }: VideoWithChannelProps) => {
+    const fetchState = useAppSelector(
+        (state) => state.fetches.comments[video.id],
+    );
+    switch (fetchState?.status) {
+        case "REQUESTED":
+        case "FETCHING":
+            return (
+                <FetchingCommentsAlert video={video} fetchState={fetchState} />
+            );
+        case "COMPLETED":
+            return (
+                <FetchedCommentsAlert video={video} fetchState={fetchState} />
+            );
+        default:
+            return <></>;
+    }
+};

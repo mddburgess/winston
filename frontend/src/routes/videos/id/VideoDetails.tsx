@@ -1,13 +1,12 @@
 import { Col, Image, Ratio, Row } from "react-bootstrap";
 import { ArrowUpLeftCircleFill, PersonVideo3 } from "react-bootstrap-icons";
-import { CommentCounts } from "../../../components/comments/CommentCounts";
-import { CopyToClipboard } from "../../../components/CopyToClipboard";
-import { Date } from "../../../components/Date";
+import { CommentCounts } from "#/components/comments/CommentCounts";
+import { CopyToClipboard } from "#/components/CopyToClipboard";
+import { Date } from "#/components/Date";
 import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
-import type { VideoWithChannelDto } from "../../../model/VideoDto";
+import type { VideoWithChannelProps } from "#/types";
 
-type VideoDetailsProps = {
-    video: VideoWithChannelDto;
+type VideoDetailsProps = VideoWithChannelProps & {
     commentCount: number;
     replyCount: number;
     totalReplyCount: number;

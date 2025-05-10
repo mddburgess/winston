@@ -1,9 +1,12 @@
 package ca.metricalsky.winston.web;
 
+import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.dto.author.AuthorDetailsResponse;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.dto.author.AuthorListResponse;
+import ca.metricalsky.winston.dto.author.AuthorSummaryResponse;
 import ca.metricalsky.winston.service.AuthorService;
+import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.VideoService;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +21,23 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/authors")
+@RequestMapping
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final ChannelService channelService;
     private final CommentService commentService;
     private final VideoService videoService;
 
-    @GetMapping
+    @GetMapping("/api/v1/authors")
     public AuthorListResponse list() {
         var authors = authorService.findAll();
         return new AuthorListResponse(authors);
     }
 
-    @GetMapping("/{authorHandle}")
+    @Deprecated(since = "1.3.0", forRemoval = true)
+    @GetMapping("/api/v1/authors/{authorHandle}")
     public AuthorDetailsResponse findAuthorDetails(@PathVariable String authorHandle) {
-
         var authorDto = authorService.findByHandle(authorHandle)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var commentDtos = commentService.findAllWithContextByAuthorId(authorDto.getId());
@@ -48,5 +52,18 @@ public class AuthorController {
                 .comments(commentDtos)
                 .videos(videoDtos)
                 .build();
+    }
+
+    @GetMapping("/api/v2/authors/{authorHandle}")
+    public AuthorSummaryResponse findAuthorSummary(@PathVariable String authorHandle) {
+        var authorDto = authorService.findByHandle(authorHandle)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var videoDtos = videoService.findAllByAuthorHandle(authorHandle);
+        var channelIds = videoDtos.stream()
+                .map(VideoDto::getChannelId)
+                .toList();
+        var channelDtos = channelService.findAllById(channelIds);
+
+        return new AuthorSummaryResponse(authorDto, channelDtos, videoDtos);
     }
 }

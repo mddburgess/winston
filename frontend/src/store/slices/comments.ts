@@ -1,13 +1,29 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
-import { ascBy } from "../../utils";
-import { api } from "../../utils/links";
+import { ascBy } from "#/utils";
+import { api } from "#/utils/links";
 import { apiSlice } from "./api";
-import type { CommentDto } from "../../model/CommentDto";
+import type { Comment, CommentListResponse } from "#/types";
 import type { EntityState } from "@reduxjs/toolkit";
 
-export type CommentState = Omit<CommentDto, "replies"> & {
-    replies: EntityState<CommentDto, string>;
+type ListCommentsByVideoIdAuthorParams = {
+    videoId: string;
+    authorHandle: string;
+};
+
+const responseTransformer = (response: CommentListResponse) => {
+    const comments = response.map((comment) => ({
+        ...comment,
+        replies: repliesAdapter.addMany(
+            repliesAdapter.getInitialState(),
+            comment.replies,
+        ),
+    }));
+    return commentsAdapter.addMany(commentsAdapter.getInitialState(), comments);
+};
+
+export type CommentState = Omit<Comment, "replies"> & {
+    replies: EntityState<Comment, string>;
 };
 
 export const commentsAdapter = createEntityAdapter<CommentState>({
@@ -16,7 +32,7 @@ export const commentsAdapter = createEntityAdapter<CommentState>({
     ),
 });
 
-export const repliesAdapter = createEntityAdapter<CommentDto>({
+export const repliesAdapter = createEntityAdapter<Comment>({
     sortComparer: ascBy((comment) =>
         DateTime.fromISO(comment.publishedAt).valueOf(),
     ),
@@ -28,24 +44,27 @@ export const commentsApi = apiSlice.injectEndpoints({
             EntityState<CommentState, string>,
             string
         >({
-            query: api.videos.id.comments.get,
-            transformResponse: (response: CommentDto[]) => {
-                const comments = response.map((comment) => ({
-                    ...comment,
-                    replies: repliesAdapter.addMany(
-                        repliesAdapter.getInitialState(),
-                        comment.replies,
-                    ),
-                }));
-                return commentsAdapter.addMany(
-                    commentsAdapter.getInitialState(),
-                    comments,
-                );
-            },
+            query: api.v1.videos.id.comments.get,
+            transformResponse: responseTransformer,
+        }),
+        listCommentsByVideoIdAuthor: builder.query<
+            EntityState<CommentState, string>,
+            ListCommentsByVideoIdAuthorParams
+        >({
+            query: ({ videoId, authorHandle }) => ({
+                url: api.v1.videos.id.comments.get(videoId),
+                params: {
+                    author: authorHandle,
+                },
+            }),
+            transformResponse: responseTransformer,
         }),
     }),
     overrideExisting: "throw",
 });
 
-export const { useListCommentsByVideoIdQuery, util: commentsApiUtils } =
-    commentsApi;
+export const {
+    useListCommentsByVideoIdQuery,
+    useListCommentsByVideoIdAuthorQuery,
+    util: commentsApiUtils,
+} = commentsApi;

@@ -1,16 +1,12 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
 import { ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { CommentCounts } from "../../../components/comments/CommentCounts";
-import { Date } from "../../../components/Date";
-import { routes } from "../../../utils/links";
-import type { VideoWithChannelIdDto } from "../../../model/VideoDto";
+import { CommentCounts } from "#/components/comments/CommentCounts";
+import { Date } from "#/components/Date";
+import { routes } from "#/utils/links";
+import type { VideoProps } from "#/types";
 
-type VideoCardProps = {
-    video: VideoWithChannelIdDto;
-};
-
-export const VideoCard = ({ video }: VideoCardProps) => (
+export const VideoCard = ({ video }: VideoProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>

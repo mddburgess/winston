@@ -1,13 +1,15 @@
 import { Col, Image, Row } from "react-bootstrap";
-import { BadgeList } from "../../../components/BadgeList";
-import { CopyToClipboard } from "../../../components/CopyToClipboard";
-import type { ChannelDto } from "../../../model/ChannelDto";
+import { BadgeList } from "#/components/BadgeList";
+import { CopyToClipboard } from "#/components/CopyToClipboard";
+import type { ChannelProps } from "#/types";
 
-type ChannelDetailsProps = {
-    channel: ChannelDto;
+const topicTransformer = (topic: string) => {
+    return topic
+        .slice("https://en.wikipedia.org/wiki/".length)
+        .replace(/_/g, " ");
 };
 
-export const ChannelDetails = ({ channel }: ChannelDetailsProps) => (
+export const ChannelDetails = ({ channel }: ChannelProps) => (
     <Row className={"bg-body-tertiary border mx-0 my-3 p-3 rounded-3"}>
         <Col xs={"auto"}>
             <Image
@@ -49,9 +51,3 @@ export const ChannelDetails = ({ channel }: ChannelDetailsProps) => (
         </Col>
     </Row>
 );
-
-const topicTransformer = (topic: string) => {
-    return topic
-        .slice("https://en.wikipedia.org/wiki/".length)
-        .replace(/_/g, " ");
-};

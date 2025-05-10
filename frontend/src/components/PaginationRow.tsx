@@ -1,5 +1,5 @@
 import { Col, Pagination, Row } from "react-bootstrap";
-import { pluralize } from "../utils";
+import { pluralize } from "#/utils";
 import { SearchControl } from "./SearchControl";
 import type { ReactElement } from "react";
 

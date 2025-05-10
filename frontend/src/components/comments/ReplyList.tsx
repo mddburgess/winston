@@ -1,43 +1,17 @@
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { ReplyAll } from "react-bootstrap-icons";
-import { FetchRepliesAction } from "../../routes/videos/id/FetchRepliesAction";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { requestedRepliesForId } from "../../store/slices/fetches";
-import { pluralize } from "../../utils";
+import { FetchRepliesAction } from "#/routes/videos/id/FetchRepliesAction";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { requestedRepliesForId } from "#/store/slices/fetches";
+import { pluralize } from "#/utils";
 import { ReplyListItem } from "./ReplyListItem";
-import type { CommentDto } from "../../model/CommentDto";
+import type { Comment } from "#/types";
 
 type ReplyListProps = {
     commentId: string;
     totalReplyCount: number;
-    replies: CommentDto[];
+    replies: Comment[];
     highlightAuthorId?: string;
-};
-
-export const ReplyList = ({
-    highlightAuthorId = "",
-    ...props
-}: ReplyListProps) => {
-    const fetchState = useAppSelector(
-        (state) => state.fetches.replies[props.commentId],
-    );
-
-    let moreRepliesElement = <></>;
-    if (
-        fetchState?.status === "REQUESTED" ||
-        fetchState?.status === "FETCHING"
-    ) {
-        moreRepliesElement = <FetchingRepliesItem {...props} />;
-    } else if (props.totalReplyCount > props.replies.length) {
-        moreRepliesElement = <MoreRepliesItem {...props} />;
-    }
-
-    return (
-        <ListGroup variant={"flush"} className={"ps-4"}>
-            <ReplyListPart {...props} highlightAuthorId={highlightAuthorId} />
-            {moreRepliesElement}
-        </ListGroup>
-    );
 };
 
 const ReplyListPart = (props: Partial<ReplyListProps>) => {
@@ -92,5 +66,31 @@ const FetchingRepliesItem = ({
             </span>
             <FetchRepliesAction commentId={commentId} />
         </ListGroupItem>
+    );
+};
+
+export const ReplyList = ({
+    highlightAuthorId = "",
+    ...props
+}: ReplyListProps) => {
+    const fetchState = useAppSelector(
+        (state) => state.fetches.replies[props.commentId],
+    );
+
+    let moreRepliesElement = <></>;
+    if (
+        fetchState?.status === "REQUESTED" ||
+        fetchState?.status === "FETCHING"
+    ) {
+        moreRepliesElement = <FetchingRepliesItem {...props} />;
+    } else if (props.totalReplyCount > props.replies.length) {
+        moreRepliesElement = <MoreRepliesItem {...props} />;
+    }
+
+    return (
+        <ListGroup variant={"flush"} className={"ps-4"}>
+            <ReplyListPart {...props} highlightAuthorId={highlightAuthorId} />
+            {moreRepliesElement}
+        </ListGroup>
     );
 };

@@ -7,7 +7,7 @@ const reducer = combineReducers({
     fetches,
 });
 
-export const setupStore = (preloadedState?: Partial<AppState>) => {
+const setupStore = (preloadedState?: Partial<AppState>) => {
     return configureStore({
         reducer,
         middleware: (getDefaultMiddleware) =>
@@ -16,6 +16,9 @@ export const setupStore = (preloadedState?: Partial<AppState>) => {
     });
 };
 
-export type AppState = ReturnType<typeof reducer>;
-export type AppStore = ReturnType<typeof setupStore>;
-export type AppDispatch = AppStore["dispatch"];
+type AppState = ReturnType<typeof reducer>;
+type AppStore = ReturnType<typeof setupStore>;
+type AppDispatch = AppStore["dispatch"];
+
+export { setupStore };
+export type { AppDispatch, AppState, AppStore };

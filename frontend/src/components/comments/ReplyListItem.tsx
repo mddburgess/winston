@@ -1,13 +1,13 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { ReplyFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { routes } from "../../utils/links";
-import { Date } from "../Date";
-import { HtmlText } from "../HtmlText";
-import type { CommentDto } from "../../model/CommentDto";
+import { Date } from "#/components/Date";
+import { HtmlText } from "#/components/HtmlText";
+import { routes } from "#/utils/links";
+import type { Comment } from "#/types";
 
 type ReplyListItemProps = {
-    reply: CommentDto;
+    reply: Comment;
     highlightAuthorId?: string;
 };
 

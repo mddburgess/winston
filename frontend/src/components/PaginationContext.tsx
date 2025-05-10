@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router";
-import { parseIntOrDefault } from "../utils";
+import { parseIntOrDefault } from "#/utils";
 import type { ReactNode } from "react";
 
 type PaginationContextProps<T> = {

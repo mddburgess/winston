@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
-import { PaginationContext } from "../../../components/PaginationContext";
-import { PaginationRow } from "../../../components/PaginationRow";
-import { useAppDispatch } from "../../../store/hooks";
-import { useFindChannelByHandleQuery } from "../../../store/slices/channels";
-import { initFetchStateForChannel } from "../../../store/slices/fetches";
+import { PaginationContext } from "#/components/PaginationContext";
+import { PaginationRow } from "#/components/PaginationRow";
+import { useAppDispatch } from "#/store/hooks";
+import { useFindChannelByHandleQuery } from "#/store/slices/channels";
+import { initFetchStateForChannel } from "#/store/slices/fetches";
 import {
     useListVideosByChannelHandleQuery,
     videosAdapter,
-} from "../../../store/slices/videos";
-import { routes } from "../../../utils/links";
+} from "#/store/slices/videos";
+import { routes } from "#/utils/links";
 import { ChannelDetails } from "./ChannelDetails";
 import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";

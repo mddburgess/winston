@@ -1,21 +1,18 @@
-import { api } from "../../utils/links";
+import { api } from "#/utils/links";
 import { apiSlice } from "./api";
-import type { AuthorDetailsResponse } from "../../model/authors/AuthorDetailsResponse";
-import type { AuthorListResponse } from "../../model/authors/AuthorListResponse";
+import type { AuthorListResponse, AuthorSummaryResponse } from "#/types";
 
-export const authorsApi = apiSlice.injectEndpoints({
+const authorsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         listAuthors: builder.query<AuthorListResponse, void>({
-            query: api.authors.get,
+            query: api.v1.authors.get,
         }),
-        findAuthorDetailsByHandle: builder.query<AuthorDetailsResponse, string>(
-            {
-                query: api.authors.handle.get,
-            },
+        findAuthorSummaryByHandle: builder.query<AuthorSummaryResponse, string>(
+            { query: api.v2.authors.handle.get },
         ),
     }),
     overrideExisting: "throw",
 });
 
-export const { useListAuthorsQuery, useFindAuthorDetailsByHandleQuery } =
+export const { useListAuthorsQuery, useFindAuthorSummaryByHandleQuery } =
     authorsApi;

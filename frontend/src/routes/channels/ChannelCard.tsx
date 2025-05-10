@@ -5,15 +5,11 @@ import {
     Youtube,
 } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { Date } from "../../components/Date";
-import { routes } from "../../utils/links";
-import type { ChannelDto } from "../../model/ChannelDto";
+import { Date } from "#/components/Date";
+import { routes } from "#/utils/links";
+import type { ChannelProps } from "#/types";
 
-type ChannelCardProps = {
-    channel: ChannelDto;
-};
-
-export const ChannelCard = ({ channel }: ChannelCardProps) => (
+export const ChannelCard = ({ channel }: ChannelProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Card.Body className={"p-2"}>

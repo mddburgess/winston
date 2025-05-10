@@ -1,13 +1,13 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
-import { backend } from "../../mocks/backend";
-import { renderHookWithProviders } from "../../utils/test-utils";
+import { backend } from "#/mocks/backend";
+import { renderHookWithProviders } from "#/utils/test-utils";
 import { appendFetchedChannels, useListChannelsQuery } from "./channels";
-import type { ChannelDto } from "../../model/ChannelDto";
+import type { Channel } from "#/types";
 
 describe("channelsApi", () => {
-    const entityAdapter = createEntityAdapter<ChannelDto>();
+    const entityAdapter = createEntityAdapter<Channel>();
 
     describe("listChannels", () => {
         it("handles a 200 response with a list of channels", async () => {

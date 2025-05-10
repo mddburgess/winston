@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
-import { PaginationContext } from "../../components/PaginationContext";
-import { PaginationRow } from "../../components/PaginationRow";
+import { PaginationContext } from "#/components/PaginationContext";
+import { PaginationRow } from "#/components/PaginationRow";
 import {
     selectAllChannels,
     useListChannelsQuery,
-} from "../../store/slices/channels";
+} from "#/store/slices/channels";
 import { ChannelCards } from "./ChannelCards";
 import { FetchChannelModal } from "./FetchChannelModal";
 
