@@ -1,4 +1,5 @@
 import javascript from "@eslint/js";
+import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
 import globals from "globals";
@@ -88,5 +89,9 @@ export default typescript.config(
                 version: "detect",
             },
         },
+    },
+    {
+        extends: [vitestPlugin.configs.recommended],
+        files: ["**/*.spec.{ts,tsx}"],
     },
 );
