@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ChannelDto } from "../../model/ChannelDto";
-import {
+import { createSlice } from "@reduxjs/toolkit";
+import type { ChannelDto } from "../../model/ChannelDto";
+import type {
     FetchCommentsEvent,
     FetchVideosEvent,
 } from "../../model/events/FetchEvent";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type FetchState = {
     id: string;

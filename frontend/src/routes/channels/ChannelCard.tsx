@@ -1,13 +1,13 @@
-import { ChannelDto } from "../../model/ChannelDto";
 import { Card, Col, Image, Row } from "react-bootstrap";
-import { Link } from "react-router";
 import {
     ArrowDownRightCircle,
     ArrowUpLeftCircleFill,
     Youtube,
 } from "react-bootstrap-icons";
+import { Link } from "react-router";
 import { Date } from "../../components/Date";
 import { routes } from "../../utils/links";
+import type { ChannelDto } from "../../model/ChannelDto";
 
 type ChannelCardProps = {
     channel: ChannelDto;

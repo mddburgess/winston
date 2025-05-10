@@ -1,6 +1,6 @@
-import { AuthorWithStatisticsDto } from "../../model/authors/AuthorDto";
 import { Col } from "react-bootstrap";
 import { ChatFill, ChatQuoteFill, Youtube } from "react-bootstrap-icons";
+import type { AuthorWithStatisticsDto } from "../../model/authors/AuthorDto";
 
 type AuthorStatisticsProps = {
     author: AuthorWithStatisticsDto;

@@ -1,7 +1,7 @@
-import { ChannelDto } from "../ChannelDto";
-import { VideoWithChannelIdDto } from "../VideoDto";
-import { CommentDto } from "../CommentDto";
-import { ProblemDetail } from "./ProblemDetail";
+import type { ChannelDto } from "../ChannelDto";
+import type { CommentDto } from "../CommentDto";
+import type { VideoWithChannelIdDto } from "../VideoDto";
+import type { ProblemDetail } from "./ProblemDetail";
 
 type FetchDataEvent<T> = {
     objectId: string;

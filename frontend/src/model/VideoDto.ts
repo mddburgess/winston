@@ -1,4 +1,4 @@
-import { ChannelDto } from "./ChannelDto";
+import type { ChannelDto } from "./ChannelDto";
 
 type VideoDto = {
     id: string;

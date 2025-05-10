@@ -1,4 +1,4 @@
-import { Maybe } from "../types";
+import type { Maybe } from "../types";
 
 export const ascBy = <T>(property: (obj: T) => number) => {
     return (a: T, b: T) => property(a) - property(b);

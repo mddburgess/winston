@@ -1,6 +1,6 @@
 import { ListGroup } from "react-bootstrap";
-import { CommentState } from "../../store/slices/comments";
 import { CommentListItem } from "./CommentListItem";
+import type { CommentState } from "../../store/slices/comments";
 
 type CommentListProps = {
     comments?: CommentState[];

@@ -1,8 +1,8 @@
-import { Link, useParams } from "react-router";
 import { Breadcrumb, BreadcrumbItem, Row } from "react-bootstrap";
+import { Link, useParams } from "react-router";
 import { useFindAuthorDetailsByHandleQuery } from "../../../store/slices/authors";
-import { VideoCommentsList } from "./VideoCommentsList";
 import { routes } from "../../../utils/links";
+import { VideoCommentsList } from "./VideoCommentsList";
 
 export const AuthorDetailsRoute = () => {
     const { authorHandle } = useParams();
