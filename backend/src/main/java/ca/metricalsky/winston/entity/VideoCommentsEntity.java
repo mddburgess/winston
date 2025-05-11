@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,14 +19,19 @@ public class VideoCommentsEntity {
     @Id
     private String videoId;
 
+    @Basic(optional = false)
     private boolean commentsDisabled;
 
-    private Long commentCount;
+    @Basic(optional = false)
+    private long commentCount;
 
-    private Long replyCount;
+    @Basic(optional = false)
+    private long replyCount;
 
-    private Long totalReplyCount;
+    @Basic(optional = false)
+    private long totalReplyCount;
 
     @UpdateTimestamp
+    @Basic(optional = false)
     private OffsetDateTime lastFetchedAt;
 }
