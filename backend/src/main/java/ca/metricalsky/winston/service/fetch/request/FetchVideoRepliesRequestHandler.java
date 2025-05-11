@@ -4,6 +4,7 @@ import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
     private final CommentRepository commentRepository;
     private final FetchRepliesActionHandler fetchRepliesActionHandler;
     private final FetchRequestService fetchRequestService;
+    private final VideoCommentsService videoCommentsService;
 
     @Override
     public void fetch(FetchRequest fetchRequest, SsePublisher ssePublisher) {
@@ -29,6 +31,8 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
         } catch (RuntimeException ex) {
             fetchRequestService.fetchFailed(fetchRequest, ex);
             throw ex;
+        } finally {
+            afterFetch(fetchRequest);
         }
     }
 
@@ -45,5 +49,10 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
                 .actionType(FetchAction.ActionType.REPLIES)
                 .objectId(commentId)
                 .build();
+    }
+
+    @Override
+    public void afterFetch(FetchRequest fetchRequest) {
+        videoCommentsService.updateVideoComments(fetchRequest.getObjectId());
     }
 }

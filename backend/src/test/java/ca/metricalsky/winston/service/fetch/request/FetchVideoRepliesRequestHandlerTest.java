@@ -5,6 +5,7 @@ import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,8 @@ class FetchVideoRepliesRequestHandlerTest {
     private FetchRepliesActionHandler fetchRepliesActionHandler;
     @Mock
     private SsePublisher ssePublisher;
+    @Mock
+    private VideoCommentsService videoCommentsService;
     @Captor
     private ArgumentCaptor<FetchAction> fetchAction;
 
@@ -59,6 +62,7 @@ class FetchVideoRepliesRequestHandlerTest {
 
         verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture(), eq(ssePublisher));
         verify(fetchRequestService).fetchCompleted(fetchRequest);
+        verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
 
         var fetchActionValues = fetchAction.getAllValues();
         assertThat(fetchActionValues.getFirst())
@@ -86,5 +90,6 @@ class FetchVideoRepliesRequestHandlerTest {
                 .isEqualTo(appException);
 
         verify(fetchRequestService).fetchFailed(fetchRequest, appException);
+        verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
     }
 }

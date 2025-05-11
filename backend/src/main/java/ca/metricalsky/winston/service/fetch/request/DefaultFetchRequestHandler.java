@@ -25,6 +25,8 @@ public abstract class DefaultFetchRequestHandler implements FetchRequestHandler 
         } catch (RuntimeException ex) {
             fetchRequestService.fetchFailed(fetchRequest, ex);
             throw ex;
+        } finally {
+            afterFetch(fetchRequest);
         }
     }
 
