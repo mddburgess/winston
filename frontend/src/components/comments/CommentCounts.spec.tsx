@@ -1,14 +1,14 @@
 import { render } from "@testing-library/react";
 import { CommentCounts } from "./CommentCounts";
 
-describe("CommentCounts", () => {
+describe(CommentCounts, () => {
     describe("the comment count", () => {
         it("is displayed when the commentsDisabled property is false", () => {
             const result = render(
                 <CommentCounts comments={0} replies={0} totalReplies={0} />,
             );
-
             const comments = result.getByTestId("comments");
+
             expect(comments).toBeInTheDocument();
             expect(comments).toHaveTextContent("0");
         });
@@ -22,8 +22,8 @@ describe("CommentCounts", () => {
                     totalReplies={0}
                 />,
             );
-
             const comments = result.getByTestId("comments");
+
             expect(comments).toBeInTheDocument();
             expect(comments).toHaveClass("text-body-tertiary");
             expect(comments).toHaveTextContent("comments disabled");
@@ -35,8 +35,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={0} replies={0} totalReplies={0} />,
             );
-
             const commentsIcon = result.getByTestId("commentsIcon");
+
             expect(commentsIcon).toBeInTheDocument();
             expect(commentsIcon).toHaveClass("bi-chat");
         });
@@ -45,8 +45,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={0} totalReplies={0} />,
             );
-
             const commentsIcon = result.getByTestId("commentsIcon");
+
             expect(commentsIcon).toBeInTheDocument();
             expect(commentsIcon).toHaveClass("bi-chat-fill");
         });
@@ -57,8 +57,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={0} totalReplies={0} />,
             );
-
             const replies = result.getByTestId("replies");
+
             expect(replies).toBeInTheDocument();
             expect(replies).toHaveTextContent("0");
         });
@@ -67,8 +67,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={0} replies={0} totalReplies={0} />,
             );
-
             const replies = result.queryByTestId("replies");
+
             expect(replies).not.toBeInTheDocument();
         });
     });
@@ -78,8 +78,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={2} totalReplies={3} />,
             );
-
             const totalReplies = result.getByTestId("totalReplies");
+
             expect(totalReplies).toBeInTheDocument();
             expect(totalReplies).toHaveClass("text-body-tertiary");
             expect(totalReplies).toContainHTML("&nbsp;/ 3");
@@ -89,8 +89,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={2} totalReplies={2} />,
             );
-
             const totalReplies = result.queryByTestId("totalReplies");
+
             expect(totalReplies).not.toBeInTheDocument();
         });
 
@@ -98,8 +98,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={3} totalReplies={2} />,
             );
-
             const totalReplies = result.queryByTestId("totalReplies");
+
             expect(totalReplies).not.toBeInTheDocument();
         });
 
@@ -112,8 +112,8 @@ describe("CommentCounts", () => {
                     showTotalReplies={false}
                 />,
             );
-
             const totalReplies = result.queryByTestId("totalReplies");
+
             expect(totalReplies).not.toBeInTheDocument();
         });
     });
@@ -123,8 +123,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={2} totalReplies={3} />,
             );
-
             const repliesIcon = result.getByTestId("repliesIcon");
+
             expect(repliesIcon).toBeInTheDocument();
             expect(repliesIcon).toHaveClass("bi-chat-quote");
         });
@@ -133,8 +133,8 @@ describe("CommentCounts", () => {
             const result = render(
                 <CommentCounts comments={1} replies={2} totalReplies={2} />,
             );
-
             const repliesIcon = result.getByTestId("repliesIcon");
+
             expect(repliesIcon).toBeInTheDocument();
             expect(repliesIcon).toHaveClass("bi-chat-quote-fill");
         });
