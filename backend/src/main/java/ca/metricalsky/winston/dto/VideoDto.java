@@ -26,6 +26,8 @@ public class VideoDto {
     @NonNull
     private String thumbnailUrl = "";
 
+    private VideoComments comments;
+
     @NonNull
     private Long commentCount = 0L;
 

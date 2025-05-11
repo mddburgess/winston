@@ -2,6 +2,7 @@ package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.Video;
 import ca.metricalsky.winston.entity.view.VideoCount;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -33,6 +34,7 @@ public interface VideoRepository extends JpaRepository<Video, String> {
             WHERE v.channelId = (SELECT id FROM Channel WHERE customUrl = :channelHandle)
             ORDER BY v.publishedAt DESC
             """)
+    @EntityGraph(attributePaths = "comments")
     List<Video> findAllByChannelHandle(String channelHandle);
 
     @Query("SELECT MAX(v.publishedAt) FROM Video v WHERE v.channelId = :channelId")

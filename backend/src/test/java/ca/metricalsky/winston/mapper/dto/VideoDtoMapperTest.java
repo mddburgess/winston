@@ -42,7 +42,7 @@ public class VideoDtoMapperTest {
         var videoDto = videoDtoMapper.fromEntity(new Video());
         assertThat(videoDto)
                 .isNotNull()
-                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel");
+                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel", "comments");
     }
 
     private static Video buildVideo() {

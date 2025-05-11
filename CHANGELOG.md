@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Author summary endpoint that returns the channels and videos an author has commented on. (mddburgess/winston#45)
+- New table and object property on videos to hold fetched comment counts, comments disabled flag, and last fetched date.
+  (mddburgess/winston#46)
 
 ### Changed
 
@@ -95,7 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web UI to fetch channels, videos, and comments.
 - Cache channel and video thumbnails.
 
-[Unreleased]: https://github.com/mddburgess/winson/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
 [1.2.1]: https://github.com/mddburgess/winston/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/mddburgess/winston/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mddburgess/winston/compare/v1.0.0...v1.1.0
