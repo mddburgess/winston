@@ -5,7 +5,7 @@ import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
-import ca.metricalsky.winston.service.fetch.action.FetchActionHandlerFactory;
+import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
 
     private final CommentRepository commentRepository;
-    private final FetchActionHandlerFactory fetchActionHandlerFactory;
+    private final FetchRepliesActionHandler fetchRepliesActionHandler;
     private final FetchRequestService fetchRequestService;
 
     @Override
@@ -35,8 +35,7 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
     private void fetchReplies(FetchRequest fetchRequest, String commentId, SsePublisher ssePublisher) {
         var fetchAction = getFirstFetchAction(fetchRequest, commentId);
         while (fetchAction != null) {
-            var actionHandler = fetchActionHandlerFactory.getHandlerForAction(fetchAction);
-            fetchAction = actionHandler.fetch(fetchAction, ssePublisher);
+            fetchAction = fetchRepliesActionHandler.fetch(fetchAction, ssePublisher);
         }
     }
 

@@ -6,8 +6,6 @@ import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
-import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
-import ca.metricalsky.winston.service.fetch.action.FetchActionHandlerFactory;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,8 +35,6 @@ class FetchVideoRepliesRequestHandlerTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private FetchActionHandlerFactory fetchActionHandlerFactory;
-    @Mock
     private FetchRequestService fetchRequestService;
     @Mock
     private FetchRepliesActionHandler fetchRepliesActionHandler;
@@ -58,8 +54,6 @@ class FetchVideoRepliesRequestHandlerTest {
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
-        when(fetchActionHandlerFactory.getHandlerForAction(any(FetchAction.class)))
-                .thenReturn((FetchActionHandler) fetchRepliesActionHandler);
 
         fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher);
 
@@ -85,8 +79,6 @@ class FetchVideoRepliesRequestHandlerTest {
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
-        when(fetchActionHandlerFactory.getHandlerForAction(any(FetchAction.class)))
-                .thenReturn((FetchActionHandler) fetchRepliesActionHandler);
         when(fetchRepliesActionHandler.fetch(any(FetchAction.class), eq(ssePublisher)))
                 .thenThrow(appException);
 

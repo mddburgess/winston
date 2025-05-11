@@ -2,15 +2,18 @@ package ca.metricalsky.winston.service.fetch.request;
 
 import ca.metricalsky.winston.entity.fetch.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @ExtendWith(MockitoExtension.class)
 class FetchRequestHandlerFactoryTest {
@@ -19,46 +22,37 @@ class FetchRequestHandlerFactoryTest {
     private FetchRequestHandlerFactory fetchRequestHandlerFactory;
 
     @Mock
-    private DefaultFetchRequestHandler defaultFetchRequestHandler;
+    private FetchChannelsRequestHandler fetchChannelsRequestHandler;
+    @Mock
+    private FetchCommentRepliesRequestHandler fetchCommentRepliesRequestHandler;
+    @Mock
+    private FetchCommentsRequestHandler fetchCommentsRequestHandler;
     @Mock
     private FetchVideoRepliesRequestHandler fetchVideoRepliesRequestHandler;
+    @Mock
+    private FetchVideosRequestHandler fetchVideosRequestHandler;
 
-    @ParameterizedTest
-    @EnumSource(
-            value = FetchType.class,
-            names = { "CHANNELS", "VIDEOS", "COMMENTS" }
-    )
-    void getHandler(FetchType fetchType) {
+    @ParameterizedTest(name = "fetchType={0}, mode={1}")
+    @MethodSource
+    void getHandler(FetchType fetchType, String mode, Class<FetchRequestHandler> expectedFetchRequestHandlerType) {
         var fetchRequest = FetchRequest.builder()
                 .fetchType(fetchType)
+                .mode(mode)
                 .build();
 
         var handler = fetchRequestHandlerFactory.getHandler(fetchRequest);
 
-        assertThat(handler).isEqualTo(defaultFetchRequestHandler);
+        assertThat(handler)
+                .isInstanceOf(expectedFetchRequestHandlerType);
     }
 
-    @Test
-    void getHandler_repliesForComment() {
-        var fetchRequest = FetchRequest.builder()
-                .fetchType(FetchType.REPLIES)
-                .mode("FOR_COMMENT")
-                .build();
-
-        var handler = fetchRequestHandlerFactory.getHandler(fetchRequest);
-
-        assertThat(handler).isEqualTo(defaultFetchRequestHandler);
-    }
-
-    @Test
-    void getHandler_repliesForVideo() {
-        var fetchRequest = FetchRequest.builder()
-                .fetchType(FetchType.REPLIES)
-                .mode("FOR_VIDEO")
-                .build();
-
-        var handler = fetchRequestHandlerFactory.getHandler(fetchRequest);
-
-        assertThat(handler).isEqualTo(fetchVideoRepliesRequestHandler);
+    private static List<Arguments> getHandler() {
+        return List.of(
+                arguments(FetchType.CHANNELS, null, FetchChannelsRequestHandler.class),
+                arguments(FetchType.VIDEOS, null, FetchVideosRequestHandler.class),
+                arguments(FetchType.COMMENTS, null, FetchCommentsRequestHandler.class),
+                arguments(FetchType.REPLIES, "FOR_COMMENT", FetchCommentRepliesRequestHandler.class),
+                arguments(FetchType.REPLIES, "FOR_VIDEO", FetchVideoRepliesRequestHandler.class)
+        );
     }
 }

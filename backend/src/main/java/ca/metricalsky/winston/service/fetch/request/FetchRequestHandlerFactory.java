@@ -8,18 +8,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FetchRequestHandlerFactory {
 
-    private final DefaultFetchRequestHandler defaultFetchRequestHandler;
+    private final FetchChannelsRequestHandler fetchChannelsRequestHandler;
+    private final FetchCommentRepliesRequestHandler fetchCommentRepliesRequestHandler;
+    private final FetchCommentsRequestHandler fetchCommentsRequestHandler;
     private final FetchVideoRepliesRequestHandler fetchVideoRepliesRequestHandler;
+    private final FetchVideosRequestHandler fetchVideosRequestHandler;
 
     public FetchRequestHandler getHandler(FetchRequest fetchRequest) {
         return switch (fetchRequest.getFetchType()) {
-            case CHANNELS, VIDEOS, COMMENTS -> defaultFetchRequestHandler;
-            case REPLIES -> {
-                if ("FOR_VIDEO".equals(fetchRequest.getMode())) {
-                    yield fetchVideoRepliesRequestHandler;
-                }
-                yield defaultFetchRequestHandler;
-            }
+            case CHANNELS -> fetchChannelsRequestHandler;
+            case VIDEOS -> fetchVideosRequestHandler;
+            case COMMENTS -> fetchCommentsRequestHandler;
+            case REPLIES -> switch (fetchRequest.getMode()) {
+                case "FOR_COMMENT" -> fetchCommentRepliesRequestHandler;
+                case "FOR_VIDEO" -> fetchVideoRepliesRequestHandler;
+                default -> throw new IllegalArgumentException("Unsupported mode: " + fetchRequest.getMode());
+            };
         };
     }
 }
