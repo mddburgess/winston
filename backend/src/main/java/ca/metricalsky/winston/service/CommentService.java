@@ -15,11 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
 
 @Service
 public class CommentService {
@@ -60,20 +56,6 @@ public class CommentService {
         return comment.getReplies() != null
                 ? ListUtils.union(List.of(comment), comment.getReplies())
                 : List.of(comment);
-    }
-
-    public Map<String, CommentCount> getCommentCountsByChannelHandle(String channelHandle) {
-        var counts = commentRepository.countCommentsByChannelCustomUrl(channelHandle)
-                .stream()
-                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
-        return defaultedMap(counts, EMPTY_COUNT);
-    }
-
-    public Map<String, CommentCount> getCommentCountsByVideoIds(Iterable<String> videoIds) {
-        var counts = commentRepository.countCommentsForVideoIds(videoIds)
-                .stream()
-                .collect(Collectors.toMap(CommentCount::getVideoId, count -> count));
-        return defaultedMap(counts, EMPTY_COUNT);
     }
 
     public CommentCount getCommentCountByVideoId(String videoId) {

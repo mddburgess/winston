@@ -29,15 +29,6 @@ public class VideoDto {
     private VideoComments comments;
 
     @NonNull
-    private Long commentCount = 0L;
-
-    @NonNull
-    private Long replyCount = 0L;
-
-    @NonNull
-    private Long totalReplyCount = 0L;
-
-    @NonNull
     private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
     @NonNull
