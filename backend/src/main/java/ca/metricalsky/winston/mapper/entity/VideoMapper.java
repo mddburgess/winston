@@ -15,7 +15,6 @@ public interface VideoMapper {
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "commentsDisabled", ignore = true)
     @Mapping(target = "lastFetchedAt", ignore = true)
     Video fromYouTube(Activity activity);
 }

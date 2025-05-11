@@ -33,23 +33,20 @@ public class VideoMapperTest {
                 .hasFieldOrPropertyWithValue("title", ytActivity.getSnippet().getTitle())
                 .hasFieldOrPropertyWithValue("description", ytActivity.getSnippet().getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl",
-                        ytActivity.getSnippet().getThumbnails().getHigh().getUrl())
-                .hasFieldOrPropertyWithValue("commentsDisabled", false);
+                        ytActivity.getSnippet().getThumbnails().getHigh().getUrl());
     }
 
     @Test
     void fromYouTube_nullActivity() {
-        var video = videoMapper.fromYouTube(null);
-        assertThat(video).isNull();
+        assertThat(videoMapper.fromYouTube(null))
+                .isNull();
     }
 
     @Test
     void fromYouTube_emptyActivity() {
-        var video = videoMapper.fromYouTube(new Activity());
-        assertThat(video)
+        assertThat(videoMapper.fromYouTube(new Activity()))
                 .isNotNull()
-                .hasAllNullFieldsOrPropertiesExcept("commentsDisabled")
-                .hasFieldOrPropertyWithValue("commentsDisabled", false);
+                .hasAllNullFieldsOrProperties();
     }
 
     private static Activity buildYouTubeActivity() {

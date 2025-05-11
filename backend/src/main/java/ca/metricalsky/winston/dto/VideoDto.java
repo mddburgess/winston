@@ -37,8 +37,6 @@ public class VideoDto {
     @NonNull
     private Long totalReplyCount = 0L;
 
-    private boolean commentsDisabled = false;
-
     @NonNull
     private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);
 
