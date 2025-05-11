@@ -7,42 +7,48 @@ import {
 } from "react-bootstrap-icons";
 
 type CommentCountsProps = {
-    comments: number;
     commentsDisabled?: boolean;
-    replies: number;
-    totalReplies: number;
-    showTotalReplies?: boolean;
+    commentCount?: number;
+    replyCount?: number;
+    totalReplyCount?: number;
+    showTotalReplyCount?: boolean;
 };
-type CommentsColProps = Pick<
-    CommentCountsProps,
-    "comments" | "commentsDisabled"
->;
-type RepliesColProps = Pick<
-    CommentCountsProps,
-    "replies" | "totalReplies" | "showTotalReplies"
+
+type CommentsColProps = Required<
+    Pick<CommentCountsProps, "commentCount" | "commentsDisabled">
 >;
 
-export const CommentCounts = ({
-    comments,
+type RepliesColProps = Required<
+    Pick<
+        CommentCountsProps,
+        "replyCount" | "totalReplyCount" | "showTotalReplyCount"
+    >
+>;
+
+const CommentCounts = ({
     commentsDisabled = false,
-    replies,
-    totalReplies,
-    showTotalReplies = true,
+    commentCount = 0,
+    replyCount = 0,
+    totalReplyCount = 0,
+    showTotalReplyCount = true,
 }: CommentCountsProps) => (
     <>
-        <CommentsCol comments={comments} commentsDisabled={commentsDisabled} />
-        {comments > 0 && (
+        <CommentsCol
+            commentCount={commentCount}
+            commentsDisabled={commentsDisabled}
+        />
+        {commentCount > 0 && (
             <RepliesCol
-                replies={replies}
-                totalReplies={totalReplies}
-                showTotalReplies={showTotalReplies}
+                replyCount={replyCount}
+                totalReplyCount={totalReplyCount}
+                showTotalReplyCount={showTotalReplyCount}
             />
         )}
     </>
 );
 
-const CommentsCol = ({ comments, commentsDisabled }: CommentsColProps) => {
-    const CommentsIcon = comments > 0 ? ChatFill : Chat;
+const CommentsCol = ({ commentCount, commentsDisabled }: CommentsColProps) => {
+    const CommentsIcon = commentCount > 0 ? ChatFill : Chat;
     return (
         <Col
             className={
@@ -53,17 +59,18 @@ const CommentsCol = ({ comments, commentsDisabled }: CommentsColProps) => {
             xs={"auto"}
         >
             <CommentsIcon className={"me-2"} data-testid={"commentsIcon"} />
-            {commentsDisabled ? "comments disabled" : comments}
+            {commentsDisabled ? "comments disabled" : commentCount}
         </Col>
     );
 };
 
 const RepliesCol = ({
-    replies,
-    totalReplies,
-    showTotalReplies,
+    replyCount,
+    totalReplyCount,
+    showTotalReplyCount,
 }: RepliesColProps) => {
-    const RepliesIcon = replies >= totalReplies ? ChatQuoteFill : ChatQuote;
+    const RepliesIcon =
+        replyCount >= totalReplyCount ? ChatQuoteFill : ChatQuote;
     return (
         <Col
             className={"align-items-center d-flex"}
@@ -71,15 +78,17 @@ const RepliesCol = ({
             xs={"auto"}
         >
             <RepliesIcon className={"me-2"} data-testid={"repliesIcon"} />
-            {replies}
-            {showTotalReplies && replies < totalReplies && (
+            {replyCount}
+            {showTotalReplyCount && replyCount < totalReplyCount && (
                 <span
                     className={"text-body-tertiary"}
                     data-testid="totalReplies"
                 >
-                    &nbsp;/ {totalReplies}
+                    &nbsp;/ {totalReplyCount}
                 </span>
             )}
         </Col>
     );
 };
+
+export { CommentCounts };

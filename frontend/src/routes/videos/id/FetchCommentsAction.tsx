@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { EventSourceProvider } from "react-sse-hooks";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
@@ -61,7 +62,13 @@ export const FetchCommentsAction = ({ videoId }: FetchVideosActionProps) => {
                         "findVideoById",
                         videoId,
                         (draft) => {
-                            draft.commentsDisabled = true;
+                            draft.comments = {
+                                commentsDisabled: true,
+                                commentCount: 0,
+                                replyCount: 0,
+                                totalReplyCount: 0,
+                                lastFetchedAt: DateTime.now().toISO(),
+                            };
                         },
                     ),
                 );
