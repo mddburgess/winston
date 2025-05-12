@@ -11,12 +11,15 @@ type CommentCountsProps = {
     commentCount?: number;
     replyCount?: number;
     totalReplyCount?: number;
+    lastFetchedAt?: string;
     showTotalReplyCount?: boolean;
 };
 
 type CommentsColProps = Required<
     Pick<CommentCountsProps, "commentCount" | "commentsDisabled">
->;
+> & {
+    hasBeenFetched: boolean;
+};
 
 type RepliesColProps = Required<
     Pick<
@@ -30,25 +33,34 @@ const CommentCounts = ({
     commentCount = 0,
     replyCount = 0,
     totalReplyCount = 0,
+    lastFetchedAt,
     showTotalReplyCount = true,
-}: CommentCountsProps) => (
-    <>
-        <CommentsCol
-            commentCount={commentCount}
-            commentsDisabled={commentsDisabled}
-        />
-        {commentCount > 0 && (
-            <RepliesCol
-                replyCount={replyCount}
-                totalReplyCount={totalReplyCount}
-                showTotalReplyCount={showTotalReplyCount}
+}: CommentCountsProps) => {
+    const hasBeenFetched = lastFetchedAt !== undefined;
+    return (
+        <>
+            <CommentsCol
+                commentCount={commentCount}
+                commentsDisabled={commentsDisabled}
+                hasBeenFetched={hasBeenFetched}
             />
-        )}
-    </>
-);
+            {commentCount > 0 && (
+                <RepliesCol
+                    replyCount={replyCount}
+                    totalReplyCount={totalReplyCount}
+                    showTotalReplyCount={showTotalReplyCount}
+                />
+            )}
+        </>
+    );
+};
 
-const CommentsCol = ({ commentCount, commentsDisabled }: CommentsColProps) => {
-    const CommentsIcon = commentCount > 0 ? ChatFill : Chat;
+const CommentsCol = ({
+    commentCount,
+    commentsDisabled,
+    hasBeenFetched,
+}: CommentsColProps) => {
+    const CommentsIcon = hasBeenFetched ? ChatFill : Chat;
     return (
         <Col
             className={

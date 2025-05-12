@@ -1,4 +1,5 @@
 import { render } from "@testing-library/react";
+import { DateTime } from "luxon";
 import { CommentCounts } from "./CommentCounts";
 
 describe(CommentCounts, () => {
@@ -22,7 +23,7 @@ describe(CommentCounts, () => {
     });
 
     describe("the comment icon", () => {
-        it("is unfilled when the comment count is 0", () => {
+        it("is unfilled when the last fetched at date is undefined", () => {
             const commentsIcon = render(<CommentCounts />).getByTestId(
                 "commentsIcon",
             );
@@ -31,9 +32,9 @@ describe(CommentCounts, () => {
             expect(commentsIcon).toHaveClass("bi-chat");
         });
 
-        it("is filled when the comment count is greater than 0", () => {
+        it("is filled when the last fetched at date is set", () => {
             const commentsIcon = render(
-                <CommentCounts commentCount={1} />,
+                <CommentCounts lastFetchedAt={DateTime.now().toISO()} />,
             ).getByTestId("commentsIcon");
 
             expect(commentsIcon).toBeInTheDocument();

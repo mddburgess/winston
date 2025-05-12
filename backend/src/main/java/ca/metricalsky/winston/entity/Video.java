@@ -34,7 +34,7 @@ public class Video {
     @UpdateTimestamp
     private OffsetDateTime lastFetchedAt;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "video_id")
     private VideoCommentsEntity comments;
 }

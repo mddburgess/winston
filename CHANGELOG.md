@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the author handle in the author details URI instead of the author ID. (mddburgess/winston#50)
 - Migrated build tool from Parcel to Vite. (mddburgess/winston#61)
 - Redesigned author details page to reduce the amount of data requested from the backend. (mddburgess/winston#45)
+- Show when comments have been fetched for a video and the fetch returned zero comments. (mddburgess/winston#46)
 
 ### Deprecated
 

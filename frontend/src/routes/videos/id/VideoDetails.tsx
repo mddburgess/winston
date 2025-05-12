@@ -23,6 +23,7 @@ export const VideoDetails = ({
         commentCount: 0,
         replyCount: 0,
         totalReplyCount: 0,
+        lastFetchedAt: undefined,
     };
     const comments = {
         commentsDisabled: videoComments.commentsDisabled,
@@ -32,6 +33,7 @@ export const VideoDetails = ({
             videoComments.totalReplyCount,
             totalReplyCount,
         ),
+        lastFetchedAt: videoComments.lastFetchedAt,
     };
 
     return (
