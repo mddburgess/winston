@@ -6,8 +6,7 @@ import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
-import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
-import ca.metricalsky.winston.service.fetch.action.FetchActionHandlerFactory;
+import ca.metricalsky.winston.service.fetch.action.FetchChannelActionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,17 +21,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class DefaultFetchRequestHandlerTest {
+class FetchChannelsRequestHandlerTest {
 
     @InjectMocks
-    private DefaultFetchRequestHandler defaultFetchRequestHandler;
+    private FetchChannelsRequestHandler fetchChannelsRequestHandler;
 
-    @Mock
-    private FetchActionHandlerFactory fetchActionHandlerFactory;
     @Mock
     private FetchRequestService fetchRequestService;
     @Mock
-    private FetchActionHandler fetchActionHandler;
+    private FetchChannelActionHandler fetchChannelActionHandler;
     @Mock
     private SsePublisher ssePublisher;
 
@@ -44,10 +41,8 @@ class DefaultFetchRequestHandlerTest {
 
         when(fetchRequestService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
-        when(fetchActionHandlerFactory.getHandlerForAction(any(FetchAction.class)))
-                .thenReturn(fetchActionHandler);
 
-        defaultFetchRequestHandler.fetch(fetchRequest, ssePublisher);
+        fetchChannelsRequestHandler.fetch(fetchRequest, ssePublisher);
 
         verify(fetchRequestService).fetchCompleted(fetchRequest);
     }
@@ -61,12 +56,10 @@ class DefaultFetchRequestHandlerTest {
 
         when(fetchRequestService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
-        when(fetchActionHandlerFactory.getHandlerForAction(any(FetchAction.class)))
-                .thenReturn(fetchActionHandler);
-        when(fetchActionHandler.fetch(any(FetchAction.class), eq(ssePublisher)))
+        when(fetchChannelActionHandler.fetch(any(FetchAction.class), eq(ssePublisher)))
                 .thenThrow(appException);
 
-        assertThatThrownBy(() -> defaultFetchRequestHandler.fetch(fetchRequest, ssePublisher))
+        assertThatThrownBy(() -> fetchChannelsRequestHandler.fetch(fetchRequest, ssePublisher))
                 .isEqualTo(appException);
 
         verify(fetchRequestService).fetchFailed(fetchRequest, appException);

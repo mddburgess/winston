@@ -23,9 +23,6 @@ public abstract class VideoDtoMapper {
 
     @Mapping(target = "thumbnailUrl", source = ".")
     @Mapping(target = "channel", ignore = true)
-    @Mapping(target = "commentCount", ignore = true)
-    @Mapping(target = "replyCount", ignore = true)
-    @Mapping(target = "totalReplyCount", ignore = true)
     abstract void mapToVideoDto(Video video, @MappingTarget VideoDto videoDto);
 
     String getThumbnailUrl(Video video) {

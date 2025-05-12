@@ -69,7 +69,7 @@ export const VideoDetailsRoute = () => {
     );
 
     const commentsDisabled = useMemo(
-        () => video?.commentsDisabled,
+        () => video?.comments?.commentsDisabled,
         [video, fetchState],
     );
 

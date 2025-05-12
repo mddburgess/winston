@@ -22,11 +22,8 @@ export const VideoCard = ({ video }: VideoProps) => (
             <Card.Footer>
                 <Row>
                     <CommentCounts
-                        comments={video.commentCount}
-                        commentsDisabled={video.commentsDisabled}
-                        replies={video.replyCount}
-                        totalReplies={video.totalReplyCount}
-                        showTotalReplies={false}
+                        {...video.comments}
+                        showTotalReplyCount={false}
                     />
                 </Row>
             </Card.Footer>

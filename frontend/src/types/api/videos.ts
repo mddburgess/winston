@@ -6,10 +6,13 @@ type Video = {
     title: string;
     description: string;
     thumbnailUrl: string;
-    commentCount: number;
-    replyCount: number;
-    totalReplyCount: number;
-    commentsDisabled: boolean;
+    comments?: {
+        commentsDisabled: boolean;
+        commentCount: number;
+        replyCount: number;
+        totalReplyCount: number;
+        lastFetchedAt: string;
+    };
     publishedAt: string;
     lastFetchedAt: string;
 };

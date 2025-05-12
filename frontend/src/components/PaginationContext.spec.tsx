@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { PaginationContext } from "./PaginationContext";
 
-describe("PaginationContext", () => {
+describe(PaginationContext, () => {
     const items = ["first", "second", "third"];
 
     it("renders all items when the total count is less than the page size", () => {
@@ -15,6 +15,7 @@ describe("PaginationContext", () => {
             </MemoryRouter>
         );
         render(paginationContext);
+
         expect(pageInfoFn).toHaveBeenCalledWith(
             expect.objectContaining({
                 pageNumber: 1,
@@ -36,6 +37,7 @@ describe("PaginationContext", () => {
             </MemoryRouter>
         );
         render(paginationContext);
+
         expect(pageInfoFn).toHaveBeenCalledWith(
             expect.objectContaining({
                 pageNumber: 1,

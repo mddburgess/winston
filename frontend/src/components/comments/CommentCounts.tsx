@@ -7,42 +7,60 @@ import {
 } from "react-bootstrap-icons";
 
 type CommentCountsProps = {
-    comments: number;
     commentsDisabled?: boolean;
-    replies: number;
-    totalReplies: number;
-    showTotalReplies?: boolean;
+    commentCount?: number;
+    replyCount?: number;
+    totalReplyCount?: number;
+    lastFetchedAt?: string;
+    showTotalReplyCount?: boolean;
 };
-type CommentsColProps = Pick<
-    CommentCountsProps,
-    "comments" | "commentsDisabled"
->;
-type RepliesColProps = Pick<
-    CommentCountsProps,
-    "replies" | "totalReplies" | "showTotalReplies"
+
+type CommentsColProps = Required<
+    Pick<CommentCountsProps, "commentCount" | "commentsDisabled">
+> & {
+    hasBeenFetched: boolean;
+};
+
+type RepliesColProps = Required<
+    Pick<
+        CommentCountsProps,
+        "replyCount" | "totalReplyCount" | "showTotalReplyCount"
+    >
 >;
 
-export const CommentCounts = ({
-    comments,
+const CommentCounts = ({
     commentsDisabled = false,
-    replies,
-    totalReplies,
-    showTotalReplies = true,
-}: CommentCountsProps) => (
-    <>
-        <CommentsCol comments={comments} commentsDisabled={commentsDisabled} />
-        {comments > 0 && (
-            <RepliesCol
-                replies={replies}
-                totalReplies={totalReplies}
-                showTotalReplies={showTotalReplies}
+    commentCount = 0,
+    replyCount = 0,
+    totalReplyCount = 0,
+    lastFetchedAt,
+    showTotalReplyCount = true,
+}: CommentCountsProps) => {
+    const hasBeenFetched = lastFetchedAt !== undefined;
+    return (
+        <>
+            <CommentsCol
+                commentCount={commentCount}
+                commentsDisabled={commentsDisabled}
+                hasBeenFetched={hasBeenFetched}
             />
-        )}
-    </>
-);
+            {commentCount > 0 && (
+                <RepliesCol
+                    replyCount={replyCount}
+                    totalReplyCount={totalReplyCount}
+                    showTotalReplyCount={showTotalReplyCount}
+                />
+            )}
+        </>
+    );
+};
 
-const CommentsCol = ({ comments, commentsDisabled }: CommentsColProps) => {
-    const CommentsIcon = comments > 0 ? ChatFill : Chat;
+const CommentsCol = ({
+    commentCount,
+    commentsDisabled,
+    hasBeenFetched,
+}: CommentsColProps) => {
+    const CommentsIcon = hasBeenFetched ? ChatFill : Chat;
     return (
         <Col
             className={
@@ -53,17 +71,18 @@ const CommentsCol = ({ comments, commentsDisabled }: CommentsColProps) => {
             xs={"auto"}
         >
             <CommentsIcon className={"me-2"} data-testid={"commentsIcon"} />
-            {commentsDisabled ? "comments disabled" : comments}
+            {commentsDisabled ? "comments disabled" : commentCount}
         </Col>
     );
 };
 
 const RepliesCol = ({
-    replies,
-    totalReplies,
-    showTotalReplies,
+    replyCount,
+    totalReplyCount,
+    showTotalReplyCount,
 }: RepliesColProps) => {
-    const RepliesIcon = replies >= totalReplies ? ChatQuoteFill : ChatQuote;
+    const RepliesIcon =
+        replyCount >= totalReplyCount ? ChatQuoteFill : ChatQuote;
     return (
         <Col
             className={"align-items-center d-flex"}
@@ -71,15 +90,17 @@ const RepliesCol = ({
             xs={"auto"}
         >
             <RepliesIcon className={"me-2"} data-testid={"repliesIcon"} />
-            {replies}
-            {showTotalReplies && replies < totalReplies && (
+            {replyCount}
+            {showTotalReplyCount && replyCount < totalReplyCount && (
                 <span
                     className={"text-body-tertiary"}
                     data-testid="totalReplies"
                 >
-                    &nbsp;/ {totalReplies}
+                    &nbsp;/ {totalReplyCount}
                 </span>
             )}
         </Col>
     );
 };
+
+export { CommentCounts };

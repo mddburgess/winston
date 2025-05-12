@@ -1,7 +1,6 @@
 package ca.metricalsky.winston.client;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.common.annotations.VisibleForTesting;
 import org.springframework.http.HttpStatus;
 
 import java.net.URI;

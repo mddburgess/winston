@@ -24,9 +24,6 @@ public class VideoDtoMapperTest {
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/v1/videos/" + video.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("commentCount", 0L)
-                .hasFieldOrPropertyWithValue("replyCount", 0L)
-                .hasFieldOrPropertyWithValue("totalReplyCount", 0L)
                 .hasFieldOrPropertyWithValue("publishedAt", video.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", video.getLastFetchedAt());
     }
@@ -42,7 +39,7 @@ public class VideoDtoMapperTest {
         var videoDto = videoDtoMapper.fromEntity(new Video());
         assertThat(videoDto)
                 .isNotNull()
-                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel");
+                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel", "comments");
     }
 
     private static Video buildVideo() {

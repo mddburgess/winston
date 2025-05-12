@@ -1,9 +1,10 @@
 import { ascBy, descBy, parseIntOrDefault, pluralize, sumBy } from "./index";
 
-describe("ascBy()", () => {
+describe(ascBy, () => {
     it("sorts values in ascending order by the specified property", () => {
         const list = ["apple", "banana", "pear"];
-        expect(list.sort(ascBy((str) => str.length))).toEqual([
+
+        expect(list.sort(ascBy((str) => str.length))).toStrictEqual([
             "pear",
             "apple",
             "banana",
@@ -11,10 +12,11 @@ describe("ascBy()", () => {
     });
 });
 
-describe("descBy()", () => {
+describe(descBy, () => {
     it("sorts values in descending order by the specified property", () => {
         const list = ["apple", "banana", "pear"];
-        expect(list.sort(descBy((str) => str.length))).toEqual([
+
+        expect(list.sort(descBy((str) => str.length))).toStrictEqual([
             "banana",
             "apple",
             "pear",
@@ -22,7 +24,7 @@ describe("descBy()", () => {
     });
 });
 
-describe("parseIntOrDefault()", () => {
+describe(parseIntOrDefault, () => {
     it("returns the parsed value when it is a positive number", () => {
         expect(parseIntOrDefault("10", 1)).toBe(10);
     });
@@ -48,7 +50,7 @@ describe("parseIntOrDefault()", () => {
     });
 });
 
-describe("pluralize()", () => {
+describe(pluralize, () => {
     it("returns plural value when count is 0", () => {
         expect(pluralize(0, "channel")).toBe("0 channels");
     });
@@ -66,7 +68,7 @@ describe("pluralize()", () => {
     });
 });
 
-describe("sumBy()", () => {
+describe(sumBy, () => {
     type Item = {
         property: number;
     };
@@ -77,11 +79,13 @@ describe("sumBy()", () => {
             { property: 4 },
             { property: 9 },
         ];
+
         expect(sumBy(items, (item) => item.property)).toBe(14);
     });
 
     it("returns 0 for an empty list", () => {
         const items: Item[] = [];
+
         expect(sumBy(items, (item) => item.property)).toBe(0);
     });
 });

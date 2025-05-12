@@ -6,8 +6,8 @@ import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.entity.fetch.FetchAction;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
-import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.CommentService;
+import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
@@ -21,18 +21,18 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
     private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
     private final CommentService commentService;
-    private final VideoRepository videoRepository;
+    private final VideoCommentsService videoCommentsService;
     private final YouTubeClientAdapter youTubeClientAdapter;
 
     public FetchCommentsActionHandler(
             FetchActionService fetchActionService,
             CommentService commentService,
-            VideoRepository videoRepository,
+            VideoCommentsService videoCommentsService,
             YouTubeClientAdapter youTubeClientAdapter
     ) {
         super(fetchActionService);
         this.commentService = commentService;
-        this.videoRepository = videoRepository;
+        this.videoCommentsService = videoCommentsService;
         this.youTubeClientAdapter = youTubeClientAdapter;
     }
 
@@ -51,10 +51,7 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
             var nextFetchAction = getNextFetchAction(fetchAction, commentThreadListResponse);
             return new FetchResult<>(fetchAction, commentDtos, nextFetchAction);
         } catch (CommentsDisabledException ex) {
-            videoRepository.findById(fetchAction.getObjectId()).ifPresent(video -> {
-                video.setCommentsDisabled(true);
-                videoRepository.save(video);
-            });
+            videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
             throw ex;
         }
     }

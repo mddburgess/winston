@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { HtmlText } from "./HtmlText";
 
-describe("HtmlText", () => {
+describe(HtmlText, () => {
     it("renders HTML from a text string", () => {
         const text = "<b>bold</b>";
 

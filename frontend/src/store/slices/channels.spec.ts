@@ -17,8 +17,10 @@ describe("channelsApi", () => {
             await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
             expect(result.current.data).toBeDefined();
+
             const data = result.current.data!;
             const channels = entityAdapter.getSelectors().selectAll(data);
+
             expect(channels).toStrictEqual([
                 {
                     id: "channel.1",
@@ -41,26 +43,26 @@ describe("channelsApi", () => {
                     return HttpResponse.json([]);
                 }),
             );
-
             const { result } = renderHookWithProviders(() =>
                 useListChannelsQuery(),
             );
             await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
             expect(result.current.data).toBeDefined();
+
             const data = result.current.data!;
             const channels = entityAdapter.getSelectors().selectAll(data);
+
             expect(channels).toStrictEqual([]);
         });
     });
 
-    describe("appendFetchedChannels", () => {
+    describe(appendFetchedChannels, () => {
         it("updates the listChannels cache with the newly fetched list of channels", async () => {
             const { store, result } = renderHookWithProviders(() =>
                 useListChannelsQuery(),
             );
             await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
             store.dispatch(
                 appendFetchedChannels([
                     {
@@ -83,12 +85,13 @@ describe("channelsApi", () => {
             );
 
             expect(updated.current.data).toBeDefined();
-            const data = updated.current.data!;
 
+            const data = updated.current.data!;
             const channels = entityAdapter.getSelectors().selectAll(data);
+
             expect(channels).toHaveLength(2);
-            expect(channels[0].id).toEqual("channel.1");
-            expect(channels[1].id).toEqual("channel.2");
+            expect(channels[0].id).toBe("channel.1");
+            expect(channels[1].id).toBe("channel.2");
         });
     });
 });

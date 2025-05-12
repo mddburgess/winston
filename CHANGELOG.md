@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Author summary endpoint that returns the channels and videos an author has commented on. (mddburgess/winston#45)
+- New table and object property on videos to hold fetched comment counts, comments disabled flag, and last fetched date.
+  (mddburgess/winston#46)
 
 ### Changed
 
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the author handle in the author details URI instead of the author ID. (mddburgess/winston#50)
 - Migrated build tool from Parcel to Vite. (mddburgess/winston#61)
 - Redesigned author details page to reduce the amount of data requested from the backend. (mddburgess/winston#45)
+- Show when comments have been fetched for a video and the fetch returned zero comments. (mddburgess/winston#46)
 
 ### Deprecated
 
@@ -95,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web UI to fetch channels, videos, and comments.
 - Cache channel and video thumbnails.
 
-[Unreleased]: https://github.com/mddburgess/winson/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
 [1.2.1]: https://github.com/mddburgess/winston/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/mddburgess/winston/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mddburgess/winston/compare/v1.0.0...v1.1.0

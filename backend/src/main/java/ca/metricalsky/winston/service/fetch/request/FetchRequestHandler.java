@@ -6,4 +6,8 @@ import ca.metricalsky.winston.events.SsePublisher;
 public interface FetchRequestHandler {
 
     void fetch(FetchRequest fetchRequest, SsePublisher ssePublisher);
+
+    default void afterFetch(FetchRequest fetchRequest) {
+        
+    }
 }
