@@ -1,11 +1,10 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.Comment;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
+import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
 import ca.metricalsky.winston.events.FetchDataEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -50,7 +49,7 @@ class FetchRepliesActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
+        var fetchAction = FetchActionEntity.builder()
                 .actionType(ActionType.REPLIES)
                 .objectId(COMMENT_ID)
                 .build();
@@ -97,8 +96,8 @@ class FetchRepliesActionHandlerTest {
         return comment;
     }
 
-    private static Comment buildTopLevelComment() {
-        var comment = new Comment();
+    private static CommentEntity buildTopLevelComment() {
+        var comment = new CommentEntity();
         comment.setId(COMMENT_ID);
         comment.setVideoId(VIDEO_ID);
         return comment;

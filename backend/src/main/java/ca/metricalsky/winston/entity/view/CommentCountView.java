@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.entity.view;
 
-public interface CommentCount {
+public interface CommentCountView {
 
     String getVideoId();
 
@@ -14,7 +14,7 @@ public interface CommentCount {
 
     Long getTotalReplies();
 
-    class Empty implements CommentCount {
+    class Empty implements CommentCountView {
 
         @Override
         public String getVideoId() {

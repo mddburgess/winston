@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
@@ -35,7 +35,7 @@ class FetchChannelsRequestHandlerTest {
 
     @Test
     void fetch() {
-        var fetchRequest = FetchRequest.builder()
+        var fetchRequest = FetchRequestEntity.builder()
                 .fetchType(FetchType.CHANNELS)
                 .build();
 
@@ -49,14 +49,14 @@ class FetchChannelsRequestHandlerTest {
 
     @Test
     void fetch_exception() {
-        var fetchRequest = FetchRequest.builder()
+        var fetchRequest = FetchRequestEntity.builder()
                 .fetchType(FetchType.CHANNELS)
                 .build();
         var appException = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
         when(fetchRequestService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
-        when(fetchChannelActionHandler.fetch(any(FetchAction.class), eq(ssePublisher)))
+        when(fetchChannelActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
                 .thenThrow(appException);
 
         assertThatThrownBy(() -> fetchChannelsRequestHandler.fetch(fetchRequest, ssePublisher))

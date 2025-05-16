@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.CommentDto;
-import ca.metricalsky.winston.entity.Author;
-import ca.metricalsky.winston.entity.Comment;
-import ca.metricalsky.winston.entity.view.CommentCount;
+import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.view.CommentCountView;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-    private static final CommentCount EMPTY_COUNT = new CommentCount.Empty();
+    private static final CommentCountView EMPTY_COUNT = new CommentCountView.Empty();
 
     private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
@@ -33,32 +33,32 @@ public class CommentService {
         this.authorRepository = authorRepository;
     }
 
-    public Optional<Comment> findById(String id) {
+    public Optional<CommentEntity> findById(String id) {
         return commentRepository.findById(id);
     }
 
     @Transactional
-    public void saveAll(List<Comment> comments) {
+    public void saveAll(List<CommentEntity> comments) {
         var authors = getAuthors(comments);
         authorRepository.saveAll(authors);
         commentRepository.saveAll(comments);
     }
 
-    private static List<Author> getAuthors(List<Comment> comments) {
+    private static List<AuthorEntity> getAuthors(List<CommentEntity> comments) {
         return comments.stream()
                 .map(CommentService::getCommentAndReplies)
                 .flatMap(List::stream)
-                .map(Comment::getAuthor)
+                .map(CommentEntity::getAuthor)
                 .toList();
     }
 
-    private static List<Comment> getCommentAndReplies(Comment comment) {
+    private static List<CommentEntity> getCommentAndReplies(CommentEntity comment) {
         return comment.getReplies() != null
                 ? ListUtils.union(List.of(comment), comment.getReplies())
                 : List.of(comment);
     }
 
-    public CommentCount getCommentCountByVideoId(String videoId) {
+    public CommentCountView getCommentCountByVideoId(String videoId) {
         return commentRepository.countCommentsForVideoId(videoId);
     }
 

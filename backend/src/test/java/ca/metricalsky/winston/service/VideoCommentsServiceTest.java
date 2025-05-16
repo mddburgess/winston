@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
-import ca.metricalsky.winston.entity.view.CommentCount;
+import ca.metricalsky.winston.entity.view.CommentCountView;
 import ca.metricalsky.winston.repository.VideoCommentsRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +30,7 @@ class VideoCommentsServiceTest {
     private VideoCommentsService videoCommentsService;
 
     @Mock
-    private CommentCount commentCount;
+    private CommentCountView commentCount;
     @Mock
     private CommentService commentService;
     @Mock

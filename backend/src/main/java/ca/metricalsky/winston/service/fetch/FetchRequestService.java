@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.Status;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.Status;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +13,17 @@ public class FetchRequestService {
 
     private final FetchRequestRepository fetchRequestRepository;
 
-    public FetchRequest startFetch(FetchRequest fetchRequest) {
+    public FetchRequestEntity startFetch(FetchRequestEntity fetchRequest) {
         fetchRequest.setStatus(Status.FETCHING);
         return fetchRequestRepository.save(fetchRequest);
     }
 
-    public FetchRequest fetchCompleted(FetchRequest fetchRequest) {
+    public FetchRequestEntity fetchCompleted(FetchRequestEntity fetchRequest) {
         fetchRequest.setStatus(Status.COMPLETED);
         return fetchRequestRepository.save(fetchRequest);
     }
 
-    public FetchRequest fetchFailed(FetchRequest fetchRequest, Throwable throwable) {
+    public FetchRequestEntity fetchFailed(FetchRequestEntity fetchRequest, Throwable throwable) {
         fetchRequest.setStatus(Status.FAILED);
         fetchRequest.setError(Throwables.getStackTraceAsString(throwable));
         return fetchRequestRepository.save(fetchRequest);

@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.CommentService;
@@ -54,8 +54,8 @@ class FetchCommentsActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
-                .actionType(FetchAction.ActionType.COMMENTS)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(FetchActionEntity.ActionType.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
         var commentThreadListResponse = buildCommentThreadListResponse();
@@ -83,8 +83,8 @@ class FetchCommentsActionHandlerTest {
 
     @Test
     void fetch_commentsDisabled() {
-        var fetchAction = FetchAction.builder()
-                .actionType(FetchAction.ActionType.COMMENTS)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(FetchActionEntity.ActionType.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
 

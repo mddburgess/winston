@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.CommentDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
 import ca.metricalsky.winston.service.CommentService;
@@ -32,7 +32,7 @@ public class FetchRepliesActionHandler extends FetchActionHandler<CommentDto> {
     }
 
     @Override
-    protected FetchResult<CommentDto> doFetch(FetchAction fetchAction) {
+    protected FetchResult<CommentDto> doFetch(FetchActionEntity fetchAction) {
         var commentListResponse = youTubeClientAdapter.getReplies(fetchAction);
         var replyEntities = commentListResponse.getItems()
                 .stream()
@@ -49,8 +49,8 @@ public class FetchRepliesActionHandler extends FetchActionHandler<CommentDto> {
         return new FetchResult<>(fetchAction, replyDtos, nextFetchAction);
     }
 
-    private static FetchAction getNextFetchAction(FetchAction fetchAction, CommentListResponse youTubeResponse) {
-        return youTubeResponse.getNextPageToken() == null ? null : FetchAction.builder()
+    private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentListResponse youTubeResponse) {
+        return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
                 .fetchRequestId(fetchAction.getFetchRequestId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())

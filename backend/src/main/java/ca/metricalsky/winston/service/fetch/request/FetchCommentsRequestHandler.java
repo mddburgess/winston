@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchRequestService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
@@ -31,7 +31,7 @@ public class FetchCommentsRequestHandler extends DefaultFetchRequestHandler {
     }
 
     @Override
-    public void afterFetch(FetchRequest fetchRequest) {
+    public void afterFetch(FetchRequestEntity fetchRequest) {
         videoCommentsService.updateVideoComments(fetchRequest.getObjectId());
     }
 }

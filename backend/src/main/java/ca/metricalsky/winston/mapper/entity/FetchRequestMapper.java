@@ -5,8 +5,8 @@ import ca.metricalsky.winston.dto.fetch.FetchComments;
 import ca.metricalsky.winston.dto.fetch.FetchReplies;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.ChannelService;
@@ -23,7 +23,7 @@ public class FetchRequestMapper {
     private final ChannelService channelService;
     private final VideoRepository videoRepository;
 
-    public FetchRequest toFetchRequest(FetchRequestDto fetchRequestDto) {
+    public FetchRequestEntity toFetchRequest(FetchRequestDto fetchRequestDto) {
         if (fetchRequestDto.getChannel() != null) {
             return channelRequest(fetchRequestDto.getChannel());
         }
@@ -39,17 +39,17 @@ public class FetchRequestMapper {
         throw new AppException(HttpStatus.BAD_REQUEST, "The request is syntactically invalid and cannot be processed.");
     }
 
-    private FetchRequest channelRequest(FetchChannel fetchChannel) {
-        var fetchRequest = new FetchRequest();
+    private FetchRequestEntity channelRequest(FetchChannel fetchChannel) {
+        var fetchRequest = new FetchRequestEntity();
         fetchRequest.setFetchType(FetchType.CHANNELS);
         fetchRequest.setObjectId(fetchChannel.getHandle());
         return fetchRequest;
     }
 
-    private FetchRequest videosRequest(FetchVideos fetchVideos) {
+    private FetchRequestEntity videosRequest(FetchVideos fetchVideos) {
         channelService.requireChannelExists(fetchVideos.getChannelId());
 
-        var fetchRequest = new FetchRequest();
+        var fetchRequest = new FetchRequestEntity();
         fetchRequest.setFetchType(FetchType.VIDEOS);
         fetchRequest.setObjectId(fetchVideos.getChannelId());
         fetchRequest.setMode(fetchVideos.getFetch().toString());
@@ -65,15 +65,15 @@ public class FetchRequestMapper {
         return fetchRequest;
     }
 
-    private FetchRequest commentsRequest(FetchComments fetchComments) {
-        var fetchRequest = new FetchRequest();
+    private FetchRequestEntity commentsRequest(FetchComments fetchComments) {
+        var fetchRequest = new FetchRequestEntity();
         fetchRequest.setFetchType(FetchType.COMMENTS);
         fetchRequest.setObjectId(fetchComments.getVideoId());
         return fetchRequest;
     }
 
-    private FetchRequest repliesRequest(FetchReplies fetchReplies) {
-        var fetchRequest = new FetchRequest();
+    private FetchRequestEntity repliesRequest(FetchReplies fetchReplies) {
+        var fetchRequest = new FetchRequestEntity();
         fetchRequest.setFetchType(FetchType.REPLIES);
         if (isNotBlank(fetchReplies.getCommentId())) {
             fetchRequest.setObjectId(fetchReplies.getCommentId());

@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "channels")
 @Getter
 @Setter
-public class Channel {
+public class ChannelEntity {
 
     @Id
     private String id;

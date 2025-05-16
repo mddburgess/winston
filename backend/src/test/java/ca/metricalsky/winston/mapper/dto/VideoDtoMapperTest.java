@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.dto;
 
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -36,14 +36,14 @@ public class VideoDtoMapperTest {
 
     @Test
     void fromEntity_emptyVideo() {
-        var videoDto = videoDtoMapper.fromEntity(new Video());
+        var videoDto = videoDtoMapper.fromEntity(new VideoEntity());
         assertThat(videoDto)
                 .isNotNull()
                 .hasNoNullFieldsOrPropertiesExcept("channelId", "channel", "comments");
     }
 
-    private static Video buildVideo() {
-        var video = new Video();
+    private static VideoEntity buildVideo() {
+        var video = new VideoEntity();
         video.setId("id");
         video.setChannelId("channelId");
         video.setTitle("title");

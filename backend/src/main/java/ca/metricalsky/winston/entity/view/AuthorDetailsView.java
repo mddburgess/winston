@@ -1,10 +1,10 @@
 package ca.metricalsky.winston.entity.view;
 
-import ca.metricalsky.winston.entity.Author;
+import ca.metricalsky.winston.entity.AuthorEntity;
 
-public interface AuthorDetails {
+public interface AuthorDetailsView {
 
-    Author getAuthor();
+    AuthorEntity getAuthor();
 
     Long getCommentedVideos();
 

@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.entity.view;
 
-public interface VideoCount {
+public interface VideoCountView {
 
     String getChannelId();
 

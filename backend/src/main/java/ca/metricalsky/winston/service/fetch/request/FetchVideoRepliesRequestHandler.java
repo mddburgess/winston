@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
@@ -20,7 +20,7 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
     private final VideoCommentsService videoCommentsService;
 
     @Override
-    public void fetch(FetchRequest fetchRequest, SsePublisher ssePublisher) {
+    public void fetch(FetchRequestEntity fetchRequest, SsePublisher ssePublisher) {
         fetchRequest = fetchRequestService.startFetch(fetchRequest);
         try {
             var videoId = fetchRequest.getObjectId();
@@ -36,23 +36,23 @@ public class FetchVideoRepliesRequestHandler implements FetchRequestHandler {
         }
     }
 
-    private void fetchReplies(FetchRequest fetchRequest, String commentId, SsePublisher ssePublisher) {
+    private void fetchReplies(FetchRequestEntity fetchRequest, String commentId, SsePublisher ssePublisher) {
         var fetchAction = getFirstFetchAction(fetchRequest, commentId);
         while (fetchAction != null) {
             fetchAction = fetchRepliesActionHandler.fetch(fetchAction, ssePublisher);
         }
     }
 
-    private static FetchAction getFirstFetchAction(FetchRequest fetchRequest, String commentId) {
-        return FetchAction.builder()
+    private static FetchActionEntity getFirstFetchAction(FetchRequestEntity fetchRequest, String commentId) {
+        return FetchActionEntity.builder()
                 .fetchRequestId(fetchRequest.getId())
-                .actionType(FetchAction.ActionType.REPLIES)
+                .actionType(FetchActionEntity.ActionType.REPLIES)
                 .objectId(commentId)
                 .build();
     }
 
     @Override
-    public void afterFetch(FetchRequest fetchRequest) {
+    public void afterFetch(FetchRequestEntity fetchRequest) {
         videoCommentsService.updateVideoComments(fetchRequest.getObjectId());
     }
 }

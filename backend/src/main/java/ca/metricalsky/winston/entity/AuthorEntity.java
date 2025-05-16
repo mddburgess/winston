@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 @Table(name = "authors")
 @Getter
 @Setter
-public class Author {
+public class AuthorEntity {
 
     @Id
     private String id;

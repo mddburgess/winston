@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.dto;
 
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -37,14 +37,14 @@ public class ChannelDtoMapperTest {
 
     @Test
     void fromEntity_emptyChannel() {
-        var channelDto = channelDtoMapper.fromEntity(new Channel());
+        var channelDto = channelDtoMapper.fromEntity(new ChannelEntity());
         assertThat(channelDto)
                 .isNotNull()
                 .hasNoNullFieldsOrProperties();
     }
 
-    private static Channel buildChannel() {
-        var channel = new Channel();
+    private static ChannelEntity buildChannel() {
+        var channel = new ChannelEntity();
         channel.setId("id");
         channel.setTitle("title");
         channel.setDescription("description");

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -35,7 +35,7 @@ class FetchRequestHandlerFactoryTest {
     @ParameterizedTest(name = "fetchType={0}, mode={1}")
     @MethodSource
     void getHandler(FetchType fetchType, String mode, Class<FetchRequestHandler> expectedFetchRequestHandlerType) {
-        var fetchRequest = FetchRequest.builder()
+        var fetchRequest = FetchRequestEntity.builder()
                 .fetchType(fetchType)
                 .mode(mode)
                 .build();

@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
-import ca.metricalsky.winston.entity.view.VideoCount;
+import ca.metricalsky.winston.entity.view.VideoCountView;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class VideoServiceTest {
     @Mock
     private VideoRepository videoRepository;
     @Mock
-    private VideoCount videoCount;
+    private VideoCountView videoCount;
 
     @Test
     void countAllByChannelId() {
@@ -109,8 +109,8 @@ class VideoServiceTest {
                 .hasFieldOrPropertyWithValue("comments.totalReplyCount", 3L);
     }
 
-    private static Video buildVideo() {
-        var video = new Video();
+    private static VideoEntity buildVideo() {
+        var video = new VideoEntity();
         video.setId(VIDEO_ID);
         video.setComments(buildVideoCommentsEntity());
         return video;

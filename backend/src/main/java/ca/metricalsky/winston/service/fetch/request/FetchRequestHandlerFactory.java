@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class FetchRequestHandlerFactory {
     private final FetchVideoRepliesRequestHandler fetchVideoRepliesRequestHandler;
     private final FetchVideosRequestHandler fetchVideosRequestHandler;
 
-    public FetchRequestHandler getHandler(FetchRequest fetchRequest) {
+    public FetchRequestHandler getHandler(FetchRequestEntity fetchRequest) {
         return switch (fetchRequest.getFetchType()) {
             case CHANNELS -> fetchChannelsRequestHandler;
             case VIDEOS -> fetchVideosRequestHandler;

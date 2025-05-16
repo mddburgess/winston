@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
@@ -36,7 +36,7 @@ public class FetchChannelActionHandler extends FetchActionHandler<ChannelDto> {
     }
 
     @Override
-    protected FetchResult<ChannelDto> doFetch(FetchAction fetchAction) {
+    protected FetchResult<ChannelDto> doFetch(FetchActionEntity fetchAction) {
         var channelListResponse = youTubeClientAdapter.getChannels(fetchAction);
         var channelEntity = Optional.ofNullable(channelListResponse.getItems())
                 .orElse(Collections.emptyList())

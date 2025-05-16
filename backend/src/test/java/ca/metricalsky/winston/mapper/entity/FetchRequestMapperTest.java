@@ -5,7 +5,7 @@ import ca.metricalsky.winston.dto.fetch.FetchComments;
 import ca.metricalsky.winston.dto.fetch.FetchReplies;
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.ChannelService;
@@ -45,7 +45,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.CHANNELS)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.CHANNELS)
                 .hasFieldOrPropertyWithValue("objectId", fetchChannel.getHandle());
     }
 
@@ -61,7 +61,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.VIDEOS)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.VIDEOS)
                 .hasFieldOrPropertyWithValue("objectId", fetchVideos.getChannelId())
                 .hasFieldOrPropertyWithValue("mode", "ALL");
     }
@@ -81,7 +81,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.VIDEOS)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.VIDEOS)
                 .hasFieldOrPropertyWithValue("objectId", fetchVideos.getChannelId())
                 .hasFieldOrPropertyWithValue("mode", "LATEST")
                 .hasFieldOrPropertyWithValue("publishedAfter", OffsetDateTime.parse("2025-01-01T00:00:01Z"))
@@ -99,7 +99,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.COMMENTS)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.COMMENTS)
                 .hasFieldOrPropertyWithValue("objectId", fetchComments.getVideoId());
     }
 
@@ -114,7 +114,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.REPLIES)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getCommentId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_COMMENT");
     }
@@ -130,7 +130,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.REPLIES)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getVideoId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_VIDEO");
     }
@@ -147,7 +147,7 @@ class FetchRequestMapperTest {
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
         assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequest.FetchType.REPLIES)
+                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getCommentId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_COMMENT");
     }

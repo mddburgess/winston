@@ -20,7 +20,7 @@ import static jakarta.persistence.CascadeType.PERSIST;
 @Table(name = "comments")
 @Getter
 @Setter
-public class Comment {
+public class CommentEntity {
 
     @Id
     private String id;
@@ -30,7 +30,7 @@ public class Comment {
     private String parentId;
 
     @ManyToOne
-    private Author author;
+    private AuthorEntity author;
 
     private String textDisplay;
 
@@ -47,6 +47,6 @@ public class Comment {
 
     @OneToMany(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "parentId", referencedColumnName = "id")
-    private List<Comment> replies;
+    private List<CommentEntity> replies;
 
 }

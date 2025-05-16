@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
@@ -13,8 +13,8 @@ public abstract class FetchActionHandler<T> {
 
     private final FetchActionService fetchActionService;
 
-    public FetchAction fetch(FetchAction fetchAction, SsePublisher ssePublisher) {
-        FetchAction nextFetchAction = null;
+    public FetchActionEntity fetch(FetchActionEntity fetchAction, SsePublisher ssePublisher) {
+        FetchActionEntity nextFetchAction = null;
         try {
             var fetchResult = fetch(fetchAction);
             nextFetchAction = fetchResult.nextFetchAction();
@@ -29,7 +29,7 @@ public abstract class FetchActionHandler<T> {
         }
     }
 
-    private FetchResult<T> fetch(FetchAction fetchAction) {
+    private FetchResult<T> fetch(FetchActionEntity fetchAction) {
         try {
             fetchAction = fetchActionService.actionFetching(fetchAction);
             var fetchResult = doFetch(fetchAction);
@@ -41,5 +41,5 @@ public abstract class FetchActionHandler<T> {
         }
     }
 
-    protected abstract FetchResult<T> doFetch(FetchAction fetchAction);
+    protected abstract FetchResult<T> doFetch(FetchActionEntity fetchAction);
 }

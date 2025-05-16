@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
@@ -41,7 +41,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync() {
         var fetchRequestDto = new FetchRequestDto();
-        var fetchRequest = new FetchRequest();
+        var fetchRequest = new FetchRequestEntity();
 
         when(fetchRequestMapper.toFetchRequest(fetchRequestDto))
                 .thenReturn(fetchRequest);
@@ -57,7 +57,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync_actionFailed() {
         var fetchRequestDto = new FetchRequestDto();
-        var fetchRequest = FetchRequest.builder().fetchType(FetchType.CHANNELS).build();
+        var fetchRequest = FetchRequestEntity.builder().fetchType(FetchType.CHANNELS).build();
         var exception = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
         when(fetchRequestMapper.toFetchRequest(fetchRequestDto))
@@ -78,7 +78,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync_publisherClosed() {
         var fetchRequestDto = new FetchRequestDto();
-        var fetchRequest = FetchRequest.builder().fetchType(FetchType.CHANNELS).build();
+        var fetchRequest = FetchRequestEntity.builder().fetchType(FetchType.CHANNELS).build();
         var exception = new PublisherException("");
 
         when(fetchRequestMapper.toFetchRequest(fetchRequestDto))

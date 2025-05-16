@@ -1,22 +1,22 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 
 import java.util.Collection;
 import java.util.List;
 
 public record FetchResult<T>(
-        FetchAction.ActionType actionType,
+        FetchActionEntity.ActionType actionType,
         String objectId,
         Collection<T> items,
-        FetchAction nextFetchAction
+        FetchActionEntity nextFetchAction
 ) {
 
-    public FetchResult(FetchAction fetchAction, T item, FetchAction nextFetchAction) {
+    public FetchResult(FetchActionEntity fetchAction, T item, FetchActionEntity nextFetchAction) {
         this(fetchAction.getActionType(), fetchAction.getObjectId(), List.of(item), nextFetchAction);
     }
 
-    public FetchResult(FetchAction fetchAction, List<T> item, FetchAction nextFetchAction) {
+    public FetchResult(FetchActionEntity fetchAction, List<T> item, FetchActionEntity nextFetchAction) {
         this(fetchAction.getActionType(), fetchAction.getObjectId(), item, nextFetchAction);
     }
 

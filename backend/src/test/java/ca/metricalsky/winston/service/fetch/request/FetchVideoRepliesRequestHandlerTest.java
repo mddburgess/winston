@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
@@ -44,11 +44,11 @@ class FetchVideoRepliesRequestHandlerTest {
     @Mock
     private VideoCommentsService videoCommentsService;
     @Captor
-    private ArgumentCaptor<FetchAction> fetchAction;
+    private ArgumentCaptor<FetchActionEntity> fetchAction;
 
     @Test
     void fetch() {
-        var fetchRequest = FetchRequest.builder()
+        var fetchRequest = FetchRequestEntity.builder()
                 .objectId("videoId")
                 .build();
         var commentIds = List.of("commentId1", "commentId2");
@@ -73,7 +73,7 @@ class FetchVideoRepliesRequestHandlerTest {
 
     @Test
     void fetch_exception() {
-        var fetchRequest = FetchRequest.builder()
+        var fetchRequest = FetchRequestEntity.builder()
                 .objectId("videoId")
                 .build();
         var commentIds = List.of("commentId1", "commentId2");
@@ -83,7 +83,7 @@ class FetchVideoRepliesRequestHandlerTest {
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
-        when(fetchRepliesActionHandler.fetch(any(FetchAction.class), eq(ssePublisher)))
+        when(fetchRepliesActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
                 .thenThrow(appException);
 
         assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher))

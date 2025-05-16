@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.mapper.entity;
 
+import ca.metricalsky.winston.entity.CommentEntity;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentSnippet;
@@ -61,7 +62,7 @@ public class CommentMapperTest {
                 .hasAllNullFieldsOrProperties();
     }
 
-    private static void assertCommentProperties(ca.metricalsky.winston.entity.Comment actual, Comment expected) {
+    private static void assertCommentProperties(CommentEntity actual, Comment expected) {
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("id", expected.getId())
                 .hasFieldOrPropertyWithValue("videoId", expected.getSnippet().getVideoId())

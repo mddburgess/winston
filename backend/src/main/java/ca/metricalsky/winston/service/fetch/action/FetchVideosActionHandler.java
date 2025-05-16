@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
 import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
@@ -38,7 +38,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
     }
 
     @Override
-    protected FetchResult<VideoDto> doFetch(FetchAction fetchAction) {
+    protected FetchResult<VideoDto> doFetch(FetchActionEntity fetchAction) {
         var activityListResponse = youTubeClientAdapter.getActivities(fetchAction);
         var videoEntities = activityListResponse.getItems()
                 .stream()
@@ -53,7 +53,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
         return new FetchResult<>(fetchAction, videoDtos, nextFetchAction);
     }
 
-    private FetchAction getNextFetchAction(FetchAction fetchAction, ActivityListResponse activityListResponse) {
+    private FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, ActivityListResponse activityListResponse) {
         var activities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -69,7 +69,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
                 .map(publishedAt -> publishedAt.minusSeconds(1))
                 .orElse(null);
 
-        return activityListResponse.getNextPageToken() == null ? null : FetchAction.builder()
+        return activityListResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
                 .fetchRequestId(fetchAction.getFetchRequestId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())

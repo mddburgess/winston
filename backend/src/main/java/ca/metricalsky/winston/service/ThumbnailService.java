@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.Thumbnail;
-import ca.metricalsky.winston.entity.view.ThumbnailLookup;
+import ca.metricalsky.winston.entity.ThumbnailEntity;
+import ca.metricalsky.winston.entity.view.ThumbnailLookupView;
 import ca.metricalsky.winston.repository.ThumbnailRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class ThumbnailService {
         return getOrFetchThumbnail(authorId, lookup);
     }
 
-    private byte[] getOrFetchThumbnail(String id, ThumbnailLookup lookup) {
+    private byte[] getOrFetchThumbnail(String id, ThumbnailLookupView lookup) {
         if (lookup.getThumbnail().isEmpty()) {
             log.info("No cached thumbnail found for ID '{}', fetching", id);
             return fetchAndSaveThumbnail(id, lookup.getThumbnailUrl())
@@ -101,7 +101,7 @@ public class ThumbnailService {
     }
 
     private void saveThumbnail(String id, String thumbnailUrl, byte[] image) {
-        var thumbnail = new Thumbnail();
+        var thumbnail = new ThumbnailEntity();
         thumbnail.setId(id);
         thumbnail.setUrl(thumbnailUrl);
         thumbnail.setImage(image);

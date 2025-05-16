@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.client;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,10 +25,10 @@ public class YouTubeClientAdapter {
     private final YouTubeClient youTubeClient;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
-    public ChannelListResponse getChannels(FetchAction fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequest.builder()
+    public ChannelListResponse getChannels(FetchActionEntity fetchAction) {
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
                 .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequest.RequestType.CHANNELS)
+                .requestType(YouTubeRequestEntity.RequestType.CHANNELS)
                 .objectId(fetchAction.getObjectId())
                 .requestedAt(OffsetDateTime.now())
                 .build());
@@ -52,10 +51,10 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public ActivityListResponse getActivities(FetchAction fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequest.builder()
+    public ActivityListResponse getActivities(FetchActionEntity fetchAction) {
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
                 .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequest.RequestType.ACTIVITIES)
+                .requestType(YouTubeRequestEntity.RequestType.ACTIVITIES)
                 .objectId(fetchAction.getObjectId())
                 .publishedAfter(formatDate(fetchAction.getPublishedAfter()))
                 .publishedBefore(formatDate(fetchAction.getPublishedBefore()))
@@ -82,10 +81,10 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public CommentThreadListResponse getComments(FetchAction fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequest.builder()
+    public CommentThreadListResponse getComments(FetchActionEntity fetchAction) {
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
                 .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequest.RequestType.COMMENTS)
+                .requestType(YouTubeRequestEntity.RequestType.COMMENTS)
                 .objectId(fetchAction.getObjectId())
                 .pageToken(fetchAction.getPageToken())
                 .requestedAt(OffsetDateTime.now())
@@ -110,10 +109,10 @@ public class YouTubeClientAdapter {
         }
     }
 
-    public CommentListResponse getReplies(FetchAction fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequest.builder()
+    public CommentListResponse getReplies(FetchActionEntity fetchAction) {
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
                 .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequest.RequestType.REPLIES)
+                .requestType(YouTubeRequestEntity.RequestType.REPLIES)
                 .objectId(fetchAction.getObjectId())
                 .pageToken(fetchAction.getPageToken())
                 .requestedAt(OffsetDateTime.now())

@@ -22,7 +22,7 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class YouTubeRequest {
+public class YouTubeRequestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,11 +1,11 @@
 package ca.metricalsky.winston.client;
 
 import ca.metricalsky.winston.config.YouTubeConfig;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.FetchType;
-import ca.metricalsky.winston.entity.fetch.YouTubeRequest;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
+import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
@@ -83,7 +83,7 @@ class YouTubeClientAdapterTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).hasSize(1);
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.CHANNELS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.CHANNELS)
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", result.getItems().size());
@@ -102,7 +102,7 @@ class YouTubeClientAdapterTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).isNull();
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.CHANNELS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.CHANNELS)
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", 0);
@@ -122,7 +122,7 @@ class YouTubeClientAdapterTest {
                 .hasCauseExactlyInstanceOf(IOException.class);
 
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.CHANNELS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.CHANNELS)
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .hasFieldOrProperty("error");
@@ -145,7 +145,7 @@ class YouTubeClientAdapterTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).hasSize(expectedItemCount);
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.ACTIVITIES)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.ACTIVITIES)
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", expectedItemCount);
@@ -165,7 +165,7 @@ class YouTubeClientAdapterTest {
                 .hasCauseExactlyInstanceOf(IOException.class);
 
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.ACTIVITIES)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.ACTIVITIES)
                 .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .hasFieldOrProperty("error");
@@ -188,7 +188,7 @@ class YouTubeClientAdapterTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).hasSize(expectedItemCount);
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.COMMENTS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.COMMENTS)
                 .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", expectedItemCount);
@@ -209,7 +209,7 @@ class YouTubeClientAdapterTest {
                 .hasCauseExactlyInstanceOf(GoogleJsonResponseException.class);
 
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.COMMENTS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.COMMENTS)
                 .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .hasFieldOrProperty("error");
@@ -229,7 +229,7 @@ class YouTubeClientAdapterTest {
                 .hasCauseExactlyInstanceOf(IOException.class);
 
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.COMMENTS)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.COMMENTS)
                 .hasFieldOrPropertyWithValue("objectId", VIDEO_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .hasFieldOrProperty("error");
@@ -252,7 +252,7 @@ class YouTubeClientAdapterTest {
         assertThat(result).isNotNull();
         assertThat(result.getItems()).hasSize(expectedItemCount);
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.REPLIES)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", COMMENT_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.OK.value())
                 .hasFieldOrPropertyWithValue("itemCount", expectedItemCount);
@@ -272,36 +272,36 @@ class YouTubeClientAdapterTest {
                 .hasCauseExactlyInstanceOf(IOException.class);
 
         assertThatYouTubeRequest(fetchAction)
-                .hasFieldOrPropertyWithValue("requestType", YouTubeRequest.RequestType.REPLIES)
+                .hasFieldOrPropertyWithValue("requestType", YouTubeRequestEntity.RequestType.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", COMMENT_ID)
                 .hasFieldOrPropertyWithValue("httpStatus", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .hasFieldOrProperty("error");
     }
 
-    private FetchRequest persistFetchRequest(FetchType fetchType, String objectId) {
-        return entityManager.persist(FetchRequest.builder()
+    private FetchRequestEntity persistFetchRequest(FetchType fetchType, String objectId) {
+        return entityManager.persist(FetchRequestEntity.builder()
                 .fetchType(fetchType)
                 .objectId(objectId)
-                .status(FetchRequest.Status.FETCHING)
+                .status(FetchRequestEntity.Status.FETCHING)
                 .build());
     }
 
-    private FetchAction persistFetchAction(FetchRequest fetchRequest, ActionType actionType, String objectId) {
-        return entityManager.persist(FetchAction.builder()
+    private FetchActionEntity persistFetchAction(FetchRequestEntity fetchRequest, ActionType actionType, String objectId) {
+        return entityManager.persist(FetchActionEntity.builder()
                 .fetchRequestId(fetchRequest.getId())
                 .actionType(actionType)
                 .objectId(objectId)
-                .status(FetchAction.Status.FETCHING)
+                .status(FetchActionEntity.Status.FETCHING)
                 .build());
     }
 
-    private ObjectAssert<YouTubeRequest> assertThatYouTubeRequest(FetchAction fetchAction) {
-        var youTubeRequest = YouTubeRequest.builder()
+    private ObjectAssert<YouTubeRequestEntity> assertThatYouTubeRequest(FetchActionEntity fetchAction) {
+        var youTubeRequest = YouTubeRequestEntity.builder()
                 .fetchActionId(fetchAction.getId())
                 .build();
         return assertThat(requestRepository.findOne(Example.of(youTubeRequest)))
                 .isPresent()
-                .get(new InstanceOfAssertFactory<>(YouTubeRequest.class, Assertions::assertThat))
+                .get(new InstanceOfAssertFactory<>(YouTubeRequestEntity.class, Assertions::assertThat))
                 .hasFieldOrProperty("id")
                 .hasFieldOrPropertyWithValue("fetchActionId", fetchAction.getId())
                 .hasFieldOrProperty("requestedAt")

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "thumbnails")
 @Getter
 @Setter
-public class Thumbnail {
+public class ThumbnailEntity {
 
     @Id
     private String id;

@@ -1,11 +1,10 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.Channel;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
 import ca.metricalsky.winston.events.FetchDataEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.ChannelRepository;
@@ -50,7 +49,7 @@ class FetchChannelActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
+        var fetchAction = FetchActionEntity.builder()
                 .actionType(ActionType.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();
@@ -66,7 +65,7 @@ class FetchChannelActionHandlerTest {
 
         assertThat(nextFetchAction).isNull();
 
-        verify(channelRepository).save(any(Channel.class));
+        verify(channelRepository).save(any(ChannelEntity.class));
         verify(fetchActionService).actionCompleted(fetchAction, channelListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
@@ -77,7 +76,7 @@ class FetchChannelActionHandlerTest {
 
     @Test
     void fetch_notFound() {
-        var fetchAction = FetchAction.builder()
+        var fetchAction = FetchActionEntity.builder()
                 .actionType(ActionType.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();

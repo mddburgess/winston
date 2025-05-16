@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.mapper.dto;
 
 import ca.metricalsky.winston.dto.author.AuthorDto;
-import ca.metricalsky.winston.entity.Author;
-import ca.metricalsky.winston.entity.view.AuthorDetails;
+import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,7 +18,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper(nullValuePropertyMappingStrategy = IGNORE)
 public abstract class AuthorDtoMapper {
 
-    public AuthorDto toAuthorDto(Author author) {
+    public AuthorDto toAuthorDto(AuthorEntity author) {
         if (author == null) {
             return null;
         }
@@ -32,15 +32,15 @@ public abstract class AuthorDtoMapper {
     @Mapping(target = "displayName", source = "author", qualifiedByName = "mapDisplayName")
     @Mapping(target = "profileImageUrl", source = "author", qualifiedByName = "mapProfileImageUrl")
     @Mapping(target = "statistics", source = ".")
-    public abstract AuthorDto toAuthorDto(AuthorDetails authorDetails);
+    public abstract AuthorDto toAuthorDto(AuthorDetailsView authorDetails);
 
     @Mapping(target = "displayName", source = ".", qualifiedByName = "mapDisplayName")
     @Mapping(target = "profileImageUrl", source = ".", qualifiedByName = "mapProfileImageUrl")
     @Mapping(target = "statistics", ignore = true)
-    abstract void mapToAuthorDto(Author author, @MappingTarget AuthorDto authorDto);
+    abstract void mapToAuthorDto(AuthorEntity author, @MappingTarget AuthorDto authorDto);
 
     @Named("mapDisplayName")
-    protected String mapDisplayName(Author author) {
+    protected String mapDisplayName(AuthorEntity author) {
         if (isNotBlank(author.getDisplayName())) {
             return author.getDisplayName();
         }
@@ -54,7 +54,7 @@ public abstract class AuthorDtoMapper {
     }
 
     @Named("mapProfileImageUrl")
-    protected String mapProfileImageUrl(Author author) {
+    protected String mapProfileImageUrl(AuthorEntity author) {
         return author.getProfileImageUrl() != null
                 ? "/api/v1/authors/" + author.getId() + "/thumbnail"
                 : "";

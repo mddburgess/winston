@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Channel;
-import ca.metricalsky.winston.entity.Comment;
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.VideoEntity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,30 +74,30 @@ class CommentRepositoryTest {
                 .isEmpty();
     }
 
-    private static Channel buildChannel() {
-        var channel = new Channel();
+    private static ChannelEntity buildChannel() {
+        var channel = new ChannelEntity();
         channel.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         channel.setCustomUrl("@" + RandomStringUtils.secure().nextAlphanumeric(10));
         return channel;
     }
 
-    private static Video buildVideo(Channel channel) {
-        var video = new Video();
+    private static VideoEntity buildVideo(ChannelEntity channel) {
+        var video = new VideoEntity();
         video.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         video.setChannelId(channel.getId());
         return video;
     }
 
-    private static Comment buildComment(Video video) {
-        var comment = new Comment();
+    private static CommentEntity buildComment(VideoEntity video) {
+        var comment = new CommentEntity();
         comment.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         comment.setVideoId(video.getId());
         comment.setTotalReplyCount(3L);
         return comment;
     }
 
-    private static Comment buildReply(Comment comment) {
-        var reply = new Comment();
+    private static CommentEntity buildReply(CommentEntity comment) {
+        var reply = new CommentEntity();
         reply.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         reply.setVideoId(comment.getVideoId());
         reply.setParentId(comment.getId());
