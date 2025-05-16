@@ -27,14 +27,14 @@ export const ChannelDetailsRoute = () => {
         if (channel) {
             dispatch(initFetchStateForChannel(channel));
         }
-    }, [channel]);
+    }, [channel, dispatch]);
 
     const { data: videos, isSuccess } = useListVideosByChannelHandleQuery(
         channelHandle!,
     );
-    const videoList = isSuccess
-        ? videosAdapter.getSelectors().selectAll(videos)
-        : [];
+    const videoList = useMemo(() => {
+        return isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];
+    }, [isSuccess, videos]);
 
     const filteredVideoList = useMemo(() => {
         return videoList.filter((video) =>

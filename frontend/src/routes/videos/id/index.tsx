@@ -28,9 +28,11 @@ export const VideoDetailsRoute = () => {
     const { isSuccess, data: comments } = useListCommentsByVideoIdQuery(
         videoId!,
     );
-    const commentsList = isSuccess
-        ? commentsAdapter.getSelectors().selectAll(comments)
-        : [];
+    const commentsList = useMemo(() => {
+        return isSuccess
+            ? commentsAdapter.getSelectors().selectAll(comments)
+            : [];
+    }, [isSuccess, comments]);
 
     const fetchState = useAppSelector(
         (state) => state.fetches.comments[videoId!],
@@ -70,7 +72,7 @@ export const VideoDetailsRoute = () => {
 
     const commentsDisabled = useMemo(
         () => video?.comments?.commentsDisabled,
-        [video, fetchState],
+        [video],
     );
 
     return (
