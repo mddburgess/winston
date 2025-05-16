@@ -33,12 +33,13 @@ dependencies {
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
-    annotationProcessor(libs.springBootConfigurationProcessor)
     annotationProcessor(libs.mapstructProcessor)
+    annotationProcessor(libs.springBootConfigurationProcessor)
 
     runtimeOnly(libs.bundles.database)
     developmentOnly(libs.springBootDevtools)
 
+    testImplementation(libs.archunitJunit5)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
 
