@@ -1,8 +1,7 @@
 import com.github.gradle.node.npm.task.NpmTask
-import com.github.gradle.node.npm.task.NpxTask
 
 plugins {
-    id("com.github.node-gradle.node") version "7.1.0"
+    alias(libs.plugins.node)
 }
 
 group = rootProject.group
