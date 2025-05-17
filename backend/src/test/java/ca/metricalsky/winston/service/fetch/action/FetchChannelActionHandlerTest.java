@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
@@ -41,7 +41,7 @@ class FetchChannelActionHandlerTest {
     @Mock
     private ChannelRepository channelRepository;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -58,7 +58,7 @@ class FetchChannelActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getChannels(fetchAction))
+        when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
         var nextFetchAction = fetchChannelActionHandler.fetch(fetchAction, ssePublisher);
@@ -84,7 +84,7 @@ class FetchChannelActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getChannels(fetchAction))
+        when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
         var appException = catchThrowableOfType(AppException.class,

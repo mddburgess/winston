@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
@@ -41,7 +41,7 @@ class FetchRepliesActionHandlerTest {
     @Mock
     private CommentService commentService;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -58,7 +58,7 @@ class FetchRepliesActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getReplies(fetchAction))
+        when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
         when(commentService.findById(COMMENT_ID))
                 .thenReturn(Optional.of(topLevelComment));

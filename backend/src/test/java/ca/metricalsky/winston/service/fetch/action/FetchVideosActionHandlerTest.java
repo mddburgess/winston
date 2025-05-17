@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
@@ -44,7 +44,7 @@ class FetchVideosActionHandlerTest {
     @Mock
     private VideoRepository videoRepository;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -61,7 +61,7 @@ class FetchVideosActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getActivities(fetchAction))
+        when(youTubeService.getActivities(fetchAction))
                 .thenReturn(activityListResponse);
 
         var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction, ssePublisher);

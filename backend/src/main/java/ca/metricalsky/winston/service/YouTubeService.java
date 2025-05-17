@@ -1,5 +1,7 @@
-package ca.metricalsky.winston.client;
+package ca.metricalsky.winston.service;
 
+import ca.metricalsky.winston.client.YouTubeClient;
+import ca.metricalsky.winston.client.YouTubeException;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
@@ -20,7 +22,7 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 
 @Service
 @RequiredArgsConstructor
-public class YouTubeClientAdapter {
+public class YouTubeService {
 
     private final YouTubeClient youTubeClient;
     private final YouTubeRequestRepository youTubeRequestRepository;

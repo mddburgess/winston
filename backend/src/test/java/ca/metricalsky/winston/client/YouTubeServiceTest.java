@@ -7,6 +7,7 @@ import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -39,12 +40,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest(includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
         YouTubeClient.class,
-        YouTubeClientAdapter.class,
+        YouTubeService.class,
         YouTubeConfig.class,
         YouTubeRequestRepository.class,
 }))
 @EnableWireMock
-class YouTubeClientAdapterTest {
+class YouTubeServiceTest {
 
     private static final String CHANNEL_HANDLE = "@handle";
     private static final String CHANNEL_ID = "channelId";
@@ -59,7 +60,7 @@ class YouTubeClientAdapterTest {
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
-    private YouTubeClientAdapter clientAdapter;
+    private YouTubeService clientAdapter;
     @Autowired
     private YouTubeRequestRepository requestRepository;
 

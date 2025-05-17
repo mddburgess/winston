@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
@@ -46,7 +46,7 @@ class FetchCommentsActionHandlerTest {
     @Mock
     private VideoCommentsService videoCommentsService;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -62,7 +62,7 @@ class FetchCommentsActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getComments(fetchAction))
+        when(youTubeService.getComments(fetchAction))
                 .thenReturn(commentThreadListResponse);
 
         var nextFetchAction = fetchCommentsActionHandler.fetch(fetchAction, ssePublisher);
@@ -90,7 +90,7 @@ class FetchCommentsActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getComments(fetchAction))
+        when(youTubeService.getComments(fetchAction))
                 .thenThrow(new CommentsDisabledException(null));
 
         var exception = catchThrowableOfType(CommentsDisabledException.class,

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
@@ -22,24 +22,24 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
 
     private final CommentService commentService;
     private final VideoCommentsService videoCommentsService;
-    private final YouTubeClientAdapter youTubeClientAdapter;
+    private final YouTubeService youTubeService;
 
     public FetchCommentsActionHandler(
             FetchActionService fetchActionService,
             CommentService commentService,
             VideoCommentsService videoCommentsService,
-            YouTubeClientAdapter youTubeClientAdapter
+            YouTubeService youTubeService
     ) {
         super(fetchActionService);
         this.commentService = commentService;
         this.videoCommentsService = videoCommentsService;
-        this.youTubeClientAdapter = youTubeClientAdapter;
+        this.youTubeService = youTubeService;
     }
 
     @Override
     protected FetchResult<CommentDto> doFetch(FetchActionEntity fetchAction) {
         try {
-            var commentThreadListResponse = youTubeClientAdapter.getComments(fetchAction);
+            var commentThreadListResponse = youTubeService.getComments(fetchAction);
             var commentEntities = commentThreadListResponse.getItems()
                     .stream()
                     .map(commentMapper::fromYouTube)

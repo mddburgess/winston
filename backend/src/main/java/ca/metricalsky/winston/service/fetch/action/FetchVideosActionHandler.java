@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
@@ -25,21 +25,21 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
     private final VideoRepository videoRepository;
-    private final YouTubeClientAdapter youTubeClientAdapter;
+    private final YouTubeService youTubeService;
 
     public FetchVideosActionHandler(
             FetchActionService fetchActionService,
             VideoRepository videoRepository,
-            YouTubeClientAdapter youTubeClientAdapter
+            YouTubeService youTubeService
     ) {
         super(fetchActionService);
         this.videoRepository = videoRepository;
-        this.youTubeClientAdapter = youTubeClientAdapter;
+        this.youTubeService = youTubeService;
     }
 
     @Override
     protected FetchResult<VideoDto> doFetch(FetchActionEntity fetchAction) {
-        var activityListResponse = youTubeClientAdapter.getActivities(fetchAction);
+        var activityListResponse = youTubeService.getActivities(fetchAction);
         var videoEntities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
