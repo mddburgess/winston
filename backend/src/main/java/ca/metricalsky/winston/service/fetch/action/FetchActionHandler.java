@@ -33,7 +33,7 @@ public abstract class FetchActionHandler<T> {
         try {
             fetchAction = fetchActionService.actionFetching(fetchAction);
             var fetchResult = doFetch(fetchAction);
-            fetchActionService.actionCompleted(fetchAction, fetchResult.items().size());
+            fetchActionService.actionSuccessful(fetchAction, fetchResult.items().size());
             return fetchResult;
         } catch (RuntimeException ex) {
             fetchActionService.actionFailed(fetchAction, ex);

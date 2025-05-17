@@ -1,11 +1,11 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
+import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
-import ca.metricalsky.winston.service.fetch.request.FetchRequestHandlerFactory;
+import ca.metricalsky.winston.service.fetch.request.FetchOperationHandlerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -18,7 +18,7 @@ import java.time.ZoneOffset;
 @RequiredArgsConstructor
 public class FetchService {
 
-    private final FetchRequestHandlerFactory fetchRequestHandlerFactory;
+    private final FetchOperationHandlerFactory fetchOperationHandlerFactory;
     private final FetchRequestMapper fetchRequestMapper;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
@@ -26,11 +26,12 @@ public class FetchService {
     private int dailyQuota;
 
     @Async
-    public void fetchAsync(FetchRequestDto fetchRequestDto, SsePublisher ssePublisher) {
-        var fetchRequest = fetchRequestMapper.toFetchRequest(fetchRequestDto);
+    public void fetchAsync(FetchRequest fetchRequest, SsePublisher ssePublisher) {
+        var fetchRequestEntity = fetchRequestMapper.toFetchRequest(fetchRequest);
         try {
-            fetchRequestHandlerFactory.getHandler(fetchRequest)
-                    .fetch(fetchRequest, ssePublisher);
+            var fetchOperation = fetchRequestEntity.getOperations().getFirst();
+            fetchOperationHandlerFactory.getHandler(fetchOperation)
+                    .fetch(fetchOperation, ssePublisher);
             ssePublisher.publish(FetchStatusEvent.completed());
             ssePublisher.complete();
         } catch (RuntimeException ex) {

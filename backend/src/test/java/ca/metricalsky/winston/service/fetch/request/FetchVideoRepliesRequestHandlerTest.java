@@ -1,12 +1,12 @@
 package ca.metricalsky.winston.service.fetch.request;
 
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
-import ca.metricalsky.winston.service.fetch.FetchRequestService;
+import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +31,12 @@ import static org.mockito.Mockito.when;
 class FetchVideoRepliesRequestHandlerTest {
 
     @InjectMocks
-    private FetchVideoRepliesRequestHandler fetchVideoRepliesRequestHandler;
+    private FetchVideoRepliesOperationHandler fetchVideoRepliesRequestHandler;
 
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private FetchRequestService fetchRequestService;
+    private FetchOperationService fetchOperationService;
     @Mock
     private FetchRepliesActionHandler fetchRepliesActionHandler;
     @Mock
@@ -48,12 +48,12 @@ class FetchVideoRepliesRequestHandlerTest {
 
     @Test
     void fetch() {
-        var fetchRequest = FetchRequestEntity.builder()
+        var fetchRequest = FetchOperationEntity.builder()
                 .objectId("videoId")
                 .build();
         var commentIds = List.of("commentId1", "commentId2");
 
-        when(fetchRequestService.startFetch(fetchRequest))
+        when(fetchOperationService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
@@ -61,7 +61,7 @@ class FetchVideoRepliesRequestHandlerTest {
         fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher);
 
         verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture(), eq(ssePublisher));
-        verify(fetchRequestService).fetchCompleted(fetchRequest);
+        verify(fetchOperationService).fetchSuccessful(fetchRequest);
         verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
 
         var fetchActionValues = fetchAction.getAllValues();
@@ -73,13 +73,13 @@ class FetchVideoRepliesRequestHandlerTest {
 
     @Test
     void fetch_exception() {
-        var fetchRequest = FetchRequestEntity.builder()
+        var fetchRequest = FetchOperationEntity.builder()
                 .objectId("videoId")
                 .build();
         var commentIds = List.of("commentId1", "commentId2");
         var appException = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
-        when(fetchRequestService.startFetch(fetchRequest))
+        when(fetchOperationService.startFetch(fetchRequest))
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
@@ -89,7 +89,7 @@ class FetchVideoRepliesRequestHandlerTest {
         assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher))
                 .isEqualTo(appException);
 
-        verify(fetchRequestService).fetchFailed(fetchRequest, appException);
+        verify(fetchOperationService).fetchFailed(fetchRequest, appException);
         verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
     }
 }

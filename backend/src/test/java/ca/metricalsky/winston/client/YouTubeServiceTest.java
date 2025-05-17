@@ -2,9 +2,8 @@ package ca.metricalsky.winston.client;
 
 import ca.metricalsky.winston.config.YouTubeConfig;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
 import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -31,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.wiremock.spring.EnableWireMock;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.forbidden;
@@ -76,8 +76,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(okJson(TEST_RESOURCES.load("channels", "200.json")));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.CHANNELS, CHANNEL_HANDLE);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.CHANNELS, CHANNEL_HANDLE);
 
         var result = clientAdapter.getChannels(fetchAction);
 
@@ -95,8 +95,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(okJson(TEST_RESOURCES.load("channels", "200_not_found.json")));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.CHANNELS, CHANNEL_HANDLE);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.CHANNELS, CHANNEL_HANDLE);
 
         var result = clientAdapter.getChannels(fetchAction);
 
@@ -114,8 +114,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetChannels(CHANNEL_HANDLE)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        var fetchRequest = persistFetchRequest(FetchType.CHANNELS, CHANNEL_HANDLE);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.CHANNELS, CHANNEL_HANDLE);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.CHANNELS, CHANNEL_HANDLE);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.CHANNELS, CHANNEL_HANDLE);
 
         assertThatThrownBy(() -> clientAdapter.getChannels(fetchAction))
                 .isInstanceOf(YouTubeException.class)
@@ -138,8 +138,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetActivities(CHANNEL_ID)
                 .willReturn(okJson(TEST_RESOURCES.load("activities", testResource)));
 
-        var fetchRequest = persistFetchRequest(FetchType.VIDEOS, CHANNEL_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.VIDEOS, CHANNEL_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.VIDEOS, CHANNEL_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.VIDEOS, CHANNEL_ID);
 
         var result = clientAdapter.getActivities(fetchAction);
 
@@ -157,8 +157,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetActivities(CHANNEL_ID)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        var fetchRequest = persistFetchRequest(FetchType.VIDEOS, CHANNEL_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.VIDEOS, CHANNEL_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.VIDEOS, CHANNEL_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.VIDEOS, CHANNEL_ID);
 
         assertThatThrownBy(() -> clientAdapter.getActivities(fetchAction))
                 .isInstanceOf(YouTubeException.class)
@@ -181,8 +181,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetCommentThreads(VIDEO_ID)
                 .willReturn(okJson(TEST_RESOURCES.load("comments", testResource)));
 
-        var fetchRequest = persistFetchRequest(FetchType.COMMENTS, VIDEO_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, VIDEO_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.COMMENTS, VIDEO_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.COMMENTS, VIDEO_ID);
 
         var result = clientAdapter.getComments(fetchAction);
 
@@ -201,8 +201,8 @@ class YouTubeServiceTest {
                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .withBody(TEST_RESOURCES.load("comments", "403_comments_disabled.json")));
 
-        var fetchRequest = persistFetchRequest(FetchType.COMMENTS, VIDEO_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, VIDEO_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.COMMENTS, VIDEO_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.COMMENTS, VIDEO_ID);
 
         assertThatThrownBy(() -> clientAdapter.getComments(fetchAction))
                 .isExactlyInstanceOf(CommentsDisabledException.class)
@@ -221,8 +221,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetCommentThreads(VIDEO_ID)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        var fetchRequest = persistFetchRequest(FetchType.COMMENTS, VIDEO_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, VIDEO_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.COMMENTS, VIDEO_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.COMMENTS, VIDEO_ID);
 
         assertThatThrownBy(() -> clientAdapter.getComments(fetchAction))
                 .isInstanceOf(YouTubeException.class)
@@ -245,8 +245,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetComments(COMMENT_ID)
                 .willReturn(okJson(TEST_RESOURCES.load("replies", testResource)));
 
-        var fetchRequest = persistFetchRequest(FetchType.REPLIES, COMMENT_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, COMMENT_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.REPLIES, COMMENT_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.COMMENTS, COMMENT_ID);
 
         var result = clientAdapter.getReplies(fetchAction);
 
@@ -264,8 +264,8 @@ class YouTubeServiceTest {
         wireMock.stubForGetComments(COMMENT_ID)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK));
 
-        var fetchRequest = persistFetchRequest(FetchType.REPLIES, COMMENT_ID);
-        var fetchAction = persistFetchAction(fetchRequest, ActionType.COMMENTS, COMMENT_ID);
+        var fetchRequest = persistFetchRequest(FetchOperationEntity.Type.REPLIES, COMMENT_ID);
+        var fetchAction = persistFetchAction(fetchRequest, FetchActionEntity.Type.COMMENTS, COMMENT_ID);
 
         assertThatThrownBy(() -> clientAdapter.getReplies(fetchAction))
                 .isInstanceOf(YouTubeException.class)
@@ -279,17 +279,25 @@ class YouTubeServiceTest {
                 .hasFieldOrProperty("error");
     }
 
-    private FetchRequestEntity persistFetchRequest(FetchType fetchType, String objectId) {
-        return entityManager.persist(FetchRequestEntity.builder()
-                .fetchType(fetchType)
+    private FetchRequestEntity persistFetchRequest(FetchOperationEntity.Type fetchType, String objectId) {
+        var request = entityManager.persist(FetchRequestEntity.builder().build());
+        var operation = entityManager.persist(FetchOperationEntity.builder()
+                .fetchRequestId(request.getId())
+                .operationType(fetchType)
                 .objectId(objectId)
-                .status(FetchRequestEntity.Status.FETCHING)
+                .status(FetchOperationEntity.Status.FETCHING)
                 .build());
+        request.setOperations(List.of(operation));
+        return request;
     }
 
-    private FetchActionEntity persistFetchAction(FetchRequestEntity fetchRequest, ActionType actionType, String objectId) {
+    private FetchActionEntity persistFetchAction(
+            FetchRequestEntity fetchRequest,
+            FetchActionEntity.Type actionType,
+            String objectId
+    ) {
         return entityManager.persist(FetchActionEntity.builder()
-                .fetchRequestId(fetchRequest.getId())
+                .fetchOperationId(fetchRequest.getOperations().getFirst().getId())
                 .actionType(actionType)
                 .objectId(objectId)
                 .status(FetchActionEntity.Status.FETCHING)

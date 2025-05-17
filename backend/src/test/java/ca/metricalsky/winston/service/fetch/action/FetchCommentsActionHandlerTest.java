@@ -55,7 +55,7 @@ class FetchCommentsActionHandlerTest {
     @Test
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.ActionType.COMMENTS)
+                .actionType(FetchActionEntity.Type.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
         var commentThreadListResponse = buildCommentThreadListResponse();
@@ -70,7 +70,7 @@ class FetchCommentsActionHandlerTest {
         assertThat(nextFetchAction).isNull();
 
         verify(commentService).saveAll(anyList());
-        verify(fetchActionService).actionCompleted(fetchAction, commentThreadListResponse.getItems().size());
+        verify(fetchActionService).actionSuccessful(fetchAction, commentThreadListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
@@ -84,7 +84,7 @@ class FetchCommentsActionHandlerTest {
     @Test
     void fetch_commentsDisabled() {
         var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.ActionType.COMMENTS)
+                .actionType(FetchActionEntity.Type.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
 

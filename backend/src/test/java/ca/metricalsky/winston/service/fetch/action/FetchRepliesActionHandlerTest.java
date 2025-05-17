@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity.ActionType;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.CommentService;
@@ -50,7 +50,7 @@ class FetchRepliesActionHandlerTest {
     @Test
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
-                .actionType(ActionType.REPLIES)
+                .actionType(Type.REPLIES)
                 .objectId(COMMENT_ID)
                 .build();
         var commentListResponse = buildCommentListResponse();
@@ -68,7 +68,7 @@ class FetchRepliesActionHandlerTest {
         assertThat(nextFetchAction).isNull();
 
         verify(commentService).saveAll(anyList());
-        verify(fetchActionService).actionCompleted(fetchAction, commentListResponse.getItems().size());
+        verify(fetchActionService).actionSuccessful(fetchAction, commentListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())

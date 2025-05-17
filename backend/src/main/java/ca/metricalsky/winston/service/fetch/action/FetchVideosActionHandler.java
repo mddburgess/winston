@@ -70,7 +70,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
                 .orElse(null);
 
         return activityListResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
-                .fetchRequestId(fetchAction.getFetchRequestId())
+                .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
                 .publishedAfter(fetchAction.getPublishedAfter())

@@ -58,7 +58,7 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
 
     private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentThreadListResponse youTubeResponse) {
         return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
-                .fetchRequestId(fetchAction.getFetchRequestId())
+                .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
                 .pageToken(youTubeResponse.getNextPageToken())

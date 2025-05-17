@@ -1,22 +1,22 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.service.fetch.FetchRequestService;
+import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import ca.metricalsky.winston.service.fetch.action.FetchVideosActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchVideosRequestHandler extends DefaultFetchRequestHandler {
+public class FetchVideosOperationHandler extends DefaultFetchOperationHandler {
 
     private final FetchVideosActionHandler fetchVideosActionHandler;
 
     @Autowired
-    public FetchVideosRequestHandler(
-            FetchRequestService fetchRequestService,
+    public FetchVideosOperationHandler(
+            FetchOperationService fetchOperationService,
             FetchVideosActionHandler fetchVideosActionHandler
     ) {
-        super(fetchRequestService);
+        super(fetchOperationService);
         this.fetchVideosActionHandler = fetchVideosActionHandler;
     }
 

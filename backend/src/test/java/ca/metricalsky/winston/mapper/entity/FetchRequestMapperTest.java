@@ -3,9 +3,9 @@ package ca.metricalsky.winston.mapper.entity;
 import ca.metricalsky.winston.dto.fetch.FetchChannel;
 import ca.metricalsky.winston.dto.fetch.FetchComments;
 import ca.metricalsky.winston.dto.fetch.FetchReplies;
-import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
+import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.dto.fetch.FetchVideos;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.ChannelService;
@@ -39,13 +39,15 @@ class FetchRequestMapperTest {
         var fetchChannel = new FetchChannel();
         fetchChannel.setHandle("@handle");
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setChannel(fetchChannel);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.CHANNELS)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.CHANNELS)
                 .hasFieldOrPropertyWithValue("objectId", fetchChannel.getHandle());
     }
 
@@ -55,13 +57,15 @@ class FetchRequestMapperTest {
         fetchVideos.setChannelId("channelId");
         fetchVideos.setFetch(FetchVideos.Mode.ALL);
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setVideos(fetchVideos);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.VIDEOS)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.VIDEOS)
                 .hasFieldOrPropertyWithValue("objectId", fetchVideos.getChannelId())
                 .hasFieldOrPropertyWithValue("mode", "ALL");
     }
@@ -72,7 +76,7 @@ class FetchRequestMapperTest {
         fetchVideos.setChannelId("channelId");
         fetchVideos.setFetch(FetchVideos.Mode.LATEST);
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setVideos(fetchVideos);
 
         when(videoRepository.findLastPublishedAtForChannelId(fetchVideos.getChannelId()))
@@ -80,8 +84,10 @@ class FetchRequestMapperTest {
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.VIDEOS)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.VIDEOS)
                 .hasFieldOrPropertyWithValue("objectId", fetchVideos.getChannelId())
                 .hasFieldOrPropertyWithValue("mode", "LATEST")
                 .hasFieldOrPropertyWithValue("publishedAfter", OffsetDateTime.parse("2025-01-01T00:00:01Z"))
@@ -93,13 +99,15 @@ class FetchRequestMapperTest {
         var fetchComments = new FetchComments();
         fetchComments.setVideoId("videoId");
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setComments(fetchComments);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.COMMENTS)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.COMMENTS)
                 .hasFieldOrPropertyWithValue("objectId", fetchComments.getVideoId());
     }
 
@@ -108,13 +116,15 @@ class FetchRequestMapperTest {
         var fetchReplies = new FetchReplies();
         fetchReplies.setCommentId("commentId");
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setReplies(fetchReplies);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getCommentId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_COMMENT");
     }
@@ -124,13 +134,15 @@ class FetchRequestMapperTest {
         var fetchReplies = new FetchReplies();
         fetchReplies.setVideoId("videoId");
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setReplies(fetchReplies);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getVideoId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_VIDEO");
     }
@@ -141,20 +153,22 @@ class FetchRequestMapperTest {
         fetchReplies.setVideoId("videoId");
         fetchReplies.setCommentId("commentId");
 
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
         fetchRequestDto.setReplies(fetchReplies);
 
         var fetchRequest = mapper.toFetchRequest(fetchRequestDto);
 
-        assertThat(fetchRequest)
-                .hasFieldOrPropertyWithValue("fetchType", FetchRequestEntity.FetchType.REPLIES)
+        assertThat(fetchRequest.getOperations())
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("operationType", Type.REPLIES)
                 .hasFieldOrPropertyWithValue("objectId", fetchReplies.getCommentId())
                 .hasFieldOrPropertyWithValue("mode", "FOR_COMMENT");
     }
 
     @Test
     void toFetchRequest_badRequest() {
-        var fetchRequestDto = new FetchRequestDto();
+        var fetchRequestDto = new FetchRequest();
 
         assertThatThrownBy(() -> mapper.toFetchRequest(fetchRequestDto))
                 .isExactlyInstanceOf(AppException.class)

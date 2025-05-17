@@ -1,26 +1,26 @@
 package ca.metricalsky.winston.service.fetch.request;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.service.VideoCommentsService;
-import ca.metricalsky.winston.service.fetch.FetchRequestService;
+import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import ca.metricalsky.winston.service.fetch.action.FetchCommentsActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchCommentsRequestHandler extends DefaultFetchRequestHandler {
+public class FetchCommentsOperationHandler extends DefaultFetchOperationHandler {
 
     private final FetchCommentsActionHandler fetchCommentsActionHandler;
     private final VideoCommentsService videoCommentsService;
 
     @Autowired
-    public FetchCommentsRequestHandler(
-            FetchRequestService fetchRequestService,
+    public FetchCommentsOperationHandler(
+            FetchOperationService fetchOperationService,
             FetchCommentsActionHandler fetchCommentsActionHandler,
             VideoCommentsService videoCommentsService
     ) {
-        super(fetchRequestService);
+        super(fetchOperationService);
         this.fetchCommentsActionHandler = fetchCommentsActionHandler;
         this.videoCommentsService = videoCommentsService;
     }
@@ -31,7 +31,7 @@ public class FetchCommentsRequestHandler extends DefaultFetchRequestHandler {
     }
 
     @Override
-    public void afterFetch(FetchRequestEntity fetchRequest) {
-        videoCommentsService.updateVideoComments(fetchRequest.getObjectId());
+    public void afterFetch(FetchOperationEntity operation) {
+        videoCommentsService.updateVideoComments(operation.getObjectId());
     }
 }

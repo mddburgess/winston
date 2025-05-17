@@ -1,11 +1,11 @@
 package ca.metricalsky.winston.service.fetch.request;
 
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity.FetchType;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.service.fetch.FetchRequestService;
+import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchChannelActionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +21,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FetchChannelsRequestHandlerTest {
+class FetchChannelsOperationHandlerTest {
 
     @InjectMocks
-    private FetchChannelsRequestHandler fetchChannelsRequestHandler;
+    private FetchChannelsOperationHandler fetchChannelsOperationHandler;
 
     @Mock
-    private FetchRequestService fetchRequestService;
+    private FetchOperationService fetchOperationService;
     @Mock
     private FetchChannelActionHandler fetchChannelActionHandler;
     @Mock
@@ -35,33 +35,33 @@ class FetchChannelsRequestHandlerTest {
 
     @Test
     void fetch() {
-        var fetchRequest = FetchRequestEntity.builder()
-                .fetchType(FetchType.CHANNELS)
+        var operation = FetchOperationEntity.builder()
+                .operationType(Type.CHANNELS)
                 .build();
 
-        when(fetchRequestService.startFetch(fetchRequest))
-                .thenReturn(fetchRequest);
+        when(fetchOperationService.startFetch(operation))
+                .thenReturn(operation);
 
-        fetchChannelsRequestHandler.fetch(fetchRequest, ssePublisher);
+        fetchChannelsOperationHandler.fetch(operation, ssePublisher);
 
-        verify(fetchRequestService).fetchCompleted(fetchRequest);
+        verify(fetchOperationService).fetchSuccessful(operation);
     }
 
     @Test
     void fetch_exception() {
-        var fetchRequest = FetchRequestEntity.builder()
-                .fetchType(FetchType.CHANNELS)
+        var operation = FetchOperationEntity.builder()
+                .operationType(Type.CHANNELS)
                 .build();
         var appException = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
-        when(fetchRequestService.startFetch(fetchRequest))
-                .thenReturn(fetchRequest);
+        when(fetchOperationService.startFetch(operation))
+                .thenReturn(operation);
         when(fetchChannelActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
                 .thenThrow(appException);
 
-        assertThatThrownBy(() -> fetchChannelsRequestHandler.fetch(fetchRequest, ssePublisher))
+        assertThatThrownBy(() -> fetchChannelsOperationHandler.fetch(operation, ssePublisher))
                 .isEqualTo(appException);
 
-        verify(fetchRequestService).fetchFailed(fetchRequest, appException);
+        verify(fetchOperationService).fetchFailed(operation, appException);
     }
 }

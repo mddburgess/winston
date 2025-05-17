@@ -3,7 +3,7 @@ package ca.metricalsky.winston.dto.fetch;
 import lombok.Data;
 
 @Data
-public class FetchRequestDto {
+public class FetchRequest {
 
     private FetchChannel channel;
     private FetchVideos videos;

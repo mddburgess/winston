@@ -1,11 +1,14 @@
 package ca.metricalsky.winston.entity.fetch;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "fetch_requests")
@@ -30,19 +34,14 @@ public class FetchRequestEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany
+    @JoinColumn(name = "fetch_request_id", referencedColumnName = "id")
+    private List<FetchOperationEntity> operations;
+
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private FetchType fetchType;
+    private Status status = Status.ACCEPTED;
 
-    private String objectId;
-
-    private String mode;
-
-    private OffsetDateTime publishedAfter;
-
-    private OffsetDateTime publishedBefore;
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
     private String error;
 
@@ -52,16 +51,10 @@ public class FetchRequestEntity {
     @UpdateTimestamp
     private OffsetDateTime lastUpdatedAt;
 
-    public enum FetchType {
-        CHANNELS,
-        VIDEOS,
-        COMMENTS,
-        REPLIES,
-    }
-
     public enum Status {
+        ACCEPTED,
         FETCHING,
+        PAUSED,
         COMPLETED,
-        FAILED,
     }
 }

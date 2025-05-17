@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.web.fetch;
 
 import ca.metricalsky.winston.dto.fetch.FetchLimitsResponse;
-import ca.metricalsky.winston.dto.fetch.FetchRequestDto;
+import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.service.NotificationsService;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class FetchController {
     @PostMapping
     public ResponseEntity<SseEmitter> fetch(
             @RequestHeader(value = "X-Notify-Subscription", required = false) UUID subscriptionId,
-            @RequestBody FetchRequestDto request
+            @RequestBody FetchRequest request
     ) {
         var ssePublisher = subscriptionId == null
                 ? notificationsService.openSubscription()

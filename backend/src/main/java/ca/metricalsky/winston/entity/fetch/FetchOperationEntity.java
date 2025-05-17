@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity.fetch;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,35 +19,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "fetch_actions")
+@Table(name = "fetch_operations")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FetchActionEntity {
+public class FetchOperationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long fetchOperationId;
+    @Column(name = "fetch_request_id")
+    private Long fetchRequestId;
 
     @Enumerated(EnumType.STRING)
-    private Type actionType;
+    private Type operationType;
 
     private String objectId;
+
+    private String mode;
 
     private OffsetDateTime publishedAfter;
 
     private OffsetDateTime publishedBefore;
 
-    private String pageToken;
-
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    private Integer itemCount;
 
     private String error;
 

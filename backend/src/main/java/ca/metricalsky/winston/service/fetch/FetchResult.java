@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 public record FetchResult<T>(
-        FetchActionEntity.ActionType actionType,
+        FetchActionEntity.Type actionType,
         String objectId,
         Collection<T> items,
         FetchActionEntity nextFetchAction

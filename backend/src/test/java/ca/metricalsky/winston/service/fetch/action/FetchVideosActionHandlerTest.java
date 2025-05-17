@@ -53,7 +53,7 @@ class FetchVideosActionHandlerTest {
     @Test
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.ActionType.VIDEOS)
+                .actionType(FetchActionEntity.Type.VIDEOS)
                 .objectId(CHANNEL_ID)
                 .build();
         var activityListResponse = new ActivityListResponse();
@@ -69,7 +69,7 @@ class FetchVideosActionHandlerTest {
         assertThat(nextFetchAction).isNull();
 
         verify(videoRepository).saveAll(anyList());
-        verify(fetchActionService).actionCompleted(fetchAction, 1);
+        verify(fetchActionService).actionSuccessful(fetchAction, 1);
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())

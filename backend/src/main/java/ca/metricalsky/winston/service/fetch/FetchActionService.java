@@ -13,25 +13,25 @@ public class FetchActionService {
 
     private final FetchActionRepository fetchActionRepository;
 
-    public FetchActionEntity actionReady(FetchActionEntity fetchAction) {
-        fetchAction.setStatus(Status.READY);
-        return fetchActionRepository.save(fetchAction);
+    public FetchActionEntity actionReady(FetchActionEntity action) {
+        action.setStatus(Status.READY);
+        return fetchActionRepository.save(action);
     }
 
-    public FetchActionEntity actionFetching(FetchActionEntity fetchAction) {
-        fetchAction.setStatus(Status.FETCHING);
-        return fetchActionRepository.save(fetchAction);
+    public FetchActionEntity actionFetching(FetchActionEntity action) {
+        action.setStatus(Status.FETCHING);
+        return fetchActionRepository.save(action);
     }
 
-    public FetchActionEntity actionCompleted(FetchActionEntity fetchAction, Integer itemCount) {
-        fetchAction.setStatus(Status.COMPLETED);
-        fetchAction.setItemCount(itemCount);
-        return fetchActionRepository.save(fetchAction);
+    public FetchActionEntity actionSuccessful(FetchActionEntity action, Integer itemCount) {
+        action.setStatus(Status.SUCCESSFUL);
+        action.setItemCount(itemCount);
+        return fetchActionRepository.save(action);
     }
 
-    public FetchActionEntity actionFailed(FetchActionEntity fetchAction, Throwable throwable) {
-        fetchAction.setStatus(Status.FAILED);
-        fetchAction.setError(Throwables.getStackTraceAsString(throwable));
-        return fetchActionRepository.save(fetchAction);
+    public FetchActionEntity actionFailed(FetchActionEntity action, Throwable throwable) {
+        action.setStatus(Status.FAILED);
+        action.setError(Throwables.getStackTraceAsString(throwable));
+        return fetchActionRepository.save(action);
     }
 }
