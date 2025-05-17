@@ -1,13 +1,17 @@
 package ca.metricalsky.winston.entity;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +21,9 @@ import java.time.OffsetDateTime;
 @Table(name = "videos")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VideoEntity {
 
     @Id
@@ -43,7 +50,7 @@ public class VideoEntity {
     @Column(name = "last_fetched_at")
     private OffsetDateTime lastFetchedAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id", referencedColumnName = "video_id")
     private VideoCommentsEntity comments;
 }
