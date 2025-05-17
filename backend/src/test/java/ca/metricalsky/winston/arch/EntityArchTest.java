@@ -2,9 +2,19 @@ package ca.metricalsky.winston.arch;
 
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 
+import static ca.metricalsky.winston.arch.ext.ExtraConditions.explicitlyDeclare;
+import static ca.metricalsky.winston.arch.ext.ExtraPredicates.areEnums;
+import static ca.metricalsky.winston.arch.ext.ExtraPredicates.areOfType;
+import static ca.metricalsky.winston.arch.ext.ExtraTransformers.fieldAnnotations;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.all;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 @AnalyzeMainClasses
 class EntityArchTest {
@@ -46,4 +56,31 @@ class EntityArchTest {
             .and().areNotInterfaces()
             .and().areNotAnnotatedWith(Entity.class)
             .should().resideOutsideOfPackage(ENTITY_PACKAGE);
+
+    @ArchTest
+    private final ArchRule entityFieldsAreAnnotatedWithColumn = fields()
+            .that().areDeclaredInClassesThat().areAnnotatedWith(Entity.class)
+            .should().beAnnotatedWith(Column.class)
+            .orShould().beAnnotatedWith(JoinColumn.class);
+
+    @ArchTest
+    private final ArchRule columnAnnotationsExplicitlyDeclareName = all(fieldAnnotations())
+            .that(areOfType(Column.class))
+            .should(explicitlyDeclare("name"));
+
+    @ArchTest
+    private final ArchRule joinColumnAnnotationsExplicitlyDeclareNames = all(fieldAnnotations())
+            .that(areOfType(JoinColumn.class))
+            .should(explicitlyDeclare("name").and(explicitlyDeclare("referencedColumnName")));
+
+    @ArchTest
+    private final ArchRule entityEnumFieldsAreAnnotatedWithEnumerated = fields()
+            .that().areDeclaredInClassesThat().areAnnotatedWith(Entity.class)
+            .and(areEnums())
+            .should().beAnnotatedWith(Enumerated.class);
+
+    @ArchTest
+    private final ArchRule enumeratedAnnotationsHaveValueSetToEnumTypeString = all(fieldAnnotations())
+            .that(areOfType(Enumerated.class))
+            .should(explicitlyDeclare("value").setTo(EnumType.STRING));
 }

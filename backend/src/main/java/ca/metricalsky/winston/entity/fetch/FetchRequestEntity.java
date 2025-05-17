@@ -1,6 +1,8 @@
 package ca.metricalsky.winston.entity.fetch;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,6 +34,7 @@ public class FetchRequestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @OneToMany
@@ -39,16 +42,20 @@ public class FetchRequestEntity {
     private List<FetchOperationEntity> operations;
 
     @Builder.Default
+    @Basic(optional = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Status status = Status.ACCEPTED;
 
-
+    @Column(name = "error")
     private String error;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "last_updated_at")
     private OffsetDateTime lastUpdatedAt;
 
     public enum Status {
