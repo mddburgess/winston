@@ -12,27 +12,27 @@ class RepositoryArchTest {
     private static final String REPOSITORY_PACKAGE = "..winston.repository..";
 
     @ArchTest
-    static final ArchRule repositoryClassNamesEndWithRepository =
-            classes().that().areAnnotatedWith(Repository.class)
-                    .should().haveSimpleNameEndingWith("Repository");
+    private final ArchRule repositoryClassNamesEndWithRepository = classes()
+            .that().areAnnotatedWith(Repository.class)
+            .should().haveSimpleNameEndingWith("Repository");
 
     @ArchTest
-    static final ArchRule repositoryClassesAreInRepositoryPackage =
-            classes().that().areAnnotatedWith(Repository.class)
-                    .should().resideInAPackage(REPOSITORY_PACKAGE);
+    private final ArchRule repositoryClassesAreInRepositoryPackage = classes()
+            .that().areAnnotatedWith(Repository.class)
+            .should().resideInAPackage(REPOSITORY_PACKAGE);
 
     @ArchTest
-    static final ArchRule repositoryClassesAreInterfaces =
-            classes().that().areAnnotatedWith(Repository.class)
-                    .should().beInterfaces();
+    private final ArchRule repositoryClassesAreInterfaces = classes()
+            .that().areAnnotatedWith(Repository.class)
+            .should().beInterfaces();
 
     @ArchTest
-    static final ArchRule nonRepositoryClassNamesDoNotEndWithRepository =
-            classes().that().areNotAnnotatedWith(Repository.class)
-                    .should().haveSimpleNameNotEndingWith("Repository");
+    private final ArchRule nonRepositoryClassNamesDoNotEndWithRepository = classes()
+            .that().areNotAnnotatedWith(Repository.class)
+            .should().haveSimpleNameNotEndingWith("Repository");
 
     @ArchTest
-    static final ArchRule nonRepositoryClassesAreNotInRepositoryPackage =
-            classes().that().areNotAnnotatedWith(Repository.class)
-                    .should().resideOutsideOfPackage(REPOSITORY_PACKAGE);
+    private final ArchRule nonRepositoryClassesAreNotInRepositoryPackage = classes()
+            .that().areNotAnnotatedWith(Repository.class)
+            .should().resideOutsideOfPackage(REPOSITORY_PACKAGE);
 }
