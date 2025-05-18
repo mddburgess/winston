@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +25,7 @@ class VideoEntityTest {
                 .channelId(channelEntity.getId())
                 .build();
 
-        var persistedEntity = entityManager.persistAndFlush(videoEntity);
+        var persistedEntity = entityManager.persistFlushFind(videoEntity);
 
         assertThat(persistedEntity)
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId())
@@ -44,7 +45,7 @@ class VideoEntityTest {
                 .publishedAt(OffsetDateTime.now())
                 .build();
 
-        var persistedEntity = entityManager.persistAndFlush(videoEntity);
+        var persistedEntity = entityManager.persistFlushFind(videoEntity);
 
         assertThat(persistedEntity)
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId())
@@ -52,7 +53,8 @@ class VideoEntityTest {
                 .hasFieldOrPropertyWithValue("title", videoEntity.getTitle())
                 .hasFieldOrPropertyWithValue("description", videoEntity.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", videoEntity.getThumbnailUrl())
-                .hasFieldOrPropertyWithValue("publishedAt", videoEntity.getPublishedAt())
+                .hasFieldOrPropertyWithValue("publishedAt",
+                        videoEntity.getPublishedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasNoNullFieldsOrPropertiesExcept("comments");
     }
 

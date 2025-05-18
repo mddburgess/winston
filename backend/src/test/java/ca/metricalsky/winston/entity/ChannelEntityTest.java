@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,11 +25,15 @@ class ChannelEntityTest {
                 .id(TestUtils.randomId())
                 .build();
 
-        var persistedEntity = entityManager.persistAndFlush(channelEntity);
+        var persistedEntity = entityManager.persistFlushFind(channelEntity);
 
         assertThat(persistedEntity)
                 .hasFieldOrPropertyWithValue("id", channelEntity.getId())
-                .hasAllNullFieldsOrPropertiesExcept("id", "lastFetchedAt");
+                .hasAllNullFieldsOrPropertiesExcept("id", "keywords", "lastFetchedAt", "topics");
+        assertThat(persistedEntity.getTopics())
+                .isEmpty();
+        assertThat(persistedEntity.getKeywords())
+                .isEmpty();
     }
 
     @Test
@@ -43,7 +49,7 @@ class ChannelEntityTest {
                 .keywords(Set.of(TestUtils.randomString()))
                 .build();
 
-        var persistedEntity = entityManager.persistAndFlush(channelEntity);
+        var persistedEntity = entityManager.persistFlushFind(channelEntity);
 
         assertThat(persistedEntity)
                 .hasFieldOrPropertyWithValue("id", channelEntity.getId())
@@ -51,7 +57,8 @@ class ChannelEntityTest {
                 .hasFieldOrPropertyWithValue("description", channelEntity.getDescription())
                 .hasFieldOrPropertyWithValue("customUrl", channelEntity.getCustomUrl())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", channelEntity.getThumbnailUrl())
-                .hasFieldOrPropertyWithValue("publishedAt", channelEntity.getPublishedAt())
+                .hasFieldOrPropertyWithValue("publishedAt",
+                        channelEntity.getPublishedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasFieldOrPropertyWithValue("topics", channelEntity.getTopics())
                 .hasFieldOrPropertyWithValue("keywords", channelEntity.getKeywords())
                 .hasNoNullFieldsOrProperties();
