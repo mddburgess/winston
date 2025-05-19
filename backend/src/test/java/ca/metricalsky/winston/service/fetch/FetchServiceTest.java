@@ -11,8 +11,8 @@ import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
-import ca.metricalsky.winston.service.fetch.request.FetchOperationHandler;
-import ca.metricalsky.winston.service.fetch.request.FetchOperationHandlerFactory;
+import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandler;
+import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -48,6 +47,8 @@ class FetchServiceTest {
     private FetchRequestMapper fetchRequestMapper;
     @Mock
     private FetchRequestRepository fetchRequestRepository;
+    @Mock
+    private FetchRequestService fetchRequestService;
     @Mock
     private SsePublisher ssePublisher;
     @Mock
@@ -73,14 +74,15 @@ class FetchServiceTest {
     void fetchAsync() {
         var fetchRequest = buildFetchRequestEntity();
 
-        when(fetchRequestRepository.findById(fetchRequest.getId()))
-                .thenReturn(Optional.of(fetchRequest));
+        when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
+                .thenReturn(fetchRequest.getOperations());
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
         verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst(), ssePublisher);
+        verify(fetchRequestService).finishProcessingRequest(fetchRequest.getId());
         verify(ssePublisher).complete();
     }
 
@@ -89,8 +91,8 @@ class FetchServiceTest {
         var fetchRequest = buildFetchRequestEntity();
         var exception = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
-        when(fetchRequestRepository.findById(fetchRequest.getId()))
-                .thenReturn(Optional.of(fetchRequest));
+        when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
+                .thenReturn(fetchRequest.getOperations());
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
@@ -109,8 +111,8 @@ class FetchServiceTest {
         var fetchRequest = buildFetchRequestEntity();
         var exception = new PublisherException("");
 
-        when(fetchRequestRepository.findById(fetchRequest.getId()))
-                .thenReturn(Optional.of(fetchRequest));
+        when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
+                .thenReturn(fetchRequest.getOperations());
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
