@@ -22,9 +22,7 @@ class FetchOperationEntityTest {
 
     @Test
     void persistsWithOnlyRequiredFields() {
-        var fetchRequestEntity = persistFetchRequest();
         var fetchOperationEntity = FetchOperationEntity.builder()
-                .fetchRequestId(fetchRequestEntity.getId())
                 .operationType(Type.CHANNELS)
                 .objectId(TestUtils.randomId())
                 .build();
@@ -32,7 +30,6 @@ class FetchOperationEntityTest {
         var persistedEntity = entityManager.persistFlushFind(fetchOperationEntity);
 
         assertThat(persistedEntity)
-                .hasFieldOrPropertyWithValue("fetchRequestId", fetchOperationEntity.getFetchRequestId())
                 .hasFieldOrPropertyWithValue("operationType", fetchOperationEntity.getOperationType())
                 .hasFieldOrPropertyWithValue("objectId", fetchOperationEntity.getObjectId())
                 .hasFieldOrPropertyWithValue("status", Status.READY);

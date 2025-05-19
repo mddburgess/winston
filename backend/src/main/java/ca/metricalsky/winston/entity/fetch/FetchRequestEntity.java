@@ -37,7 +37,7 @@ public class FetchRequestEntity {
     @Column(name = "id")
     private Long id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fetch_request_id", referencedColumnName = "id")
     private List<FetchOperationEntity> operations;
 

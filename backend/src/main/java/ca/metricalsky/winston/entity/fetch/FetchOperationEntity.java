@@ -33,7 +33,6 @@ public class FetchOperationEntity {
     @Column(name = "id")
     private Long id;
 
-    @Basic(optional = false)
     @Column(name = "fetch_request_id")
     private Long fetchRequestId;
 
