@@ -20,39 +20,39 @@ public class FetchVideoRepliesOperationHandler implements FetchOperationHandler 
     private final VideoCommentsService videoCommentsService;
 
     @Override
-    public void fetch(FetchOperationEntity operation, SsePublisher ssePublisher) {
-        operation = fetchOperationService.startFetch(operation);
+    public void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher) {
+        fetchOperation = fetchOperationService.startFetch(fetchOperation);
         try {
-            var videoId = operation.getObjectId();
+            var videoId = fetchOperation.getObjectId();
             for (var commentId : commentRepository.findIdsMissingRepliesByVideoId(videoId)) {
-                fetchReplies(operation, commentId, ssePublisher);
+                fetchReplies(fetchOperation, commentId, ssePublisher);
             }
-            fetchOperationService.fetchSuccessful(operation);
+            fetchOperationService.fetchSuccessful(fetchOperation);
         } catch (RuntimeException ex) {
-            fetchOperationService.fetchFailed(operation, ex);
+            fetchOperationService.fetchFailed(fetchOperation, ex);
             throw ex;
         } finally {
-            afterFetch(operation);
+            afterFetch(fetchOperation);
         }
     }
 
-    private void fetchReplies(FetchOperationEntity operation, String commentId, SsePublisher ssePublisher) {
-        var action = getFirstFetchAction(operation, commentId);
+    private void fetchReplies(FetchOperationEntity fetchOperation, String commentId, SsePublisher ssePublisher) {
+        var action = getFirstFetchAction(fetchOperation, commentId);
         while (action != null) {
             action = fetchRepliesActionHandler.fetch(action, ssePublisher);
         }
     }
 
-    private static FetchActionEntity getFirstFetchAction(FetchOperationEntity operation, String commentId) {
+    private static FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation, String commentId) {
         return FetchActionEntity.builder()
-                .fetchOperationId(operation.getId())
+                .fetchOperationId(fetchOperation.getId())
                 .actionType(FetchActionEntity.Type.REPLIES)
                 .objectId(commentId)
                 .build();
     }
 
     @Override
-    public void afterFetch(FetchOperationEntity operation) {
-        videoCommentsService.updateVideoComments(operation.getObjectId());
+    public void afterFetch(FetchOperationEntity fetchOperation) {
+        videoCommentsService.updateVideoComments(fetchOperation.getObjectId());
     }
 }

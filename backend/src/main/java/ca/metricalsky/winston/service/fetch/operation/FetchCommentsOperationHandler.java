@@ -31,7 +31,7 @@ public class FetchCommentsOperationHandler extends DefaultFetchOperationHandler 
     }
 
     @Override
-    public void afterFetch(FetchOperationEntity operation) {
-        videoCommentsService.updateVideoComments(operation.getObjectId());
+    public void afterFetch(FetchOperationEntity fetchOperation) {
+        videoCommentsService.updateVideoComments(fetchOperation.getObjectId());
     }
 }

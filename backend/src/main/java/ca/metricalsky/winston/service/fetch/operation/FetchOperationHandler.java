@@ -5,9 +5,9 @@ import ca.metricalsky.winston.events.SsePublisher;
 
 public interface FetchOperationHandler {
 
-    void fetch(FetchOperationEntity operation, SsePublisher ssePublisher);
+    void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher);
 
-    default void afterFetch(FetchOperationEntity operation) {
+    default void afterFetch(FetchOperationEntity fetchOperation) {
         
     }
 }

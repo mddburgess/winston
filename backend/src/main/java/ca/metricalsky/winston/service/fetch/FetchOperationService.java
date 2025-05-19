@@ -13,19 +13,19 @@ public class FetchOperationService {
 
     private final FetchOperationRepository fetchOperationRepository;
 
-    public FetchOperationEntity startFetch(FetchOperationEntity operation) {
-        operation.setStatus(Status.FETCHING);
-        return fetchOperationRepository.save(operation);
+    public FetchOperationEntity startFetch(FetchOperationEntity fetchOperation) {
+        fetchOperation.setStatus(Status.FETCHING);
+        return fetchOperationRepository.save(fetchOperation);
     }
 
-    public FetchOperationEntity fetchSuccessful(FetchOperationEntity operation) {
-        operation.setStatus(Status.SUCCESSFUL);
-        return fetchOperationRepository.save(operation);
+    public FetchOperationEntity fetchSuccessful(FetchOperationEntity fetchOperation) {
+        fetchOperation.setStatus(Status.SUCCESSFUL);
+        return fetchOperationRepository.save(fetchOperation);
     }
 
-    public FetchOperationEntity fetchFailed(FetchOperationEntity operation, Throwable throwable) {
-        operation.setStatus(Status.FAILED);
-        operation.setError(Throwables.getStackTraceAsString(throwable));
-        return fetchOperationRepository.save(operation);
+    public FetchOperationEntity fetchFailed(FetchOperationEntity fetchOperation, Throwable throwable) {
+        fetchOperation.setStatus(Status.FAILED);
+        fetchOperation.setError(Throwables.getStackTraceAsString(throwable));
+        return fetchOperationRepository.save(fetchOperation);
     }
 }

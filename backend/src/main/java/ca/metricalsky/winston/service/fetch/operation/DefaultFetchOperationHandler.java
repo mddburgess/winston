@@ -13,20 +13,20 @@ public abstract class DefaultFetchOperationHandler implements FetchOperationHand
     private final FetchOperationService fetchOperationService;
 
     @Override
-    public void fetch(FetchOperationEntity operation, SsePublisher ssePublisher) {
-        operation = fetchOperationService.startFetch(operation);
-        var action = getFirstFetchAction(operation);
+    public void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher) {
+        fetchOperation = fetchOperationService.startFetch(fetchOperation);
+        var action = getFirstFetchAction(fetchOperation);
         try {
             while (action != null) {
                 var actionHandler = getFetchActionHandler();
                 action = actionHandler.fetch(action, ssePublisher);
             }
-            fetchOperationService.fetchSuccessful(operation);
+            fetchOperationService.fetchSuccessful(fetchOperation);
         } catch (RuntimeException ex) {
-            fetchOperationService.fetchFailed(operation, ex);
+            fetchOperationService.fetchFailed(fetchOperation, ex);
             throw ex;
         } finally {
-            afterFetch(operation);
+            afterFetch(fetchOperation);
         }
     }
 
