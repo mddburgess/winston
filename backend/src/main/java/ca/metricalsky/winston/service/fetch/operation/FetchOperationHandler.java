@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.service.fetch.request;
+package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.SsePublisher;

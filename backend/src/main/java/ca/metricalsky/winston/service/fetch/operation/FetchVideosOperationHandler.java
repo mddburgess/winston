@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.service.fetch.request;
+package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
