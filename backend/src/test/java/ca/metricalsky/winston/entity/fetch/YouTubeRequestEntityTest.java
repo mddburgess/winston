@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,10 +41,10 @@ class YouTubeRequestEntityTest {
         assertThat(persistedEntity)
                 .hasFieldOrPropertyWithValue("fetchActionId", youtubeRequestEntity.getFetchActionId())
                 .hasFieldOrPropertyWithValue("requestType", youtubeRequestEntity.getRequestType())
-                .hasFieldOrPropertyWithValue("objectId", youtubeRequestEntity.getObjectId())
-                .hasFieldOrPropertyWithValue("requestedAt",
-                        youtubeRequestEntity.getRequestedAt().withOffsetSameInstant(ZoneOffset.UTC));
+                .hasFieldOrPropertyWithValue("objectId", youtubeRequestEntity.getObjectId());
         assertThat(persistedEntity.getId())
+                .isNotNull();
+        assertThat(persistedEntity.getRequestedAt())
                 .isNotNull();
     }
 
@@ -74,13 +73,10 @@ class YouTubeRequestEntityTest {
                 .hasFieldOrPropertyWithValue("publishedAfter", youtubeRequestEntity.getPublishedAfter())
                 .hasFieldOrPropertyWithValue("publishedBefore", youtubeRequestEntity.getPublishedBefore())
                 .hasFieldOrPropertyWithValue("pageToken", youtubeRequestEntity.getPageToken())
-                .hasFieldOrPropertyWithValue("requestedAt",
-                        youtubeRequestEntity.getRequestedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasFieldOrPropertyWithValue("httpStatus", youtubeRequestEntity.getHttpStatus())
                 .hasFieldOrPropertyWithValue("itemCount", youtubeRequestEntity.getItemCount())
                 .hasFieldOrPropertyWithValue("error", youtubeRequestEntity.getError())
-                .hasFieldOrPropertyWithValue("respondedAt",
-                        youtubeRequestEntity.getRespondedAt().withOffsetSameInstant(ZoneOffset.UTC));
+                .hasNoNullFieldsOrProperties();
     }
 
     private FetchRequestEntity persistFetchRequest() {

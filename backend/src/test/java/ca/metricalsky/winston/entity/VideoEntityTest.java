@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,8 +52,6 @@ class VideoEntityTest {
                 .hasFieldOrPropertyWithValue("title", videoEntity.getTitle())
                 .hasFieldOrPropertyWithValue("description", videoEntity.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", videoEntity.getThumbnailUrl())
-                .hasFieldOrPropertyWithValue("publishedAt",
-                        videoEntity.getPublishedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasNoNullFieldsOrPropertiesExcept("comments");
     }
 

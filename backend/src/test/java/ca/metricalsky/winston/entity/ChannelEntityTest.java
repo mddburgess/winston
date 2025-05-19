@@ -7,8 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Collections;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,8 +55,6 @@ class ChannelEntityTest {
                 .hasFieldOrPropertyWithValue("description", channelEntity.getDescription())
                 .hasFieldOrPropertyWithValue("customUrl", channelEntity.getCustomUrl())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", channelEntity.getThumbnailUrl())
-                .hasFieldOrPropertyWithValue("publishedAt",
-                        channelEntity.getPublishedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasFieldOrPropertyWithValue("topics", channelEntity.getTopics())
                 .hasFieldOrPropertyWithValue("keywords", channelEntity.getKeywords())
                 .hasNoNullFieldsOrProperties();

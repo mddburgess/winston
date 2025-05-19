@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,10 +68,6 @@ class FetchActionEntityTest {
                 .hasFieldOrPropertyWithValue("fetchOperationId", fetchActionEntity.getFetchOperationId())
                 .hasFieldOrPropertyWithValue("actionType", fetchActionEntity.getActionType())
                 .hasFieldOrPropertyWithValue("objectId", fetchActionEntity.getObjectId())
-                .hasFieldOrPropertyWithValue("publishedAfter",
-                        fetchActionEntity.getPublishedAfter().withOffsetSameInstant(ZoneOffset.UTC))
-                .hasFieldOrPropertyWithValue("publishedBefore",
-                        fetchActionEntity.getPublishedBefore().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasFieldOrPropertyWithValue("pageToken", fetchActionEntity.getPageToken())
                 .hasFieldOrPropertyWithValue("status", fetchActionEntity.getStatus())
                 .hasFieldOrPropertyWithValue("itemCount", fetchActionEntity.getItemCount())

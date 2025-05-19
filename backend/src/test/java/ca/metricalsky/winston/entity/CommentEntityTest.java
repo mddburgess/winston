@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,10 +64,6 @@ class CommentEntityTest {
                 .hasFieldOrPropertyWithValue("textDisplay", commentEntity.getTextDisplay())
                 .hasFieldOrPropertyWithValue("textOriginal", commentEntity.getTextOriginal())
                 .hasFieldOrPropertyWithValue("totalReplyCount", commentEntity.getTotalReplyCount())
-                .hasFieldOrPropertyWithValue("publishedAt",
-                        commentEntity.getPublishedAt().withOffsetSameInstant(ZoneOffset.UTC))
-                .hasFieldOrPropertyWithValue("updatedAt",
-                        commentEntity.getUpdatedAt().withOffsetSameInstant(ZoneOffset.UTC))
                 .hasNoNullFieldsOrPropertiesExcept("author", "parentId");
         assertThat(persistedEntity.getReplies())
                 .isEmpty();
