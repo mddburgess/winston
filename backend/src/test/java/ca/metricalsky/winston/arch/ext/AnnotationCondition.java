@@ -1,15 +1,14 @@
 package ca.metricalsky.winston.arch.ext;
 
-import com.tngtech.archunit.base.HasDescription;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
-import com.tngtech.archunit.core.domain.properties.HasSourceCodeLocation;
+import com.tngtech.archunit.core.domain.JavaMember;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.apache.commons.lang3.EnumUtils;
 
-public class AnnotationCondition<OWNER extends HasDescription & HasSourceCodeLocation>
+public class AnnotationCondition<OWNER extends JavaMember>
         extends ArchCondition<JavaAnnotation<OWNER>> {
 
     private final String propertyName;

@@ -4,6 +4,7 @@ import ca.metricalsky.winston.dto.fetch.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
+import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.request.FetchOperationHandlerFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,22 @@ public class FetchService {
 
     private final FetchOperationHandlerFactory fetchOperationHandlerFactory;
     private final FetchRequestMapper fetchRequestMapper;
+    private final FetchRequestRepository fetchRequestRepository;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
     @Value("${youtube.quota.daily}")
     private int dailyQuota;
 
-    @Async
-    public void fetchAsync(FetchRequest fetchRequest, SsePublisher ssePublisher) {
+    public Long save(FetchRequest fetchRequest) {
         var fetchRequestEntity = fetchRequestMapper.toFetchRequest(fetchRequest);
+        fetchRequestEntity = fetchRequestRepository.save(fetchRequestEntity);
+        return fetchRequestEntity.getId();
+    }
+
+    @Async
+    public void fetchAsync(Long fetchRequestId, SsePublisher ssePublisher) {
         try {
+            var fetchRequestEntity = fetchRequestRepository.findById(fetchRequestId).orElse(null);
             var fetchOperation = fetchRequestEntity.getOperations().getFirst();
             fetchOperationHandlerFactory.getHandler(fetchOperation)
                     .fetch(fetchOperation, ssePublisher);

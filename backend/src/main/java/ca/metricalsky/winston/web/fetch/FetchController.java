@@ -29,13 +29,15 @@ public class FetchController {
     @PostMapping
     public ResponseEntity<SseEmitter> fetch(
             @RequestHeader(value = "X-Notify-Subscription", required = false) UUID subscriptionId,
-            @RequestBody FetchRequest request
+            @RequestBody FetchRequest fetchRequest
     ) {
+        var fetchRequestId = fetchService.save(fetchRequest);
+
         var ssePublisher = subscriptionId == null
                 ? notificationsService.openSubscription()
                 : notificationsService.requireSubscription(subscriptionId);
 
-        fetchService.fetchAsync(request, ssePublisher);
+        fetchService.fetchAsync(fetchRequestId, ssePublisher);
 
         return subscriptionId == null
                 ? ResponseEntity.status(HttpStatus.OK)

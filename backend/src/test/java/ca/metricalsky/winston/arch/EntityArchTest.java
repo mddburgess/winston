@@ -1,5 +1,7 @@
 package ca.metricalsky.winston.arch;
 
+import ca.metricalsky.winston.arch.ext.ExtraConditions;
+import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import jakarta.persistence.Column;
@@ -71,7 +73,8 @@ class EntityArchTest {
     @ArchTest
     private final ArchRule joinColumnAnnotationsExplicitlyDeclareNames = all(fieldAnnotations())
             .that(areOfType(JoinColumn.class))
-            .should(explicitlyDeclare("name").and(explicitlyDeclare("referencedColumnName")));
+            .should(ExtraConditions.<JavaField>explicitlyDeclare("name")
+                    .and(explicitlyDeclare("referencedColumnName")));
 
     @ArchTest
     private final ArchRule entityEnumFieldsAreAnnotatedWithEnumerated = fields()
@@ -82,5 +85,5 @@ class EntityArchTest {
     @ArchTest
     private final ArchRule enumeratedAnnotationsHaveValueSetToEnumTypeString = all(fieldAnnotations())
             .that(areOfType(Enumerated.class))
-            .should(explicitlyDeclare("value").setTo(EnumType.STRING));
+            .should(ExtraConditions.<JavaField>explicitlyDeclare("value").setTo(EnumType.STRING));
 }

@@ -9,17 +9,25 @@ import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
+import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
+import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.request.FetchOperationHandler;
 import ca.metricalsky.winston.service.fetch.request.FetchOperationHandlerFactory;
+import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -39,19 +47,38 @@ class FetchServiceTest {
     @Mock
     private FetchRequestMapper fetchRequestMapper;
     @Mock
+    private FetchRequestRepository fetchRequestRepository;
+    @Mock
     private SsePublisher ssePublisher;
+    @Mock
+    private YouTubeRequestRepository youTubeRequestRepository;
+
+    @Test
+    void save() {
+        var fetchRequest = new FetchRequest();
+        var fetchRequestEntity = buildFetchRequestEntity();
+
+        when(fetchRequestMapper.toFetchRequest(fetchRequest))
+                .thenReturn(fetchRequestEntity);
+        when(fetchRequestRepository.save(fetchRequestEntity))
+                .thenAnswer(returnsFirstArg());
+
+        var fetchRequestId = fetchService.save(fetchRequest);
+
+        assertThat(fetchRequestId)
+                .isEqualTo(fetchRequestEntity.getId());
+    }
 
     @Test
     void fetchAsync() {
-        var fetchRequestDto = new FetchRequest();
         var fetchRequest = buildFetchRequestEntity();
 
-        when(fetchRequestMapper.toFetchRequest(fetchRequestDto))
-                .thenReturn(fetchRequest);
+        when(fetchRequestRepository.findById(fetchRequest.getId()))
+                .thenReturn(Optional.of(fetchRequest));
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
 
-        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
         verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst(), ssePublisher);
         verify(ssePublisher).complete();
@@ -59,12 +86,11 @@ class FetchServiceTest {
 
     @Test
     void fetchAsync_actionFailed() {
-        var fetchRequestDto = new FetchRequest();
         var fetchRequest = buildFetchRequestEntity();
         var exception = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
-        when(fetchRequestMapper.toFetchRequest(fetchRequestDto))
-                .thenReturn(fetchRequest);
+        when(fetchRequestRepository.findById(fetchRequest.getId()))
+                .thenReturn(Optional.of(fetchRequest));
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
@@ -72,7 +98,7 @@ class FetchServiceTest {
         when(ssePublisher.isOpen())
                 .thenReturn(true);
 
-        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
         verify(ssePublisher).publish(any(FetchStatusEvent.class));
         verify(ssePublisher).completeWithError(exception);
@@ -80,12 +106,11 @@ class FetchServiceTest {
 
     @Test
     void fetchAsync_publisherClosed() {
-        var fetchRequestDto = new FetchRequest();
         var fetchRequest = buildFetchRequestEntity();
         var exception = new PublisherException("");
 
-        when(fetchRequestMapper.toFetchRequest(fetchRequestDto))
-                .thenReturn(fetchRequest);
+        when(fetchRequestRepository.findById(fetchRequest.getId()))
+                .thenReturn(Optional.of(fetchRequest));
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
@@ -93,9 +118,22 @@ class FetchServiceTest {
         when(ssePublisher.isOpen())
                 .thenReturn(false);
 
-        fetchService.fetchAsync(fetchRequestDto, ssePublisher);
+        fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
         verifyNoMoreInteractions(ssePublisher);
+    }
+
+    @Test
+    void getRemainingQuota() {
+        ReflectionTestUtils.setField(fetchService, "dailyQuota", 10000);
+
+        when(youTubeRequestRepository.countAllByRequestedAtAfter(any(OffsetDateTime.class)))
+                .thenReturn(1);
+
+        var remainingQuota = fetchService.getRemainingQuota();
+
+        assertThat(remainingQuota)
+                .isEqualTo(9999);
     }
 
     private static FetchRequestEntity buildFetchRequestEntity() {
@@ -103,6 +141,7 @@ class FetchServiceTest {
                 .operationType(Type.CHANNELS)
                 .build();
         return FetchRequestEntity.builder()
+                .id(TestUtils.randomLong())
                 .operations(List.of(fetchOperationEntity))
                 .build();
     }
