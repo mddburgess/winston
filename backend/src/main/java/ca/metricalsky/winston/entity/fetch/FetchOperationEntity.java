@@ -55,10 +55,11 @@ public class FetchOperationEntity {
     @Column(name = "published_before")
     private OffsetDateTime publishedBefore;
 
+    @Builder.Default
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private Status status = Status.READY;
 
     @Column(name = "error")
     private String error;

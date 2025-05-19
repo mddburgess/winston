@@ -47,9 +47,6 @@ public class FetchRequestEntity {
     @Column(name = "status")
     private Status status = Status.ACCEPTED;
 
-    @Column(name = "error")
-    private String error;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private OffsetDateTime createdAt;

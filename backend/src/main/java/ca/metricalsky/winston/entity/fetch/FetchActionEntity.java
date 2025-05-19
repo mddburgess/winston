@@ -55,10 +55,11 @@ public class FetchActionEntity {
     @Column(name = "page_token")
     private String pageToken;
 
+    @Builder.Default
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status;
+    private Status status = Status.READY;
 
     @Column(name = "item_count")
     private Integer itemCount;

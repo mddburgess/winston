@@ -23,6 +23,10 @@ public final class TestUtils {
         return Base64.getUrlEncoder().encodeToString(randomBytes(18));
     }
 
+    public static int randomInt() {
+        return RandomUtils.secure().randomInt();
+    }
+
     public static long randomLong() {
         return RandomUtils.secure().randomLong(0, 1000);
     }
