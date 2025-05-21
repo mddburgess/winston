@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ChannelRepository extends JpaRepository<Channel, String> {
+public interface ChannelRepository extends JpaRepository<ChannelEntity, String> {
 
     @NonNull
     @EntityGraph(attributePaths = {"topics", "keywords"})
-    List<Channel> findAll();
+    List<ChannelEntity> findAll();
 
     @Override
     @NonNull
     @EntityGraph(attributePaths = {"topics", "keywords"})
-    Optional<Channel> findById(@NonNull String id);
+    Optional<ChannelEntity> findById(@NonNull String id);
 
     @EntityGraph(attributePaths = {"topics", "keywords"})
-    Optional<Channel> findByCustomUrl(String customUrl);
+    Optional<ChannelEntity> findByCustomUrl(String customUrl);
 }

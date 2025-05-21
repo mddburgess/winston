@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import org.junit.jupiter.api.Test;
@@ -106,8 +106,8 @@ class ChannelServiceTest {
                 .hasMessageEndingWith("The requested channel was not found.");
     }
 
-    private static Channel buildChannel() {
-        var channel = new Channel();
+    private static ChannelEntity buildChannel() {
+        var channel = new ChannelEntity();
         channel.setId(CHANNEL_ID);
         channel.setCustomUrl(CHANNEL_HANDLE);
         return channel;

@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.mapper.entity.ChannelMapper;
@@ -23,21 +23,21 @@ public class FetchChannelActionHandler extends FetchActionHandler<ChannelDto> {
     private final ChannelDtoMapper channelDtoMapper = Mappers.getMapper(ChannelDtoMapper.class);
 
     private final ChannelRepository channelRepository;
-    private final YouTubeClientAdapter youTubeClientAdapter;
+    private final YouTubeService youTubeService;
 
     public FetchChannelActionHandler(
             FetchActionService fetchActionService,
             ChannelRepository channelRepository,
-            YouTubeClientAdapter youTubeClientAdapter
+            YouTubeService youTubeService
     ) {
         super(fetchActionService);
         this.channelRepository = channelRepository;
-        this.youTubeClientAdapter = youTubeClientAdapter;
+        this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<ChannelDto> doFetch(FetchAction fetchAction) {
-        var channelListResponse = youTubeClientAdapter.getChannels(fetchAction);
+    protected FetchResult<ChannelDto> doFetch(FetchActionEntity fetchAction) {
+        var channelListResponse = youTubeService.getChannels(fetchAction);
         var channelEntity = Optional.ofNullable(channelListResponse.getItems())
                 .orElse(Collections.emptyList())
                 .stream()

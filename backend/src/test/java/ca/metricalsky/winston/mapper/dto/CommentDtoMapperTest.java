@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mapper.dto;
 
-import ca.metricalsky.winston.entity.Author;
-import ca.metricalsky.winston.entity.Comment;
+import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.CommentEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -42,14 +42,14 @@ public class CommentDtoMapperTest {
 
     @Test
     void fromEntity_emptyComment() {
-        var commentDto = commentDtoMapper.fromEntity(new Comment());
+        var commentDto = commentDtoMapper.fromEntity(new CommentEntity());
         assertThat(commentDto)
                 .isNotNull()
                 .hasNoNullFieldsOrProperties();
     }
 
-    private static Comment buildComment() {
-        var comment = new Comment();
+    private static CommentEntity buildComment() {
+        var comment = new CommentEntity();
         comment.setId("id");
         comment.setVideoId("videoId");
         comment.setAuthor(buildAuthor());
@@ -62,8 +62,8 @@ public class CommentDtoMapperTest {
         return comment;
     }
 
-    private static Author buildAuthor() {
-        var author = new Author();
+    private static AuthorEntity buildAuthor() {
+        var author = new AuthorEntity();
         author.setId("id");
         author.setDisplayName("displayName");
         author.setChannelUrl("channelUrl");

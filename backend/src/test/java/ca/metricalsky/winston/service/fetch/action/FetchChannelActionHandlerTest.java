@@ -1,11 +1,10 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.Channel;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
+import ca.metricalsky.winston.service.YouTubeService;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
 import ca.metricalsky.winston.events.FetchDataEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.ChannelRepository;
@@ -42,7 +41,7 @@ class FetchChannelActionHandlerTest {
     @Mock
     private ChannelRepository channelRepository;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -50,8 +49,8 @@ class FetchChannelActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
-                .actionType(ActionType.CHANNELS)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(Type.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();
         var channelListResponse = new ChannelListResponse();
@@ -59,15 +58,15 @@ class FetchChannelActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getChannels(fetchAction))
+        when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
         var nextFetchAction = fetchChannelActionHandler.fetch(fetchAction, ssePublisher);
 
         assertThat(nextFetchAction).isNull();
 
-        verify(channelRepository).save(any(Channel.class));
-        verify(fetchActionService).actionCompleted(fetchAction, channelListResponse.getItems().size());
+        verify(channelRepository).save(any(ChannelEntity.class));
+        verify(fetchActionService).actionSuccessful(fetchAction, channelListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
@@ -77,15 +76,15 @@ class FetchChannelActionHandlerTest {
 
     @Test
     void fetch_notFound() {
-        var fetchAction = FetchAction.builder()
-                .actionType(ActionType.CHANNELS)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(Type.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();
         var channelListResponse = new ChannelListResponse();
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getChannels(fetchAction))
+        when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
         var appException = catchThrowableOfType(AppException.class,

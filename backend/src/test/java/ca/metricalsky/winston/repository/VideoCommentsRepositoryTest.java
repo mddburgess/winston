@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Channel;
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,15 +25,15 @@ class VideoCommentsRepositoryTest {
     @Autowired
     private VideoCommentsRepository repository;
 
-    private Video video;
+    private VideoEntity video;
 
     @BeforeEach
     void beforeEach() {
-        var channel = new Channel();
+        var channel = new ChannelEntity();
         channel.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         channel = entityManager.persist(channel);
 
-        video = new Video();
+        video = new VideoEntity();
         video.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         video.setChannelId(channel.getId());
         video = entityManager.persist(video);

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.entity.view.VideoCount;
+import ca.metricalsky.winston.entity.view.VideoCountView;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
@@ -26,7 +26,7 @@ public class VideoService {
     public Map<String, Long> countAllByChannelId() {
         var counts = videoRepository.countAllByChannelId()
                 .stream()
-                .collect(Collectors.toMap(VideoCount::getChannelId, VideoCount::getVideos));
+                .collect(Collectors.toMap(VideoCountView::getChannelId, VideoCountView::getVideos));
         return defaultedMap(counts, 0L);
     }
 

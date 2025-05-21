@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Video;
-import ca.metricalsky.winston.entity.view.VideoCount;
+import ca.metricalsky.winston.entity.VideoEntity;
+import ca.metricalsky.winston.entity.view.VideoCountView;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,31 +12,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VideoRepository extends JpaRepository<Video, String> {
+public interface VideoRepository extends JpaRepository<VideoEntity, String> {
 
     @Query("""
             SELECT c.id AS channelId, COUNT(v.id) AS videos
-            FROM Channel c
-                JOIN Video v ON c.id = v.channelId
+            FROM ChannelEntity c
+                JOIN VideoEntity v ON c.id = v.channelId
             GROUP BY c.id
             """)
-    List<VideoCount> countAllByChannelId();
+    List<VideoCountView> countAllByChannelId();
 
     @Query("""
             SELECT DISTINCT v
-            FROM Video v JOIN Comment c ON v.id = c.videoId
+            FROM VideoEntity v JOIN CommentEntity c ON v.id = c.videoId
             WHERE c.author.displayName = :authorDisplayName
             """)
-    List<Video> findAllByCommentAuthorDisplayName(String authorDisplayName);
+    List<VideoEntity> findAllByCommentAuthorDisplayName(String authorDisplayName);
 
     @Query("""
-            SELECT v FROM Video v
-            WHERE v.channelId = (SELECT id FROM Channel WHERE customUrl = :channelHandle)
+            SELECT v FROM VideoEntity v
+            WHERE v.channelId = (SELECT id FROM ChannelEntity WHERE customUrl = :channelHandle)
             ORDER BY v.publishedAt DESC
             """)
     @EntityGraph(attributePaths = "comments")
-    List<Video> findAllByChannelHandle(String channelHandle);
+    List<VideoEntity> findAllByChannelHandle(String channelHandle);
 
-    @Query("SELECT MAX(v.publishedAt) FROM Video v WHERE v.channelId = :channelId")
+    @Query("SELECT MAX(v.publishedAt) FROM VideoEntity v WHERE v.channelId = :channelId")
     Optional<OffsetDateTime> findLastPublishedAtForChannelId(String channelId);
 }

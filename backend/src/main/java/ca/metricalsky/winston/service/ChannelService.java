@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.repository.ChannelRepository;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ChannelService {
         return populateVideoCounts(channels);
     }
 
-    private List<ChannelDto> populateVideoCounts(List<Channel> channels) {
+    private List<ChannelDto> populateVideoCounts(List<ChannelEntity> channels) {
         var videoCounts = videoService.countAllByChannelId();
         return channels.stream()
                 .map(channelDtoMapper::fromEntity)

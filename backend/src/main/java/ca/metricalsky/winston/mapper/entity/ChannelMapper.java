@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import com.google.api.services.youtube.model.Channel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -22,7 +23,7 @@ public abstract class ChannelMapper {
     @Mapping(target = "topics", source = "topicDetails.topicCategories")
     @Mapping(target = "keywords", source = "brandingSettings.channel.keywords")
     @Mapping(target = "lastFetchedAt", ignore = true)
-    public abstract Channel fromYouTube(com.google.api.services.youtube.model.Channel ytChannel);
+    public abstract ChannelEntity fromYouTube(Channel ytChannel);
 
     Set<String> fromYouTubeKeywords(String ytKeywords) {
         return ytKeywords == null ? null : KEYWORD_PATTERN.matcher(ytKeywords).results()

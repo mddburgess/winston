@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.Author;
-import ca.metricalsky.winston.entity.view.AuthorDetails;
+import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class AuthorServiceTest {
     @Mock
     private AuthorRepository authorRepository;
     @Mock
-    private AuthorDetails authorDetails;
+    private AuthorDetailsView authorDetails;
 
     @Test
     void findAll() {
@@ -113,8 +113,8 @@ class AuthorServiceTest {
         assertThat(authorDto).isEmpty();
     }
 
-    private static Author buildAuthor() {
-        var author = new Author();
+    private static AuthorEntity buildAuthor() {
+        var author = new AuthorEntity();
         author.setId(AUTHOR_ID);
         author.setChannelUrl(AUTHOR_CHANNEL_URL);
         author.setDisplayName(AUTHOR_DISPLAY_NAME);

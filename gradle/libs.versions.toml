@@ -1,0 +1,51 @@
+[versions]
+mapstruct = "1.6.3"
+
+[libraries]
+archunitJunit5 = { module = "com.tngtech.archunit:archunit-junit5", version = "1.4.1" }
+commonsCollections4 = { module = "org.apache.commons:commons-collections4", version = "4.5.0" }
+commonsLang3 = { module = "org.apache.commons:commons-lang3", version = "3.17.0" }
+flywayCore = { module = "org.flywaydb:flyway-core" }
+flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql" }
+datasourceProxySpringBootStarter = { module = "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter", version = "1.11.0" }
+googleApiClient = { module = "com.google.api-client:google-api-client", version = "2.7.2" }
+googleApiServicesYoutube = { module = "com.google.apis:google-api-services-youtube", version = "v3-rev20250422-2.0.0" }
+googleHttpClientGson = { module = "com.google.http-client:google-http-client-gson", version = "1.47.0" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
+lombok = { module = "org.projectlombok:lombok" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+postgresql = { module = "org.postgresql:postgresql" }
+springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
+springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+springBootStarterDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+wiremockSpringBoot = { module = "org.wiremock.integrations:wiremock-spring-boot", version = "3.10.0" }
+
+[bundles]
+apacheCommons = [
+    "commonsCollections4",
+    "commonsLang3"
+]
+database = [
+    "flywayCore",
+    "flywayDatabasePostgresql",
+    "postgresql"
+]
+springBoot = [
+    "springBootStarterActuator",
+    "springBootStarterDataJpa",
+    "springBootStarterWeb"
+]
+youtube = [
+    "googleApiClient",
+    "googleApiServicesYoutube",
+    "googleHttpClientGson"
+]
+
+[plugins]
+node = { id = "com.github.node-gradle.node", version = "7.1.0" }
+springBoot = { id = "org.springframework.boot", version = "3.4.5" }
+springDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.7" }

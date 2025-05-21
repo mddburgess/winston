@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Author;
+import ca.metricalsky.winston.entity.AuthorEntity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,11 +26,11 @@ class AuthorRepositoryTest {
     @Autowired
     private AuthorRepository repository;
 
-    private Author savedAuthor;
+    private AuthorEntity savedAuthor;
 
     @BeforeEach
     void beforeEach() {
-        var author = new Author();
+        var author = new AuthorEntity();
         author.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         author.setDisplayName(DISPLAY_NAME);
         author.setChannelUrl(CHANNEL_URL);

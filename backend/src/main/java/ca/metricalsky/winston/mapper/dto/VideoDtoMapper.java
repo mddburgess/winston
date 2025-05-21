@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mapper.dto;
 
 import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -11,7 +11,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper(nullValuePropertyMappingStrategy = IGNORE)
 public abstract class VideoDtoMapper {
 
-    public VideoDto fromEntity(Video video) {
+    public VideoDto fromEntity(VideoEntity video) {
         if (video == null) {
             return null;
         }
@@ -23,9 +23,9 @@ public abstract class VideoDtoMapper {
 
     @Mapping(target = "thumbnailUrl", source = ".")
     @Mapping(target = "channel", ignore = true)
-    abstract void mapToVideoDto(Video video, @MappingTarget VideoDto videoDto);
+    abstract void mapToVideoDto(VideoEntity video, @MappingTarget VideoDto videoDto);
 
-    String getThumbnailUrl(Video video) {
+    String getThumbnailUrl(VideoEntity video) {
         return video.getThumbnailUrl() != null
                 ? "/api/v1/videos/" + video.getId() + "/thumbnail"
                 : "";

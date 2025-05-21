@@ -2,6 +2,7 @@ import javascript from "@eslint/js";
 import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
 import globals from "globals";
 import typescript from "typescript-eslint";
 import viteConfig from "./vite.config";
@@ -94,6 +95,7 @@ export default typescript.config(
         extends: [
             reactPlugin.configs.flat.recommended,
             reactPlugin.configs.flat["jsx-runtime"],
+            reactHooksPlugin.configs["recommended-latest"],
         ],
         settings: {
             react: {

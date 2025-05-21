@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Channel;
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.VideoEntity;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,15 +44,15 @@ class VideoRepositoryTest {
                 .isEmpty();
     }
 
-    private static Channel buildChannel() {
-        var channel = new Channel();
+    private static ChannelEntity buildChannel() {
+        var channel = new ChannelEntity();
         channel.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         channel.setCustomUrl("@" + RandomStringUtils.secure().nextAlphanumeric(10));
         return channel;
     }
 
-    private static Video buildVideo(Channel channel) {
-        var video = new Video();
+    private static VideoEntity buildVideo(ChannelEntity channel) {
+        var video = new VideoEntity();
         video.setId(RandomStringUtils.secure().nextAlphanumeric(10));
         video.setChannelId(channel.getId());
         return video;

@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.dto;
 
-import ca.metricalsky.winston.entity.Author;
+import ca.metricalsky.winston.entity.AuthorEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -28,13 +28,13 @@ public class AuthorDtoMapperTest {
 
     @Test
     void toAuthorDto_nullAuthor() {
-        var authorDto = authorDtoMapper.toAuthorDto((Author) null);
+        var authorDto = authorDtoMapper.toAuthorDto((AuthorEntity) null);
         assertThat(authorDto).isNull();
     }
 
     @Test
     void toAuthorDto_emptyAuthor() {
-        var authorDto = authorDtoMapper.toAuthorDto(new Author());
+        var authorDto = authorDtoMapper.toAuthorDto(new AuthorEntity());
         assertThat(authorDto)
                 .hasNoNullFieldsOrPropertiesExcept("statistics");
     }
@@ -47,7 +47,7 @@ public class AuthorDtoMapperTest {
             ", , authorId, authorId",
     })
     void mapDisplayName(String displayName, String channelUrl, String id, String expectedDisplayName) {
-        var author = new Author();
+        var author = new AuthorEntity();
         author.setId(id);
         author.setDisplayName(displayName);
         author.setChannelUrl(channelUrl);
@@ -57,8 +57,8 @@ public class AuthorDtoMapperTest {
         assertThat(mappedDisplayName).isEqualTo(expectedDisplayName);
     }
 
-    private static Author buildAuthor() {
-        var author = new Author();
+    private static AuthorEntity buildAuthor() {
+        var author = new AuthorEntity();
         author.setId("id");
         author.setDisplayName("displayName");
         author.setChannelUrl("channelUrl");
