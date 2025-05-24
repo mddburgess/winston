@@ -1,0 +1,11 @@
+{
+  "apiPackage": "ca.metricalsky.winston.api",
+  "modelPackage": "ca.metricalsky.winston.api.model",
+  "documentationProvider": "none",
+  "exceptionHandler": false,
+  "interfaceOnly": true,
+  "skipDefaultInterface": true,
+  "useResponseEntity": false,
+  "useSpringBoot3": true,
+  "useTags": true
+}

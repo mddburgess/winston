@@ -1,0 +1,513 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/v1/fetch:
+    post:
+      tags:
+        - fetch-controller
+      operationId: fetch
+      parameters:
+        - name: X-Notify-Subscription
+          in: header
+          required: false
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FetchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SseEmitter"
+  /api/v2/authors/{authorHandle}:
+    get:
+      tags:
+        - author-controller
+      operationId: findAuthorSummary
+      parameters:
+        - name: authorHandle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorSummaryResponse"
+  /api/v1/videos/{videoId}:
+    get:
+      tags:
+        - video-controller
+      operationId: findById
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/VideoDto"
+  /api/v1/videos/{videoId}/thumbnail:
+    get:
+      tags:
+        - thumbnail-controller
+      operationId: getVideoThumbnail
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: byte
+  /api/v1/videos/{videoId}/comments:
+    get:
+      tags:
+        - comment-controller
+      operationId: listByVideoId
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CommentDto"
+  /api/v1/notifications:
+    get:
+      tags:
+        - notifications-controller
+      operationId: subscribe
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SseEmitter"
+  /api/v1/fetch/limits:
+    get:
+      tags:
+        - fetch-controller
+      operationId: getFetchLimits
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FetchLimitsResponse"
+  /api/v1/channels:
+    get:
+      tags:
+        - channel-controller
+      operationId: list
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChannelDto"
+  /api/v1/channels/{channelId}/thumbnail:
+    get:
+      tags:
+        - thumbnail-controller
+      operationId: getChannelThumbnail
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: byte
+  /api/v1/channels/{channelHandle}:
+    get:
+      tags:
+        - channel-controller
+      operationId: findByHandle
+      parameters:
+        - name: channelHandle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ChannelDto"
+  /api/v1/channels/{channelHandle}/videos:
+    get:
+      tags:
+        - video-controller
+      operationId: listByChannelHandle
+      parameters:
+        - name: channelHandle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VideoDto"
+  /api/v1/authors:
+    get:
+      tags:
+        - author-controller
+      operationId: list_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorListResponse"
+  /api/v1/authors/{authorId}/thumbnail:
+    get:
+      tags:
+        - thumbnail-controller
+      operationId: getAuthorThumbnail
+      parameters:
+        - name: authorId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: byte
+  /api/v1/authors/{authorHandle}:
+    get:
+      tags:
+        - author-controller
+      operationId: findAuthorDetails
+      parameters:
+        - name: authorHandle
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthorDetailsResponse"
+      deprecated: true
+components:
+  schemas:
+    FetchChannel:
+      type: object
+      properties:
+        handle:
+          type: string
+    FetchComments:
+      type: object
+      properties:
+        videoId:
+          type: string
+    FetchRange:
+      type: object
+      properties:
+        after:
+          type: string
+          format: date-time
+        before:
+          type: string
+          format: date-time
+    FetchReplies:
+      type: object
+      properties:
+        videoId:
+          type: string
+        commentId:
+          type: string
+    FetchRequest:
+      type: object
+      properties:
+        channel:
+          $ref: "#/components/schemas/FetchChannel"
+        videos:
+          $ref: "#/components/schemas/FetchVideos"
+        comments:
+          $ref: "#/components/schemas/FetchComments"
+        replies:
+          $ref: "#/components/schemas/FetchReplies"
+    FetchVideos:
+      type: object
+      properties:
+        channelId:
+          type: string
+        fetch:
+          type: string
+          enum:
+            - ALL
+            - LATEST
+            - RANGE
+        range:
+          $ref: "#/components/schemas/FetchRange"
+    SseEmitter:
+      type: object
+      properties:
+        timeout:
+          type: integer
+          format: int64
+    AuthorDto:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        channelUrl:
+          type: string
+        profileImageUrl:
+          type: string
+        statistics:
+          $ref: "#/components/schemas/AuthorStatistics"
+      required:
+        - channelUrl
+        - displayName
+        - id
+        - profileImageUrl
+    AuthorStatistics:
+      type: object
+      properties:
+        commentedVideos:
+          type: integer
+          format: int64
+        totalComments:
+          type: integer
+          format: int64
+        totalReplies:
+          type: integer
+          format: int64
+    AuthorSummaryResponse:
+      type: object
+      properties:
+        author:
+          $ref: "#/components/schemas/AuthorDto"
+        channels:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChannelDto"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoDto"
+    ChannelDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        customUrl:
+          type: string
+        thumbnailUrl:
+          type: string
+        topics:
+          type: array
+          items:
+            type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        videoCount:
+          type: integer
+          format: int64
+        publishedAt:
+          type: string
+          format: date-time
+        lastFetchedAt:
+          type: string
+          format: date-time
+      required:
+        - customUrl
+        - description
+        - id
+        - keywords
+        - lastFetchedAt
+        - publishedAt
+        - thumbnailUrl
+        - title
+        - topics
+        - videoCount
+    VideoComments:
+      type: object
+      properties:
+        commentsDisabled:
+          type: boolean
+        commentCount:
+          type: integer
+          format: int64
+        replyCount:
+          type: integer
+          format: int64
+        totalReplyCount:
+          type: integer
+          format: int64
+        lastFetchedAt:
+          type: string
+          format: date-time
+    VideoDto:
+      type: object
+      properties:
+        id:
+          type: string
+        channelId:
+          type: string
+        channel:
+          $ref: "#/components/schemas/ChannelDto"
+        title:
+          type: string
+        description:
+          type: string
+        thumbnailUrl:
+          type: string
+        comments:
+          $ref: "#/components/schemas/VideoComments"
+        publishedAt:
+          type: string
+          format: date-time
+        lastFetchedAt:
+          type: string
+          format: date-time
+      required:
+        - description
+        - id
+        - lastFetchedAt
+        - publishedAt
+        - thumbnailUrl
+        - title
+    CommentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        videoId:
+          type: string
+        author:
+          $ref: "#/components/schemas/AuthorDto"
+        text:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        lastFetchedAt:
+          type: string
+          format: date-time
+        totalReplyCount:
+          type: integer
+          format: int64
+        replies:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentDto"
+      required:
+        - author
+        - id
+        - lastFetchedAt
+        - publishedAt
+        - replies
+        - text
+        - totalReplyCount
+        - updatedAt
+        - videoId
+    FetchLimitsResponse:
+      type: object
+      properties:
+        remainingQuota:
+          type: integer
+          format: int32
+    AuthorListResponse:
+      type: object
+      properties:
+        results:
+          type: integer
+          format: int32
+        authors:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuthorDto"
+    AuthorDetailsResponse:
+      type: object
+      properties:
+        author:
+          $ref: "#/components/schemas/AuthorDto"
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentDto"
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/VideoDto"
