@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mapper.dto;
 
 import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.entity.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -12,7 +12,7 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 @Mapper(nullValuePropertyMappingStrategy = IGNORE)
 public abstract class ChannelDtoMapper {
 
-    public ChannelDto fromEntity(Channel channel) {
+    public ChannelDto fromEntity(ChannelEntity channel) {
         if (channel == null) {
             return null;
         }
@@ -24,12 +24,12 @@ public abstract class ChannelDtoMapper {
 
     @Mapping(target = "thumbnailUrl", source = ".")
     @Mapping(target = "videoCount", ignore = true)
-    abstract void mapToChannelDto(Channel channel, @MappingTarget ChannelDto channelDto);
+    abstract void mapToChannelDto(ChannelEntity channel, @MappingTarget ChannelDto channelDto);
 
     @NonNull
-    String getThumbnailUrl(Channel channel) {
+    String getThumbnailUrl(ChannelEntity channel) {
         return channel.getThumbnailUrl() != null
-                ? "/api/channels/" + channel.getId() + "/thumbnail"
+                ? "/api/v1/channels/" + channel.getId() + "/thumbnail"
                 : "";
     }
 }

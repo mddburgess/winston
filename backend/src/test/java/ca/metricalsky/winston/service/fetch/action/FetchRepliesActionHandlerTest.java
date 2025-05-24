@@ -1,11 +1,10 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.Comment;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
-import ca.metricalsky.winston.entity.fetch.FetchAction.ActionType;
+import ca.metricalsky.winston.service.YouTubeService;
+import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
 import ca.metricalsky.winston.events.FetchDataEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -42,7 +41,7 @@ class FetchRepliesActionHandlerTest {
     @Mock
     private CommentService commentService;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -50,8 +49,8 @@ class FetchRepliesActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
-                .actionType(ActionType.REPLIES)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(Type.REPLIES)
                 .objectId(COMMENT_ID)
                 .build();
         var commentListResponse = buildCommentListResponse();
@@ -59,7 +58,7 @@ class FetchRepliesActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getReplies(fetchAction))
+        when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
         when(commentService.findById(COMMENT_ID))
                 .thenReturn(Optional.of(topLevelComment));
@@ -69,7 +68,7 @@ class FetchRepliesActionHandlerTest {
         assertThat(nextFetchAction).isNull();
 
         verify(commentService).saveAll(anyList());
-        verify(fetchActionService).actionCompleted(fetchAction, commentListResponse.getItems().size());
+        verify(fetchActionService).actionSuccessful(fetchAction, commentListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
@@ -97,8 +96,8 @@ class FetchRepliesActionHandlerTest {
         return comment;
     }
 
-    private static Comment buildTopLevelComment() {
-        var comment = new Comment();
+    private static CommentEntity buildTopLevelComment() {
+        var comment = new CommentEntity();
         comment.setId(COMMENT_ID);
         comment.setVideoId(VIDEO_ID);
         return comment;

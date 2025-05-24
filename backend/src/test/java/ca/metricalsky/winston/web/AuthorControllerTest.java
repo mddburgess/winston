@@ -5,6 +5,7 @@ import ca.metricalsky.winston.dto.author.AuthorDto;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.service.AuthorService;
+import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.VideoService;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest({AuthorController.class, AppResourceResolver.class})
 class AuthorControllerTest {
 
+    private static final String AUTHOR_DISPLAY_NAME = "author.displayName";
     private static final String AUTHOR_ID = "author.id";
     private static final String VIDEO_ID = "video.id";
 
@@ -37,6 +39,8 @@ class AuthorControllerTest {
 
     @MockitoBean
     private AuthorService authorService;
+    @MockitoBean
+    private ChannelService channelService;
     @MockitoBean
     private CommentService commentService;
     @MockitoBean
@@ -47,7 +51,7 @@ class AuthorControllerTest {
         when(authorService.findAll())
                 .thenReturn(List.of(buildAuthorDto()));
 
-        mvc.perform(get("/api/authors"))
+        mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.results").value(1))
                 .andExpect(jsonPath("$.authors", hasSize(1)))
@@ -59,7 +63,7 @@ class AuthorControllerTest {
         when(authorService.findAll())
                 .thenReturn(List.of());
 
-        mvc.perform(get("/api/authors"))
+        mvc.perform(get("/api/v1/authors"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.results").value(0))
                 .andExpect(jsonPath("$.authors", hasSize(0)));
@@ -67,16 +71,17 @@ class AuthorControllerTest {
 
     @Test
     void findAuthorDetails() throws Exception {
-        when(authorService.findById(AUTHOR_ID))
+        when(authorService.findByHandle(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.of(buildAuthorDto()));
         when(commentService.findAllWithContextByAuthorId(AUTHOR_ID))
                 .thenReturn(List.of(buildCommentDto()));
         when(videoService.getAllById(Set.of(VIDEO_ID)))
                 .thenReturn(List.of(buildVideoDto()));
 
-        mvc.perform(get("/api/authors/{authorId}", AUTHOR_ID))
+        mvc.perform(get("/api/v1/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author.id").value(AUTHOR_ID))
+                .andExpect(jsonPath("$.author.displayName").value(AUTHOR_DISPLAY_NAME))
                 .andExpect(jsonPath("$.comments", hasSize(1)))
                 .andExpect(jsonPath("$.comments[0].id").value("comment.id"))
                 .andExpect(jsonPath("$.comments[0].videoId").value(VIDEO_ID))
@@ -88,17 +93,17 @@ class AuthorControllerTest {
 
     @Test
     void findAuthorDetails_authorNotFound() throws Exception {
-        when(authorService.findById(AUTHOR_ID))
+        when(authorService.findByHandle(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
 
-        mvc.perform(get("/api/authors/{authorId}", AUTHOR_ID))
+        mvc.perform(get("/api/v1/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
                 .andExpect(status().isNotFound());
     }
 
     private static AuthorDto buildAuthorDto() {
         var authorDto = new AuthorDto();
         authorDto.setId(AUTHOR_ID);
-        authorDto.setDisplayName("author.displayName");
+        authorDto.setDisplayName(AUTHOR_DISPLAY_NAME);
         return authorDto;
     }
 

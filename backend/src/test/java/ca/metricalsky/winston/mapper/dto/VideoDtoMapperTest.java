@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.dto;
 
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -23,10 +23,7 @@ public class VideoDtoMapperTest {
                 .hasFieldOrPropertyWithValue("channel", null)
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
-                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/videos/" + video.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("commentCount", 0L)
-                .hasFieldOrPropertyWithValue("replyCount", 0L)
-                .hasFieldOrPropertyWithValue("totalReplyCount", 0L)
+                .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/v1/videos/" + video.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("publishedAt", video.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", video.getLastFetchedAt());
     }
@@ -39,14 +36,14 @@ public class VideoDtoMapperTest {
 
     @Test
     void fromEntity_emptyVideo() {
-        var videoDto = videoDtoMapper.fromEntity(new Video());
+        var videoDto = videoDtoMapper.fromEntity(new VideoEntity());
         assertThat(videoDto)
                 .isNotNull()
-                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel");
+                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel", "comments");
     }
 
-    private static Video buildVideo() {
-        var video = new Video();
+    private static VideoEntity buildVideo() {
+        var video = new VideoEntity();
         video.setId("id");
         video.setChannelId("channelId");
         video.setTitle("title");

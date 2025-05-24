@@ -1,8 +1,7 @@
 import com.github.gradle.node.npm.task.NpmTask
-import com.github.gradle.node.npm.task.NpxTask
 
 plugins {
-    id("com.github.node-gradle.node") version "7.1.0"
+    alias(libs.plugins.node)
 }
 
 group = rootProject.group
@@ -10,6 +9,7 @@ version = rootProject.version
 
 node {
     download.set(true)
+    version.set("23.11.0")
     workDir.set(file("$rootDir/.gradle/nodejs"))
 }
 
@@ -19,17 +19,18 @@ tasks {
         delete("dist")
     }
 
-    register<NpxTask>("npmCheckUpdates") {
-        command.set("npm-check-updates")
-        args.add("-u")
+    register<NpmTask>("format") {
+        dependsOn(npmInstall)
+        npmCommand.addAll("run", "format")
     }
 
-    npmInstall {
-        dependsOn("npmCheckUpdates")
+    register<NpmTask>("compileTypescript") {
+        dependsOn("format")
+        npmCommand.addAll("run", "compile")
     }
 
     register<NpmTask>("assemble") {
-        dependsOn("npmInstall")
+        dependsOn("compileTypescript")
         inputs.files(
             fileTree("node_modules"),
             fileTree("src"),
@@ -41,7 +42,7 @@ tasks {
     }
 
     register<NpmTask>("test") {
-        dependsOn("npmInstall")
+        dependsOn("compileTypescript")
         npmCommand.addAll("test")
     }
 

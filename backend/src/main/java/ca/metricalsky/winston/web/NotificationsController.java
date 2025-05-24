@@ -16,7 +16,7 @@ public class NotificationsController {
         this.notificationsService = notificationsService;
     }
 
-    @GetMapping("/api/notifications")
+    @GetMapping("/api/v1/notifications")
     public SseEmitter subscribe() {
         return notificationsService.openSubscription().getSseEmitter();
     }

@@ -1,98 +1,112 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {FetchLimits} from "../../model/FetchLimits";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { api } from "#/utils/links";
+import type { FetchLimits } from "#/types";
 
 type FetchRequest = {
     subscriptionId: string;
-}
+};
 
 type FetchChannelRequest = FetchRequest & {
     channelHandle: string;
-}
+};
 
 type FetchVideosRequest = FetchRequest & {
     channelId: string;
-    mode: 'ALL' | 'LATEST'
-}
+    mode: "ALL" | "LATEST";
+};
 
 type FetchCommentsRequest = FetchRequest & {
     videoId: string;
-}
+};
 
 type FetchRepliesRequest = FetchRequest & {
     commentId: string;
-}
+};
 
 export const apiSlice = createApi({
     reducerPath: "api",
-    baseQuery: fetchBaseQuery({baseUrl: "/api"}),
+    baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
     tagTypes: ["fetchLimits"],
-    endpoints: builder => ({
+    endpoints: (builder) => ({
         getFetchLimits: builder.query<FetchLimits, void>({
-            query: () => `/fetch/limits`,
+            query: api.v1.fetch.limits.get,
             providesTags: ["fetchLimits"],
         }),
         fetchChannelByHandle: builder.mutation<undefined, FetchChannelRequest>({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.v1.fetch.post(),
                 method: `POST`,
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
                     channel: {
-                        handle: request.channelHandle
-                    }
-                }
-            })
-        }),
-        fetchVideosByChannelId: builder.mutation<undefined, FetchVideosRequest>({
-            query: (request) => ({
-                url: `/fetch`,
-                method: 'POST',
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
-                body: {
-                    videos: {
-                        channelId: request.channelId,
-                        fetch: request.mode
-                    }
-                }
+                        handle: request.channelHandle,
+                    },
+                },
             }),
         }),
-        fetchCommentsByVideoId: builder.mutation<undefined, FetchCommentsRequest>({
+        fetchVideosByChannelId: builder.mutation<undefined, FetchVideosRequest>(
+            {
+                query: (request) => ({
+                    url: api.v1.fetch.post(),
+                    method: "POST",
+                    headers: [
+                        ["X-Notify-Subscription", request.subscriptionId],
+                    ],
+                    body: {
+                        videos: {
+                            channelId: request.channelId,
+                            fetch: request.mode,
+                        },
+                    },
+                }),
+            },
+        ),
+        fetchCommentsByVideoId: builder.mutation<
+            undefined,
+            FetchCommentsRequest
+        >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.v1.fetch.post(),
                 method: "POST",
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
                     comments: {
-                        videoId: request.videoId
-                    }
-                }
-            })
+                        videoId: request.videoId,
+                    },
+                },
+            }),
         }),
-        fetchRepliesByCommentId: builder.mutation<undefined, FetchRepliesRequest>({
+        fetchRepliesByCommentId: builder.mutation<
+            undefined,
+            FetchRepliesRequest
+        >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.v1.fetch.post(),
                 method: "POST",
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
                     replies: {
-                        commentId: request.commentId
-                    }
-                }
-            })
+                        commentId: request.commentId,
+                    },
+                },
+            }),
         }),
-        fetchRepliesByVideoId: builder.mutation<undefined, FetchCommentsRequest>({
+        fetchRepliesByVideoId: builder.mutation<
+            undefined,
+            FetchCommentsRequest
+        >({
             query: (request) => ({
-                url: `/fetch`,
+                url: api.v1.fetch.post(),
                 method: "POST",
-                headers: [ ["X-Notify-Subscription", request.subscriptionId] ],
+                headers: [["X-Notify-Subscription", request.subscriptionId]],
                 body: {
                     replies: {
-                        videoId: request.videoId
-                    }
-                }
-            })
-        })
-    })
+                        videoId: request.videoId,
+                    },
+                },
+            }),
+        }),
+    }),
 });
 
 export const {
@@ -102,6 +116,7 @@ export const {
     useFetchCommentsByVideoIdMutation,
     useFetchRepliesByCommentIdMutation,
     useFetchRepliesByVideoIdMutation,
-} = apiSlice
+} = apiSlice;
 
-export const invalidateFetchLimits = () => apiSlice.util.invalidateTags(["fetchLimits"]);
+export const invalidateFetchLimits = () =>
+    apiSlice.util.invalidateTags(["fetchLimits"]);

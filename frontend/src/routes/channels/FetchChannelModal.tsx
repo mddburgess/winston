@@ -1,29 +1,30 @@
-import {Button, Form, InputGroup, Modal} from "react-bootstrap";
-import {ChangeEvent, FormEvent, useState} from "react";
-import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {requestedChannelForHandle} from "../../store/slices/fetches";
-import {FetchChannelAction} from "./FetchChannelAction";
+import { useState } from "react";
+import { Button, Form, InputGroup, Modal } from "react-bootstrap";
+import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { requestedChannelForHandle } from "#/store/slices/fetches";
+import { FetchChannelAction } from "./FetchChannelAction";
+import type { ChangeEvent, FormEvent } from "react";
 
 const handleRegex = /^@([A-Za-z0-9_\-.]{0,30})$/;
-const urlRegex = /^(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/@([A-Za-z0-9_\-.]{3,30})/;
+const urlRegex =
+    /^(?:https?:\/\/)?(?:www\.|m\.)?youtube\.com\/@([A-Za-z0-9_\-.]{3,30})/;
 
 type FetchChannelModalProps = {
-    show: boolean,
-    setShow: (show: boolean) => void,
-}
+    show: boolean;
+    setShow: (show: boolean) => void;
+};
 
 export const FetchChannelModal = (props: FetchChannelModalProps) => {
-
     const [channelHandle, setChannelHandle] = useState("");
-    const fetchState = useAppSelector(state => state.fetches);
+    const fetchState = useAppSelector((state) => state.fetches);
     const dispatch = useAppDispatch();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
 
         const value = event.target.value;
-        const handleMatch = value.match(handleRegex)
+        const handleMatch = value.match(handleRegex);
         const urlMatch = value.match(urlRegex);
 
         if (handleMatch) {
@@ -37,22 +38,22 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
 
     const handleShow = () => {
         setChannelHandle("");
-    }
+    };
 
     const handleHide = () => {
         props.setShow(false);
-    }
+    };
 
     const handleFetch = () => {
         if (channelHandle.length > 0) {
             dispatch(requestedChannelForHandle(channelHandle));
         }
-    }
+    };
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         handleFetch();
-    }
+    };
 
     return (
         <Modal show={props.show} onShow={handleShow} onHide={handleHide}>
@@ -62,9 +63,7 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group>
-                        <Form.Label>
-                            YouTube channel handle or URL
-                        </Form.Label>
+                        <Form.Label>YouTube channel handle or URL</Form.Label>
                         <InputGroup>
                             <InputGroup.Text>@</InputGroup.Text>
                             <Form.Control
@@ -77,7 +76,7 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                {fetchState.channel[channelHandle]?.status === undefined &&
+                {fetchState.channel[channelHandle]?.status === undefined && (
                     <>
                         <Button
                             variant={"outline-secondary"}
@@ -95,8 +94,8 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
                             <ArrowDownRightCircleFill className="ms-2" />
                         </Button>
                     </>
-                }
-                {fetchState.channel[channelHandle]?.status === 'REQUESTED' &&
+                )}
+                {fetchState.channel[channelHandle]?.status === "REQUESTED" && (
                     <Button
                         variant={"primary"}
                         disabled={true}
@@ -105,8 +104,8 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
                         Fetching...
                         <FetchChannelAction channelHandle={channelHandle} />
                     </Button>
-                }
+                )}
             </Modal.Footer>
         </Modal>
     );
-}
+};

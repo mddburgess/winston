@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class SsePublisherTest {
 
     @Test
     void publishFetchDataEvent() throws Exception {
-        var fetchResult = new FetchResult<>(new FetchAction(), List.of(new Object()), null);
+        var fetchResult = new FetchResult<>(new FetchActionEntity(), List.of(new Object()), null);
         var fetchDataEvent = FetchDataEvent.of(fetchResult);
 
         ssePublisher.publish(fetchDataEvent);

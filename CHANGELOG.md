@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0]
+
+### Added
+
+- Author summary endpoint that returns the channels and videos an author has commented on. (mddburgess/winston#45)
+- New table and object property on videos to hold fetched comment counts, comments disabled flag, and last fetched date.
+  (mddburgess/winston#46)
+
+### Changed
+
+- Show the channel handle in the channel details URI instead of the channel ID. (mddburgess/winston#50)
+- Show the author handle in the author details URI instead of the author ID. (mddburgess/winston#50)
+- Migrated build tool from Parcel to Vite. (mddburgess/winston#61)
+- Redesigned author details page to reduce the amount of data requested from the backend. (mddburgess/winston#45)
+- Show when comments have been fetched for a video and the fetch returned zero comments. (mddburgess/winston#46)
+
+### Deprecated
+
+- Deprecated the author details endpoint, to be replaced by the author summary endpoint. (mddburgess/winston#45)
+
+### Fixed
+
+- Comment and reply counts on the video details page now update in real time when comments and replies are fetched.
+  (mddburgess/winston#43)
+- Fixed N+1 query bug causing the comments API to execute slowly. (mddburgess/winston#44)
+
 ## [1.2.1] — 2025-04-16
 
 ### Fixed
@@ -72,6 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web UI to fetch channels, videos, and comments.
 - Cache channel and video thumbnails.
 
+[Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.3.0]: https://github.com/mddburgess/winston/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/mddburgess/winston/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/mddburgess/winston/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mddburgess/winston/compare/v1.0.0...v1.1.0

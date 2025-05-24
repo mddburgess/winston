@@ -1,14 +1,15 @@
-import {ChannelDto} from "../../model/ChannelDto";
-import {Card, Col, Image, Row} from "react-bootstrap";
-import {Link} from "react-router";
-import {ArrowDownRightCircle, ArrowUpLeftCircleFill, Youtube} from "react-bootstrap-icons";
-import {Date} from "../../components/Date";
+import { Card, Col, Image, Row } from "react-bootstrap";
+import {
+    ArrowDownRightCircle,
+    ArrowUpLeftCircleFill,
+    Youtube,
+} from "react-bootstrap-icons";
+import { Link } from "react-router";
+import { Date } from "#/components/Date";
+import { routes } from "#/utils/links";
+import type { ChannelProps } from "#/types";
 
-type ChannelCardProps = {
-    channel: ChannelDto;
-}
-
-export const ChannelCard = ({channel}: ChannelCardProps) => (
+export const ChannelCard = ({ channel }: ChannelProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Card.Body className={"p-2"}>
@@ -21,8 +22,8 @@ export const ChannelCard = ({channel}: ChannelCardProps) => (
                         />
                     </Col>
                     <Col className={"col-10 col-md-9"}>
-                       <p className={"fs-5 mb-1"}>
-                            <Link to={`/channels/${channel.id}`}>
+                        <p className={"fs-5 mb-1"}>
+                            <Link to={routes.channels.details(channel)}>
                                 {channel.title}
                             </Link>
                         </p>
@@ -35,7 +36,7 @@ export const ChannelCard = ({channel}: ChannelCardProps) => (
             <Card.Footer>
                 <Row>
                     <Col className={"align-items-center col-auto d-flex"}>
-                        <Youtube className={"me-2"}/>
+                        <Youtube className={"me-2"} />
                         {channel.videoCount}
                     </Col>
                 </Row>
@@ -43,12 +44,12 @@ export const ChannelCard = ({channel}: ChannelCardProps) => (
             <Card.Footer>
                 <Row>
                     <Col className={"align-items-center col-auto d-flex"}>
-                        <ArrowUpLeftCircleFill className={"me-2"}/>
-                        <Date date={channel.publishedAt}/>
+                        <ArrowUpLeftCircleFill className={"me-2"} />
+                        <Date date={channel.publishedAt} />
                     </Col>
                     <Col className={"align-items-center d-flex"}>
-                        <ArrowDownRightCircle className={"me-2"}/>
-                        <Date date={channel.lastFetchedAt}/>
+                        <ArrowDownRightCircle className={"me-2"} />
+                        <Date date={channel.lastFetchedAt} />
                     </Col>
                 </Row>
             </Card.Footer>

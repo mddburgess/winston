@@ -1,9 +1,8 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.service.YouTubeService;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
-import ca.metricalsky.winston.events.FetchStatus;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -45,7 +44,7 @@ class FetchVideosActionHandlerTest {
     @Mock
     private VideoRepository videoRepository;
     @Mock
-    private YouTubeClientAdapter youTubeClientAdapter;
+    private YouTubeService youTubeService;
     @Mock
     private SsePublisher ssePublisher;
     @Captor
@@ -53,8 +52,8 @@ class FetchVideosActionHandlerTest {
 
     @Test
     void fetch() {
-        var fetchAction = FetchAction.builder()
-                .actionType(FetchAction.ActionType.VIDEOS)
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(FetchActionEntity.Type.VIDEOS)
                 .objectId(CHANNEL_ID)
                 .build();
         var activityListResponse = new ActivityListResponse();
@@ -62,7 +61,7 @@ class FetchVideosActionHandlerTest {
 
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
-        when(youTubeClientAdapter.getActivities(fetchAction))
+        when(youTubeService.getActivities(fetchAction))
                 .thenReturn(activityListResponse);
 
         var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction, ssePublisher);
@@ -70,7 +69,7 @@ class FetchVideosActionHandlerTest {
         assertThat(nextFetchAction).isNull();
 
         verify(videoRepository).saveAll(anyList());
-        verify(fetchActionService).actionCompleted(fetchAction, 1);
+        verify(fetchActionService).actionSuccessful(fetchAction, 1);
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())

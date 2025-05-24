@@ -1,15 +1,20 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.Author;
-import ca.metricalsky.winston.entity.view.AuthorDetails;
+import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, String> {
+public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
+
+    Optional<AuthorEntity> findByChannelUrl(String channelUrl);
+
+    Optional<AuthorEntity> findByDisplayName(String displayName);
 
     @Query("""
             SELECT
@@ -17,9 +22,9 @@ public interface AuthorRepository extends JpaRepository<Author, String> {
                 COUNT(DISTINCT c.videoId) AS commentedVideos,
                 COUNT(c.id) - COUNT(c.parentId) AS totalComments,
                 COUNT(c.parentId) AS totalReplies
-            FROM Author a
-                JOIN Comment c ON a.id = c.author.id
+            FROM AuthorEntity a
+                JOIN CommentEntity c ON a.id = c.author.id
             GROUP BY a.id
             """)
-    List<AuthorDetails> findAllAuthorDetails();
+    List<AuthorDetailsView> findAllAuthorDetails();
 }

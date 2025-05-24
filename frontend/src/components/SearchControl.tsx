@@ -1,20 +1,21 @@
-import {Button, FormControl, InputGroup} from "react-bootstrap";
-import {Search, XCircleFill} from "react-bootstrap-icons";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { Search, XCircleFill } from "react-bootstrap-icons";
+import type { ChangeEvent } from "react";
 
 type SearchControlProps = {
     value?: string;
     setValue?: (value: string) => void;
-}
+};
 
-export const SearchControl = ({value, setValue}: SearchControlProps) => {
+export const SearchControl = ({ value, setValue }: SearchControlProps) => {
     if (!setValue) {
         return <></>;
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         setValue(event.target.value);
-    }
+    };
 
     return (
         <InputGroup>
@@ -25,7 +26,7 @@ export const SearchControl = ({value, setValue}: SearchControlProps) => {
             />
             {!value && (
                 <Button className={"align-items-center d-flex"}>
-                    <Search/>
+                    <Search />
                 </Button>
             )}
             {value && (
@@ -34,9 +35,9 @@ export const SearchControl = ({value, setValue}: SearchControlProps) => {
                     className={"align-items-center d-flex"}
                     onClick={() => setValue("")}
                 >
-                    <XCircleFill/>
+                    <XCircleFill />
                 </Button>
             )}
         </InputGroup>
-    )
-}
+    );
+};

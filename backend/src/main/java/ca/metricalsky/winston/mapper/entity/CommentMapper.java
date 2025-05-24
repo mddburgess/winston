@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.Comment;
+import ca.metricalsky.winston.entity.CommentEntity;
+import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentThread;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +12,7 @@ import org.mapstruct.Mapping;
 })
 public abstract class CommentMapper {
 
-    public Comment fromYouTube(CommentThread commentThread) {
+    public CommentEntity fromYouTube(CommentThread commentThread) {
         if (commentThread == null || commentThread.getSnippet() == null) {
             return null;
         }
@@ -44,5 +45,5 @@ public abstract class CommentMapper {
     @Mapping(target = "lastFetchedAt", ignore = true)
     @Mapping(target = "totalReplyCount", ignore = true)
     @Mapping(target = "replies", ignore = true)
-    public abstract Comment fromYouTube(com.google.api.services.youtube.model.Comment ytComment);
+    public abstract CommentEntity fromYouTube(Comment ytComment);
 }

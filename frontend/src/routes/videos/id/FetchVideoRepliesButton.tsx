@@ -1,26 +1,29 @@
-import {ArrowDownRightCircleFill} from "react-bootstrap-icons";
-import {Button, Spinner} from "react-bootstrap";
-import {useAppDispatch, useAppSelector} from "../../../store/hooks";
-import {requestedRepliesForId} from "../../../store/slices/fetches";
-import {FetchVideoRepliesAction} from "./FetchVideoRepliesAction";
+import { Button } from "react-bootstrap";
+import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { requestedRepliesForId } from "#/store/slices/fetches";
+import { FetchVideoRepliesAction } from "./FetchVideoRepliesAction";
 
 type FVRProps = {
     videoId: string;
-}
+};
 
 export const FetchVideoRepliesButton = ({ videoId }: FVRProps) => {
+    const fetchState = useAppSelector(
+        (state) => state.fetches.replies[videoId],
+    );
 
-    const fetchState = useAppSelector(state => state.fetches.replies[videoId]);
-
-    if (fetchState?.status === 'REQUESTED' || fetchState?.status === 'FETCHING') {
-        return <FetchVideoRepliesAction videoId={videoId}/>
+    if (
+        fetchState?.status === "REQUESTED" ||
+        fetchState?.status === "FETCHING"
+    ) {
+        return <FetchVideoRepliesAction videoId={videoId} />;
     } else {
-        return <FVRButton videoId={videoId}/>
+        return <FVRButton videoId={videoId} />;
     }
-}
+};
 
-const FVRButton = ({videoId}:FVRProps) => {
-
+const FVRButton = ({ videoId }: FVRProps) => {
     const dispatch = useAppDispatch();
     return (
         <Button
@@ -28,7 +31,7 @@ const FVRButton = ({videoId}:FVRProps) => {
             onClick={() => dispatch(requestedRepliesForId(videoId))}
             size={"sm"}
         >
-            <ArrowDownRightCircleFill/>
+            <ArrowDownRightCircleFill />
         </Button>
     );
-}
+};

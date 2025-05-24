@@ -1,16 +1,14 @@
-import {useState} from "react";
-import {Clipboard, ClipboardCheckFill} from "react-bootstrap-icons";
+import { useState } from "react";
+import { Clipboard, ClipboardCheckFill } from "react-bootstrap-icons";
 
 type CopyToClipboardProps = {
     text: string;
-}
+};
 
 export const CopyToClipboard = ({ text }: CopyToClipboardProps) => {
-
     const [copied, setCopied] = useState(false);
-    const handleOnClick = async () => {
-        await navigator.clipboard.writeText(text);
-        setCopied(true);
+    const handleOnClick = () => {
+        void navigator.clipboard.writeText(text).then(() => setCopied(true));
     };
     const ClipboardIcon = copied ? ClipboardCheckFill : Clipboard;
 
@@ -21,4 +19,4 @@ export const CopyToClipboard = ({ text }: CopyToClipboardProps) => {
             onClick={handleOnClick}
         />
     );
-}
+};

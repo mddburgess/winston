@@ -26,16 +26,7 @@ public class VideoDto {
     @NonNull
     private String thumbnailUrl = "";
 
-    @NonNull
-    private Long commentCount = 0L;
-
-    @NonNull
-    private Long replyCount = 0L;
-
-    @NonNull
-    private Long totalReplyCount = 0L;
-
-    private boolean commentsDisabled = false;
+    private VideoComments comments;
 
     @NonNull
     private OffsetDateTime publishedAt = Instant.EPOCH.atOffset(ZoneOffset.UTC);

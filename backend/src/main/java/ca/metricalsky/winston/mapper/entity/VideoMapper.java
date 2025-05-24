@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import com.google.api.services.youtube.model.Activity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +14,7 @@ public interface VideoMapper {
     @Mapping(target = "description", source = "snippet.description")
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
-    @Mapping(target = "commentsDisabled", ignore = true)
+    @Mapping(target = "comments", ignore = true)
     @Mapping(target = "lastFetchedAt", ignore = true)
-    Video fromYouTube(Activity activity);
+    VideoEntity fromYouTube(Activity activity);
 }

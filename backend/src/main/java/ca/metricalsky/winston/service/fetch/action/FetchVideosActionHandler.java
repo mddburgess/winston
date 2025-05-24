@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.mapper.entity.VideoMapper;
@@ -25,21 +25,21 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
     private final VideoRepository videoRepository;
-    private final YouTubeClientAdapter youTubeClientAdapter;
+    private final YouTubeService youTubeService;
 
     public FetchVideosActionHandler(
             FetchActionService fetchActionService,
             VideoRepository videoRepository,
-            YouTubeClientAdapter youTubeClientAdapter
+            YouTubeService youTubeService
     ) {
         super(fetchActionService);
         this.videoRepository = videoRepository;
-        this.youTubeClientAdapter = youTubeClientAdapter;
+        this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<VideoDto> doFetch(FetchAction fetchAction) {
-        var activityListResponse = youTubeClientAdapter.getActivities(fetchAction);
+    protected FetchResult<VideoDto> doFetch(FetchActionEntity fetchAction) {
+        var activityListResponse = youTubeService.getActivities(fetchAction);
         var videoEntities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -53,7 +53,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
         return new FetchResult<>(fetchAction, videoDtos, nextFetchAction);
     }
 
-    private FetchAction getNextFetchAction(FetchAction fetchAction, ActivityListResponse activityListResponse) {
+    private FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, ActivityListResponse activityListResponse) {
         var activities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -69,8 +69,8 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
                 .map(publishedAt -> publishedAt.minusSeconds(1))
                 .orElse(null);
 
-        return activityListResponse.getNextPageToken() == null ? null : FetchAction.builder()
-                .fetchRequestId(fetchAction.getFetchRequestId())
+        return activityListResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+                .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
                 .publishedAfter(fetchAction.getPublishedAfter())

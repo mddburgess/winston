@@ -1,13 +1,13 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.client.YouTubeClientAdapter;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.CommentDto;
-import ca.metricalsky.winston.entity.fetch.FetchAction;
+import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.mapper.entity.CommentMapper;
-import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.CommentService;
+import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
@@ -21,25 +21,25 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
     private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
     private final CommentService commentService;
-    private final VideoRepository videoRepository;
-    private final YouTubeClientAdapter youTubeClientAdapter;
+    private final VideoCommentsService videoCommentsService;
+    private final YouTubeService youTubeService;
 
     public FetchCommentsActionHandler(
             FetchActionService fetchActionService,
             CommentService commentService,
-            VideoRepository videoRepository,
-            YouTubeClientAdapter youTubeClientAdapter
+            VideoCommentsService videoCommentsService,
+            YouTubeService youTubeService
     ) {
         super(fetchActionService);
         this.commentService = commentService;
-        this.videoRepository = videoRepository;
-        this.youTubeClientAdapter = youTubeClientAdapter;
+        this.videoCommentsService = videoCommentsService;
+        this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<CommentDto> doFetch(FetchAction fetchAction) {
+    protected FetchResult<CommentDto> doFetch(FetchActionEntity fetchAction) {
         try {
-            var commentThreadListResponse = youTubeClientAdapter.getComments(fetchAction);
+            var commentThreadListResponse = youTubeService.getComments(fetchAction);
             var commentEntities = commentThreadListResponse.getItems()
                     .stream()
                     .map(commentMapper::fromYouTube)
@@ -51,17 +51,14 @@ public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
             var nextFetchAction = getNextFetchAction(fetchAction, commentThreadListResponse);
             return new FetchResult<>(fetchAction, commentDtos, nextFetchAction);
         } catch (CommentsDisabledException ex) {
-            videoRepository.findById(fetchAction.getObjectId()).ifPresent(video -> {
-                video.setCommentsDisabled(true);
-                videoRepository.save(video);
-            });
+            videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
             throw ex;
         }
     }
 
-    private static FetchAction getNextFetchAction(FetchAction fetchAction, CommentThreadListResponse youTubeResponse) {
-        return youTubeResponse.getNextPageToken() == null ? null : FetchAction.builder()
-                .fetchRequestId(fetchAction.getFetchRequestId())
+    private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentThreadListResponse youTubeResponse) {
+        return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+                .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
                 .pageToken(youTubeResponse.getNextPageToken())

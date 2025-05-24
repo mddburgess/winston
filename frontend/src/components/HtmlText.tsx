@@ -1,9 +1,18 @@
-import {sanitize} from "dompurify";
+import DOMPurify from "dompurify";
+import type { HTMLAttributes } from "react";
 
-type HtmlTextProps = {
-    text: string,
-}
+type HtmlTextProps = Omit<
+    HTMLAttributes<HTMLSpanElement>,
+    "children" | "dangerouslySetInnerHTML"
+> & {
+    text: string;
+};
 
-export const HtmlText = ({text}: HtmlTextProps) => (
-    <span dangerouslySetInnerHTML={{ __html: sanitize(text) }}/>
-);
+export const HtmlText = ({ text, ...spanAttributes }: HtmlTextProps) => {
+    return (
+        <span
+            {...spanAttributes}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
+        />
+    );
+};

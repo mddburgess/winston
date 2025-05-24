@@ -1,60 +1,61 @@
-import {render, renderHook, RenderHookOptions, RenderOptions} from "@testing-library/react";
-import {AppState, AppStore, setupStore} from "../store";
-import {PropsWithChildren, ReactElement} from "react";
-import {Provider} from "react-redux";
+import { render, renderHook } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { setupStore } from "#/store";
+import type { AppState, AppStore } from "#/store";
+import type { RenderHookOptions, RenderOptions } from "@testing-library/react";
+import type { PropsWithChildren, ReactElement } from "react";
 
-type ExtendedRenderOptions = Omit<RenderOptions, 'queries'> & {
+type ExtendedRenderOptions = Omit<RenderOptions, "queries"> & {
     preloadedState?: Partial<AppState>;
     store?: AppStore;
-}
+};
 
-export const renderWithProviders = (
+const renderWithProviders = (
     ui: ReactElement,
-    options: ExtendedRenderOptions = {}
+    options: ExtendedRenderOptions = {},
 ) => {
-
     const {
         preloadedState = {},
         store = setupStore(preloadedState),
         ...renderOptions
     } = options;
 
-    const wrapper = ({children}: PropsWithChildren) => (
-        <Provider store={store}>
-            {children}
-        </Provider>
+    const wrapper = ({ children }: PropsWithChildren) => (
+        <Provider store={store}>{children}</Provider>
     );
 
     return {
         store,
-        ...render(ui, { wrapper, ...renderOptions })
-    }
-}
+        ...render(ui, { wrapper, ...renderOptions }),
+    };
+};
 
-type ExtendedRenderHookOptions<Props> = Omit<RenderHookOptions<Props>, 'queries'> & {
+type ExtendedRenderHookOptions<Props> = Omit<
+    RenderHookOptions<Props>,
+    "queries"
+> & {
     preloadedState?: Partial<AppState>;
     store?: AppStore;
-}
+};
 
-export const renderHookWithProviders = <Props, Result> (
+const renderHookWithProviders = <Props, Result>(
     hook: (initialProps?: Props) => Result,
-    options: ExtendedRenderHookOptions<Props> = {}
+    options: ExtendedRenderHookOptions<Props> = {},
 ) => {
-
     const {
         preloadedState = {},
         store = setupStore(preloadedState),
         ...renderHookOptions
     } = options;
 
-    const wrapper = ({children}: PropsWithChildren) => (
-        <Provider store={store}>
-            {children}
-        </Provider>
+    const wrapper = ({ children }: PropsWithChildren) => (
+        <Provider store={store}>{children}</Provider>
     );
 
     return {
         store,
-        ...renderHook(hook, { wrapper, ...renderHookOptions })
-    }
-}
+        ...renderHook(hook, { wrapper, ...renderHookOptions }),
+    };
+};
+
+export { renderHookWithProviders, renderWithProviders };

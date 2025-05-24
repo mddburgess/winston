@@ -1,11 +1,13 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchRequest;
-import ca.metricalsky.winston.entity.fetch.FetchRequest.Status;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
-import com.google.common.base.Throwables;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,19 +15,18 @@ public class FetchRequestService {
 
     private final FetchRequestRepository fetchRequestRepository;
 
-    public FetchRequest startFetch(FetchRequest fetchRequest) {
-        fetchRequest.setStatus(Status.FETCHING);
-        return fetchRequestRepository.save(fetchRequest);
+    @Transactional
+    public List<FetchOperationEntity> startProcessingRequest(Long fetchRequestId) {
+        var fetchRequest = fetchRequestRepository.findById(fetchRequestId).orElseThrow();
+        fetchRequest.setStatus(FetchRequestEntity.Status.FETCHING);
+        fetchRequestRepository.save(fetchRequest);
+        return fetchRequest.getOperations();
     }
 
-    public FetchRequest fetchCompleted(FetchRequest fetchRequest) {
-        fetchRequest.setStatus(Status.COMPLETED);
-        return fetchRequestRepository.save(fetchRequest);
-    }
-
-    public FetchRequest fetchFailed(FetchRequest fetchRequest, Throwable throwable) {
-        fetchRequest.setStatus(Status.FAILED);
-        fetchRequest.setError(Throwables.getStackTraceAsString(throwable));
-        return fetchRequestRepository.save(fetchRequest);
+    @Transactional
+    public void finishProcessingRequest(Long fetchRequestId) {
+        var fetchRequest = fetchRequestRepository.findById(fetchRequestId).orElseThrow();
+        fetchRequest.setStatus(FetchRequestEntity.Status.COMPLETED);
+        fetchRequestRepository.save(fetchRequest);
     }
 }

@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.dto.ChannelDto;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.repository.ChannelRepository;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,11 +22,19 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
     private final VideoService videoService;
 
-    @Transactional(readOnly = true)
     public List<ChannelDto> findAll() {
+        var channels = channelRepository.findAll();
+        return populateVideoCounts(channels);
+    }
+
+    public List<ChannelDto> findAllById(Iterable<String> channelIds) {
+        var channels = channelRepository.findAllById(channelIds);
+        return populateVideoCounts(channels);
+    }
+
+    private List<ChannelDto> populateVideoCounts(List<ChannelEntity> channels) {
         var videoCounts = videoService.countAllByChannelId();
-        return channelRepository.findAll()
-                .stream()
+        return channels.stream()
                 .map(channelDtoMapper::fromEntity)
                 .peek(channelDto -> channelDto.setVideoCount(videoCounts.get(channelDto.getId())))
                 .sorted(Comparator.comparing(ChannelDto::getTitle))
@@ -35,6 +43,11 @@ public class ChannelService {
 
     public Optional<ChannelDto> findById(String channelId) {
         return channelRepository.findById(channelId)
+                .map(channelDtoMapper::fromEntity);
+    }
+
+    public Optional<ChannelDto> findByHandle(String channelHandle) {
+        return channelRepository.findByCustomUrl(channelHandle)
                 .map(channelDtoMapper::fromEntity);
     }
 

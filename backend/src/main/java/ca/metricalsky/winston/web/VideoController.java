@@ -22,12 +22,12 @@ public class VideoController {
         this.channelService = channelService;
     }
 
-    @GetMapping("/api/channels/{channelId}/videos")
-    public List<VideoDto> listByChannelId(@PathVariable String channelId) {
-        return videoService.findAllByChannelId(channelId);
+    @GetMapping("/api/v1/channels/{channelHandle}/videos")
+    public List<VideoDto> listByChannelHandle(@PathVariable String channelHandle) {
+        return videoService.findAllByChannelHandle(channelHandle);
     }
 
-    @GetMapping("/api/videos/{videoId}")
+    @GetMapping("/api/v1/videos/{videoId}")
     public VideoDto findById(@PathVariable String videoId) {
         var video = videoService.getById(videoId);
         channelService.findById(video.getChannelId()).ifPresent(channel -> {
