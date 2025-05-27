@@ -9,8 +9,12 @@ import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { requestedVideosForChannelId } from "#/store/slices/fetches";
 import { pluralize } from "#/utils";
 import { FetchVideosAction } from "./FetchVideosAction";
+import type { Channel } from "#/api";
 import type { FetchState } from "#/store/slices/fetches";
-import type { ChannelProps } from "#/types";
+
+type ChannelProps = {
+    channel: Channel;
+};
 
 type AlertBodyProps = ChannelProps & {
     fetchState: FetchState;
@@ -23,7 +27,7 @@ const FetchAvailableBody = ({ channel }: ChannelProps) => {
             <Col>
                 The videos for this channel were last fetched from YouTube{" "}
                 <strong>
-                    <Date date={channel.lastFetchedAt} />.
+                    <Date date={channel.last_fetched_at} />.
                 </strong>
             </Col>
             <Col xs={"auto"}>

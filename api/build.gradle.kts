@@ -1,10 +1,12 @@
+import com.github.gradle.node.npm.task.NpmTask
+import com.github.gradle.node.npm.task.NpxTask
+
 group = rootProject.group
 version = rootProject.version
 
 plugins {
     java
-    alias(libs.plugins.springBoot)
-    alias(libs.plugins.springDependencyManagement)
+    alias(libs.plugins.node)
     alias(libs.plugins.openapiGenerator)
 }
 
@@ -29,6 +31,12 @@ java {
     }
 }
 
+node {
+    download.set(true)
+    version.set("23.11.0")
+    workDir.set(file("$rootDir/.gradle/nodejs"))
+}
+
 openApiGenerate {
     generatorName.set("spring")
     inputSpec.set("$projectDir/src/openapi.yaml")
@@ -38,7 +46,34 @@ openApiGenerate {
 }
 
 tasks {
+    register<NpxTask>("npmCheckUpdates") {
+        command.set("npm-check-updates")
+        args.add("-u")
+    }
+
+    npmInstall {
+        dependsOn("npmCheckUpdates")
+    }
+
+    register<NpmTask>("validate") {
+        dependsOn(npmInstall)
+        npmCommand.set(listOf("run", "lint"))
+    }
+
+    named("openApiGenerate") {
+        dependsOn("validate")
+    }
+
     compileJava {
         dependsOn(openApiGenerate)
+    }
+
+    register<Copy>("copyResources") {
+        from("$projectDir/src")
+        into(layout.buildDirectory.dir("resources/main/static/spec"))
+    }
+
+    processResources {
+        dependsOn("copyResources")
     }
 }

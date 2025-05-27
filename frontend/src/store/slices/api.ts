@@ -25,7 +25,7 @@ type FetchRepliesRequest = FetchRequest & {
 
 export const apiSlice = createApi({
     reducerPath: "api",
-    baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
+    baseQuery: fetchBaseQuery({ baseUrl: "/" }),
     tagTypes: ["fetchLimits"],
     endpoints: (builder) => ({
         getFetchLimits: builder.query<FetchLimits, void>({

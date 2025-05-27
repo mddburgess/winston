@@ -19,14 +19,4 @@ type ChannelListProps = {
     channels: Channel[];
 };
 
-type ChannelListResponse = Channel[];
-
-type ChannelDetailResponse = Channel;
-
-export type {
-    Channel,
-    ChannelDetailResponse,
-    ChannelListProps,
-    ChannelListResponse,
-    ChannelProps,
-};
+export type { Channel, ChannelListProps, ChannelProps };

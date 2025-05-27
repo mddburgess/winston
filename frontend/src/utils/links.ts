@@ -1,25 +1,24 @@
-import type { Author, Channel, Video } from "#/types";
+import type { Author, Video } from "#/types";
 
 const api = {
     v1: {
         authors: {
-            get: () => `/v1/authors`,
+            get: () => `/api/v1/authors`,
             handle: {
-                get: (handle: string) => `/v1/authors/${handle}`,
+                get: (handle: string) => `/api/v1/authors/${handle}`,
             },
         },
         fetch: {
-            post: () => `/v1/fetch`,
+            post: () => `/api/v1/fetch`,
             limits: {
-                get: () => `/v1/fetch/limits`,
+                get: () => `/api/v1/fetch/limits`,
             },
         },
         channels: {
-            get: () => `/v1/channels`,
             handle: {
-                get: (handle: string) => `/v1/channels/${handle}`,
                 videos: {
-                    get: (handle: string) => `/v1/channels/${handle}/videos`,
+                    get: (handle: string) =>
+                        `/api/v1/channels/${handle}/videos`,
                 },
             },
         },
@@ -28,9 +27,10 @@ const api = {
         },
         videos: {
             id: {
-                get: (videoId: string) => `/v1/videos/${videoId}`,
+                get: (videoId: string) => `/api/v1/videos/${videoId}`,
                 comments: {
-                    get: (videoId: string) => `/v1/videos/${videoId}/comments`,
+                    get: (videoId: string) =>
+                        `/api/v1/videos/${videoId}/comments`,
                 },
             },
         },
@@ -38,7 +38,7 @@ const api = {
     v2: {
         authors: {
             handle: {
-                get: (handle: string) => `/v2/authors/${handle}`,
+                get: (handle: string) => `/api/v2/authors/${handle}`,
             },
         },
     },
@@ -53,8 +53,7 @@ const routes = {
     },
     channels: {
         list: `/`,
-        details: (channel?: Channel) =>
-            `/channels/${channel?.customUrl ?? `:channelHandle`}`,
+        details: (handle?: string) => `/channels/${handle ?? `:handle`}`,
     },
     videos: {
         details: (video?: Video) => `/videos/${video?.id ?? `:videoId`}`,

@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.web;
 
+import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.config.AppResourceResolver;
-import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.service.ChannelService;
+import ca.metricalsky.winston.dao.ChannelDataService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,51 +31,51 @@ class ChannelControllerTest {
     private MockMvc mvc;
 
     @MockitoBean
-    private ChannelService channelService;
+    private ChannelDataService channelDataService;
 
     @Test
     void list() throws Exception{
-        when(channelService.findAll())
-                .thenReturn(List.of(buildChannelDto()));
+        when(channelDataService.getAllChannels())
+                .thenReturn(List.of(buildChannel()));
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(
                 status().isOk(),
-                jsonPath("$", hasSize(1)),
-                jsonPath("$[0].id").value("channel.id"),
-                jsonPath("$[0].title").value("channel.title"),
-                jsonPath("$[0].description").value("channel.description"),
-                jsonPath("$[0].customUrl").value(CHANNEL_HANDLE)
+                jsonPath("$.channels", hasSize(1)),
+                jsonPath("$.channels[0].id").value("channel.id"),
+                jsonPath("$.channels[0].title").value("channel.title"),
+                jsonPath("$.channels[0].description").value("channel.description"),
+                jsonPath("$.channels[0].handle").value(CHANNEL_HANDLE)
         );
     }
 
     @Test
     void list_noResults() throws Exception {
-        when(channelService.findAll())
+        when(channelDataService.getAllChannels())
                 .thenReturn(List.of());
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(
                 status().isOk(),
-                jsonPath("$", hasSize(0))
+                jsonPath("$.channels", hasSize(0))
         );
     }
 
     @Test
     void findByHandle() throws Exception {
-        when(channelService.findByHandle(CHANNEL_HANDLE))
-                .thenReturn(Optional.of(buildChannelDto()));
+        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
+                .thenReturn(Optional.of(buildChannel()));
 
-        mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
+        mvc.perform(get("/api/v1/channels/{handle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isOk(),
                 jsonPath("$.id").value("channel.id"),
                 jsonPath("$.title").value("channel.title"),
                 jsonPath("$.description").value("channel.description"),
-                jsonPath("$.customUrl").value(CHANNEL_HANDLE)
+                jsonPath("$.handle").value(CHANNEL_HANDLE)
         );
     }
 
     @Test
     void findByHandle_notFound() throws Exception {
-        when(channelService.findByHandle(CHANNEL_HANDLE))
+        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
                 .thenReturn(Optional.empty());
 
         mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
@@ -86,12 +86,11 @@ class ChannelControllerTest {
         );
     }
 
-    private static ChannelDto buildChannelDto() {
-        var channelDto = new ChannelDto();
-        channelDto.setId("channel.id");
-        channelDto.setTitle("channel.title");
-        channelDto.setDescription("channel.description");
-        channelDto.setCustomUrl(CHANNEL_HANDLE);
-        return channelDto;
+    private static Channel buildChannel() {
+        return new Channel()
+                .id("channel.id")
+                .title("channel.title")
+                .description("channel.description")
+                .handle(CHANNEL_HANDLE);
     }
 }

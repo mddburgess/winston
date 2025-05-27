@@ -1,10 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type {
-    Channel,
-    FetchCommentsEvent,
-    FetchVideosEvent,
-    Maybe,
-} from "#/types";
+import type { Channel } from "#/api";
+import type { FetchCommentsEvent, FetchVideosEvent, Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {

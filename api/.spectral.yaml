@@ -1,0 +1,7 @@
+extends:
+  - ["spectral:oas", all]
+  - "@apisyouwonthate/style-guide"
+rules:
+  hosts-https-only-oas3: warn
+  no-security-schemes-defined: warn
+  no-x-headers: warn

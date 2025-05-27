@@ -1,5 +1,6 @@
 [versions]
 mapstruct = "1.6.3"
+springBoot = "3.4.5"
 
 [libraries]
 archunitJunit5 = { module = "com.tngtech.archunit:archunit-junit5", version = "1.4.1" }
@@ -17,13 +18,13 @@ lombok = { module = "org.projectlombok:lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
 postgresql = { module = "org.postgresql:postgresql" }
-springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
-springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
-springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
-springBootStarterDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
-springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test" }
-springBootStarterValidation = { module = "org.springframework.boot:spring-boot-starter-validation" }
-springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+springBootConfigurationProcessor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "springBoot" }
+springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBoot" }
+springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
+springBootStarterDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
+springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
+springBootStarterValidation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springBoot" }
+springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot" }
 wiremockSpringBoot = { module = "org.wiremock.integrations:wiremock-spring-boot", version = "3.10.0" }
 
 [bundles]

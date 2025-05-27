@@ -5,7 +5,7 @@
   "exceptionHandler": false,
   "interfaceOnly": true,
   "skipDefaultInterface": true,
-  "useResponseEntity": false,
+  "useResponseEntity": true,
   "useSpringBoot3": true,
   "useTags": true
 }

@@ -86,7 +86,9 @@ export const VideoDetailsRoute = () => {
                         <BreadcrumbItem
                             linkAs={Link}
                             linkProps={{
-                                to: routes.channels.details(video.channel),
+                                to: routes.channels.details(
+                                    video.channel.customUrl,
+                                ),
                             }}
                         >
                             {video.channel.title}

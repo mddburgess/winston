@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { useAppDispatch } from "#/store/hooks";
-import { useFindChannelByHandleQuery } from "#/store/slices/channels";
+import { useGetChannelByHandleQuery } from "#/store/slices/channels";
 import { initFetchStateForChannel } from "#/store/slices/fetches";
 import {
     useListVideosByChannelHandleQuery,
@@ -16,13 +16,13 @@ import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
-    const { channelHandle } = useParams();
+    const { handle } = useParams();
 
     const dispatch = useAppDispatch();
 
     const [search, setSearch] = useState("");
 
-    const { data: channel } = useFindChannelByHandleQuery(channelHandle!);
+    const { data: channel } = useGetChannelByHandleQuery({ handle: handle! });
     useEffect(() => {
         if (channel) {
             dispatch(initFetchStateForChannel(channel));
@@ -30,7 +30,7 @@ export const ChannelDetailsRoute = () => {
     }, [channel, dispatch]);
 
     const { data: videos, isSuccess } = useListVideosByChannelHandleQuery(
-        channelHandle!,
+        handle!,
     );
     const videoList = useMemo(() => {
         return isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];

@@ -1,0 +1,11 @@
+title: ListChannelsResponse
+description:
+  The response for the list channels endpoint.
+type: object
+properties:
+  channels:
+    type: array
+    items:
+      $ref: "channel.yaml"
+required:
+  - channels
