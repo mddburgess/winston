@@ -50,11 +50,12 @@ properties:
     format: date-time
   last_fetched_at:
     description:
-      The timestamp of the most recent time the channel data was fetched.
+      The timestamp of the most recent time that the channel data was fetched.
     type: string
     format: date-time
 required:
   - id
   - title
+  - handle
   - published_at
   - last_fetched_at

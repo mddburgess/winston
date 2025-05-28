@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Channel Summary
+description:
+  Summary data for a YouTube channel.
+type: object
+properties:
+  title:
+    description:
+      The channel title.
+    type: string
+  handle:
+    description:
+      The unique channel handle used in the channel's URL.
+    type: string
+required:
+  - title
+  - handle

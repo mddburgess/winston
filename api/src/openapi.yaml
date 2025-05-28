@@ -30,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/list-channels-response.yaml"
+                $ref: "schemas/channels/list-channels-response.yaml"
 
   /api/v1/channels/{handle}:
     get:
@@ -54,17 +54,85 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/channel.yaml"
+                $ref: "schemas/channels/channel.yaml"
         "404":
           description:
             The requested channel was not found.
           content:
             application/problem+json:
               schema:
-                $ref: "schemas/error.yaml"
+                $ref: "#/components/schemas/Error"
               examples:
                 notFound:
-                  $ref: "examples/get-channel-by-handle-404.yaml"
+                  $ref: "examples/channels/get-channel-by-handle-404.yaml"
+
+  /api/v1/channels/{handle}/videos:
+    get:
+      summary: List videos for channel
+      description:
+        Lists the video data for all the fetched videos for a single channel.
+      tags:
+        - Videos
+      operationId: list_videos_for_channel
+      parameters:
+        - name: handle
+          description:
+            The unique channel handle used in the channel's URL.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/videos/list-videos-for-channel-response.yaml"
+        "404":
+          description:
+            The requested channel was not found.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  $ref: "examples/videos/list-videos-for-channel-404.yaml"
+
+  /api/v1/videos/{id}:
+    get:
+      summary: Get video
+      description:
+        Gets the video data for a single fetched video.
+      tags:
+        - Videos
+      operationId: get_video_by_id
+      parameters:
+        - name: id
+          description:
+            The unique identifier for the video.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "schemas/videos/video.yaml"
+        "404":
+          description:
+            The requested video was not found.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  $ref: "examples/videos/get-video-by-id-404.yaml"
 
   /api/v1/fetch:
     post:
@@ -109,24 +177,6 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/AuthorSummaryResponse"
-  /api/v1/videos/{videoId}:
-    get:
-      tags:
-        - video-controller
-      operationId: findById
-      parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/VideoDto"
   /api/v1/videos/{videoId}/thumbnail:
     get:
       tags:
@@ -215,26 +265,6 @@ paths:
                 type: string
                 format: byte
 
-  /api/v1/channels/{channelHandle}/videos:
-    get:
-      tags:
-        - video-controller
-      operationId: listByChannelHandle
-      parameters:
-        - name: channelHandle
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/VideoDto"
   /api/v1/authors:
     get:
       tags:
@@ -287,6 +317,8 @@ paths:
       deprecated: true
 components:
   schemas:
+    Error:
+      $ref: "schemas/error.yaml"
     FetchChannel:
       type: object
       properties:
@@ -542,3 +574,4 @@ components:
             $ref: "#/components/schemas/VideoDto"
 tags:
   - name: Channels
+  - name: Videos

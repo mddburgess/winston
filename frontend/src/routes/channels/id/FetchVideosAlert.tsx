@@ -87,7 +87,7 @@ const FetchRequestedBody = ({ channel, fetchState }: AlertBodyProps) => {
                 >
                     Fetching...
                     <FetchVideosAction
-                        channelId={channel.id}
+                        channel={channel}
                         mode={fetchState.mode ?? "LATEST"}
                     />
                 </Button>

@@ -1,39 +1,36 @@
 package ca.metricalsky.winston.web;
 
-import ca.metricalsky.winston.dto.VideoDto;
-import ca.metricalsky.winston.service.ChannelService;
-import ca.metricalsky.winston.service.VideoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import ca.metricalsky.winston.api.VideosApi;
+import ca.metricalsky.winston.api.model.ListVideosForChannelResponse;
+import ca.metricalsky.winston.api.model.Video;
+import ca.metricalsky.winston.dao.VideoDataService;
+import ca.metricalsky.winston.exception.AppException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-public class VideoController {
+@RequiredArgsConstructor
+public class VideoController implements VideosApi {
 
-    private final VideoService videoService;
-    private final ChannelService channelService;
+    private final VideoDataService videoDataService;
 
-    @Autowired
-    public VideoController(VideoService videoService, ChannelService channelService) {
-        this.videoService = videoService;
-        this.channelService = channelService;
+    @Override
+    public ResponseEntity<ListVideosForChannelResponse> listVideosForChannel(String handle) {
+        var videos = videoDataService.getVideosForChannel(handle);
+        var response = new ListVideosForChannelResponse()
+                .channelHandle(handle)
+                .videos(videos);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/v1/channels/{channelHandle}/videos")
-    public List<VideoDto> listByChannelHandle(@PathVariable String channelHandle) {
-        return videoService.findAllByChannelHandle(channelHandle);
-    }
+    @Override
+    public ResponseEntity<Video> getVideoById(String id) {
+        var video = videoDataService.findVideoById(id)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested video was not found."));
 
-    @GetMapping("/api/v1/videos/{videoId}")
-    public VideoDto findById(@PathVariable String videoId) {
-        var video = videoService.getById(videoId);
-        channelService.findById(video.getChannelId()).ifPresent(channel -> {
-            video.setChannel(channel);
-            video.setChannelId(null);
-        });
-        return video;
+        return ResponseEntity.ok(video);
     }
 }

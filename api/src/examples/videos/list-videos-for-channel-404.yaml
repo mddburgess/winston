@@ -1,0 +1,9 @@
+summary: Channel not found
+description:
+  The requested channel was not found.
+value:
+  type: about:blank
+  title: Not Found
+  status: 404
+  detail: The requested channel was not found.
+  instance: /api/v1/channels/@alice/videos

@@ -7,8 +7,8 @@ import { useAppDispatch } from "#/store/hooks";
 import { useGetChannelByHandleQuery } from "#/store/slices/channels";
 import { initFetchStateForChannel } from "#/store/slices/fetches";
 import {
-    useListVideosByChannelHandleQuery,
-    videosAdapter,
+    selectAllVideos,
+    useListVideosForChannelQuery,
 } from "#/store/slices/videos";
 import { routes } from "#/utils/links";
 import { ChannelDetails } from "./ChannelDetails";
@@ -29,11 +29,12 @@ export const ChannelDetailsRoute = () => {
         }
     }, [channel, dispatch]);
 
-    const { data: videos, isSuccess } = useListVideosByChannelHandleQuery(
-        handle!,
-    );
+    const { data: videos, isSuccess } = useListVideosForChannelQuery({
+        handle: handle!,
+    });
+
     const videoList = useMemo(() => {
-        return isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];
+        return isSuccess ? selectAllVideos(videos) : [];
     }, [isSuccess, videos]);
 
     const filteredVideoList = useMemo(() => {

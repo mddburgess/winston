@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { EventSourceProvider } from "react-sse-hooks";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
@@ -12,7 +11,7 @@ import {
     repliesAdapter,
 } from "#/store/slices/comments";
 import { fetchedComments, updateFetchStatus } from "#/store/slices/fetches";
-import { videosApiUtils } from "#/store/slices/videos";
+import { markVideoCommentsDisabled } from "#/store/slices/videos";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
 type FetchVideosActionProps = {
@@ -57,21 +56,7 @@ export const FetchCommentsAction = ({ videoId }: FetchVideosActionProps) => {
         );
         if (event.status === "FAILED") {
             if (event.error.type === "/api/problem/comments-disabled") {
-                dispatch(
-                    videosApiUtils.updateQueryData(
-                        "findVideoById",
-                        videoId,
-                        (draft) => {
-                            draft.comments = {
-                                commentsDisabled: true,
-                                commentCount: 0,
-                                replyCount: 0,
-                                totalReplyCount: 0,
-                                lastFetchedAt: DateTime.now().toISO(),
-                            };
-                        },
-                    ),
-                );
+                dispatch(markVideoCommentsDisabled(videoId));
             }
         }
         dispatch(invalidateFetchLimits());

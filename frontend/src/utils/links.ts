@@ -1,4 +1,4 @@
-import type { Author, Video } from "#/types";
+import type { Author } from "#/types";
 
 const api = {
     v1: {
@@ -14,20 +14,11 @@ const api = {
                 get: () => `/api/v1/fetch/limits`,
             },
         },
-        channels: {
-            handle: {
-                videos: {
-                    get: (handle: string) =>
-                        `/api/v1/channels/${handle}/videos`,
-                },
-            },
-        },
         notifications: {
             get: () => `/api/v1/notifications`,
         },
         videos: {
             id: {
-                get: (videoId: string) => `/api/v1/videos/${videoId}`,
                 comments: {
                     get: (videoId: string) =>
                         `/api/v1/videos/${videoId}/comments`,
@@ -56,7 +47,7 @@ const routes = {
         details: (handle?: string) => `/channels/${handle ?? `:handle`}`,
     },
     videos: {
-        details: (video?: Video) => `/videos/${video?.id ?? `:videoId`}`,
+        details: (videoId?: string) => `/videos/${videoId ?? `:videoId`}`,
     },
 };
 

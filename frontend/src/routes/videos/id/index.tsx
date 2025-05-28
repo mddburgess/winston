@@ -10,7 +10,7 @@ import {
     repliesAdapter,
     useListCommentsByVideoIdQuery,
 } from "#/store/slices/comments";
-import { useFindVideoByIdQuery } from "#/store/slices/videos";
+import { useGetVideoByIdQuery } from "#/store/slices/videos";
 import { sumBy } from "#/utils";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
@@ -23,7 +23,7 @@ export const VideoDetailsRoute = () => {
 
     const [search, setSearch] = useState("");
 
-    const { data: video } = useFindVideoByIdQuery(videoId!);
+    const { data: video } = useGetVideoByIdQuery({ id: videoId! });
 
     const { isSuccess, data: comments } = useListCommentsByVideoIdQuery(
         videoId!,
@@ -71,7 +71,7 @@ export const VideoDetailsRoute = () => {
     );
 
     const commentsDisabled = useMemo(
-        () => video?.comments?.commentsDisabled,
+        () => video?.comments?.comments_disabled,
         [video],
     );
 
@@ -87,7 +87,7 @@ export const VideoDetailsRoute = () => {
                             linkAs={Link}
                             linkProps={{
                                 to: routes.channels.details(
-                                    video.channel.customUrl,
+                                    video.channel.handle,
                                 ),
                             }}
                         >

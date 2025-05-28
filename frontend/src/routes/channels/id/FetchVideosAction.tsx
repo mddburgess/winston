@@ -6,35 +6,32 @@ import {
     useFetchVideosByChannelIdMutation,
 } from "#/store/slices/api";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
-import { videosAdapter, videosApiUtils } from "#/store/slices/videos";
+import { addVideosForChannel } from "#/store/slices/videos";
+import type { Channel } from "#/api";
 import type { FetchStatusEvent, FetchVideosEvent } from "#/types";
 
 type FetchVideosWidgetProps = {
-    channelId: string;
+    channel: Channel;
     mode: "ALL" | "LATEST";
 };
 
 export const FetchVideosAction = ({
-    channelId,
+    channel,
     mode,
 }: FetchVideosWidgetProps) => {
     const [fetchVideosByChannelId] = useFetchVideosByChannelIdMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchVideosByChannelId({ subscriptionId, channelId, mode });
+        void fetchVideosByChannelId({
+            subscriptionId,
+            channelId: channel.handle,
+            mode,
+        });
     };
 
     const handleDataEvent = (event: FetchVideosEvent) => {
-        dispatch(
-            videosApiUtils.updateQueryData(
-                "listVideosByChannelHandle",
-                channelId,
-                (draft) => {
-                    videosAdapter.setMany(draft, event.items);
-                },
-            ),
-        );
+        dispatch(addVideosForChannel(channel.handle, event.items));
         dispatch(fetchedVideos(event));
     };
 
@@ -42,7 +39,7 @@ export const FetchVideosAction = ({
         dispatch(
             updateFetchStatus({
                 fetchType: "videos",
-                objectId: channelId,
+                objectId: channel.handle,
                 status: event.status,
             }),
         );

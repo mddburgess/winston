@@ -3,10 +3,14 @@ import { CheckCircleFill } from "react-bootstrap-icons";
 import { useAppSelector } from "#/store/hooks";
 import { pluralize } from "#/utils";
 import { FetchCommentsAction } from "./FetchCommentsAction";
+import type { Video } from "#/api";
 import type { FetchState } from "#/store/slices/fetches";
-import type { VideoWithChannelProps } from "#/types";
 
-type FetchingCommentsAlertProps = VideoWithChannelProps & {
+type Props = {
+    video: Video;
+};
+
+type FetchingCommentsAlertProps = Props & {
     fetchState: FetchState;
 };
 
@@ -48,7 +52,7 @@ const FetchedCommentsAlert = ({ fetchState }: FetchingCommentsAlertProps) => (
     </Alert>
 );
 
-export const FetchCommentsAlert = ({ video }: VideoWithChannelProps) => {
+export const FetchCommentsAlert = ({ video }: Props) => {
     const fetchState = useAppSelector(
         (state) => state.fetches.comments[video.id],
     );

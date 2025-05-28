@@ -1,5 +1,5 @@
 import { backendApi } from "#/api";
-import type { Channel } from "#/api";
+import type { Channel, Video } from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 import type {
     DefinitionsFromApi,
@@ -10,13 +10,22 @@ import type {
 type TagTypes = TagTypesFromApi<typeof backendApi>;
 type Definitions = DefinitionsFromApi<typeof backendApi>;
 
-type OverrideListChannels = OverrideResultType<
+type ListChannelsDefinition = OverrideResultType<
     Definitions["listChannels"],
     EntityState<Channel, string>
 >;
 
-type UpdatedDefinitions = Omit<Definitions, "listChannels"> & {
-    listChannels: OverrideListChannels;
+type ListVideosForChannelDefinition = OverrideResultType<
+    Definitions["listVideosForChannel"],
+    EntityState<Video, string>
+>;
+
+type UpdatedDefinitions = Omit<
+    Definitions,
+    "listChannels" | "listVideosForChannel"
+> & {
+    listChannels: ListChannelsDefinition;
+    listVideosForChannel: ListVideosForChannelDefinition;
 };
 
 export const enhancedBackendApi = backendApi.enhanceEndpoints<

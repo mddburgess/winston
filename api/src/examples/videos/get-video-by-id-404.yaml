@@ -1,0 +1,9 @@
+summary: Video not found
+description:
+  The requested video was not found.
+value:
+  type: about:blank
+  title: Not Found
+  status: 404
+  detail: The requested video was not found.
+  instance: /api/v1/videos/RsCNsSuB35o

@@ -1,0 +1,16 @@
+title: ListVideosForChannelResponse
+description:
+  The response for the list videos for channel endpoint.
+type: object
+properties:
+  channel_handle:
+    description:
+      The unique channel handle used in the channel's URL.
+    type: string
+  videos:
+    type: array
+    items:
+      $ref: "video.yaml"
+required:
+  - channel_handle
+  - videos

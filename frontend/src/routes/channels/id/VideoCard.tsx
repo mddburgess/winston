@@ -4,19 +4,25 @@ import { Link } from "react-router";
 import { CommentCounts } from "#/components/comments/CommentCounts";
 import { Date } from "#/components/Date";
 import { routes } from "#/utils/links";
-import type { VideoProps } from "#/types";
+import type { Video } from "#/api";
 
-export const VideoCard = ({ video }: VideoProps) => (
+type Props = {
+    video: Video;
+};
+
+export const VideoCard = ({ video }: Props) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
-                <Link to={routes.videos.details(video)}>
-                    <Card.Img variant={"top"} src={video.thumbnailUrl} />
+                <Link to={routes.videos.details(video.id)}>
+                    <Card.Img variant={"top"} src={video.thumbnail_url} />
                 </Link>
             </Ratio>
             <Card.Body>
                 <Card.Subtitle>
-                    <Link to={routes.videos.details(video)}>{video.title}</Link>
+                    <Link to={routes.videos.details(video.id)}>
+                        {video.title}
+                    </Link>
                 </Card.Subtitle>
             </Card.Body>
             <Card.Footer>
@@ -29,7 +35,7 @@ export const VideoCard = ({ video }: VideoProps) => (
             </Card.Footer>
             <Card.Footer className={"d-flex align-items-center"}>
                 <ArrowUpLeftCircleFill className={"me-2"} />
-                <Date date={video.publishedAt} />
+                <Date date={video.published_at} />
             </Card.Footer>
         </Card>
     </Col>
