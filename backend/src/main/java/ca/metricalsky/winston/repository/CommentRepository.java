@@ -36,18 +36,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
     List<CommentEntity> findCommentsForVideoByAuthor(String videoId, String authorDisplayName);
 
     @Query("""
-            SELECT c FROM CommentEntity c
-            WHERE c.parentId IS NULL
-            AND (c.author.id = :authorId OR c.id IN (
-                SELECT r.parentId FROM CommentEntity r
-                WHERE r.parentId IS NOT NULL AND r.author.id = :authorId
-            ))
-            """)
-    @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
-    @Deprecated(since = "1.3.0", forRemoval = true)
-    List<CommentEntity> findAllWithContextByAuthorId(String authorId);
-
-    @Query("""
             SELECT c.id
             FROM CommentEntity c
                 LEFT JOIN CommentEntity r ON c.id = r.parentId

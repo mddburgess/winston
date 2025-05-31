@@ -2,8 +2,6 @@ package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.config.AppResourceResolver;
 import ca.metricalsky.winston.dto.author.AuthorDto;
-import ca.metricalsky.winston.dto.CommentDto;
-import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.service.AuthorService;
 import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.service.CommentService;
@@ -18,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -70,28 +67,6 @@ class AuthorControllerTest {
     }
 
     @Test
-    void findAuthorDetails() throws Exception {
-        when(authorService.findByHandle(AUTHOR_DISPLAY_NAME))
-                .thenReturn(Optional.of(buildAuthorDto()));
-        when(commentService.findAllWithContextByAuthorId(AUTHOR_ID))
-                .thenReturn(List.of(buildCommentDto()));
-        when(videoService.getAllById(Set.of(VIDEO_ID)))
-                .thenReturn(List.of(buildVideoDto()));
-
-        mvc.perform(get("/api/v1/authors/{authorHandle}", AUTHOR_DISPLAY_NAME))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.author.id").value(AUTHOR_ID))
-                .andExpect(jsonPath("$.author.displayName").value(AUTHOR_DISPLAY_NAME))
-                .andExpect(jsonPath("$.comments", hasSize(1)))
-                .andExpect(jsonPath("$.comments[0].id").value("comment.id"))
-                .andExpect(jsonPath("$.comments[0].videoId").value(VIDEO_ID))
-                .andExpect(jsonPath("$.comments[0].text").value("comment.text"))
-                .andExpect(jsonPath("$.videos", hasSize(1)))
-                .andExpect(jsonPath("$.videos[0].id").value("video.id"))
-                .andExpect(jsonPath("$.videos[0].title").value("video.title"));
-    }
-
-    @Test
     void findAuthorDetails_authorNotFound() throws Exception {
         when(authorService.findByHandle(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
@@ -105,20 +80,5 @@ class AuthorControllerTest {
         authorDto.setId(AUTHOR_ID);
         authorDto.setDisplayName(AUTHOR_DISPLAY_NAME);
         return authorDto;
-    }
-
-    private static CommentDto buildCommentDto() {
-        var commentDto = new CommentDto();
-        commentDto.setId("comment.id");
-        commentDto.setVideoId(VIDEO_ID);
-        commentDto.setText("comment.text");
-        return commentDto;
-    }
-
-    private static VideoDto buildVideoDto() {
-        var videoDto = new VideoDto();
-        videoDto.setId(VIDEO_ID);
-        videoDto.setTitle("video.title");
-        return videoDto;
     }
 }

@@ -93,21 +93,6 @@ class VideoServiceTest {
                 .hasMessageEndingWith("The requested video was not found.");
     }
 
-    @Test
-    void getAllById() {
-        when(videoRepository.findAllById(List.of(VIDEO_ID)))
-                .thenReturn(List.of(buildVideo()));
-
-        var videoDtos = videoService.getAllById(List.of(VIDEO_ID));
-
-        assertThat(videoDtos)
-                .hasSize(1)
-                .first()
-                .hasFieldOrPropertyWithValue("id", VIDEO_ID)
-                .hasFieldOrPropertyWithValue("comments.commentCount", 1L)
-                .hasFieldOrPropertyWithValue("comments.replyCount", 2L)
-                .hasFieldOrPropertyWithValue("comments.totalReplyCount", 3L);
-    }
 
     private static VideoEntity buildVideo() {
         var video = new VideoEntity();

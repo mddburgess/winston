@@ -173,6 +173,22 @@ paths:
                 videoNotFound:
                   $ref: ./examples/listCommentsForVideo/404-videoNotFound.yaml
 
+  /api/v1/authors:
+    get:
+      summary: List authors
+      description:
+        Lists the authors for all the fetched comments.
+      tags:
+        - Authors
+      operationId: listAuthors
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/listAuthors-response.yaml
+
   /api/v1/fetch:
     post:
       tags:
@@ -278,18 +294,7 @@ paths:
               schema:
                 type: string
                 format: byte
-  /api/v1/authors:
-    get:
-      tags:
-        - author-controller
-      operationId: list_1
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/AuthorListResponse"
+
   /api/v1/authors/{authorId}/thumbnail:
     get:
       tags:
@@ -309,29 +314,9 @@ paths:
               schema:
                 type: string
                 format: byte
-  /api/v1/authors/{authorHandle}:
-    get:
-      tags:
-        - author-controller
-      operationId: findAuthorDetails
-      parameters:
-        - name: authorHandle
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/AuthorDetailsResponse"
-      deprecated: true
+
 components:
   schemas:
-#    Channel:
-#      $ref: schemas/channels/channel.yaml
     Error:
       $ref: "schemas/error.yaml"
     FetchChannel:
@@ -390,203 +375,25 @@ components:
         timeout:
           type: integer
           format: int64
-    AuthorDto:
-      type: object
-      properties:
-        id:
-          type: string
-        displayName:
-          type: string
-        channelUrl:
-          type: string
-        profileImageUrl:
-          type: string
-        statistics:
-          $ref: "#/components/schemas/AuthorStatistics"
-      required:
-        - channelUrl
-        - displayName
-        - id
-        - profileImageUrl
-    AuthorStatistics:
-      type: object
-      properties:
-        commentedVideos:
-          type: integer
-          format: int64
-        totalComments:
-          type: integer
-          format: int64
-        totalReplies:
-          type: integer
-          format: int64
     AuthorSummaryResponse:
       type: object
       properties:
         author:
-          $ref: "#/components/schemas/AuthorDto"
+          $ref: "./schemas/authors/author.yaml"
         channels:
           type: array
           items:
-            $ref: "#/components/schemas/ChannelDto"
+            $ref: "./schemas/channels/channel.yaml"
         videos:
           type: array
           items:
-            $ref: "#/components/schemas/VideoDto"
-    ChannelDto:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        customUrl:
-          type: string
-        thumbnailUrl:
-          type: string
-        topics:
-          type: array
-          items:
-            type: string
-        keywords:
-          type: array
-          items:
-            type: string
-        videoCount:
-          type: integer
-          format: int64
-        publishedAt:
-          type: string
-          format: date-time
-        lastFetchedAt:
-          type: string
-          format: date-time
-      required:
-        - customUrl
-        - description
-        - id
-        - keywords
-        - lastFetchedAt
-        - publishedAt
-        - thumbnailUrl
-        - title
-        - topics
-        - videoCount
-    VideoComments:
-      type: object
-      properties:
-        commentsDisabled:
-          type: boolean
-        commentCount:
-          type: integer
-          format: int64
-        replyCount:
-          type: integer
-          format: int64
-        totalReplyCount:
-          type: integer
-          format: int64
-        lastFetchedAt:
-          type: string
-          format: date-time
-    VideoDto:
-      type: object
-      properties:
-        id:
-          type: string
-        channelId:
-          type: string
-        channel:
-          $ref: "#/components/schemas/ChannelDto"
-        title:
-          type: string
-        description:
-          type: string
-        thumbnailUrl:
-          type: string
-        comments:
-          $ref: "#/components/schemas/VideoComments"
-        publishedAt:
-          type: string
-          format: date-time
-        lastFetchedAt:
-          type: string
-          format: date-time
-      required:
-        - description
-        - id
-        - lastFetchedAt
-        - publishedAt
-        - thumbnailUrl
-        - title
-    CommentDto:
-      type: object
-      properties:
-        id:
-          type: string
-        videoId:
-          type: string
-        author:
-          $ref: "#/components/schemas/AuthorDto"
-        text:
-          type: string
-        publishedAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        lastFetchedAt:
-          type: string
-          format: date-time
-        totalReplyCount:
-          type: integer
-          format: int64
-        replies:
-          type: array
-          items:
-            $ref: "#/components/schemas/CommentDto"
-      required:
-        - author
-        - id
-        - lastFetchedAt
-        - publishedAt
-        - replies
-        - text
-        - totalReplyCount
-        - updatedAt
-        - videoId
+            $ref: "./schemas/videos/video.yaml"
     FetchLimitsResponse:
       type: object
       properties:
         remainingQuota:
           type: integer
           format: int32
-    AuthorListResponse:
-      type: object
-      properties:
-        results:
-          type: integer
-          format: int32
-        authors:
-          type: array
-          items:
-            $ref: "#/components/schemas/AuthorDto"
-    AuthorDetailsResponse:
-      type: object
-      properties:
-        author:
-          $ref: "#/components/schemas/AuthorDto"
-        comments:
-          type: array
-          items:
-            $ref: "#/components/schemas/CommentDto"
-        videos:
-          type: array
-          items:
-            $ref: "#/components/schemas/VideoDto"
 tags:
   - name: Channels
   - name: Videos

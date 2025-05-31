@@ -49,12 +49,4 @@ public class VideoService {
                 .map(videoDtoMapper::fromEntity)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested video was not found."));
     }
-
-    @Deprecated(since = "1.3.0", forRemoval = true)
-    public List<VideoDto> getAllById(Iterable<String> videoIds) {
-        return videoRepository.findAllById(videoIds)
-                .stream()
-                .map(videoDtoMapper::fromEntity)
-                .toList();
-    }
 }

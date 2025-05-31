@@ -60,12 +60,4 @@ public class CommentService {
     public CommentCountView getCommentCountByVideoId(String videoId) {
         return commentRepository.countCommentsForVideoId(videoId);
     }
-
-    @Deprecated(since = "1.3.0", forRemoval = true)
-    public List<CommentDto> findAllWithContextByAuthorId(String authorId) {
-        return commentRepository.findAllWithContextByAuthorId(authorId)
-                .stream()
-                .map(commentDtoMapper::fromEntity)
-                .toList();
-    }
 }
