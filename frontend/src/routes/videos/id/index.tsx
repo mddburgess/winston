@@ -6,9 +6,10 @@ import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { useAppSelector } from "#/store/hooks";
 import {
-    commentsAdapter,
-    repliesAdapter,
-    useListCommentsByVideoIdQuery,
+    selectAllReplies,
+    selectAllTopLevelComments,
+    selectReplyCount,
+    useListCommentsForVideoQuery,
 } from "#/store/slices/comments";
 import { useGetVideoByIdQuery } from "#/store/slices/videos";
 import { sumBy } from "#/utils";
@@ -25,13 +26,11 @@ export const VideoDetailsRoute = () => {
 
     const { data: video } = useGetVideoByIdQuery({ id: videoId! });
 
-    const { isSuccess, data: comments } = useListCommentsByVideoIdQuery(
-        videoId!,
-    );
+    const { isSuccess, data: comments } = useListCommentsForVideoQuery({
+        id: videoId!,
+    });
     const commentsList = useMemo(() => {
-        return isSuccess
-            ? commentsAdapter.getSelectors().selectAll(comments)
-            : [];
+        return isSuccess ? selectAllTopLevelComments(comments) : [];
     }, [isSuccess, comments]);
 
     const fetchState = useAppSelector(
@@ -42,32 +41,29 @@ export const VideoDetailsRoute = () => {
         () =>
             commentsList.filter(
                 (comment) =>
-                    comment.author.displayName
+                    comment.author.handle
                         .toLowerCase()
                         .includes(search.toLowerCase()) ||
                     comment.text.toLowerCase().includes(search.toLowerCase()) ||
-                    repliesAdapter
-                        .getSelectors()
-                        .selectAll(comment.replies)
-                        .filter(
-                            (reply) =>
-                                reply.author.displayName
-                                    .toLowerCase()
-                                    .includes(search.toLowerCase()) ||
-                                reply.text
-                                    .toLowerCase()
-                                    .includes(search.toLowerCase()),
-                        ).length > 0,
+                    selectAllReplies(comment.replies).filter(
+                        (reply) =>
+                            reply.author.handle
+                                .toLowerCase()
+                                .includes(search.toLowerCase()) ||
+                            reply.text
+                                .toLowerCase()
+                                .includes(search.toLowerCase()),
+                    ).length > 0,
             ),
         [commentsList, search],
     );
 
     const replyCount = sumBy(commentsList, (comment) =>
-        repliesAdapter.getSelectors().selectTotal(comment.replies),
+        selectReplyCount(comment.replies),
     );
     const totalReplyCount = sumBy(
         commentsList,
-        (comment) => comment.totalReplyCount,
+        (comment) => comment.total_reply_count,
     );
 
     const commentsDisabled = useMemo(

@@ -6,7 +6,7 @@ import {
     invalidateFetchLimits,
     useFetchChannelByHandleMutation,
 } from "#/store/slices/api";
-import { addChannels } from "#/store/slices/channels";
+import { appendChannels } from "#/store/slices/channels";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import { routes } from "#/utils/links";
 import type { FetchChannelEvent, FetchStatusEvent } from "#/types";
@@ -28,7 +28,7 @@ export const FetchChannelAction = ({
     };
 
     const handleDataEvent = (event: FetchChannelEvent) => {
-        dispatch(addChannels(event.items));
+        dispatch(appendChannels(event.items));
         dispatch(invalidateFetchLimits());
         if (event.items.length > 0) {
             void navigate(routes.channels.details(event.items[0].handle));

@@ -1,0 +1,29 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Author
+description:
+  An author of a comment.
+type: object
+properties:
+  id:
+    description:
+      The unique identifier for the author.
+    type: string
+  handle:
+    description:
+      The unique channel handle used in the author's channel URL.
+    type: string
+  channel_url:
+    description:
+      An URL to the author's YouTube channel page.
+    type: string
+  profile_image_url:
+    description:
+      An URL to a thumbnail image for the author's channel.
+    type: string
+#  statistics:
+#    $ref: "#/components/schemas/AuthorStatistics"
+required:
+  - id
+  - display_name
+  - handle
+  - profile_image_url

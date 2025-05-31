@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: TopLevelComment
+description:
+  A top-level comment on a YouTube video.
+allOf:
+  - $ref: ./comment.yaml
+  - type: object
+    properties:
+      total_reply_count:
+        description:
+          The total number of replies to the comment that can be fetched.
+          This number may be less than the actual total number of replies to the comment in YouTube.
+        type: integer
+        format: int32
+      replies:
+        type: array
+        items:
+          $ref: ./comment.yaml
+    required:
+      - total_reply_count
+      - replies

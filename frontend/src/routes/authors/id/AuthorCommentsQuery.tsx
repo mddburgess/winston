@@ -1,8 +1,8 @@
 import {
-    commentsAdapter,
-    useListCommentsByVideoIdAuthorQuery,
+    selectAllTopLevelComments,
+    useListCommentsForVideoQuery,
 } from "#/store/slices/comments";
-import type { CommentState } from "#/store/slices/comments";
+import type { TopLevelComment } from "#/store/slices/backend";
 import type { AuthorHandleProps, VideoProps } from "#/types";
 import type { ReactNode } from "react";
 
@@ -10,7 +10,7 @@ type AuthorCommentsQueryProps = VideoProps &
     AuthorHandleProps & {
         children: {
             isLoading?: () => ReactNode;
-            isSuccess: (summary: CommentState[]) => ReactNode;
+            isSuccess: (summary: TopLevelComment[]) => ReactNode;
         };
     };
 
@@ -19,14 +19,14 @@ export const AuthorCommentsQuery = ({
     authorHandle,
     children,
 }: AuthorCommentsQueryProps) => {
-    const { isLoading, isSuccess, data } = useListCommentsByVideoIdAuthorQuery({
-        videoId: video.id,
-        authorHandle,
+    const { isLoading, isSuccess, data } = useListCommentsForVideoQuery({
+        id: video.id,
+        author: authorHandle,
     });
     return isLoading && children.isLoading ? (
         children.isLoading()
     ) : isSuccess ? (
-        children.isSuccess(commentsAdapter.getSelectors().selectAll(data))
+        children.isSuccess(selectAllTopLevelComments(data))
     ) : (
         <></>
     );

@@ -5,11 +5,6 @@ import {
     invalidateFetchLimits,
     useFetchRepliesByVideoIdMutation,
 } from "#/store/slices/api";
-import {
-    commentsAdapter,
-    commentsApiUtils,
-    repliesAdapter,
-} from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
@@ -30,24 +25,24 @@ export const FetchVideoRepliesAction = ({
     const handleDataEvent = (event: FetchCommentsEvent) => {
         if (event.items.length > 0) {
             const commentId = event.objectId;
-            dispatch(
-                commentsApiUtils.updateQueryData(
-                    "listCommentsByVideoId",
-                    videoId,
-                    (draft) => {
-                        const comment = commentsAdapter
-                            .getSelectors()
-                            .selectById(draft, commentId);
-                        commentsAdapter.setOne(draft, {
-                            ...comment,
-                            replies: repliesAdapter.addMany(
-                                comment.replies,
-                                event.items,
-                            ),
-                        });
-                    },
-                ),
-            );
+            // dispatch(
+            //     commentsApiUtils.updateQueryData(
+            //         "listCommentsByVideoId",
+            //         videoId,
+            //         (draft) => {
+            //             const comment = commentsAdapter
+            //                 .getSelectors()
+            //                 .selectById(draft, commentId);
+            //             commentsAdapter.setOne(draft, {
+            //                 ...comment,
+            //                 replies: repliesAdapter.addMany(
+            //                     comment.replies,
+            //                     event.items,
+            //                 ),
+            //             });
+            //         },
+            //     ),
+            // );
         }
     };
 

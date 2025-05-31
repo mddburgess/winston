@@ -4,8 +4,10 @@ description:
 type: object
 properties:
   channels:
+    description:
+      A list of all the channels.
     type: array
     items:
-      $ref: "channel.yaml"
+      $ref: ./channel.yaml
 required:
   - channels

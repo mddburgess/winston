@@ -3,7 +3,7 @@ import { waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { backend } from "#/mocks/backend";
 import { renderHookWithProviders } from "#/utils/test-utils";
-import { addChannels, useListChannelsQuery } from "./channels.ts";
+import { appendChannels, useListChannelsQuery } from "./channels.ts";
 import type { Channel } from "#/api";
 
 describe("channelsApi", () => {
@@ -59,7 +59,7 @@ describe("channelsApi", () => {
         });
     });
 
-    describe(addChannels, () => {
+    describe(appendChannels, () => {
         it("adds a list of channels to the listChannels cache", async () => {
             const { store, result } = renderHookWithProviders(() =>
                 useListChannelsQuery(),
@@ -67,7 +67,7 @@ describe("channelsApi", () => {
             await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
             store.dispatch(
-                addChannels([
+                appendChannels([
                     {
                         id: "channel.2",
                         title: "channel.2.title",

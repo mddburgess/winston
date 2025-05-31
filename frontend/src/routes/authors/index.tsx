@@ -78,7 +78,7 @@ export const AuthorListRoute = () => {
                                         <Col className={"py-2"}>
                                             <Link
                                                 to={routes.authors.details(
-                                                    author,
+                                                    author.displayName,
                                                 )}
                                             >
                                                 {author.displayName}

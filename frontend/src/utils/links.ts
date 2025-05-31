@@ -17,14 +17,6 @@ const api = {
         notifications: {
             get: () => `/api/v1/notifications`,
         },
-        videos: {
-            id: {
-                comments: {
-                    get: (videoId: string) =>
-                        `/api/v1/videos/${videoId}/comments`,
-                },
-            },
-        },
     },
     v2: {
         authors: {
@@ -39,8 +31,8 @@ const routes = {
     home: `/`,
     authors: {
         list: `/authors`,
-        details: (author?: Author) =>
-            `/authors/${author?.displayName ?? `:authorHandle`}`,
+        details: (authorHandle?: string) =>
+            `/authors/${authorHandle ?? `:authorHandle`}`,
     },
     channels: {
         list: `/`,

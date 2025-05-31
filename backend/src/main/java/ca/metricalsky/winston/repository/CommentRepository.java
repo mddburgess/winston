@@ -14,23 +14,26 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
 
     @Query("""
             SELECT c FROM CommentEntity c
-            WHERE c.videoId = :videoId AND c.parentId IS NULL
+            WHERE c.videoId = :videoId
+            AND c.parentId IS NULL
             ORDER BY c.publishedAt ASC
             """)
     @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
-    List<CommentEntity> findTopLevelCommentsByVideoId(String videoId);
+    List<CommentEntity> findCommentsForVideo(String videoId);
 
     @Query("""
             SELECT c FROM CommentEntity c
             WHERE c.videoId = :videoId
             AND c.parentId IS NULL
-            AND (c.author.id = :authorId OR c.id IN (
+            AND (c.author.displayName = :authorDisplayName OR c.id IN (
                 SELECT r.parentId FROM CommentEntity r
-                WHERE r.parentId IS NOT NULL AND r.videoId = :videoId AND r.author.id = :authorId
+                WHERE r.parentId IS NOT NULL
+                AND r.videoId = :videoId
+                AND r.author.displayName = :authorDisplayName
             ))
             """)
     @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
-    List<CommentEntity> findAllForVideoByAuthorId(String videoId, String authorId);
+    List<CommentEntity> findCommentsForVideoByAuthor(String videoId, String authorDisplayName);
 
     @Query("""
             SELECT c FROM CommentEntity c
@@ -67,19 +70,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
             GROUP BY v.id
             """)
     List<CommentCountView> countCommentsByChannelCustomUrl(String channelCustomUrl);
-
-    @Query("""
-            SELECT
-                v.id AS videoId,
-                COUNT(c.id) AS commentsAndReplies,
-                COUNT(c.parentId) AS replies,
-                COALESCE(SUM(c.totalReplyCount), 0) AS totalReplies
-            FROM VideoEntity v
-                JOIN CommentEntity c ON v.id = c.videoId
-            WHERE v.id IN :videoIds
-            GROUP BY v.id
-            """)
-    List<CommentCountView> countCommentsForVideoIds(Iterable<String> videoIds);
 
     @Query("""
             SELECT

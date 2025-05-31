@@ -12,6 +12,4 @@ type Comment = {
     replies: Comment[];
 };
 
-type CommentListResponse = Comment[];
-
-export type { Comment, CommentListResponse };
+export type { Comment };

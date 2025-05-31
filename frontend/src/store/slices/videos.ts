@@ -27,7 +27,7 @@ const videosAdapter = createEntityAdapter<Video>({
 
 const { selectAll: selectAllVideos } = videosAdapter.getSelectors();
 
-const addVideosForChannel = (channelHandle: string, videos: Video[]) =>
+const appendVideosForChannel = (channelHandle: string, videos: Video[]) =>
     videosApi.util.updateQueryData(
         "listVideosForChannel",
         { handle: channelHandle },
@@ -52,7 +52,7 @@ const markVideoCommentsDisabled = (videoId: string) =>
     );
 
 export {
-    addVideosForChannel,
+    appendVideosForChannel,
     markVideoCommentsDisabled,
     selectAllVideos,
     useGetVideoByIdQuery,

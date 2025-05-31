@@ -2,32 +2,29 @@ import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { Link } from "react-router";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
-import { repliesAdapter } from "#/store/slices/comments";
+import { selectAllReplies } from "#/store/slices/comments";
 import { routes } from "#/utils/links";
 import { ReplyList } from "./ReplyList";
-import type { CommentState } from "#/store/slices/comments";
+import type { TopLevelComment } from "#/store/slices/backend";
 
-type CommentListItemProps = {
-    comment: CommentState;
+type Props = {
+    comment: TopLevelComment;
     highlightAuthorId?: string;
 };
 
-export const CommentListItem = ({
-    comment,
-    highlightAuthorId = "",
-}: CommentListItemProps) => {
+export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
     const highlight = highlightAuthorId === comment.author.id;
 
     return (
         <ListGroupItem key={comment.id}>
             <Row>
                 <Col xs={"auto"} className={"small"}>
-                    <Link to={routes.authors.details(comment.author)}>
-                        {comment.author.displayName}
+                    <Link to={routes.authors.details(comment.author.handle)}>
+                        {comment.author.handle}
                     </Link>
                 </Col>
                 <Col xs={"auto"} className={"ps-0 small"}>
-                    <Date date={comment.publishedAt} />
+                    <Date date={comment.published_at} />
                 </Col>
             </Row>
             <Row>
@@ -44,10 +41,8 @@ export const CommentListItem = ({
             <Row>
                 <ReplyList
                     commentId={comment.id}
-                    totalReplyCount={comment.totalReplyCount}
-                    replies={repliesAdapter
-                        .getSelectors()
-                        .selectAll(comment.replies)}
+                    totalReplyCount={comment.total_reply_count}
+                    replies={selectAllReplies(comment.replies)}
                     highlightAuthorId={highlightAuthorId}
                 />
             </Row>

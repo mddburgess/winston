@@ -6,7 +6,6 @@ import {
     useFetchVideosByChannelIdMutation,
 } from "#/store/slices/api";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
-import { addVideosForChannel } from "#/store/slices/videos";
 import type { Channel } from "#/api";
 import type { FetchStatusEvent, FetchVideosEvent } from "#/types";
 
@@ -31,7 +30,7 @@ export const FetchVideosAction = ({
     };
 
     const handleDataEvent = (event: FetchVideosEvent) => {
-        dispatch(addVideosForChannel(channel.handle, event.items));
+        // dispatch(appendVideosForChannel(channel.handle, event.items));
         dispatch(fetchedVideos(event));
     };
 

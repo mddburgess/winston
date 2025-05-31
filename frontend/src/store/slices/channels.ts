@@ -23,7 +23,7 @@ const channelsAdapter = createEntityAdapter<Channel>({
 
 const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
 
-const addChannels = (channels: Channel[]) =>
+const appendChannels = (channels: Channel[]) =>
     channelsApi.util.updateQueryData(
         "listChannels",
         undefined,
@@ -33,7 +33,7 @@ const addChannels = (channels: Channel[]) =>
     );
 
 export {
-    addChannels,
+    appendChannels,
     selectAllChannels,
     useGetChannelByHandleQuery,
     useListChannelsQuery,

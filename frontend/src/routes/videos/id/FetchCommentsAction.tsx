@@ -5,11 +5,6 @@ import {
     invalidateFetchLimits,
     useFetchCommentsByVideoIdMutation,
 } from "#/store/slices/api";
-import {
-    commentsAdapter,
-    commentsApiUtils,
-    repliesAdapter,
-} from "#/store/slices/comments";
 import { fetchedComments, updateFetchStatus } from "#/store/slices/fetches";
 import { markVideoCommentsDisabled } from "#/store/slices/videos";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
@@ -27,22 +22,22 @@ export const FetchCommentsAction = ({ videoId }: FetchVideosActionProps) => {
     };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
-        dispatch(
-            commentsApiUtils.updateQueryData(
-                "listCommentsByVideoId",
-                videoId,
-                (draft) => {
-                    const comments = event.items.map((comment) => ({
-                        ...comment,
-                        replies: repliesAdapter.addMany(
-                            repliesAdapter.getInitialState(),
-                            comment.replies,
-                        ),
-                    }));
-                    commentsAdapter.addMany(draft, comments);
-                },
-            ),
-        );
+        // dispatch(
+        //     commentsApiUtils.updateQueryData(
+        //         "listCommentsByVideoId",
+        //         videoId,
+        //         (draft) => {
+        //             const comments = event.items.map((comment) => ({
+        //                 ...comment,
+        //                 replies: repliesAdapter.addMany(
+        //                     repliesAdapter.getInitialState(),
+        //                     comment.replies,
+        //                 ),
+        //             }));
+        //             commentsAdapter.addMany(draft, comments);
+        //         },
+        //     ),
+        // );
         dispatch(fetchedComments(event));
     };
 

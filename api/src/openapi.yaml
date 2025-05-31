@@ -23,14 +23,14 @@ paths:
         Lists the channel data for all the fetched channels.
       tags:
         - Channels
-      operationId: list_channels
+      operationId: listChannels
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "schemas/channels/list-channels-response.yaml"
+                $ref: ./schemas/channels/listChannels-response.yaml
 
   /api/v1/channels/{handle}:
     get:
@@ -39,7 +39,7 @@ paths:
         Gets the channel data for a single fetched channel.
       tags:
         - Channels
-      operationId: get_channel_by_handle
+      operationId: getChannelByHandle
       parameters:
         - name: handle
           description:
@@ -54,7 +54,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/channels/channel.yaml"
+                $ref: ./schemas/channels/channel.yaml
         "404":
           description:
             The requested channel was not found.
@@ -63,8 +63,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               examples:
-                notFound:
-                  $ref: "examples/channels/get-channel-by-handle-404.yaml"
+                channelNotFound:
+                  $ref: ./examples/getChannelByHandle/404-channelNotFound.yaml
 
   /api/v1/channels/{handle}/videos:
     get:
@@ -73,7 +73,7 @@ paths:
         Lists the video data for all the fetched videos for a single channel.
       tags:
         - Videos
-      operationId: list_videos_for_channel
+      operationId: listVideosForChannel
       parameters:
         - name: handle
           description:
@@ -88,7 +88,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/videos/list-videos-for-channel-response.yaml"
+                $ref: ./schemas/videos/listVideosForChannel-response.yaml
         "404":
           description:
             The requested channel was not found.
@@ -97,8 +97,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               examples:
-                notFound:
-                  $ref: "examples/videos/list-videos-for-channel-404.yaml"
+                channelNotFound:
+                  $ref: ./examples/listVideosForChannel/404-channelNotFound.yaml
 
   /api/v1/videos/{id}:
     get:
@@ -107,7 +107,7 @@ paths:
         Gets the video data for a single fetched video.
       tags:
         - Videos
-      operationId: get_video_by_id
+      operationId: getVideoById
       parameters:
         - name: id
           description:
@@ -122,7 +122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "schemas/videos/video.yaml"
+                $ref: ./schemas/videos/video.yaml
         "404":
           description:
             The requested video was not found.
@@ -131,8 +131,47 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               examples:
-                notFound:
-                  $ref: "examples/videos/get-video-by-id-404.yaml"
+                videoNotFound:
+                  $ref: ./examples/getVideoById/404-videoNotFound.yaml
+
+  /api/v1/videos/{id}/comments:
+    get:
+      summary: List comments for video
+      description:
+        Lists all the fetched comments for a single video.
+      tags:
+        - Comments
+      operationId: listCommentsForVideo
+      parameters:
+        - name: id
+          description:
+            The unique identifier for the video.
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/comments/listCommentsForVideo-response.yaml
+        "404":
+          description:
+            The requested video was not found.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                videoNotFound:
+                  $ref: ./examples/listCommentsForVideo/404-videoNotFound.yaml
 
   /api/v1/fetch:
     post:
@@ -196,31 +235,6 @@ paths:
               schema:
                 type: string
                 format: byte
-  /api/v1/videos/{videoId}/comments:
-    get:
-      tags:
-        - comment-controller
-      operationId: listByVideoId
-      parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: author
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CommentDto"
   /api/v1/notifications:
     get:
       tags:
@@ -264,7 +278,6 @@ paths:
               schema:
                 type: string
                 format: byte
-
   /api/v1/authors:
     get:
       tags:
@@ -317,6 +330,8 @@ paths:
       deprecated: true
 components:
   schemas:
+#    Channel:
+#      $ref: schemas/channels/channel.yaml
     Error:
       $ref: "schemas/error.yaml"
     FetchChannel:

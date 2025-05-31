@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,22 +59,6 @@ public class CommentService {
 
     public CommentCountView getCommentCountByVideoId(String videoId) {
         return commentRepository.countCommentsForVideoId(videoId);
-    }
-
-    public List<CommentDto> findAllByVideoId(String videoId) {
-        return commentRepository.findTopLevelCommentsByVideoId(videoId)
-                .stream()
-                .map(commentDtoMapper::fromEntity)
-                .toList();
-    }
-
-    public List<CommentDto> findAllForVideoByAuthor(String videoId, String authorHandle) {
-        return authorRepository.findByDisplayName(authorHandle)
-                .map(author -> commentRepository.findAllForVideoByAuthorId(videoId, author.getId())
-                .stream()
-                .map(commentDtoMapper::fromEntity)
-                .toList())
-                .orElse(Collections.emptyList());
     }
 
     @Deprecated(since = "1.3.0", forRemoval = true)
