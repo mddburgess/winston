@@ -13,8 +13,6 @@ properties:
       The unique identifier for the video the comment is published on.
     type: string
   author:
-    description:
-      The author of the comment.
     $ref: ../authors/author.yaml
   text:
     description:

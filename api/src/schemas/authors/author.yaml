@@ -20,8 +20,29 @@ properties:
     description:
       An URL to a thumbnail image for the author's channel.
     type: string
-#  statistics:
-#    $ref: "#/components/schemas/AuthorStatistics"
+  statistics:
+    description:
+      Statistics of the author's comment activity.
+    type: object
+    properties:
+      video_count:
+        description:
+          The number of fetched videos that the author has commented on.
+        type: integer
+        format: int32
+        minimum: 0
+      comment_count:
+        description:
+          The number of top-level comments across all fetched videos that were published by the author.
+        type: integer
+        format: int32
+        minimum: 0
+      reply_count:
+        description:
+          The number of replies to comments across all fetched videos that were published by the author.
+        type: integer
+        format: int32
+        minimum: 0
 required:
   - id
   - display_name

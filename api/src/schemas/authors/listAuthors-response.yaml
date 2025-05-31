@@ -1,0 +1,13 @@
+title: ListAuthorsResponse
+description:
+  The response for the list authors endpoint.
+type: object
+properties:
+  authors:
+    description:
+      A list of all the authors.
+    type: array
+    items:
+      $ref: ./author.yaml
+required:
+  - channels
