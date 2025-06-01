@@ -27,4 +27,11 @@ public class VideoDataService {
         return videoRepository.findChannelVideoById(id)
                 .map(videoMapper::toVideo);
     }
+
+    public List<Video> getVideosForAuthor(String authorHandle) {
+        return videoRepository.findAllChannelVideosByAuthorDisplayName(authorHandle)
+                .stream()
+                .map(videoMapper::toVideo)
+                .toList();
+    }
 }

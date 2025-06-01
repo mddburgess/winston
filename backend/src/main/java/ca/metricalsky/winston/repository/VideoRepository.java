@@ -47,4 +47,14 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String> {
             WHERE v.id = :videoId
             """)
     Optional<ChannelVideoView> findChannelVideoById(String videoId);
+
+    @Query("""
+            SELECT DISTINCT ch AS channel, v AS video
+            FROM ChannelEntity ch
+                JOIN VideoEntity v ON ch.id = v.channelId
+                JOIN CommentEntity co ON v.id = co.videoId
+            WHERE co.author.displayName = :authorDisplayName
+            """)
+    @EntityGraph(attributePaths = "comments")
+    List<ChannelVideoView> findAllChannelVideosByAuthorDisplayName(String authorDisplayName);
 }

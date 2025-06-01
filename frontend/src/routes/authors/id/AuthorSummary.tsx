@@ -1,4 +1,4 @@
-import { groupBy } from "lodash";
+import { groupBy, sortedUniqBy } from "lodash";
 import { useContext } from "react";
 import {
     Accordion,
@@ -11,26 +11,24 @@ import {
 } from "react-bootstrap";
 import { CommentList } from "#/components/comments/CommentList";
 import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
-import type {
-    AuthorHandleProps,
-    ChannelListProps,
-    ChannelProps,
-    VideoListProps,
-    VideoProps,
-} from "#/types";
+import type { Author, GetAuthorByHandleResp, Video } from "#/api";
 
-type AuthorChannelSummaryProps = ChannelProps &
-    VideoListProps &
-    AuthorHandleProps;
-type AuthorSummaryProps = ChannelListProps & VideoListProps & AuthorHandleProps;
+type AuthorChannelSummaryProps = {
+    author: Author;
+    channel: Video["channel"];
+    videos: Video[];
+};
 
-type Props = VideoProps & AuthorHandleProps;
+type AccordionProps = {
+    author: Author;
+    video: Video;
+};
 
-const AccordionContent = ({ video, authorHandle }: Props) => {
+const AccordionContent = ({ author, video }: AccordionProps) => {
     const { activeEventKey } = useContext(AccordionContext);
     const isCurrentEventKey = activeEventKey === video.id;
     return isCurrentEventKey ? (
-        <AuthorCommentsQuery video={video} authorHandle={authorHandle}>
+        <AuthorCommentsQuery author={author} video={video}>
             {{
                 isLoading: () => <small>Loading...</small>,
                 isSuccess: (comments) => <CommentList comments={comments} />,
@@ -42,9 +40,9 @@ const AccordionContent = ({ video, authorHandle }: Props) => {
 };
 
 const AuthorChannelSummary = ({
+    author,
     channel,
     videos,
-    authorHandle,
 }: AuthorChannelSummaryProps) => (
     <>
         <h4>{channel.title}</h4>
@@ -53,10 +51,7 @@ const AuthorChannelSummary = ({
                 <AccordionItem key={video.id} eventKey={video.id}>
                     <AccordionHeader>{video.title}</AccordionHeader>
                     <AccordionBody>
-                        <AccordionContent
-                            video={video}
-                            authorHandle={authorHandle}
-                        />
+                        <AccordionContent author={author} video={video} />
                     </AccordionBody>
                 </AccordionItem>
             ))}
@@ -64,21 +59,21 @@ const AuthorChannelSummary = ({
     </>
 );
 
-export const AuthorSummary = ({
-    channels,
-    videos,
-    authorHandle,
-}: AuthorSummaryProps) => {
-    const channelVideos = groupBy(videos, (video) => video.channelId);
+export const AuthorSummary = ({ author, videos }: GetAuthorByHandleResp) => {
+    const channels = sortedUniqBy(
+        videos.map((video) => video.channel),
+        (channel) => channel.title,
+    );
+    const channelVideos = groupBy(videos, (video) => video.channel.handle);
     return (
         <Row>
             <Col>
                 {channels.map((channel) => (
                     <AuthorChannelSummary
-                        key={channel.id}
+                        key={channel.handle}
+                        author={author}
                         channel={channel}
-                        videos={channelVideos[channel.id]}
-                        authorHandle={authorHandle}
+                        videos={channelVideos[channel.handle]}
                     />
                 ))}
             </Col>

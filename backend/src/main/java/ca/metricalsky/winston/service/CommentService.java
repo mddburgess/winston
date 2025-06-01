@@ -1,6 +1,5 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.view.CommentCountView;

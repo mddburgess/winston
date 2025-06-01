@@ -1,13 +1,5 @@
-import type { Author } from "#/types";
-
 const api = {
     v1: {
-        authors: {
-            get: () => `/api/v1/authors`,
-            handle: {
-                get: (handle: string) => `/api/v1/authors/${handle}`,
-            },
-        },
         fetch: {
             post: () => `/api/v1/fetch`,
             limits: {
@@ -16,13 +8,6 @@ const api = {
         },
         notifications: {
             get: () => `/api/v1/notifications`,
-        },
-    },
-    v2: {
-        authors: {
-            handle: {
-                get: (handle: string) => `/api/v2/authors/${handle}`,
-            },
         },
     },
 };

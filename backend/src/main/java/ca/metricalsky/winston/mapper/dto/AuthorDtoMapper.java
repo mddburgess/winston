@@ -2,7 +2,6 @@ package ca.metricalsky.winston.mapper.dto;
 
 import ca.metricalsky.winston.dto.author.AuthorDto;
 import ca.metricalsky.winston.entity.AuthorEntity;
-import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -27,12 +26,6 @@ public abstract class AuthorDtoMapper {
         mapToAuthorDto(author, authorDto);
         return authorDto;
     }
-
-    @Mapping(target = ".", source = "author")
-    @Mapping(target = "displayName", source = "author", qualifiedByName = "mapDisplayName")
-    @Mapping(target = "profileImageUrl", source = "author", qualifiedByName = "mapProfileImageUrl")
-    @Mapping(target = "statistics", source = ".")
-    public abstract AuthorDto toAuthorDto(AuthorDetailsView authorDetails);
 
     @Mapping(target = "displayName", source = ".", qualifiedByName = "mapDisplayName")
     @Mapping(target = "profileImageUrl", source = ".", qualifiedByName = "mapProfileImageUrl")

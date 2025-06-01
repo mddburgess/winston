@@ -189,6 +189,40 @@ paths:
               schema:
                 $ref: ./schemas/authors/listAuthors-response.yaml
 
+  /api/v1/authors/{handle}:
+    get:
+      summary: Get author by handle
+      description:
+        Gets the author summary data for a single author.
+      tags:
+        - Authors
+      operationId: getAuthorByHandle
+      parameters:
+        - name: handle
+          description:
+            The unique channel handle used in the author's channel URL.
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/getAuthorByHandle-response.yaml
+        "404":
+          description:
+            The requested author was not found.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                notFound:
+                  $ref: ./examples/getAuthorByHandle/404-authorNotFound.yaml
+
   /api/v1/fetch:
     post:
       tags:
@@ -208,30 +242,10 @@ paths:
               $ref: "#/components/schemas/FetchRequest"
         required: true
       responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/SseEmitter"
-  /api/v2/authors/{authorHandle}:
-    get:
-      tags:
-        - author-controller
-      operationId: findAuthorSummary
-      parameters:
-        - name: authorHandle
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/AuthorSummaryResponse"
+        "202":
+          description:
+            The fetch request was accepted for processing.
+
   /api/v1/videos/{videoId}/thumbnail:
     get:
       tags:
@@ -260,9 +274,12 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            text/event-stream:
               schema:
-                $ref: "#/components/schemas/SseEmitter"
+                type: array
+                format: event-stream
+                items:
+                  type: string
   /api/v1/fetch/limits:
     get:
       tags:
@@ -369,25 +386,6 @@ components:
             - RANGE
         range:
           $ref: "#/components/schemas/FetchRange"
-    SseEmitter:
-      type: object
-      properties:
-        timeout:
-          type: integer
-          format: int64
-    AuthorSummaryResponse:
-      type: object
-      properties:
-        author:
-          $ref: "./schemas/authors/author.yaml"
-        channels:
-          type: array
-          items:
-            $ref: "./schemas/channels/channel.yaml"
-        videos:
-          type: array
-          items:
-            $ref: "./schemas/videos/video.yaml"
     FetchLimitsResponse:
       type: object
       properties:
@@ -397,3 +395,5 @@ components:
 tags:
   - name: Channels
   - name: Videos
+  - name: Comments
+  - name: Authors

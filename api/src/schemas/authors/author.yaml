@@ -43,8 +43,12 @@ properties:
         type: integer
         format: int32
         minimum: 0
+    required:
+      - video_count
+      - comment_count
+      - reply_count
 required:
   - id
-  - display_name
   - handle
+  - channel_url
   - profile_image_url

@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: GetAuthorByHandleResponse
+description:
+  The response for the get author by handle endpoint.
+type: object
+properties:
+  author:
+    $ref: "./author.yaml"
+  videos:
+    description:
+      The list of videos the author has commented on.
+    type: array
+    items:
+      $ref: "../videos/video.yaml"
+required:
+  - author
+  - videos

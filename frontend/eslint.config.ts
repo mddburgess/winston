@@ -1,5 +1,6 @@
 import javascript from "@eslint/js";
 import vitestPlugin from "@vitest/eslint-plugin";
+import { globalIgnores } from "eslint/config";
 import importPlugin from "eslint-plugin-import";
 import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
@@ -9,7 +10,7 @@ import viteConfig from "./vite.config";
 
 export default typescript.config(
     {
-        files: ["**/*.{ts,tsx}"],
+        files: ["src/**/*.{ts,tsx}"],
         languageOptions: {
             globals: globals.browser,
         },
@@ -154,4 +155,5 @@ export default typescript.config(
             },
         },
     },
+    globalIgnores(["eslint.config.ts", "src/api/index.ts"]),
 );
