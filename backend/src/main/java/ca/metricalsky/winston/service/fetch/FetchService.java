@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;

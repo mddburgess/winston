@@ -1,18 +1,12 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.dto.fetch.FetchChannel;
-import ca.metricalsky.winston.dto.fetch.FetchComments;
-import ca.metricalsky.winston.dto.fetch.FetchReplies;
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
-import ca.metricalsky.winston.dto.fetch.FetchVideos;
+import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.ChannelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,65 +27,56 @@ public class FetchRequestMapper {
     }
 
     private FetchOperationEntity toFetchOperation(FetchRequest fetchRequest) {
-        if (fetchRequest.getChannel() != null) {
-            return channelRequest(fetchRequest.getChannel());
-        }
-        if (fetchRequest.getVideos() != null) {
-            return videosRequest(fetchRequest.getVideos());
-        }
-        if (fetchRequest.getComments() != null) {
-            return commentsRequest(fetchRequest.getComments());
-        }
-        if (fetchRequest.getReplies() != null) {
-            return repliesRequest(fetchRequest.getReplies());
-        }
-        throw new AppException(HttpStatus.BAD_REQUEST, "The request is syntactically invalid and cannot be processed.");
+        return switch (fetchRequest.getFetch()) {
+            case CHANNEL -> channelRequest(fetchRequest);
+            case VIDEOS -> videosRequest(fetchRequest);
+            case COMMENTS -> commentsRequest(fetchRequest);
+            case REPLIES -> repliesRequest(fetchRequest);
+            default -> throw new IllegalStateException("Unexpected value: " + fetchRequest.getFetch());
+        };
     }
 
-    private FetchOperationEntity channelRequest(FetchChannel fetchChannel) {
+    private FetchOperationEntity channelRequest(FetchRequest fetchRequest) {
         return FetchOperationEntity.builder()
                 .operationType(Type.CHANNELS)
-                .objectId(fetchChannel.getHandle())
+                .objectId(fetchRequest.getChannelHandle())
                 .build();
     }
 
-    private FetchOperationEntity videosRequest(FetchVideos fetchVideos) {
-        channelService.requireChannelExists(fetchVideos.getChannelId());
+    private FetchOperationEntity videosRequest(FetchRequest fetchRequest) {
+        channelService.requireChannelExists(fetchRequest.getChannelId());
 
         var builder = FetchOperationEntity.builder()
                 .operationType(Type.VIDEOS)
-                .objectId(fetchVideos.getChannelId())
-                .mode(fetchVideos.getFetch().toString());
+                .objectId(fetchRequest.getChannelId())
+                .mode(fetchRequest.getRange() != null ? fetchRequest.getRange().name() : null);
 
-        if (fetchVideos.getFetch() == FetchVideos.Mode.LATEST) {
-            var publishedAfter = videoRepository.findLastPublishedAtForChannelId(fetchVideos.getChannelId())
+        if (fetchRequest.getRange() == FetchRequest.RangeEnum.LATEST) {
+            var publishedAfter = videoRepository.findLastPublishedAtForChannelId(fetchRequest.getChannelId())
                     .map(date -> date.plusSeconds(1))
                     .orElse(null);
             builder.publishedAfter(publishedAfter);
-        } else if (fetchVideos.getRange() != null) {
-            builder.publishedAfter(fetchVideos.getRange().getAfter())
-                    .publishedBefore(fetchVideos.getRange().getBefore());
         }
 
         return builder.build();
     }
 
-    private FetchOperationEntity commentsRequest(FetchComments fetchComments) {
+    private FetchOperationEntity commentsRequest(FetchRequest fetchRequest) {
         return FetchOperationEntity.builder()
                 .operationType(Type.COMMENTS)
-                .objectId(fetchComments.getVideoId())
+                .objectId(fetchRequest.getVideoId())
                 .build();
     }
 
-    private FetchOperationEntity repliesRequest(FetchReplies fetchReplies) {
+    private FetchOperationEntity repliesRequest(FetchRequest fetchRequest) {
         var builder = FetchOperationEntity.builder()
                 .operationType(Type.REPLIES);
 
-        if (isNotBlank(fetchReplies.getCommentId())) {
-            builder.objectId(fetchReplies.getCommentId())
+        if (isNotBlank(fetchRequest.getCommentId())) {
+            builder.objectId(fetchRequest.getCommentId())
                     .mode("FOR_COMMENT");
-        } else if (isNotBlank(fetchReplies.getVideoId())) {
-            builder.objectId(fetchReplies.getVideoId())
+        } else if (isNotBlank(fetchRequest.getVideoId())) {
+            builder.objectId(fetchRequest.getVideoId())
                     .mode("FOR_VIDEO");
         }
 

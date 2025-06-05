@@ -226,12 +226,12 @@ paths:
   /api/v1/fetch:
     post:
       tags:
-        - fetch-controller
+        - Fetch
       operationId: fetch
       parameters:
         - name: X-Notify-Subscription
           in: header
-          required: false
+          required: true
           schema:
             type: string
             format: uuid
@@ -239,7 +239,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FetchRequest"
+              $ref: ./schemas/fetch/fetch-request.yaml
+
         required: true
       responses:
         "202":
@@ -336,64 +337,16 @@ components:
   schemas:
     Error:
       $ref: "schemas/error.yaml"
-    FetchChannel:
-      type: object
-      properties:
-        handle:
-          type: string
-    FetchComments:
-      type: object
-      properties:
-        videoId:
-          type: string
-    FetchRange:
-      type: object
-      properties:
-        after:
-          type: string
-          format: date-time
-        before:
-          type: string
-          format: date-time
-    FetchReplies:
-      type: object
-      properties:
-        videoId:
-          type: string
-        commentId:
-          type: string
-    FetchRequest:
-      type: object
-      properties:
-        channel:
-          $ref: "#/components/schemas/FetchChannel"
-        videos:
-          $ref: "#/components/schemas/FetchVideos"
-        comments:
-          $ref: "#/components/schemas/FetchComments"
-        replies:
-          $ref: "#/components/schemas/FetchReplies"
-    FetchVideos:
-      type: object
-      properties:
-        channelId:
-          type: string
-        fetch:
-          type: string
-          enum:
-            - ALL
-            - LATEST
-            - RANGE
-        range:
-          $ref: "#/components/schemas/FetchRange"
     FetchLimitsResponse:
       type: object
       properties:
         remainingQuota:
           type: integer
           format: int32
+
 tags:
   - name: Channels
   - name: Videos
   - name: Comments
   - name: Authors
+  - name: Fetch

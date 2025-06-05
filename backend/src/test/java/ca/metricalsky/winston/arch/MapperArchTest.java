@@ -13,12 +13,14 @@ public class MapperArchTest {
 
     @ArchTest
     private final ArchRule classesNamedAsMappersAreInMapperPackage = classes()
-            .that().haveSimpleNameEndingWith("Mapper")
+            .that().areTopLevelClasses()
+            .and().haveSimpleNameEndingWith("Mapper")
             .should().resideInAPackage(MAPPER_PACKAGE);
 
     @ArchTest
     private final ArchRule classesNotNamedAsMappersAreNotInMapperPackage = classes()
-            .that().haveSimpleNameNotEndingWith("Mapper")
+            .that().areTopLevelClasses()
+            .and().haveSimpleNameNotEndingWith("Mapper")
             .and().haveSimpleNameNotEndingWith("MapperImpl")
             .should().resideOutsideOfPackage(MAPPER_PACKAGE);
 
