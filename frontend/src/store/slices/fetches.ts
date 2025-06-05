@@ -27,7 +27,7 @@ const initialState: FetchStates = {
 
 type FetchVideosRequest = {
     channelId: string;
-    mode: "ALL" | "LATEST";
+    mode: "all" | "latest";
 };
 
 type UpdateFetchStatus = {
@@ -38,7 +38,7 @@ type UpdateFetchStatus = {
 
 export type FetchState = {
     id: string;
-    mode?: "ALL" | "LATEST";
+    mode?: "all" | "latest";
     status: "READY" | "REQUESTED" | "FETCHING" | "COMPLETED" | "FAILED";
     count: number;
 };

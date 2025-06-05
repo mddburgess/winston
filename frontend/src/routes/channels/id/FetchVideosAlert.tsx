@@ -38,7 +38,7 @@ const FetchAvailableBody = ({ channel }: ChannelProps) => {
                             dispatch(
                                 requestedVideosForChannelId({
                                     channelId: channel.id,
-                                    mode: "LATEST",
+                                    mode: "latest",
                                 }),
                             )
                         }
@@ -54,7 +54,7 @@ const FetchAvailableBody = ({ channel }: ChannelProps) => {
                                 dispatch(
                                     requestedVideosForChannelId({
                                         channelId: channel.id,
-                                        mode: "ALL",
+                                        mode: "all",
                                     }),
                                 )
                             }
@@ -88,7 +88,7 @@ const FetchRequestedBody = ({ channel, fetchState }: AlertBodyProps) => {
                     Fetching...
                     <FetchVideosAction
                         channel={channel}
-                        mode={fetchState.mode ?? "LATEST"}
+                        mode={fetchState.mode ?? "latest"}
                     />
                 </Button>
             </Col>

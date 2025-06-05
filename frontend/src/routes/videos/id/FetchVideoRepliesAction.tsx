@@ -1,10 +1,8 @@
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchRepliesByVideoIdMutation,
-} from "#/store/slices/api";
+import { invalidateFetchLimits } from "#/store/slices/api";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
@@ -15,11 +13,17 @@ type FetchRepliesActionProps = {
 export const FetchVideoRepliesAction = ({
     videoId,
 }: FetchRepliesActionProps) => {
-    const [fetchRepliesByVideoId] = useFetchRepliesByVideoIdMutation();
+    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchRepliesByVideoId({ subscriptionId, videoId });
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "replies",
+                video_id: videoId,
+            },
+        });
     };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {

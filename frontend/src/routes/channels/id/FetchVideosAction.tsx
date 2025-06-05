@@ -1,31 +1,32 @@
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchVideosByChannelIdMutation,
-} from "#/store/slices/api";
+import { invalidateFetchLimits } from "#/store/slices/api";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
 import type { Channel } from "#/api";
 import type { FetchStatusEvent, FetchVideosEvent } from "#/types";
 
 type FetchVideosWidgetProps = {
     channel: Channel;
-    mode: "ALL" | "LATEST";
+    mode: "all" | "latest";
 };
 
 export const FetchVideosAction = ({
     channel,
     mode,
 }: FetchVideosWidgetProps) => {
-    const [fetchVideosByChannelId] = useFetchVideosByChannelIdMutation();
+    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchVideosByChannelId({
-            subscriptionId,
-            channelId: channel.handle,
-            mode,
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "videos",
+                channel_handle: channel.handle,
+                range: mode,
+            },
         });
     };
 

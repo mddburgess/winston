@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router";
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchChannelByHandleMutation,
-} from "#/store/slices/api";
+import { invalidateFetchLimits } from "#/store/slices/api";
 import { appendChannels } from "#/store/slices/channels";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import { routes } from "#/utils/links";
@@ -21,10 +19,16 @@ export const FetchChannelAction = ({
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const [fetchChannelsByHandle] = useFetchChannelByHandleMutation();
+    const [fetch] = useFetchMutation();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchChannelsByHandle({ subscriptionId, channelHandle });
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "channel",
+                channel_handle: channelHandle,
+            },
+        });
     };
 
     const handleDataEvent = (event: FetchChannelEvent) => {

@@ -1,10 +1,8 @@
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchRepliesByCommentIdMutation,
-} from "#/store/slices/api";
+import { invalidateFetchLimits } from "#/store/slices/api";
 import { fetchedReplies, updateFetchStatus } from "#/store/slices/fetches";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
@@ -13,11 +11,17 @@ type FetchRepliesActionProps = {
 };
 
 export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
-    const [fetchRepliesByCommentId] = useFetchRepliesByCommentIdMutation();
+    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchRepliesByCommentId({ subscriptionId, commentId });
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "replies",
+                comment_id: commentId,
+            },
+        });
     };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
