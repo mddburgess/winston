@@ -225,6 +225,7 @@ paths:
 
   /api/v1/fetch:
     post:
+      summary: Fetch
       tags:
         - Fetch
       operationId: fetch
@@ -246,6 +247,22 @@ paths:
         "202":
           description:
             The fetch request was accepted for processing.
+
+  /api/v1/fetch/limits:
+    get:
+      summary: Get fetch limits
+      description:
+        Gets the limits on calling the fetch API.
+      tags:
+        - Fetch
+      operationId: getFetchLimits
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/fetch/fetch-limits-response.yaml
 
   /api/v1/videos/{videoId}/thumbnail:
     get:
@@ -281,18 +298,6 @@ paths:
                 format: event-stream
                 items:
                   type: string
-  /api/v1/fetch/limits:
-    get:
-      tags:
-        - fetch-controller
-      operationId: getFetchLimits
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/FetchLimitsResponse"
   /api/v1/channels/{channelId}/thumbnail:
     get:
       tags:
@@ -337,12 +342,6 @@ components:
   schemas:
     Error:
       $ref: "schemas/error.yaml"
-    FetchLimitsResponse:
-      type: object
-      properties:
-        remainingQuota:
-          type: integer
-          format: int32
 
 tags:
   - name: Channels

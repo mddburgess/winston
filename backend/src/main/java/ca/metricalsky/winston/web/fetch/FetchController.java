@@ -1,13 +1,12 @@
 package ca.metricalsky.winston.web.fetch;
 
 import ca.metricalsky.winston.api.FetchApi;
+import ca.metricalsky.winston.api.model.FetchLimitsResponse;
 import ca.metricalsky.winston.api.model.FetchRequest;
-import ca.metricalsky.winston.dto.fetch.FetchLimitsResponse;
 import ca.metricalsky.winston.service.NotificationsService;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -28,9 +27,12 @@ public class FetchController implements FetchApi {
         return ResponseEntity.accepted().build();
     }
 
-    @GetMapping("/limits")
-    public FetchLimitsResponse getFetchLimits() {
+    @Override
+    public ResponseEntity<FetchLimitsResponse> getFetchLimits() {
         var remainingQuota = fetchService.getRemainingQuota();
-        return new FetchLimitsResponse(remainingQuota);
+        var response = new FetchLimitsResponse()
+                .remainingQuota(remainingQuota);
+
+        return ResponseEntity.ok(response);
     }
 }

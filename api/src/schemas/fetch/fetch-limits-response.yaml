@@ -1,0 +1,11 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: FetchLimitsResponse
+type: object
+properties:
+  remainingQuota:
+    description:
+      The remaining daily quota available to use on fetch requests.
+    type: integer
+    format: int32
+    minimum: 0
+    maximum: 10000
