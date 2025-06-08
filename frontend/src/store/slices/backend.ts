@@ -1,10 +1,5 @@
 import { backendApi } from "#/api";
-import type {
-    Channel,
-    Comment,
-    ListCommentsForVideoResponse,
-    Video,
-} from "#/api";
+import type { Channel, Comment, ListCommentsResponse, Video } from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 import type {
     DefinitionsFromApi,
@@ -20,30 +15,30 @@ type ListChannelsDefinition = OverrideResultType<
     EntityState<Channel, string>
 >;
 
-type ListVideosForChannelDefinition = OverrideResultType<
-    Definitions["listVideosForChannel"],
+type ListVideosDefinition = OverrideResultType<
+    Definitions["listVideos"],
     EntityState<Video, string>
 >;
 
 type TopLevelComment = Omit<
-    ListCommentsForVideoResponse["comments"][number],
+    ListCommentsResponse["comments"][number],
     "replies"
 > & {
     replies: EntityState<Comment, string>;
 };
 
-type ListCommentsForVideoDefinition = OverrideResultType<
-    Definitions["listCommentsForVideo"],
+type ListCommentsDefinition = OverrideResultType<
+    Definitions["listComments"],
     EntityState<TopLevelComment, string>
 >;
 
 type UpdatedDefinitions = Omit<
     Definitions,
-    "listChannels" | "listVideosForChannel"
+    "listChannels" | "listVideos" | "listComments"
 > & {
     listChannels: ListChannelsDefinition;
-    listVideosForChannel: ListVideosForChannelDefinition;
-    listCommentsForVideo: ListCommentsForVideoDefinition;
+    listVideos: ListVideosDefinition;
+    listComments: ListCommentsDefinition;
 };
 
 const enhancedBackendApi = backendApi.enhanceEndpoints<

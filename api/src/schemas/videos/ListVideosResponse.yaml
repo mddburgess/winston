@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-title: ListVideosForChannelResponse
+title: List Videos Response
 description: The response for the list videos for channel endpoint.
 type: object
 required:
@@ -13,4 +13,4 @@ properties:
     description: A list of all the videos for the channel.
     type: array
     items:
-      $ref: ./video.yaml
+      $ref: ./Video.yaml

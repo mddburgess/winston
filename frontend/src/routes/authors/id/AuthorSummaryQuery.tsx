@@ -1,17 +1,17 @@
-import { useGetAuthorByHandleQuery } from "#/api";
-import type { GetAuthorByHandleResponse } from "#/api";
+import { useGetAuthorQuery } from "#/api";
+import type { GetAuthorResponse } from "#/api";
 import type { ReactNode } from "react";
 
 type Props = {
     authorHandle: string;
     children: {
         isLoading?: () => ReactNode;
-        isSuccess: (summary: GetAuthorByHandleResponse) => ReactNode;
+        isSuccess: (summary: GetAuthorResponse) => ReactNode;
     };
 };
 
 export const AuthorSummaryQuery = ({ authorHandle, children }: Props) => {
-    const { isLoading, isSuccess, data } = useGetAuthorByHandleQuery({
+    const { isLoading, isSuccess, data } = useGetAuthorQuery({
         handle: authorHandle,
     });
 

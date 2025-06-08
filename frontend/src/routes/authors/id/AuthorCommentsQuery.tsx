@@ -1,6 +1,6 @@
 import {
     selectAllTopLevelComments,
-    useListCommentsForVideoQuery,
+    useListCommentsQuery,
 } from "#/store/slices/comments";
 import type { Author, Video } from "#/api";
 import type { TopLevelComment } from "#/store/slices/backend";
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const AuthorCommentsQuery = ({ author, video, children }: Props) => {
-    const { isLoading, isSuccess, data } = useListCommentsForVideoQuery({
+    const { isLoading, isSuccess, data } = useListCommentsQuery({
         id: video.id,
         author: author.handle,
     });

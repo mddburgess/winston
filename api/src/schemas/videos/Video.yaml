@@ -22,13 +22,13 @@ properties:
     type: string
   channel:
     description: The channel that published the video.
-    $ref: ../channels/channel-summary.yaml
+    $ref: ../channels/ChannelSummary.yaml
   thumbnail_url:
     description: A URL to a thumbnail image for the video.
     type: string
     format: uri-reference
   comments:
-    $ref: ./video-comments.yaml
+    $ref: ./VideoComments.yaml
   published_at:
     description: The timestamp of when the video was published.
     type: string

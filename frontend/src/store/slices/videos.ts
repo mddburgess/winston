@@ -2,13 +2,13 @@ import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import { descBy } from "#/utils";
-import type { ListVideosForChannelResponse, Video } from "#/api";
+import type { ListVideosResponse, Video } from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 
 const videosApi = enhancedBackendApi.enhanceEndpoints({
     endpoints: {
-        listVideosForChannel: {
-            transformResponse: (response: ListVideosForChannelResponse) =>
+        listVideos: {
+            transformResponse: (response: ListVideosResponse) =>
                 videosAdapter.addMany(
                     videosAdapter.getInitialState(),
                     response.videos,
@@ -17,7 +17,7 @@ const videosApi = enhancedBackendApi.enhanceEndpoints({
     },
 });
 
-const { useListVideosForChannelQuery, useGetVideoByIdQuery } = videosApi;
+const { useListVideosQuery, useGetVideoQuery } = videosApi;
 
 const videosAdapter = createEntityAdapter<Video>({
     sortComparer: descBy((video) =>
@@ -27,9 +27,9 @@ const videosAdapter = createEntityAdapter<Video>({
 
 const { selectAll: selectAllVideos } = videosAdapter.getSelectors();
 
-const appendVideosForChannel = (channelHandle: string, videos: Video[]) =>
+const appendVideos = (channelHandle: string, videos: Video[]) =>
     videosApi.util.updateQueryData(
-        "listVideosForChannel",
+        "listVideos",
         { handle: channelHandle },
         (draft: EntityState<Video, string>) => {
             videosAdapter.setMany(draft, videos);
@@ -38,7 +38,7 @@ const appendVideosForChannel = (channelHandle: string, videos: Video[]) =>
 
 const markVideoCommentsDisabled = (videoId: string) =>
     videosApi.util.updateQueryData(
-        "getVideoById",
+        "getVideo",
         { id: videoId },
         (draft: Video) => {
             draft.comments = {
@@ -52,9 +52,9 @@ const markVideoCommentsDisabled = (videoId: string) =>
     );
 
 export {
-    appendVideosForChannel,
+    appendVideos,
     markVideoCommentsDisabled,
     selectAllVideos,
-    useGetVideoByIdQuery,
-    useListVideosForChannelQuery,
+    useGetVideoQuery,
+    useListVideosQuery,
 };

@@ -28,7 +28,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/channels/listChannels-response.yaml
+                $ref: ./schemas/channels/ListChannelsResponse.yaml
+              examples:
+                Channel list:
+                  $ref: ./examples/listChannels/200-channelList.yaml
+                Empty channel list:
+                  $ref: ./examples/listChannels/200-emptyChannelList.yaml
 
   /api/v1/channels/{handle}:
     get:
@@ -36,7 +41,7 @@ paths:
       description: Gets the channel data for a single fetched channel.
       tags:
         - Channels
-      operationId: getChannelByHandle
+      operationId: getChannel
       parameters:
         - $ref: "#/components/parameters/channelHandle"
       responses:
@@ -45,17 +50,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/channels/channel.yaml
+                $ref: ./schemas/channels/Channel.yaml
+              examples:
+                Channel:
+                  $ref: ./examples/getChannel/200-channel.yaml
         "404":
           $ref: "#/components/responses/404-channelNotFound"
 
   /api/v1/channels/{handle}/videos:
     get:
-      summary: List videos for channel
+      summary: List videos
       description: Lists the video data for all the fetched videos for a single channel.
       tags:
         - Videos
-      operationId: listVideosForChannel
+      operationId: listVideos
       parameters:
         - $ref: "#/components/parameters/channelHandle"
       responses:
@@ -64,7 +72,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/videos/listVideosForChannel-response.yaml
+                $ref: ./schemas/videos/ListVideosResponse.yaml
         "404":
           $ref: "#/components/responses/404-channelNotFound"
 
@@ -74,7 +82,7 @@ paths:
       description: Gets the video data for a single fetched video.
       tags:
         - Videos
-      operationId: getVideoById
+      operationId: getVideo
       parameters:
         - $ref: "#/components/parameters/videoId"
       responses:
@@ -83,17 +91,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/videos/video.yaml
+                $ref: ./schemas/videos/Video.yaml
         "404":
           $ref: "#/components/responses/404-videoNotFound"
 
   /api/v1/videos/{id}/comments:
     get:
-      summary: List comments for video
+      summary: List comments
       description: Lists all the fetched comments for a single video.
       tags:
         - Comments
-      operationId: listCommentsForVideo
+      operationId: listComments
       parameters:
         - $ref: "#/components/parameters/videoId"
         - name: author
@@ -110,7 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/comments/listCommentsForVideo-response.yaml
+                $ref: ./schemas/comments/ListCommentsResponse.yaml
         "404":
           $ref: "#/components/responses/404-videoNotFound"
 
@@ -127,15 +135,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/authors/listAuthors-response.yaml
+                $ref: ./schemas/authors/ListAuthorsResponse.yaml
 
   /api/v1/authors/{handle}:
     get:
-      summary: Get author by handle
+      summary: Get author
       description: Gets the author summary data for a single author.
       tags:
         - Authors
-      operationId: getAuthorByHandle
+      operationId: getAuthor
       parameters:
         - $ref: "#/components/parameters/authorHandle"
       responses:
@@ -144,7 +152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/authors/getAuthorByHandle-response.yaml
+                $ref: ./schemas/authors/GetAuthorResponse.yaml
         "404":
           $ref: "#/components/responses/404-authorNotFound"
 
@@ -212,7 +220,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ./schemas/fetch/fetch-request.yaml
+              $ref: ./schemas/fetch/FetchRequest.yaml
 
         required: true
       responses:
@@ -232,7 +240,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ./schemas/fetch/fetch-limits-response.yaml
+                $ref: ./schemas/fetch/FetchLimitsResponse.yaml
 
   /api/v1/notifications:
     get:
@@ -255,7 +263,7 @@ paths:
 components:
   schemas:
     Problem:
-      $ref: schemas/problem.yaml
+      $ref: schemas/Problem.yaml
   parameters:
     authorHandle:
       name: handle

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.VideosApi;
-import ca.metricalsky.winston.api.model.ListVideosForChannelResponse;
+import ca.metricalsky.winston.api.model.ListVideosResponse;
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
@@ -17,9 +17,9 @@ public class VideoController implements VideosApi {
     private final VideoDataService videoDataService;
 
     @Override
-    public ResponseEntity<ListVideosForChannelResponse> listVideosForChannel(String handle) {
+    public ResponseEntity<ListVideosResponse> listVideos(String handle) {
         var videos = videoDataService.getVideosForChannel(handle);
-        var response = new ListVideosForChannelResponse()
+        var response = new ListVideosResponse()
                 .channelHandle(handle)
                 .videos(videos);
 
@@ -27,7 +27,7 @@ public class VideoController implements VideosApi {
     }
 
     @Override
-    public ResponseEntity<Video> getVideoById(String id) {
+    public ResponseEntity<Video> getVideo(String id) {
         var video = videoDataService.findVideoById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested video was not found."));
 

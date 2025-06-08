@@ -1,0 +1,20 @@
+summary: Channel list
+description: The list of channels that have been fetched.
+value:
+  channels:
+    - id: MtbbyMUCmDf0OqyENPcG3Dbw
+      title: Bob Loblaw's Law Blog
+      description: Videos about laws and blogs.
+      handle: "@bobloblawslawblog"
+      thumbnail_url: /api/v1/channels/MtbbyMUCmDf0OqyENPcG3Dbw/thumbnail
+      topics:
+        - https://en.wikipedia.org/wiki/Law
+        - https://en.wikipedia.org/wiki/Blog
+      keywords:
+        - bob
+        - loblaw
+        - law
+        - blog
+      video_count: 0
+      published_at: 2005-12-19T12:34:56.789Z
+      last_fetched_at: 2025-06-08T08:12:00.000Z

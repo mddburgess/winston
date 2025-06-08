@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-title: VideoComments
+title: Video Comments
 description: Additional data related to the comments on a video.
 type: object
 required:

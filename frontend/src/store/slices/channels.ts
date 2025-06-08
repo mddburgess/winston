@@ -15,7 +15,7 @@ const channelsApi = enhancedBackendApi.enhanceEndpoints({
     },
 });
 
-const { useListChannelsQuery, useGetChannelByHandleQuery } = channelsApi;
+const { useListChannelsQuery, useGetChannelQuery } = channelsApi;
 
 const channelsAdapter = createEntityAdapter<Channel>({
     sortComparer: (a, b) => a.title.localeCompare(b.title),
@@ -35,6 +35,6 @@ const appendChannels = (channels: Channel[]) =>
 export {
     appendChannels,
     selectAllChannels,
-    useGetChannelByHandleQuery,
+    useGetChannelQuery,
     useListChannelsQuery,
 };

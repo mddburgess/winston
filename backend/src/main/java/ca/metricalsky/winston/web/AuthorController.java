@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.AuthorsApi;
-import ca.metricalsky.winston.api.model.GetAuthorByHandleResponse;
+import ca.metricalsky.winston.api.model.GetAuthorResponse;
 import ca.metricalsky.winston.api.model.ListAuthorsResponse;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
@@ -29,11 +29,11 @@ public class AuthorController implements AuthorsApi {
     }
 
     @Override
-    public ResponseEntity<GetAuthorByHandleResponse> getAuthorByHandle(String handle) {
+    public ResponseEntity<GetAuthorResponse> getAuthor(String handle) {
         var author = authorDataService.findAuthorByHandle(handle)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested author was not found."));
         var videos = videoDataService.getVideosForAuthor(handle);
-        var response = new GetAuthorByHandleResponse()
+        var response = new GetAuthorResponse()
                 .author(author)
                 .videos(videos);
 

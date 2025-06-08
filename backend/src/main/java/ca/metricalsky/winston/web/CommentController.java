@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.CommentsApi;
-import ca.metricalsky.winston.api.model.ListCommentsForVideoResponse;
+import ca.metricalsky.winston.api.model.ListCommentsResponse;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class CommentController implements CommentsApi {
     private final CommentService commentService;
 
     @Override
-    public ResponseEntity<ListCommentsForVideoResponse> listCommentsForVideo(String id, String author) {
+    public ResponseEntity<ListCommentsResponse> listComments(String id, String author) {
         var comments = commentDataService.getCommentsForVideo(id, author);
-        var response = new ListCommentsForVideoResponse()
+        var response = new ListCommentsResponse()
                 .videoId(id)
                 .comments(comments);
 

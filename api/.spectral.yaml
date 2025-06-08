@@ -11,3 +11,55 @@ rules:
   no-security-schemes-defined: off
   no-x-headers: off
   openapi-tags-alphabetical: off
+
+  example-description:
+    description: Examples should have a description.
+    severity: warn
+    given: $..examples[*]
+    then:
+      field: description
+      function: truthy
+
+  example-summary:
+    description: Examples must have a summary.
+    severity: error
+    given: $..examples[*]
+    then:
+      field: summary
+      function: truthy
+
+  # RTK Query codegen doesn't read kebab-cased operationIds and uses default values instead.
+  operation-operationId-casing:
+    description: Operation "operationId" must be camelCased.
+    severity: error
+    given: $..operationId
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+
+  requestBody-examples:
+    description: Request bodies must have an example.
+    severity: warn
+    given: $.paths..requestBody.content[*]
+    then:
+      - field: examples
+        function: truthy
+      - field: examples
+        function: length
+        functionOptions:
+          min: 1
+
+  response-examples:
+    description: Responses must have an example.
+    severity: warn
+    given:
+      - $.paths..responses[*].content[application/json]
+      - $.paths..responses[*].content[application/problem+json]
+    then:
+      - field: examples
+        function: truthy
+      - field: examples
+        function: length
+        functionOptions:
+          min: 1

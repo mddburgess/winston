@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-title: ListAuthorsResponse
+title: List Authors Response
 description: The response for the list authors endpoint.
 type: object
 required:
@@ -14,4 +14,4 @@ properties:
     description: A list of all the authors.
     type: array
     items:
-      $ref: ./author.yaml
+      $ref: ./Author.yaml

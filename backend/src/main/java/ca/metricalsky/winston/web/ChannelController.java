@@ -26,7 +26,7 @@ public class ChannelController implements ChannelsApi {
     }
 
     @Override
-    public ResponseEntity<Channel> getChannelByHandle(String handle) {
+    public ResponseEntity<Channel> getChannel(String handle) {
         var channel = channelDataService.findChannelByHandle(handle)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested channel was not found."));
 

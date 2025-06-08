@@ -9,9 +9,9 @@ import {
     selectAllReplies,
     selectAllTopLevelComments,
     selectReplyCount,
-    useListCommentsForVideoQuery,
+    useListCommentsQuery,
 } from "#/store/slices/comments";
-import { useGetVideoByIdQuery } from "#/store/slices/videos";
+import { useGetVideoQuery } from "#/store/slices/videos";
 import { sumBy } from "#/utils";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
@@ -24,9 +24,9 @@ export const VideoDetailsRoute = () => {
 
     const [search, setSearch] = useState("");
 
-    const { data: video } = useGetVideoByIdQuery({ id: videoId! });
+    const { data: video } = useGetVideoQuery({ id: videoId! });
 
-    const { isSuccess, data: comments } = useListCommentsForVideoQuery({
+    const { isSuccess, data: comments } = useListCommentsQuery({
         id: videoId!,
     });
     const commentsList = useMemo(() => {
