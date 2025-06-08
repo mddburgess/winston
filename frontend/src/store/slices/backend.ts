@@ -1,5 +1,10 @@
 import { backendApi } from "#/api";
-import type { Channel, Comment, ListCommentsForVideoResp, Video } from "#/api";
+import type {
+    Channel,
+    Comment,
+    ListCommentsForVideoResponse,
+    Video,
+} from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 import type {
     DefinitionsFromApi,
@@ -21,7 +26,7 @@ type ListVideosForChannelDefinition = OverrideResultType<
 >;
 
 type TopLevelComment = Omit<
-    ListCommentsForVideoResp["comments"][number],
+    ListCommentsForVideoResponse["comments"][number],
     "replies"
 > & {
     replies: EntityState<Comment, string>;

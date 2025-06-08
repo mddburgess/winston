@@ -2,13 +2,13 @@ import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import { descBy } from "#/utils";
-import type { ListVideosForChannelResp, Video } from "#/api";
+import type { ListVideosForChannelResponse, Video } from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 
 const videosApi = enhancedBackendApi.enhanceEndpoints({
     endpoints: {
         listVideosForChannel: {
-            transformResponse: (response: ListVideosForChannelResp) =>
+            transformResponse: (response: ListVideosForChannelResponse) =>
                 videosAdapter.addMany(
                     videosAdapter.getInitialState(),
                     response.videos,

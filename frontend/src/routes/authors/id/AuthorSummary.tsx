@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { CommentList } from "#/components/comments/CommentList";
 import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
-import type { Author, GetAuthorByHandleResp, Video } from "#/api";
+import type { Author, GetAuthorByHandleResponse, Video } from "#/api";
 
 type AuthorChannelSummaryProps = {
     author: Author;
@@ -59,7 +59,10 @@ const AuthorChannelSummary = ({
     </>
 );
 
-export const AuthorSummary = ({ author, videos }: GetAuthorByHandleResp) => {
+export const AuthorSummary = ({
+    author,
+    videos,
+}: GetAuthorByHandleResponse) => {
     const channels = sortedUniqBy(
         videos.map((video) => video.channel),
         (channel) => channel.title,
