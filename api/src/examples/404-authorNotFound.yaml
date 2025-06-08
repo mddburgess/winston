@@ -1,6 +1,5 @@
 summary: Author not found
-description:
-  The requested author was not found.
+description: The requested author was not found.
 value:
   type: about:blank
   title: Not Found

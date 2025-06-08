@@ -1,14 +1,12 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: ListChannelsResponse
-description:
-  The response for the list channels endpoint.
+description: The response for the list channels endpoint.
 type: object
+required:
+  - channels
 properties:
   channels:
-    description:
-      A list of all the channels.
+    description: A list of all the channels.
     type: array
     items:
       $ref: ./channel.yaml
-required:
-  - channels

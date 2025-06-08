@@ -1,6 +1,5 @@
 summary: Video not found
-description:
-  The requested video was not found.
+description: The requested video was not found.
 value:
   type: about:blank
   title: Not Found

@@ -2,8 +2,7 @@ openapi: 3.1.1
 
 info:
   title: Winston
-  description:
-    OpenAPI specification for the Winston backend.
+  description: OpenAPI specification for the Winston backend.
   contact:
     name: Mike Burgess
   license:
@@ -19,8 +18,7 @@ paths:
   /api/v1/channels:
     get:
       summary: List channels
-      description:
-        Lists the channel data for all the fetched channels.
+      description: Lists the channel data for all the fetched channels.
       tags:
         - Channels
       operationId: listChannels
@@ -35,8 +33,7 @@ paths:
   /api/v1/channels/{handle}:
     get:
       summary: Get channel
-      description:
-        Gets the channel data for a single fetched channel.
+      description: Gets the channel data for a single fetched channel.
       tags:
         - Channels
       operationId: getChannelByHandle
@@ -55,8 +52,7 @@ paths:
   /api/v1/channels/{handle}/videos:
     get:
       summary: List videos for channel
-      description:
-        Lists the video data for all the fetched videos for a single channel.
+      description: Lists the video data for all the fetched videos for a single channel.
       tags:
         - Videos
       operationId: listVideosForChannel
@@ -75,8 +71,7 @@ paths:
   /api/v1/videos/{id}:
     get:
       summary: Get video
-      description:
-        Gets the video data for a single fetched video.
+      description: Gets the video data for a single fetched video.
       tags:
         - Videos
       operationId: getVideoById
@@ -95,8 +90,7 @@ paths:
   /api/v1/videos/{id}/comments:
     get:
       summary: List comments for video
-      description:
-        Lists all the fetched comments for a single video.
+      description: Lists all the fetched comments for a single video.
       tags:
         - Comments
       operationId: listCommentsForVideo
@@ -120,8 +114,7 @@ paths:
   /api/v1/authors:
     get:
       summary: List authors
-      description:
-        Lists the authors for all the fetched comments.
+      description: Lists the authors for all the fetched comments.
       tags:
         - Authors
       operationId: listAuthors
@@ -136,8 +129,7 @@ paths:
   /api/v1/authors/{handle}:
     get:
       summary: Get author by handle
-      description:
-        Gets the author summary data for a single author.
+      description: Gets the author summary data for a single author.
       tags:
         - Authors
       operationId: getAuthorByHandle
@@ -151,14 +143,12 @@ paths:
               schema:
                 $ref: ./schemas/authors/getAuthorByHandle-response.yaml
         "404":
-          $ref:
-            "#/components/responses/404-authorNotFound"
+          $ref: "#/components/responses/404-authorNotFound"
 
   /api/v1/channels/{id}/thumbnail:
     get:
       summary: Get channel thumbnail
-      description:
-        Gets the thumbnail image for a channel.
+      description: Gets the thumbnail image for a channel.
       tags:
         - Thumbnails
       operationId: getChannelThumbnail
@@ -173,8 +163,7 @@ paths:
   /api/v1/videos/{id}/thumbnail:
     get:
       summary: Get video thumbnail
-      description:
-        Gets the thumbnail image for a video.
+      description: Gets the thumbnail image for a video.
       tags:
         - Thumbnails
       operationId: getVideoThumbnail
@@ -189,8 +178,7 @@ paths:
   /api/v1/authors/{id}/thumbnail:
     get:
       summary: Get author thumbnail
-      description:
-        Gets the thumbnail image for an author.
+      description: Gets the thumbnail image for an author.
       tags:
         - Thumbnails
       operationId: getAuthorThumbnail
@@ -224,14 +212,12 @@ paths:
         required: true
       responses:
         "202":
-          description:
-            The fetch request was accepted for processing.
+          description: The fetch request was accepted for processing.
 
   /api/v1/fetch/limits:
     get:
       summary: Get fetch limits
-      description:
-        Gets the limits on calling the fetch API.
+      description: Gets the limits on calling the fetch API.
       tags:
         - Fetch
       operationId: getFetchLimits
@@ -242,7 +228,6 @@ paths:
             application/json:
               schema:
                 $ref: ./schemas/fetch/fetch-limits-response.yaml
-
 
   /api/v1/notifications:
     get:
@@ -260,50 +245,42 @@ paths:
                 items:
                   type: string
 
-
-
 components:
   schemas:
     Problem:
-      $ref: "schemas/problem.yaml"
+      $ref: schemas/problem.yaml
   parameters:
     authorHandle:
       name: handle
-      description:
-        The unique channel handle used in the author's channel URL.
+      description: The unique channel handle used in the author's channel URL.
       in: path
       required: true
       schema:
         type: string
     authorId:
       name: id
-      description:
-        The unique identifier for the author.
+      description: The unique identifier for the author.
       in: path
       required: true
       schema:
-        type:
-          string
+        type: string
     channelHandle:
       name: handle
-      description:
-        The unique channel handle used in the channel's URL.
+      description: The unique channel handle used in the channel's URL.
       in: path
       required: true
       schema:
         type: string
     channelId:
       name: id
-      description:
-        The unique identifier for the channel.
+      description: The unique identifier for the channel.
       in: path
       required: true
       schema:
         type: string
     videoId:
       name: id
-      description:
-        The unique identifier for the video.
+      description: The unique identifier for the video.
       in: path
       required: true
       schema:
@@ -314,13 +291,11 @@ components:
       content:
         image/jpeg:
           schema:
-            description:
-              The requested thumbnail image.
+            description: The requested thumbnail image.
             type: string
             format: byte
     404-authorNotFound:
-      description:
-        The requested author was not found.
+      description: The requested author was not found.
       content:
         application/problem+json:
           schema:
@@ -329,8 +304,7 @@ components:
             notFound:
               $ref: ./examples/404-authorNotFound.yaml
     404-channelNotFound:
-      description:
-        The requested channel was not found.
+      description: The requested channel was not found.
       content:
         application/problem+json:
           schema:
@@ -339,8 +313,7 @@ components:
             channelNotFound:
               $ref: ./examples/404-channelNotFound.yaml
     404-videoNotFound:
-      description:
-        The requested video was not found.
+      description: The requested video was not found.
       content:
         application/problem+json:
           schema:
@@ -349,23 +322,16 @@ components:
             videoNotFound:
               $ref: ./examples/404-videoNotFound.yaml
 
-
 tags:
   - name: Channels
-    description:
-      Endpoints to get data related to channels.
+    description: Endpoints to get data related to channels.
   - name: Videos
-    description:
-      Endpoints to get data related to videos.
+    description: Endpoints to get data related to videos.
   - name: Comments
-    description:
-      Endpoints to get data related to comments and replies.
+    description: Endpoints to get data related to comments and replies.
   - name: Authors
-    description:
-      Endpoints to get data related to comment authors.
+    description: Endpoints to get data related to comment authors.
   - name: Thumbnails
-    description:
-      Endpoints to get thumbnail images.
+    description: Endpoints to get thumbnail images.
   - name: Fetch
-    description:
-      Endpoints related to fetching data from YouTube.
+    description: Endpoints related to fetching data from YouTube.

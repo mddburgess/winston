@@ -2,11 +2,17 @@
   "name": "api",
   "version": "1.4.0-SNAPSHOT",
   "private": true,
+  "type": "module",
   "scripts": {
-    "lint": "spectral lint src/openapi.yaml"
+    "format": "prettier . --write",
+    "lint": "eslint src",
+    "validate": "spectral lint src/openapi.yaml"
   },
   "devDependencies": {
     "@apisyouwonthate/style-guide": "^1.5.0",
-    "@stoplight/spectral-cli": "^6.15.0"
+    "@stoplight/spectral-cli": "^6.15.0",
+    "eslint": "^9.28.0",
+    "eslint-plugin-yml": "^1.18.0",
+    "prettier": "^3.5.3"
   }
 }

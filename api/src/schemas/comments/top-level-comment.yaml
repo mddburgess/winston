@@ -1,10 +1,12 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: TopLevelComment
-description:
-  A top-level comment on a YouTube video.
+description: A top-level comment on a YouTube video.
 allOf:
   - $ref: ./comment.yaml
   - type: object
+    required:
+      - total_reply_count
+      - replies
     properties:
       total_reply_count:
         description:
@@ -16,6 +18,3 @@ allOf:
         type: array
         items:
           $ref: ./comment.yaml
-    required:
-      - total_reply_count
-      - replies

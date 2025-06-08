@@ -1,19 +1,16 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: ListVideosForChannelResponse
-description:
-  The response for the list videos for channel endpoint.
+description: The response for the list videos for channel endpoint.
 type: object
-properties:
-  channel_handle:
-    description:
-      The unique channel handle used in the channel's URL.
-    type: string
-  videos:
-    description:
-      A list of all the videos for the channel.
-    type: array
-    items:
-      $ref: ./video.yaml
 required:
   - channel_handle
   - videos
+properties:
+  channel_handle:
+    description: The unique channel handle used in the channel's URL.
+    type: string
+  videos:
+    description: A list of all the videos for the channel.
+    type: array
+    items:
+      $ref: ./video.yaml

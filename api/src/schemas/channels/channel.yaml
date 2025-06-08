@@ -1,61 +1,50 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Channel
-description:
-  A YouTube channel.
+description: A YouTube channel.
 type: object
-properties:
-  id:
-    description:
-      The unique identifier for the channel.
-    type: string
-  title:
-    description:
-      The channel title.
-    type: string
-  description:
-    description:
-      The channel description.
-    type: string
-  handle:
-    description:
-      The unique channel handle used in the channel's URL.
-    type: string
-  thumbnail_url:
-    description:
-      An URL to a thumbnail image for the channel.
-    type: string
-    format: uri-reference
-  topics:
-    description:
-      A list of topics associated with the channel.
-    type: array
-    items:
-      type: string
-      format: uri
-  keywords:
-    description:
-      A list of keywords associated with the channel.
-    type: array
-    items:
-      type: string
-  video_count:
-    description:
-      The number of videos that have been fetched for the channel.
-    type: integer
-    minimum: 0
-  published_at:
-    description:
-      The timestamp of when the channel was created.
-    type: string
-    format: date-time
-  last_fetched_at:
-    description:
-      The timestamp of the most recent time that the channel data was fetched.
-    type: string
-    format: date-time
 required:
   - id
   - title
   - handle
   - published_at
   - last_fetched_at
+properties:
+  id:
+    description: The unique identifier for the channel.
+    type: string
+  title:
+    description: The channel title.
+    type: string
+  description:
+    description: The channel description.
+    type: string
+  handle:
+    description: The unique channel handle used in the channel's URL.
+    type: string
+  thumbnail_url:
+    description: An URL to a thumbnail image for the channel.
+    type: string
+    format: uri-reference
+  topics:
+    description: A list of topics associated with the channel.
+    type: array
+    items:
+      type: string
+      format: uri
+  keywords:
+    description: A list of keywords associated with the channel.
+    type: array
+    items:
+      type: string
+  video_count:
+    description: The number of videos that have been fetched for the channel.
+    type: integer
+    minimum: 0
+  published_at:
+    description: The timestamp of when the channel was created.
+    type: string
+    format: date-time
+  last_fetched_at:
+    description: The timestamp of the most recent time that the channel data was fetched.
+    type: string
+    format: date-time

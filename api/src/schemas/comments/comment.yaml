@@ -1,43 +1,36 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Comment
-description:
-  A comment on a YouTube video.
+description: A comment on a YouTube video.
 type: object
-properties:
-  id:
-    description:
-      The unique identifier for the comment.
-    type: string
-  video_id:
-    description:
-      The unique identifier for the video the comment is published on.
-    type: string
-  author:
-    $ref: ../authors/author.yaml
-  text:
-    description:
-      The comment text.
-    type: string
-  published_at:
-    description:
-      The timestamp of when the comment was published.
-    type: string
-    format: date-time
-  updated_at:
-    description:
-      The timestamp of the most recent time that the comment was updated.
-    type: string
-    format: date-time
-  last_fetched_at:
-    description:
-      The timestamp of the most recent time that the comment was fetched.
-    type: string
-    format: date-time
 required:
   - id
-  - videoId
+  - video_id
   - author
   - text
   - published_at
   - updated_at
   - last_fetched_at
+properties:
+  id:
+    description: The unique identifier for the comment.
+    type: string
+  video_id:
+    description: The unique identifier for the video the comment is published on.
+    type: string
+  author:
+    $ref: ../authors/author.yaml
+  text:
+    description: The comment text.
+    type: string
+  published_at:
+    description: The timestamp of when the comment was published.
+    type: string
+    format: date-time
+  updated_at:
+    description: The timestamp of the most recent time that the comment was updated.
+    type: string
+    format: date-time
+  last_fetched_at:
+    description: The timestamp of the most recent time that the comment was fetched.
+    type: string
+    format: date-time

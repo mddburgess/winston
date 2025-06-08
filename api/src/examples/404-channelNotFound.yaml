@@ -1,6 +1,5 @@
 summary: Channel not found
-description:
-  The requested channel was not found.
+description: The requested channel was not found.
 value:
   type: about:blank
   title: Not Found

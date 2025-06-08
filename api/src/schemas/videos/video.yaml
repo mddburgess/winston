@@ -1,42 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Video
-description:
-  A YouTube video.
+description: A YouTube video.
 type: object
-properties:
-  id:
-    description:
-      The unique identifier for the video.
-    type: string
-  title:
-    description:
-      The video title.
-    type: string
-  description:
-    description:
-      The video description.
-    type: string
-  channel:
-    description:
-      The channel that published the video.
-    $ref: ../channels/channel-summary.yaml
-  thumbnail_url:
-    description:
-      A URL to a thumbnail image for the video.
-    type: string
-    format: uri-reference
-  comments:
-    $ref: ./video-comments.yaml
-  published_at:
-    description:
-      The timestamp of when the video was published.
-    type: string
-    format: date-time
-  last_fetched_at:
-    description:
-      The timestamp of the most recent time that the video data was fetched.
-    type: string
-    format: date-time
 required:
   - id
   - title
@@ -45,3 +10,30 @@ required:
   - thumbnail_url
   - published_at
   - last_fetched_at
+properties:
+  id:
+    description: The unique identifier for the video.
+    type: string
+  title:
+    description: The video title.
+    type: string
+  description:
+    description: The video description.
+    type: string
+  channel:
+    description: The channel that published the video.
+    $ref: ../channels/channel-summary.yaml
+  thumbnail_url:
+    description: A URL to a thumbnail image for the video.
+    type: string
+    format: uri-reference
+  comments:
+    $ref: ./video-comments.yaml
+  published_at:
+    description: The timestamp of when the video was published.
+    type: string
+    format: date-time
+  last_fetched_at:
+    description: The timestamp of the most recent time that the video data was fetched.
+    type: string
+    format: date-time

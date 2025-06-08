@@ -55,9 +55,19 @@ tasks {
         dependsOn("npmCheckUpdates")
     }
 
-    register<NpmTask>("validate") {
+    register<NpmTask>("format") {
         dependsOn(npmInstall)
+        npmCommand.set(listOf("run", "format"))
+    }
+
+    register<NpmTask>("lint") {
+        dependsOn("format")
         npmCommand.set(listOf("run", "lint"))
+    }
+
+    register<NpmTask>("validate") {
+        dependsOn("lint")
+        npmCommand.set(listOf("run", "validate"))
     }
 
     named("openApiGenerate") {
