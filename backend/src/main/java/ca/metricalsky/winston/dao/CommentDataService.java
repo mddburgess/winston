@@ -2,7 +2,7 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.mapper.dto.CommentMapper;
+import ca.metricalsky.winston.mappers.api.CommentMapper;
 import ca.metricalsky.winston.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

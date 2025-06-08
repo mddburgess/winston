@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.mapper.dto.VideoMapper;
+import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

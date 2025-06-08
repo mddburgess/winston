@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
-import ca.metricalsky.winston.mapper.dto.AuthorMapper;
+import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Optionals;

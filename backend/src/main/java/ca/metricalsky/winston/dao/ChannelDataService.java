@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
-import ca.metricalsky.winston.mapper.dto.ChannelMapper;
+import ca.metricalsky.winston.mappers.api.ChannelMapper;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

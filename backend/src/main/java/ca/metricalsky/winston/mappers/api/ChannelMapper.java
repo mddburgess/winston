@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.mapper.dto;
+package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.entity.ChannelEntity;
