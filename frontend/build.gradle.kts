@@ -31,7 +31,7 @@ tasks {
     }
 
     register<NpxTask>("codegenOpenApi") {
-        dependsOn(npmInstall)
+        dependsOn(npmInstall, ":api:validate")
         inputs.files(
             project(":api").fileTree("src"),
             "openapi-config.js"
