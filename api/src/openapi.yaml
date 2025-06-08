@@ -73,6 +73,11 @@ paths:
             application/json:
               schema:
                 $ref: ./schemas/videos/ListVideosResponse.yaml
+              examples:
+                Video list:
+                  $ref: ./examples/listVideos/200-videoList.yaml
+                Empty video list:
+                  $ref: ./examples/listVideos/200-emptyVideoList.yaml
         "404":
           $ref: "#/components/responses/404-channelNotFound"
 
@@ -92,6 +97,9 @@ paths:
             application/json:
               schema:
                 $ref: ./schemas/videos/Video.yaml
+              examples:
+                Video:
+                  $ref: ./examples/getVideo/200-video.yaml
         "404":
           $ref: "#/components/responses/404-videoNotFound"
 
@@ -316,7 +324,7 @@ components:
           schema:
             $ref: "#/components/schemas/Problem"
           examples:
-            notFound:
+            Author not found:
               $ref: ./examples/404-authorNotFound.yaml
     404-channelNotFound:
       description: The requested channel was not found.
@@ -325,7 +333,7 @@ components:
           schema:
             $ref: "#/components/schemas/Problem"
           examples:
-            channelNotFound:
+            Channel not found:
               $ref: ./examples/404-channelNotFound.yaml
     404-videoNotFound:
       description: The requested video was not found.
@@ -334,7 +342,7 @@ components:
           schema:
             $ref: "#/components/schemas/Problem"
           examples:
-            videoNotFound:
+            Video not found:
               $ref: ./examples/404-videoNotFound.yaml
 
 tags:

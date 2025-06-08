@@ -2,6 +2,7 @@ extends:
   - ["spectral:oas", all]
   - "@apisyouwonthate/style-guide"
   - "@stoplight/spectral-documentation"
+
 rules:
   api-health: off
   api-home: off
@@ -43,8 +44,8 @@ rules:
     severity: warn
     given: $..properties[*]
     then:
-      - field: description
-        function: truthy
+      field: description
+      function: truthy
 
   requestBody-examples:
     description: Request bodies should have an example.
