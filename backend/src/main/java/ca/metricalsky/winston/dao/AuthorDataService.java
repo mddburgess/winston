@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class AuthorDataService {
         return authorRepository.findAllAuthorDetails()
                 .stream()
                 .map(authorMapper::toAuthor)
+                .sorted(Comparator.comparing(Author::getHandle))
                 .toList();
     }
 

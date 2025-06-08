@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.dao;
 
+import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.mapper.dto.AuthorMapper;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +40,7 @@ class AuthorDataServiceTest {
 
     @Test
     void getAllAuthors() {
-        var authorDetailsView = mockAuthorDetailsView();
+        var authorDetailsView = mockAuthorDetailsView(AUTHOR_DISPLAY_NAME);
         when(authorRepository.findAllAuthorDetails())
                 .thenReturn(List.of(authorDetailsView));
 
@@ -54,7 +56,22 @@ class AuthorDataServiceTest {
     }
 
     @Test
-    void findAll_empty() {
+    void getAllAuthors_sortedByHandle() {
+        var bob = mockAuthorDetailsView("@bob");
+        var alice = mockAuthorDetailsView("@alice");
+        when(authorRepository.findAllAuthorDetails())
+                .thenReturn(List.of(bob, alice));
+
+        var authors = authorDataService.getAllAuthors();
+
+        assertThat(authors)
+                .hasSize(2)
+                .as("list should be sorted by handle")
+                .isSortedAccordingTo(Comparator.comparing(Author::getHandle));
+    }
+
+    @Test
+    void getAllAuthors_empty() {
         when(authorRepository.findAllAuthorDetails())
                 .thenReturn(List.of());
 
@@ -64,9 +81,9 @@ class AuthorDataServiceTest {
     }
 
     @Test
-    void findByHandle_foundByDisplayName() {
+    void findAuthorByHandle_foundByDisplayName() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
-                .thenReturn(Optional.of(buildAuthorEntity()));
+                .thenReturn(Optional.of(buildAuthorEntity(AUTHOR_DISPLAY_NAME)));
 
         var authorDto = authorDataService.findAuthorByHandle(AUTHOR_DISPLAY_NAME);
 
@@ -77,11 +94,11 @@ class AuthorDataServiceTest {
     }
 
     @Test
-    void findByHandle_foundByChannelUrl() {
+    void findAuthorByHandle_foundByChannelUrl() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
         when(authorRepository.findByChannelUrl(AUTHOR_CHANNEL_URL))
-                .thenReturn(Optional.of(buildAuthorEntity()));
+                .thenReturn(Optional.of(buildAuthorEntity(AUTHOR_DISPLAY_NAME)));
 
         var authorDto = authorDataService.findAuthorByHandle(AUTHOR_DISPLAY_NAME);
 
@@ -92,13 +109,13 @@ class AuthorDataServiceTest {
     }
 
     @Test
-    void findByHandle_foundById() {
+    void findAuthorByHandle_foundById() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
         when(authorRepository.findByChannelUrl(AUTHOR_CHANNEL_URL))
                 .thenReturn(Optional.empty());
         when(authorRepository.findById(AUTHOR_DISPLAY_NAME))
-                .thenReturn(Optional.of(buildAuthorEntity()));
+                .thenReturn(Optional.of(buildAuthorEntity(AUTHOR_DISPLAY_NAME)));
 
         var authorDto = authorDataService.findAuthorByHandle(AUTHOR_DISPLAY_NAME);
 
@@ -107,7 +124,7 @@ class AuthorDataServiceTest {
     }
 
     @Test
-    void findByHandle_notFound() {
+    void findAuthorByHandle_notFound() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());
         when(authorRepository.findByChannelUrl(AUTHOR_CHANNEL_URL))
@@ -120,19 +137,19 @@ class AuthorDataServiceTest {
         assertThat(authorDto).isEmpty();
     }
 
-    private static AuthorEntity buildAuthorEntity() {
+    private static AuthorEntity buildAuthorEntity(String displayName) {
         return AuthorEntity.builder()
                 .id(AUTHOR_ID)
                 .channelUrl(AUTHOR_CHANNEL_URL)
-                .displayName(AUTHOR_DISPLAY_NAME)
+                .displayName(displayName)
                 .profileImageUrl("profileImageUrl")
                 .build();
     }
 
-    private static AuthorDetailsView mockAuthorDetailsView() {
+    private static AuthorDetailsView mockAuthorDetailsView(String displayName) {
         var authorDetailsView = mock(AuthorDetailsView.class);
         lenient().when(authorDetailsView.getAuthor())
-                .thenReturn(buildAuthorEntity());
+                .thenReturn(buildAuthorEntity(displayName));
         lenient().when(authorDetailsView.getVideoCount())
                 .thenReturn(1L);
         lenient().when(authorDetailsView.getCommentCount())
