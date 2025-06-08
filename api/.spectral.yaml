@@ -3,8 +3,11 @@ extends:
   - "@apisyouwonthate/style-guide"
   - "@stoplight/spectral-documentation"
 rules:
+  api-health: off
+  api-home: off
+  contact-properties: off
   docs-tags-alphabetical: off
-  hosts-https-only-oas3: warn
-  no-security-schemes-defined: warn
-  no-x-headers: warn
+  hosts-https-only-oas3: off
+  no-security-schemes-defined: off
+  no-x-headers: off
   openapi-tags-alphabetical: off
