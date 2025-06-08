@@ -38,8 +38,16 @@ rules:
       functionOptions:
         type: camel
 
+  property-description:
+    description: Properties should have a description.
+    severity: warn
+    given: $..properties[*]
+    then:
+      - field: description
+        function: truthy
+
   requestBody-examples:
-    description: Request bodies must have an example.
+    description: Request bodies should have an example.
     severity: warn
     given: $.paths..requestBody.content[*]
     then:
@@ -51,11 +59,9 @@ rules:
           min: 1
 
   response-examples:
-    description: Responses must have an example.
+    description: Responses should have an example.
     severity: warn
-    given:
-      - $.paths..responses[*].content[application/json]
-      - $.paths..responses[*].content[application/problem+json]
+    given: $.paths..responses[*].content[?( @property.match( /^application\/(.+\+)?json$/i ) )]
     then:
       - field: examples
         function: truthy

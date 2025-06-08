@@ -15,6 +15,7 @@ allOf:
         type: integer
         format: int32
       replies:
+        description: The list of replies to the comment.
         type: array
         items:
           $ref: ./Comment.yaml
