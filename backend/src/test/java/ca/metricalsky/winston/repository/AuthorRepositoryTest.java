@@ -1,7 +1,10 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
-import org.apache.commons.lang3.RandomStringUtils;
+import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.VideoEntity;
+import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +33,11 @@ class AuthorRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        var author = new AuthorEntity();
-        author.setId(RandomStringUtils.secure().nextAlphanumeric(10));
-        author.setDisplayName(DISPLAY_NAME);
-        author.setChannelUrl(CHANNEL_URL);
-        savedAuthor = entityManager.persist(author);
+        savedAuthor = entityManager.persist(AuthorEntity.builder()
+                .id(TestUtils.randomId())
+                .displayName(DISPLAY_NAME)
+                .channelUrl(CHANNEL_URL)
+                .build());
     }
 
     @Test
@@ -67,5 +70,50 @@ class AuthorRepositoryTest {
 
         assertThat(author)
                 .isEmpty();
+    }
+
+    @Test
+    void findAllAuthorDetails() {
+        var channel = entityManager.persist(ChannelEntity.builder()
+                .id(TestUtils.randomId())
+                .build());
+        var video = entityManager.persist(VideoEntity.builder()
+                .id(TestUtils.randomId())
+                .channelId(channel.getId())
+                .build());
+        var comment = entityManager.persist(CommentEntity.builder()
+                .id(TestUtils.randomId())
+                .videoId(video.getId())
+                .author(savedAuthor)
+                .build());
+        entityManager.persist(CommentEntity.builder()
+                .id(TestUtils.randomId())
+                .videoId(video.getId())
+                .parentId(comment.getId())
+                .author(savedAuthor)
+                .build());
+
+        var authorDetailsList = repository.findAllAuthorDetails();
+
+        assertThat(authorDetailsList)
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("author", savedAuthor)
+                .hasFieldOrPropertyWithValue("videoCount", 1L)
+                .hasFieldOrPropertyWithValue("commentCount", 1L)
+                .hasFieldOrPropertyWithValue("videoCount", 1L);
+    }
+
+    @Test
+    void findAllAuthorDetails_noComments() {
+        var authorDetailsList = repository.findAllAuthorDetails();
+
+        assertThat(authorDetailsList)
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("author", savedAuthor)
+                .hasFieldOrPropertyWithValue("videoCount", 0L)
+                .hasFieldOrPropertyWithValue("commentCount", 0L)
+                .hasFieldOrPropertyWithValue("videoCount", 0L);
     }
 }

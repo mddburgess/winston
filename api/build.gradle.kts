@@ -57,6 +57,8 @@ tasks {
 
     register<NpmTask>("format") {
         dependsOn(npmInstall)
+        inputs.dir(".")
+        outputs.dir(".")
         npmCommand.set(listOf("run", "format"))
     }
 
@@ -79,6 +81,7 @@ tasks {
     }
 
     register<Copy>("copyResources") {
+        dependsOn("format")
         from("$projectDir/src")
         into(layout.buildDirectory.dir("resources/main/static/spec"))
     }

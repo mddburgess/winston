@@ -23,7 +23,7 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
                 COUNT(c.id) - COUNT(c.parentId) AS commentCount,
                 COUNT(c.parentId) AS replyCount
             FROM AuthorEntity a
-                JOIN CommentEntity c ON a.id = c.author.id
+                LEFT JOIN CommentEntity c ON a.id = c.author.id
             GROUP BY a.id
             """)
     List<AuthorDetailsView> findAllAuthorDetails();
