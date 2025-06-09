@@ -24,13 +24,6 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String> {
     List<VideoCountView> countAllByChannelId();
 
     @Query("""
-            SELECT DISTINCT v
-            FROM VideoEntity v JOIN CommentEntity c ON v.id = c.videoId
-            WHERE c.author.displayName = :authorDisplayName
-            """)
-    List<VideoEntity> findAllByCommentAuthorDisplayName(String authorDisplayName);
-
-    @Query("""
             SELECT v FROM VideoEntity v
             WHERE v.channelId = (SELECT id FROM ChannelEntity WHERE customUrl = :channelHandle)
             ORDER BY v.publishedAt DESC

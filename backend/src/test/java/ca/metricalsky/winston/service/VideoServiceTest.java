@@ -35,24 +35,6 @@ class VideoServiceTest {
     private VideoCountView videoCount;
 
     @Test
-    void countAllByChannelId() {
-        when(videoRepository.countAllByChannelId())
-                .thenReturn(List.of(videoCount));
-        when(videoCount.getChannelId())
-                .thenReturn(CHANNEL_ID);
-        when(videoCount.getVideos())
-                .thenReturn(1L);
-
-        var videoCounts = videoService.countAllByChannelId();
-
-        assertThat(videoCounts)
-                .hasSize(1)
-                .containsEntry(CHANNEL_ID, 1L);
-        assertThat(videoCounts.get("defaultValue"))
-                .isEqualTo(0L);
-    }
-
-    @Test
     void findAllByChannelHandle() {
         when(videoRepository.findAllByChannelHandle(CHANNEL_HANDLE))
                 .thenReturn(List.of(buildVideo()));

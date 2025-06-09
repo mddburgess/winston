@@ -23,20 +23,6 @@ public class VideoService {
     private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
     private final VideoRepository videoRepository;
 
-    public Map<String, Long> countAllByChannelId() {
-        var counts = videoRepository.countAllByChannelId()
-                .stream()
-                .collect(Collectors.toMap(VideoCountView::getChannelId, VideoCountView::getVideos));
-        return defaultedMap(counts, 0L);
-    }
-
-    public List<VideoDto> findAllByAuthorHandle(String authorHandle) {
-        return videoRepository.findAllByCommentAuthorDisplayName(authorHandle)
-                .stream()
-                .map(videoDtoMapper::fromEntity)
-                .toList();
-    }
-
     public List<VideoDto> findAllByChannelHandle(String channelHandle) {
         return videoRepository.findAllByChannelHandle(channelHandle)
                 .stream()

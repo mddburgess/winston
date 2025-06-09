@@ -3,6 +3,7 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.config.AppResourceResolver;
 import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.service.ChannelService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,12 @@ class ChannelControllerTest {
 
     @MockitoBean
     private ChannelDataService channelDataService;
+    @MockitoBean
+    private ChannelService channelService;
 
     @Test
-    void list() throws Exception{
-        when(channelDataService.getAllChannels())
+    void list() throws Exception {
+        when(channelService.getAllChannels())
                 .thenReturn(List.of(buildChannel()));
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(
@@ -50,7 +53,7 @@ class ChannelControllerTest {
 
     @Test
     void list_noResults() throws Exception {
-        when(channelDataService.getAllChannels())
+        when(channelService.getAllChannels())
                 .thenReturn(List.of());
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(
