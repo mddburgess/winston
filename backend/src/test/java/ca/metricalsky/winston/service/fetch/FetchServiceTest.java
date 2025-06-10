@@ -59,7 +59,7 @@ class FetchServiceTest {
         var fetchRequest = new FetchRequest();
         var fetchRequestEntity = buildFetchRequestEntity();
 
-        when(fetchRequestMapper.toFetchRequest(fetchRequest))
+        when(fetchRequestMapper.toFetchRequestEntity(fetchRequest))
                 .thenReturn(fetchRequestEntity);
         when(fetchRequestRepository.save(fetchRequestEntity))
                 .thenAnswer(returnsFirstArg());

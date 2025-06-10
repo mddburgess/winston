@@ -4,9 +4,11 @@ import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.ChannelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,30 +22,32 @@ public class FetchRequestMapper {
     private final ChannelService channelService;
     private final VideoRepository videoRepository;
 
-    public FetchRequestEntity toFetchRequest(FetchRequest fetchRequest) {
+    public FetchRequestEntity toFetchRequestEntity(FetchRequest fetchRequest) {
         return FetchRequestEntity.builder()
-                .operations(List.of(toFetchOperation(fetchRequest)))
+                .operations(List.of(toFetchOperationEntity(fetchRequest)))
                 .build();
     }
 
-    private FetchOperationEntity toFetchOperation(FetchRequest fetchRequest) {
+    private FetchOperationEntity toFetchOperationEntity(FetchRequest fetchRequest) {
+        if (fetchRequest.getFetch() == null) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "The request is syntactically invalid and cannot be processed.");
+        }
         return switch (fetchRequest.getFetch()) {
-            case CHANNEL -> channelRequest(fetchRequest);
-            case VIDEOS -> videosRequest(fetchRequest);
-            case COMMENTS -> commentsRequest(fetchRequest);
-            case REPLIES -> repliesRequest(fetchRequest);
-            default -> throw new IllegalStateException("Unexpected value: " + fetchRequest.getFetch());
+            case CHANNEL -> buildFetchChannelOperation(fetchRequest);
+            case VIDEOS -> buildFetchVideosOperation(fetchRequest);
+            case COMMENTS -> buildFetchCommentsOperation(fetchRequest);
+            case REPLIES -> buildFetchRepliesOperation(fetchRequest);
         };
     }
 
-    private FetchOperationEntity channelRequest(FetchRequest fetchRequest) {
+    private FetchOperationEntity buildFetchChannelOperation(FetchRequest fetchRequest) {
         return FetchOperationEntity.builder()
                 .operationType(Type.CHANNELS)
                 .objectId(fetchRequest.getChannelHandle())
                 .build();
     }
 
-    private FetchOperationEntity videosRequest(FetchRequest fetchRequest) {
+    private FetchOperationEntity buildFetchVideosOperation(FetchRequest fetchRequest) {
         channelService.requireChannelExists(fetchRequest.getChannelId());
 
         var builder = FetchOperationEntity.builder()
@@ -61,14 +65,14 @@ public class FetchRequestMapper {
         return builder.build();
     }
 
-    private FetchOperationEntity commentsRequest(FetchRequest fetchRequest) {
+    private FetchOperationEntity buildFetchCommentsOperation(FetchRequest fetchRequest) {
         return FetchOperationEntity.builder()
                 .operationType(Type.COMMENTS)
                 .objectId(fetchRequest.getVideoId())
                 .build();
     }
 
-    private FetchOperationEntity repliesRequest(FetchRequest fetchRequest) {
+    private FetchOperationEntity buildFetchRepliesOperation(FetchRequest fetchRequest) {
         var builder = FetchOperationEntity.builder()
                 .operationType(Type.REPLIES);
 

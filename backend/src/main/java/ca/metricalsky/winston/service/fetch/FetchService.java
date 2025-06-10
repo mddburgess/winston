@@ -29,7 +29,7 @@ public class FetchService {
     private int dailyQuota;
 
     public Long save(FetchRequest fetchRequest) {
-        var fetchRequestEntity = fetchRequestMapper.toFetchRequest(fetchRequest);
+        var fetchRequestEntity = fetchRequestMapper.toFetchRequestEntity(fetchRequest);
         fetchRequestEntity = fetchRequestRepository.save(fetchRequestEntity);
         return fetchRequestEntity.getId();
     }
