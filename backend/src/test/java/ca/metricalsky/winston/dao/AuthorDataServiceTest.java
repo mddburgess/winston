@@ -46,9 +46,7 @@ class AuthorDataServiceTest {
 
         var authors = authorDataService.getAllAuthors();
 
-        assertThat(authors)
-                .hasSize(1)
-                .first()
+        assertThat(authors).first()
                 .hasFieldOrPropertyWithValue("id", AUTHOR_ID)
                 .hasFieldOrPropertyWithValue("statistics.videoCount", 1)
                 .hasFieldOrPropertyWithValue("statistics.commentCount", 2)

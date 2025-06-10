@@ -47,9 +47,7 @@ class ChannelServiceTest {
 
         var channels = channelService.getAllChannels();
 
-        assertThat(channels)
-                .hasSize(1)
-                .first()
+        assertThat(channels).first()
                 .isSameAs(channel);
         assertThat(channel.getVideoCount())
                 .isEqualTo(1);

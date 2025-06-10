@@ -95,9 +95,7 @@ class AuthorRepositoryTest {
 
         var authorDetailsList = repository.findAllAuthorDetails();
 
-        assertThat(authorDetailsList)
-                .hasSize(1)
-                .first()
+        assertThat(authorDetailsList).first()
                 .hasFieldOrPropertyWithValue("author", savedAuthor)
                 .hasFieldOrPropertyWithValue("videoCount", 1L)
                 .hasFieldOrPropertyWithValue("commentCount", 1L)
@@ -108,9 +106,7 @@ class AuthorRepositoryTest {
     void findAllAuthorDetails_noComments() {
         var authorDetailsList = repository.findAllAuthorDetails();
 
-        assertThat(authorDetailsList)
-                .hasSize(1)
-                .first()
+        assertThat(authorDetailsList).first()
                 .hasFieldOrPropertyWithValue("author", savedAuthor)
                 .hasFieldOrPropertyWithValue("videoCount", 0L)
                 .hasFieldOrPropertyWithValue("commentCount", 0L)

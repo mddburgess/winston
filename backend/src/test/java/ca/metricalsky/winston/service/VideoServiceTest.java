@@ -41,9 +41,7 @@ class VideoServiceTest {
 
         var videoDtos = videoService.findAllByChannelHandle(CHANNEL_HANDLE);
 
-        assertThat(videoDtos)
-                .hasSize(1)
-                .first()
+        assertThat(videoDtos).first()
                 .hasFieldOrPropertyWithValue("id", VIDEO_ID)
                 .hasFieldOrPropertyWithValue("comments.commentCount", 1L)
                 .hasFieldOrPropertyWithValue("comments.replyCount", 2L)

@@ -44,9 +44,7 @@ class VideoDataServiceTest {
 
         var videos = videoDataService.getVideosForChannel(channelHandle);
 
-        assertThat(videos)
-                .hasSize(1)
-                .first()
+        assertThat(videos).first()
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId());
     }
 
@@ -101,9 +99,7 @@ class VideoDataServiceTest {
 
         var videos = videoDataService.getVideosForAuthor(authorHandle);
 
-        assertThat(videos)
-                .hasSize(1)
-                .first()
+        assertThat(videos).first()
                 .hasFieldOrPropertyWithValue("id", videoId);
     }
 

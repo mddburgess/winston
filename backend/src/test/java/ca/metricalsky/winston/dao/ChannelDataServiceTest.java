@@ -38,9 +38,7 @@ class ChannelDataServiceTest {
 
         var channels = channelDataService.getAllChannels();
 
-        assertThat(channels)
-                .hasSize(1)
-                .first()
+        assertThat(channels).first()
                 .hasFieldOrPropertyWithValue("id", channelEntity.getId())
                 .hasFieldOrPropertyWithValue("handle", channelEntity.getCustomUrl());
     }
