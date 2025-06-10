@@ -14,42 +14,45 @@ import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VideoMapperTest {
+public class VideoEntityMapperTest {
 
     private static final String PUBLISHED_AT = "2025-01-01T00:00:00.000Z";
 
-    private final VideoMapper videoMapper = new VideoMapperImpl();
+    private final VideoEntityMapper videoEntityMapper = new VideoEntityMapperImpl();
 
     @Test
-    void fromYouTube() {
-        var ytActivity = buildYouTubeActivity();
+    void toVideoEntity() {
+        var activity = buildActivity();
 
-        var video = videoMapper.fromYouTube(ytActivity);
+        var video = videoEntityMapper.toVideoEntity(activity);
 
         assertThat(video)
-                .hasFieldOrPropertyWithValue("id", ytActivity.getContentDetails().getUpload().getVideoId())
+                .hasFieldOrPropertyWithValue("id", activity.getContentDetails().getUpload().getVideoId())
                 .hasFieldOrPropertyWithValue("publishedAt", OffsetDateTime.parse(PUBLISHED_AT))
-                .hasFieldOrPropertyWithValue("channelId", ytActivity.getSnippet().getChannelId())
-                .hasFieldOrPropertyWithValue("title", ytActivity.getSnippet().getTitle())
-                .hasFieldOrPropertyWithValue("description", ytActivity.getSnippet().getDescription())
+                .hasFieldOrPropertyWithValue("channelId", activity.getSnippet().getChannelId())
+                .hasFieldOrPropertyWithValue("title", activity.getSnippet().getTitle())
+                .hasFieldOrPropertyWithValue("description", activity.getSnippet().getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl",
-                        ytActivity.getSnippet().getThumbnails().getHigh().getUrl());
+                        activity.getSnippet().getThumbnails().getHigh().getUrl());
     }
 
     @Test
-    void fromYouTube_nullActivity() {
-        assertThat(videoMapper.fromYouTube(null))
+    void toVideoEntity_nullActivity() {
+        var videoEntity = videoEntityMapper.toVideoEntity(null);
+
+        assertThat(videoEntity)
                 .isNull();
     }
 
     @Test
-    void fromYouTube_emptyActivity() {
-        assertThat(videoMapper.fromYouTube(new Activity()))
-                .isNotNull()
+    void toVideoEntity_emptyActivity() {
+        var videoEntity = videoEntityMapper.toVideoEntity(new Activity());
+
+        assertThat(videoEntity)
                 .hasAllNullFieldsOrProperties();
     }
 
-    private static Activity buildYouTubeActivity() {
+    private static Activity buildActivity() {
         var thumbnail = new Thumbnail()
                 .setUrl("channel.snippet.thumbnails.high.url");
 

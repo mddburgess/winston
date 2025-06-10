@@ -16,49 +16,53 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CommentMapperTest {
+public class CommentEntityMapperTest {
 
     private static final String PUBLISHED_AT = "2025-01-01T00:00:00.000Z";
     private static final String UPDATED_AT = "2025-01-02T00:00:00.000Z";
 
-    private final CommentMapper commentMapper = new CommentMapperImpl();
+    private final CommentEntityMapper commentEntityMapper = new CommentEntityMapperImpl();
 
     @Test
-    void fromYouTubeCommentThread() {
-        var ytCommentThread = buildYouTubeCommentThread();
+    void toCommentEntity_commentThread() {
+        var commentThread = buildCommentThread();
 
-        var comment = commentMapper.fromYouTube(ytCommentThread);
+        var comment = commentEntityMapper.toCommentEntity(commentThread);
 
-        var ytTopLevelComment = ytCommentThread.getSnippet().getTopLevelComment();
-        assertCommentProperties(comment, ytTopLevelComment);
+        var topLevelComment = commentThread.getSnippet().getTopLevelComment();
+        assertCommentProperties(comment, topLevelComment);
         assertThat(comment)
-                .hasFieldOrPropertyWithValue("totalReplyCount", ytCommentThread.getSnippet().getTotalReplyCount());
+                .hasFieldOrPropertyWithValue("totalReplyCount", commentThread.getSnippet().getTotalReplyCount());
         assertThat(comment.getReplies()).hasSize(1);
 
         var replyComment = comment.getReplies().getFirst();
-        var ytReplyComment = ytCommentThread.getReplies().getComments().getFirst();
+        var ytReplyComment = commentThread.getReplies().getComments().getFirst();
         assertCommentProperties(replyComment, ytReplyComment);
         assertThat(replyComment)
                 .hasFieldOrPropertyWithValue("parentId", ytReplyComment.getSnippet().getParentId());
     }
 
     @Test
-    void fromYouTubeCommentThread_nullCommentThread() {
-        var comment = commentMapper.fromYouTube((CommentThread) null);
-        assertThat(comment).isNull();
-    }
+    void toCommentEntity_nullCommentThread() {
+        var comment = commentEntityMapper.toCommentEntity((CommentThread) null);
 
-    @Test
-    void fromYouTubeComment_nullComment() {
-        var comment = commentMapper.fromYouTube((Comment) null);
-        assertThat(comment).isNull();
-    }
-
-    @Test
-    void fromYouTubeComment_emptyComment() {
-        var comment = commentMapper.fromYouTube(new Comment());
         assertThat(comment)
-                .isNotNull()
+                .isNull();
+    }
+
+    @Test
+    void toCommentEntity_nullComment() {
+        var comment = commentEntityMapper.toCommentEntity((Comment) null);
+
+        assertThat(comment)
+                .isNull();
+    }
+
+    @Test
+    void toCommentEntity_emptyComment() {
+        var comment = commentEntityMapper.toCommentEntity(new Comment());
+
+        assertThat(comment)
                 .hasAllNullFieldsOrProperties();
     }
 
@@ -77,13 +81,13 @@ public class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("channelUrl", expected.getSnippet().getAuthorChannelUrl());
     }
 
-    private static CommentThread buildYouTubeCommentThread() {
+    private static CommentThread buildCommentThread() {
         var snippet = new CommentThreadSnippet()
-                .setTopLevelComment(buildYouTubeTopLevelComment())
+                .setTopLevelComment(buildTopLevelComment())
                 .setTotalReplyCount(1L);
 
         var replies = new CommentThreadReplies()
-                .setComments(List.of(buildYouTubeReplyComment()));
+                .setComments(List.of(buildReplyComment()));
 
         return new CommentThread()
                 .setId("id")
@@ -91,7 +95,7 @@ public class CommentMapperTest {
                 .setReplies(replies);
     }
 
-    private static Comment buildYouTubeTopLevelComment() {
+    private static Comment buildTopLevelComment() {
         var authorChannelId = new CommentSnippetAuthorChannelId()
                 .setValue("value");
 
@@ -111,7 +115,7 @@ public class CommentMapperTest {
                 .setSnippet(snippet);
     }
 
-    private static Comment buildYouTubeReplyComment() {
+    private static Comment buildReplyComment() {
         var authorChannelId = new CommentSnippetAuthorChannelId()
                 .setValue("value");
 

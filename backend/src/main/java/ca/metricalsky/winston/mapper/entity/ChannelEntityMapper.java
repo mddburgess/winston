@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Mapper(uses = OffsetDateTimeMapper.class)
-public abstract class ChannelMapper {
+public abstract class ChannelEntityMapper {
 
     private static final Pattern KEYWORD_PATTERN = Pattern.compile("\".+?\"|[^ ]+");
 
@@ -23,16 +23,16 @@ public abstract class ChannelMapper {
     @Mapping(target = "topics", source = "topicDetails.topicCategories")
     @Mapping(target = "keywords", source = "brandingSettings.channel.keywords")
     @Mapping(target = "lastFetchedAt", ignore = true)
-    public abstract ChannelEntity fromYouTube(Channel ytChannel);
+    public abstract ChannelEntity toChannelEntity(Channel channel);
 
-    Set<String> fromYouTubeKeywords(String ytKeywords) {
-        return ytKeywords == null ? null : KEYWORD_PATTERN.matcher(ytKeywords).results()
+    Set<String> mapKeywords(String keywords) {
+        return keywords == null ? null : KEYWORD_PATTERN.matcher(keywords).results()
                 .map(MatchResult::group)
-                .map(this::trimQuotes)
+                .map(ChannelEntityMapper::trimQuotes)
                 .collect(Collectors.toSet());
     }
 
-    private String trimQuotes(String keyword) {
+    private static String trimQuotes(String keyword) {
         return keyword.startsWith("\"") && keyword.endsWith("\"")
                 ? keyword.substring(1, keyword.length() - 1)
                 : keyword;

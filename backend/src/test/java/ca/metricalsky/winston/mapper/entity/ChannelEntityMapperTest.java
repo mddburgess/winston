@@ -16,17 +16,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ChannelMapperTest {
+class ChannelEntityMapperTest {
 
     private static final String PUBLISHED_AT = "2025-01-01T00:00:00.000Z";
 
-    private final ChannelMapper channelMapper = new ChannelMapperImpl();
+    private final ChannelEntityMapper channelEntityMapper = new ChannelEntityMapperImpl();
 
     @Test
-    void fromYouTube() {
-        var ytChannel = buildYouTubeChannel();
+    void toChannelEntity() {
+        var ytChannel = buildChannel();
 
-        var channel = channelMapper.fromYouTube(ytChannel);
+        var channel = channelEntityMapper.toChannelEntity(ytChannel);
 
         assertThat(channel)
                 .hasFieldOrPropertyWithValue("id", ytChannel.getId())
@@ -36,29 +36,29 @@ class ChannelMapperTest {
                 .hasFieldOrPropertyWithValue("publishedAt", OffsetDateTime.parse(PUBLISHED_AT))
                 .hasFieldOrPropertyWithValue("thumbnailUrl",
                         ytChannel.getSnippet().getThumbnails().getHigh().getUrl());
-
         assertThat(channel.getTopics())
                 .containsOnlyOnceElementsOf(ytChannel.getTopicDetails().getTopicCategories());
-
         assertThat(channel.getKeywords())
                 .containsOnlyOnce("keyword", "long keyword");
     }
 
     @Test
-    void fromYouTube_nullChannel() {
-        var channel = channelMapper.fromYouTube(null);
-        assertThat(channel).isNull();
+    void toChannelEntity_nullChannel() {
+        var channel = channelEntityMapper.toChannelEntity(null);
+
+        assertThat(channel)
+                .isNull();
     }
 
     @Test
-    void fromYouTube_emptyChannel() {
-        var channel = channelMapper.fromYouTube(new Channel());
+    void toChannelEntity_emptyChannel() {
+        var channel = channelEntityMapper.toChannelEntity(new Channel());
+
         assertThat(channel)
-                .isNotNull()
                 .hasAllNullFieldsOrProperties();
     }
 
-    private static Channel buildYouTubeChannel() {
+    private static Channel buildChannel() {
         var thumbnail = new Thumbnail()
                 .setUrl("channel.snippet.thumbnails.high.url");
 

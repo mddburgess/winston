@@ -5,7 +5,7 @@ import ca.metricalsky.winston.dto.VideoDto;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
-import ca.metricalsky.winston.mapper.entity.VideoMapper;
+import ca.metricalsky.winston.mapper.entity.VideoEntityMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
@@ -20,7 +20,7 @@ import java.util.Comparator;
 @Service
 public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
 
-    private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
+    private final VideoEntityMapper videoEntityMapper = Mappers.getMapper(VideoEntityMapper.class);
     private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
@@ -43,7 +43,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
         var videoEntities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
-                .map(videoMapper::fromYouTube)
+                .map(videoEntityMapper::toVideoEntity)
                 .toList();
         videoRepository.saveAll(videoEntities);
         var videoDtos = videoEntities.stream()

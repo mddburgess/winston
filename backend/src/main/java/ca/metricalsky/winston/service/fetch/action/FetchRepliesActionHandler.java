@@ -4,7 +4,7 @@ import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.dto.CommentDto;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
-import ca.metricalsky.winston.mapper.entity.CommentMapper;
+import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
 import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FetchRepliesActionHandler extends FetchActionHandler<CommentDto> {
 
-    private final CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
+    private final CommentEntityMapper commentEntityMapper = Mappers.getMapper(CommentEntityMapper.class);
     private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
     private final CommentService commentService;
@@ -36,7 +36,7 @@ public class FetchRepliesActionHandler extends FetchActionHandler<CommentDto> {
         var commentListResponse = youTubeService.getReplies(fetchAction);
         var replyEntities = commentListResponse.getItems()
                 .stream()
-                .map(commentMapper::fromYouTube)
+                .map(commentEntityMapper::toCommentEntity)
                 .toList();
         commentService.findById(fetchAction.getObjectId()).ifPresent(topLevelComment -> {
             replyEntities.forEach(replyEntity -> replyEntity.setVideoId(topLevelComment.getVideoId()));

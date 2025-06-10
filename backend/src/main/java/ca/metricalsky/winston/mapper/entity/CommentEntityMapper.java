@@ -7,17 +7,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(uses = {
-        AuthorMapper.class,
+        AuthorEntityMapper.class,
         OffsetDateTimeMapper.class
 })
-public abstract class CommentMapper {
+public abstract class CommentEntityMapper {
 
-    public CommentEntity fromYouTube(CommentThread commentThread) {
+    public CommentEntity toCommentEntity(CommentThread commentThread) {
         if (commentThread == null || commentThread.getSnippet() == null) {
             return null;
         }
 
-        var comment = fromYouTube(commentThread.getSnippet().getTopLevelComment());
+        var comment = toCommentEntity(commentThread.getSnippet().getTopLevelComment());
         if (comment == null) {
             return null;
         }
@@ -27,7 +27,7 @@ public abstract class CommentMapper {
         if (commentThread.getReplies() != null && commentThread.getReplies().getComments() != null) {
             var replies = commentThread.getReplies().getComments()
                     .stream()
-                    .map(this::fromYouTube)
+                    .map(this::toCommentEntity)
                     .toList();
             comment.setReplies(replies);
         }
@@ -45,5 +45,5 @@ public abstract class CommentMapper {
     @Mapping(target = "lastFetchedAt", ignore = true)
     @Mapping(target = "totalReplyCount", ignore = true)
     @Mapping(target = "replies", ignore = true)
-    public abstract CommentEntity fromYouTube(Comment ytComment);
+    public abstract CommentEntity toCommentEntity(Comment ytComment);
 }

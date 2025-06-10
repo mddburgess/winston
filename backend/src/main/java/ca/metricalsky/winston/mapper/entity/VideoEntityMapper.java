@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(uses = OffsetDateTimeMapper.class)
-public interface VideoMapper {
+public interface VideoEntityMapper {
 
     @Mapping(target = "id", source = "contentDetails.upload.videoId")
     @Mapping(target = "channelId", source = "snippet.channelId")
@@ -16,5 +16,5 @@ public interface VideoMapper {
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "lastFetchedAt", ignore = true)
-    VideoEntity fromYouTube(Activity activity);
+    VideoEntity toVideoEntity(Activity activity);
 }
