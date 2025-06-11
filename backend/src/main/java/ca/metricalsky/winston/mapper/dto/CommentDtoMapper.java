@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Mapper(
         uses = {AuthorDtoMapper.class},
         nullValuePropertyMappingStrategy = IGNORE

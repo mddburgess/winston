@@ -10,6 +10,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Data
 public class CommentDto {
 

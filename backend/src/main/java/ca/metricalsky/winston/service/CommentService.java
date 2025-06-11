@@ -3,11 +3,9 @@ package ca.metricalsky.winston.service;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.view.CommentCountView;
-import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import org.apache.commons.collections4.ListUtils;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +17,6 @@ import java.util.Optional;
 public class CommentService {
 
     private static final CommentCountView EMPTY_COUNT = new CommentCountView.Empty();
-
-    private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
 
     private final CommentRepository commentRepository;
     private final AuthorRepository authorRepository;

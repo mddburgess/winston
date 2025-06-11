@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
 
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Mapper(nullValuePropertyMappingStrategy = IGNORE)
 public abstract class ChannelDtoMapper {
 

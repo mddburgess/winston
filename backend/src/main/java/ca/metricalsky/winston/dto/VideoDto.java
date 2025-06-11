@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Data
 public class VideoDto {
 

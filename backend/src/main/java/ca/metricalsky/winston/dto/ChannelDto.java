@@ -9,6 +9,7 @@ import java.time.ZoneOffset;
 import java.util.TreeSet;
 
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Data
 public class ChannelDto {
 

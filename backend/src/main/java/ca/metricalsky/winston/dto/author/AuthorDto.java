@@ -3,6 +3,7 @@ package ca.metricalsky.winston.dto.author;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Data
 public class AuthorDto {
 

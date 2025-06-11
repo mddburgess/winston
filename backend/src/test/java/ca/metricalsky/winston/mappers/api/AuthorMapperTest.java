@@ -1,19 +1,22 @@
 package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 
 public class AuthorMapperTest {
 
     private final AuthorMapper authorMapper = new AuthorMapperImpl();
 
     @Test
-    void toAuthor() {
+    void toAuthor_authorEntity() {
         var authorEntity = buildAuthorEntity();
 
         var author = authorMapper.toAuthor(authorEntity);
@@ -23,7 +26,8 @@ public class AuthorMapperTest {
                 .hasFieldOrPropertyWithValue("id", authorEntity.getId())
                 .hasFieldOrPropertyWithValue("handle", authorEntity.getDisplayName())
                 .hasFieldOrPropertyWithValue("channelUrl", authorEntity.getChannelUrl())
-                .hasFieldOrPropertyWithValue("profileImageUrl", "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
+                .hasFieldOrPropertyWithValue("profileImageUrl",
+                        "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
         assertThat(author.getStatistics())
                 .as("author.statistics")
                 .isNull();
@@ -43,6 +47,35 @@ public class AuthorMapperTest {
 
         assertThat(author)
                 .hasAllNullFieldsOrProperties();
+    }
+
+    @Test
+    void toAuthor_authorDetailsView() {
+        var authorDetailsView = mockAuthorDetailsView();
+        var authorEntity = authorDetailsView.getAuthor();
+
+        var author = authorMapper.toAuthor(authorDetailsView);
+
+        assertThat(author)
+                .as("author")
+                .hasFieldOrPropertyWithValue("id", authorEntity.getId())
+                .hasFieldOrPropertyWithValue("handle", authorEntity.getDisplayName())
+                .hasFieldOrPropertyWithValue("channelUrl", authorEntity.getChannelUrl())
+                .hasFieldOrPropertyWithValue("profileImageUrl",
+                        "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
+        assertThat(author.getStatistics())
+                .as("author.statistics")
+                .hasFieldOrPropertyWithValue("videoCount", 1)
+                .hasFieldOrPropertyWithValue("commentCount", 2)
+                .hasFieldOrPropertyWithValue("replyCount", 3);
+    }
+
+    @Test
+    void toAuthor_nullAuthorDetailsView() {
+        var author = authorMapper.toAuthor((AuthorDetailsView) null);
+
+        assertThat(author)
+                .isNull();
     }
 
     @ParameterizedTest
@@ -73,5 +106,18 @@ public class AuthorMapperTest {
                 .channelUrl(TestUtils.randomString())
                 .profileImageUrl(TestUtils.randomString())
                 .build();
+    }
+
+    private static AuthorDetailsView mockAuthorDetailsView() {
+        var authorDetailsView = mock(AuthorDetailsView.class);
+        lenient().when(authorDetailsView.getAuthor())
+                .thenReturn(buildAuthorEntity());
+        lenient().when(authorDetailsView.getVideoCount())
+                .thenReturn(1L);
+        lenient().when(authorDetailsView.getCommentCount())
+                .thenReturn(2L);
+        lenient().when(authorDetailsView.getReplyCount())
+                .thenReturn(3L);
+        return authorDetailsView;
     }
 }

@@ -14,6 +14,7 @@ import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
+@Deprecated(since = "1.4.0", forRemoval = true)
 @Mapper(nullValuePropertyMappingStrategy = IGNORE)
 public abstract class AuthorDtoMapper {
 
