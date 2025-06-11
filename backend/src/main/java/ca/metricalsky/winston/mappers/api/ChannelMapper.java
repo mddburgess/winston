@@ -18,7 +18,7 @@ public abstract class ChannelMapper {
     protected String getThumbnailUrl(ChannelEntity channelEntity) {
         return channelEntity.getThumbnailUrl() != null
                 ? "/api/v1/channels/" + channelEntity.getId() + "/thumbnail"
-                : "";
+                : null;
     }
 
     protected URI toURI(String uriString) {

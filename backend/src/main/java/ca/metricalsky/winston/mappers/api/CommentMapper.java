@@ -7,11 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = AuthorMapper.class)
-public abstract class CommentMapper {
+public interface CommentMapper {
 
     @Mapping(target = "text", source = "textDisplay")
-    public abstract TopLevelComment toTopLevelComment(CommentEntity comment);
+    TopLevelComment toTopLevelComment(CommentEntity comment);
 
     @Mapping(target = "text", source = "textDisplay")
-    public abstract Comment toComment(CommentEntity comment);
+    Comment toComment(CommentEntity comment);
 }

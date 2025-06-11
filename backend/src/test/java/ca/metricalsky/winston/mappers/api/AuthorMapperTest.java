@@ -19,11 +19,13 @@ public class AuthorMapperTest {
         var author = authorMapper.toAuthor(authorEntity);
 
         assertThat(author)
+                .as("author")
                 .hasFieldOrPropertyWithValue("id", authorEntity.getId())
                 .hasFieldOrPropertyWithValue("handle", authorEntity.getDisplayName())
                 .hasFieldOrPropertyWithValue("channelUrl", authorEntity.getChannelUrl())
                 .hasFieldOrPropertyWithValue("profileImageUrl", "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
         assertThat(author.getStatistics())
+                .as("author.statistics")
                 .isNull();
     }
 

@@ -1,6 +1,7 @@
 {
   "apiPackage": "ca.metricalsky.winston.api",
   "modelPackage": "ca.metricalsky.winston.api.model",
+  "containerDefaultToNull": true,
   "documentationProvider": "none",
   "exceptionHandler": false,
   "interfaceOnly": true,
