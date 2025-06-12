@@ -26,6 +26,6 @@ public abstract class VideoMapper {
     protected String getThumbnailUrl(VideoEntity videoEntity) {
         return videoEntity.getThumbnailUrl() != null
                 ? "/api/v1/videos/" + videoEntity.getId() + "/thumbnail"
-                : "";
+                : null;
     }
 }
