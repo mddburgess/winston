@@ -20,7 +20,6 @@ public class VideoDtoMapperTest {
         assertThat(videoDto)
                 .hasFieldOrPropertyWithValue("id", video.getId())
                 .hasFieldOrPropertyWithValue("channelId", video.getChannelId())
-                .hasFieldOrPropertyWithValue("channel", null)
                 .hasFieldOrPropertyWithValue("title", video.getTitle())
                 .hasFieldOrPropertyWithValue("description", video.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", "/api/v1/videos/" + video.getId() + "/thumbnail")
@@ -39,7 +38,7 @@ public class VideoDtoMapperTest {
         var videoDto = videoDtoMapper.fromEntity(new VideoEntity());
         assertThat(videoDto)
                 .isNotNull()
-                .hasNoNullFieldsOrPropertiesExcept("channelId", "channel", "comments");
+                .hasNoNullFieldsOrPropertiesExcept("channelId", "comments");
     }
 
     private static VideoEntity buildVideo() {

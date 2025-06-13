@@ -16,8 +16,6 @@ public class VideoDto {
 
     private String channelId;
 
-    private ChannelDto channel;
-
     @NonNull
     private String title = "";
 

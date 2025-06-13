@@ -1,13 +1,13 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import org.junit.jupiter.api.Test;
@@ -20,10 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -39,7 +39,7 @@ class FetchChannelActionHandlerTest {
     @Mock
     private FetchActionService fetchActionService;
     @Mock
-    private ChannelRepository channelRepository;
+    private ChannelDataService channelDataService;
     @Mock
     private YouTubeService youTubeService;
     @Mock
@@ -53,25 +53,34 @@ class FetchChannelActionHandlerTest {
                 .actionType(Type.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();
-        var channelListResponse = new ChannelListResponse();
-        channelListResponse.setItems(List.of(new com.google.api.services.youtube.model.Channel()));
-
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
+
+        var channelListResponse = new ChannelListResponse();
+        channelListResponse.setItems(List.of(new com.google.api.services.youtube.model.Channel()));
         when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
+        var channel = new Channel();
+        when(channelDataService.saveChannel(channelListResponse))
+                .thenReturn(Optional.of(channel));
+
         var nextFetchAction = fetchChannelActionHandler.fetch(fetchAction, ssePublisher);
 
-        assertThat(nextFetchAction).isNull();
+        assertThat(nextFetchAction)
+                .as("nextFetchAction")
+                .isNull();
 
-        verify(channelRepository).save(any(ChannelEntity.class));
         verify(fetchActionService).actionSuccessful(fetchAction, channelListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
-                .hasFieldOrPropertyWithValue("objectId", CHANNEL_HANDLE);
-        assertThat(fetchDataEvent.getValue().items()).hasSize(channelListResponse.getItems().size());
+                .as("fetchDataEvent")
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId());
+        assertThat(fetchDataEvent.getValue().items())
+                .as("fetchDataEvent.items")
+                .hasSize(1)
+                .first().isEqualTo(channel);
     }
 
     @Test
@@ -80,12 +89,15 @@ class FetchChannelActionHandlerTest {
                 .actionType(Type.CHANNELS)
                 .objectId(CHANNEL_HANDLE)
                 .build();
-        var channelListResponse = new ChannelListResponse();
-
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
+
+        var channelListResponse = new ChannelListResponse();
         when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
+
+        when(channelDataService.saveChannel(channelListResponse))
+                .thenReturn(Optional.empty());
 
         var appException = catchThrowableOfType(AppException.class,
                 () -> fetchChannelActionHandler.fetch(fetchAction, ssePublisher));

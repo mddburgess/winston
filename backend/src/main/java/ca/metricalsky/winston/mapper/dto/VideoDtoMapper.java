@@ -23,7 +23,6 @@ public abstract class VideoDtoMapper {
     }
 
     @Mapping(target = "thumbnailUrl", source = ".")
-    @Mapping(target = "channel", ignore = true)
     abstract void mapToVideoDto(VideoEntity video, @MappingTarget VideoDto videoDto);
 
     String getThumbnailUrl(VideoEntity video) {
