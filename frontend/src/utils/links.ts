@@ -1,17 +1,3 @@
-const api = {
-    v1: {
-        fetch: {
-            post: () => `/api/v1/fetch`,
-            limits: {
-                get: () => `/api/v1/fetch/limits`,
-            },
-        },
-        notifications: {
-            get: () => `/api/v1/notifications`,
-        },
-    },
-};
-
 const routes = {
     home: `/`,
     authors: {
@@ -28,4 +14,4 @@ const routes = {
     },
 };
 
-export { api, routes };
+export { routes };
