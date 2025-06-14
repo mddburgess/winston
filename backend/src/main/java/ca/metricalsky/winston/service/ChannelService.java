@@ -1,54 +1,33 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.dto.ChannelDto;
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.mapper.dto.ChannelDtoMapper;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ChannelService {
 
-    private final ChannelDtoMapper channelDtoMapper = Mappers.getMapper(ChannelDtoMapper.class);
+    private final ChannelDataService channelDataService;
     private final ChannelRepository channelRepository;
-    private final VideoService videoService;
+    private final VideoDataService videoDataService;
 
-    public List<ChannelDto> findAll() {
-        var channels = channelRepository.findAll();
-        return populateVideoCounts(channels);
-    }
+    public List<Channel> getAllChannels() {
+        var channels = channelDataService.getAllChannels();
+        var videoCounts = videoDataService.countAllVideosByChannelId();
 
-    public List<ChannelDto> findAllById(Iterable<String> channelIds) {
-        var channels = channelRepository.findAllById(channelIds);
-        return populateVideoCounts(channels);
-    }
-
-    private List<ChannelDto> populateVideoCounts(List<ChannelEntity> channels) {
-        var videoCounts = videoService.countAllByChannelId();
         return channels.stream()
-                .map(channelDtoMapper::fromEntity)
-                .peek(channelDto -> channelDto.setVideoCount(videoCounts.get(channelDto.getId())))
-                .sorted(Comparator.comparing(ChannelDto::getTitle))
+                .map(channel -> channel.videoCount(videoCounts.get(channel.getId())))
+                .sorted(Comparator.comparing(Channel::getTitle))
                 .toList();
-    }
-
-    public Optional<ChannelDto> findById(String channelId) {
-        return channelRepository.findById(channelId)
-                .map(channelDtoMapper::fromEntity);
-    }
-
-    public Optional<ChannelDto> findByHandle(String channelHandle) {
-        return channelRepository.findByCustomUrl(channelHandle)
-                .map(channelDtoMapper::fromEntity);
     }
 
     public void requireChannelExists(String channelId) {

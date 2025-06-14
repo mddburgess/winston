@@ -1,0 +1,16 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: List Comments Response
+description: The response for the list comments for video endpoint.
+type: object
+required:
+  - video_id
+  - comments
+properties:
+  video_id:
+    description: The unique identifier for the video.
+    type: string
+  comments:
+    description: A list of all the comments for the video.
+    type: array
+    items:
+      $ref: ./TopLevelComment.yaml

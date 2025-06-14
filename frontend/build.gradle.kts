@@ -1,4 +1,5 @@
 import com.github.gradle.node.npm.task.NpmTask
+import com.github.gradle.node.npm.task.NpxTask
 
 plugins {
     alias(libs.plugins.node)
@@ -17,10 +18,31 @@ tasks {
     register<Delete>("clean") {
         delete("coverage")
         delete("dist")
+        delete("src/api")
+    }
+
+    register<NpxTask>("npmCheckUpdates") {
+        command.set("npm-check-updates")
+        args.add("-u")
+    }
+
+    npmInstall {
+        dependsOn("npmCheckUpdates")
+    }
+
+    register<NpxTask>("codegenOpenApi") {
+        dependsOn(npmInstall, ":api:validate")
+        inputs.files(
+            project(":api").fileTree("src"),
+            "openapi-config.js"
+        )
+        outputs.dir("src/api")
+        command.set("@rtk-query/codegen-openapi")
+        args.add("openapi-config.js")
     }
 
     register<NpmTask>("format") {
-        dependsOn(npmInstall)
+        dependsOn("codegenOpenApi")
         npmCommand.addAll("run", "format")
     }
 

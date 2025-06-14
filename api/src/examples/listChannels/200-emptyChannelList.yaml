@@ -1,0 +1,4 @@
+summary: Empty channel list
+description: Channel list is empty when no channels have been fetched.
+value:
+  channels: []

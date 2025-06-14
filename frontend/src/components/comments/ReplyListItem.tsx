@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
 import { routes } from "#/utils/links";
-import type { Comment } from "#/types";
+import type { Comment } from "#/api";
 
 type ReplyListItemProps = {
     reply: Comment;
@@ -23,14 +23,14 @@ export const ReplyListItem = ({
                 <Col xs={"auto"} className={"align-items-center d-flex"}>
                     <ReplyFill className={"me-2"} />
                     <Link
-                        to={routes.authors.details(reply.author)}
+                        to={routes.authors.details(reply.author.handle)}
                         className={"small"}
                     >
-                        {reply.author.displayName}
+                        {reply.author.handle}
                     </Link>
                 </Col>
                 <Col xs={"auto"} className={"ps-0 small"}>
-                    <Date date={reply.publishedAt} />
+                    <Date date={reply.published_at} />
                 </Col>
             </Row>
             <Row>

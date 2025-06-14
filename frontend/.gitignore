@@ -3,3 +3,4 @@ coverage/
 dist/
 node/
 node_modules/
+src/api/

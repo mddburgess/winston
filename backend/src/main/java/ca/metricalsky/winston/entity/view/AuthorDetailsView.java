@@ -6,9 +6,9 @@ public interface AuthorDetailsView {
 
     AuthorEntity getAuthor();
 
-    Long getCommentedVideos();
+    Long getVideoCount();
 
-    Long getTotalComments();
+    Long getCommentCount();
 
-    Long getTotalReplies();
+    Long getReplyCount();
 }

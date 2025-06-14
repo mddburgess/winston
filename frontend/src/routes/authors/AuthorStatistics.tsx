@@ -1,12 +1,12 @@
 import { Col } from "react-bootstrap";
 import { ChatFill, ChatQuoteFill, Youtube } from "react-bootstrap-icons";
-import type { AuthorWithStatistics } from "#/types";
+import type { Author } from "#/api";
 
-type AuthorStatisticsProps = {
-    author: AuthorWithStatistics;
+type Props = {
+    author: Author;
 };
 
-export const AuthorStatistics = ({ author }: AuthorStatisticsProps) => (
+export const AuthorStatistics = ({ author }: Props) => (
     <>
         <Col
             className={"align-items-center d-flex"}
@@ -14,7 +14,7 @@ export const AuthorStatistics = ({ author }: AuthorStatisticsProps) => (
             xs={"auto"}
         >
             <Youtube className={"me-2"} />
-            {author.statistics.commentedVideos}
+            {author.statistics?.video_count ?? 0}
         </Col>
         <Col
             className={"align-items-center d-flex"}
@@ -22,7 +22,7 @@ export const AuthorStatistics = ({ author }: AuthorStatisticsProps) => (
             xs={"auto"}
         >
             <ChatFill className={"me-2"} />
-            {author.statistics.totalComments}
+            {author.statistics?.comment_count ?? 0}
         </Col>
         <Col
             className={"align-items-center d-flex"}
@@ -30,7 +30,7 @@ export const AuthorStatistics = ({ author }: AuthorStatisticsProps) => (
             xs={"auto"}
         >
             <ChatQuoteFill className={"me-2"} />
-            {author.statistics.totalReplies}
+            {author.statistics?.reply_count ?? 0}
         </Col>
     </>
 );

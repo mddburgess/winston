@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.bundles.youtube)
     implementation(libs.datasourceProxySpringBootStarter)
     implementation(libs.mapstruct)
+    implementation(project(":api"))
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)

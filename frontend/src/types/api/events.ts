@@ -1,4 +1,6 @@
-import type { Channel, Comment, ProblemDetail, Video } from "#/types";
+import type { Channel, Video } from "#/api";
+import type { TopLevelComment } from "#/store/slices/backend";
+import type { ProblemDetail } from "#/types";
 
 type FetchDataEvent<T> = {
     objectId: string;
@@ -20,7 +22,7 @@ type SubscriptionEvent = {
 };
 
 type FetchChannelEvent = FetchDataEvent<Channel>;
-type FetchCommentsEvent = FetchDataEvent<Comment>;
+type FetchCommentsEvent = FetchDataEvent<TopLevelComment>;
 type FetchVideosEvent = FetchDataEvent<Video>;
 type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;
 

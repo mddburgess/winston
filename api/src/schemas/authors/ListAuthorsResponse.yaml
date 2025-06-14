@@ -1,0 +1,17 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: List Authors Response
+description: The response for the list authors endpoint.
+type: object
+required:
+  - results
+  - authors
+properties:
+  results:
+    description: The number of authors in the list.
+    type: integer
+    format: int32
+  authors:
+    description: A list of all the authors.
+    type: array
+    items:
+      $ref: ./Author.yaml

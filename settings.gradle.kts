@@ -1,2 +1,2 @@
 rootProject.name = "winston"
-include("backend", "frontend", "package")
+include("api", "backend", "frontend", "package")

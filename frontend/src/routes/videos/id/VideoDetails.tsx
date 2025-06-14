@@ -4,9 +4,10 @@ import { CommentCounts } from "#/components/comments/CommentCounts";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
 import { Date } from "#/components/Date";
 import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
-import type { VideoWithChannelProps } from "#/types";
+import type { Video } from "#/api";
 
-type VideoDetailsProps = VideoWithChannelProps & {
+type VideoDetailsProps = {
+    video: Video;
     commentCount: number;
     replyCount: number;
     totalReplyCount: number;
@@ -19,28 +20,28 @@ export const VideoDetails = ({
     totalReplyCount,
 }: VideoDetailsProps) => {
     const videoComments = video.comments ?? {
-        commentsDisabled: false,
-        commentCount: 0,
-        replyCount: 0,
-        totalReplyCount: 0,
-        lastFetchedAt: undefined,
+        comments_disabled: false,
+        comment_count: 0,
+        reply_count: 0,
+        total_reply_count: 0,
+        last_fetched_at: undefined,
     };
     const comments = {
-        commentsDisabled: videoComments.commentsDisabled,
-        commentCount: Math.max(videoComments.commentCount, commentCount),
-        replyCount: Math.max(videoComments.replyCount, replyCount),
+        commentsDisabled: videoComments.comments_disabled,
+        commentCount: Math.max(videoComments.comment_count, commentCount),
+        replyCount: Math.max(videoComments.reply_count, replyCount),
         totalReplyCount: Math.max(
-            videoComments.totalReplyCount,
+            videoComments.total_reply_count,
             totalReplyCount,
         ),
-        lastFetchedAt: videoComments.lastFetchedAt,
+        lastFetchedAt: videoComments.last_fetched_at,
     };
 
     return (
         <Row className={"bg-body-tertiary border mx-0 my-3 rounded-3"}>
             <Col xs={12} sm={3} className={"p-0"}>
                 <Ratio aspectRatio={"4x3"}>
-                    <Image rounded src={video.thumbnailUrl} />
+                    <Image rounded src={video.thumbnail_url} />
                 </Ratio>
             </Col>
             <Col xs={12} sm={9} className={"px-3 py-2"}>
@@ -59,11 +60,11 @@ export const VideoDetails = ({
                     </Col>
                     <Col xs={"auto"} className={"align-items-center d-flex"}>
                         <ArrowUpLeftCircleFill className={"me-2"} />
-                        <Date date={video.publishedAt} />
+                        <Date date={video.published_at} />
                     </Col>
                     <CommentCounts {...comments} />
-                    {videoComments.totalReplyCount >
-                        videoComments.replyCount && (
+                    {videoComments.total_reply_count >
+                        videoComments.reply_count && (
                         <Col xs={"auto"}>
                             <FetchVideoRepliesButton videoId={video.id} />
                         </Col>

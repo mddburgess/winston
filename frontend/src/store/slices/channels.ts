@@ -1,46 +1,40 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
-import { api } from "#/utils/links";
-import { apiSlice } from "./api";
-import type {
-    Channel,
-    ChannelDetailResponse,
-    ChannelListResponse,
-} from "#/types";
+import { enhancedBackendApi } from "#/store/slices/backend";
+import type { Channel, ListChannelsResponse } from "#/api";
 import type { EntityState } from "@reduxjs/toolkit";
 
-const channelsAdapter = createEntityAdapter<Channel>({
-    sortComparer: (first, second) => first.title.localeCompare(second.title),
-});
-
-const channelsApi = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
-        listChannels: builder.query<EntityState<Channel, string>, void>({
-            query: api.v1.channels.get,
-            transformResponse: (response: ChannelListResponse) => {
-                return channelsAdapter.addMany(
+const channelsApi = enhancedBackendApi.enhanceEndpoints({
+    endpoints: {
+        listChannels: {
+            transformResponse: (response: ListChannelsResponse) =>
+                channelsAdapter.addMany(
                     channelsAdapter.getInitialState(),
-                    response,
-                );
-            },
-        }),
-        findChannelByHandle: builder.query<ChannelDetailResponse, string>({
-            query: api.v1.channels.handle.get,
-        }),
-    }),
-    overrideExisting: "throw",
+                    response.channels,
+                ),
+        },
+    },
 });
 
-export const { useListChannelsQuery, useFindChannelByHandleQuery } =
-    channelsApi;
+const { useListChannelsQuery, useGetChannelQuery } = channelsApi;
 
-export const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
+const channelsAdapter = createEntityAdapter<Channel>({
+    sortComparer: (a, b) => a.title.localeCompare(b.title),
+});
 
-export const appendFetchedChannels = (channels: Channel[]) => {
-    return channelsApi.util.updateQueryData(
+const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
+
+const appendChannels = (channels: Channel[]) =>
+    channelsApi.util.updateQueryData(
         "listChannels",
         undefined,
-        (draft) => {
+        (draft: EntityState<Channel, string>) => {
             channelsAdapter.setMany(draft, channels);
         },
     );
+
+export {
+    appendChannels,
+    selectAllChannels,
+    useGetChannelQuery,
+    useListChannelsQuery,
 };

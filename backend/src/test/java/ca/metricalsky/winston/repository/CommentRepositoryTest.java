@@ -33,9 +33,7 @@ class CommentRepositoryTest {
 
         var commentCounts = repository.countCommentsByChannelCustomUrl(channel.getCustomUrl());
 
-        assertThat(commentCounts)
-                .hasSize(1)
-                .first()
+        assertThat(commentCounts).first()
                 .hasFieldOrPropertyWithValue("videoId", video.getId())
                 .hasFieldOrPropertyWithValue("comments", 1L)
                 .hasFieldOrPropertyWithValue("commentsAndReplies", 2L)

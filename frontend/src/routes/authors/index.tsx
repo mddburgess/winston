@@ -8,9 +8,9 @@ import {
     Row,
 } from "react-bootstrap";
 import { Link } from "react-router";
+import { useListAuthorsQuery } from "#/api";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
-import { useListAuthorsQuery } from "#/store/slices/authors";
 import { routes } from "#/utils/links";
 import { AuthorStatistics } from "./AuthorStatistics";
 
@@ -20,7 +20,7 @@ export const AuthorListRoute = () => {
     const filteredAuthors = useMemo(
         () =>
             data?.authors.filter((author) =>
-                author.displayName.toLowerCase().includes(search.toLowerCase()),
+                author.handle.toLowerCase().includes(search.toLowerCase()),
             ) ?? [],
         [data, search],
     );
@@ -71,17 +71,19 @@ export const AuthorListRoute = () => {
                                                 <Image
                                                     className={"border"}
                                                     roundedCircle
-                                                    src={author.profileImageUrl}
+                                                    src={
+                                                        author.profile_image_url
+                                                    }
                                                 />
                                             </Ratio>
                                         </Col>
                                         <Col className={"py-2"}>
                                             <Link
                                                 to={routes.authors.details(
-                                                    author,
+                                                    author.handle,
                                                 )}
                                             >
-                                                {author.displayName}
+                                                {author.handle}
                                             </Link>
                                         </Col>
                                         <AuthorStatistics author={author} />

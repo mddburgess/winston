@@ -1,18 +1,11 @@
-import { DateTime } from "luxon";
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchCommentsByVideoIdMutation,
-} from "#/store/slices/api";
-import {
-    commentsAdapter,
-    commentsApiUtils,
-    repliesAdapter,
-} from "#/store/slices/comments";
+import { invalidateFetchLimits } from "#/store/slices/api";
+import { appendComments } from "#/store/slices/comments";
 import { fetchedComments, updateFetchStatus } from "#/store/slices/fetches";
-import { videosApiUtils } from "#/store/slices/videos";
+import { markVideoCommentsDisabled } from "#/store/slices/videos";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
 type FetchVideosActionProps = {
@@ -20,30 +13,21 @@ type FetchVideosActionProps = {
 };
 
 export const FetchCommentsAction = ({ videoId }: FetchVideosActionProps) => {
-    const [fetchCommentsByVideoId] = useFetchCommentsByVideoIdMutation();
+    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchCommentsByVideoId({ subscriptionId, videoId });
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "comments",
+                video_id: videoId,
+            },
+        });
     };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
-        dispatch(
-            commentsApiUtils.updateQueryData(
-                "listCommentsByVideoId",
-                videoId,
-                (draft) => {
-                    const comments = event.items.map((comment) => ({
-                        ...comment,
-                        replies: repliesAdapter.addMany(
-                            repliesAdapter.getInitialState(),
-                            comment.replies,
-                        ),
-                    }));
-                    commentsAdapter.addMany(draft, comments);
-                },
-            ),
-        );
+        dispatch(appendComments(event.objectId, event.items));
         dispatch(fetchedComments(event));
     };
 
@@ -57,21 +41,7 @@ export const FetchCommentsAction = ({ videoId }: FetchVideosActionProps) => {
         );
         if (event.status === "FAILED") {
             if (event.error.type === "/api/problem/comments-disabled") {
-                dispatch(
-                    videosApiUtils.updateQueryData(
-                        "findVideoById",
-                        videoId,
-                        (draft) => {
-                            draft.comments = {
-                                commentsDisabled: true,
-                                commentCount: 0,
-                                replyCount: 0,
-                                totalReplyCount: 0,
-                                lastFetchedAt: DateTime.now().toISO(),
-                            };
-                        },
-                    ),
-                );
+                dispatch(markVideoCommentsDisabled(videoId));
             }
         }
         dispatch(invalidateFetchLimits());

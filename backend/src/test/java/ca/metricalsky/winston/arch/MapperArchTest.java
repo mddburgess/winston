@@ -9,18 +9,24 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 @AnalyzeMainClasses
 public class MapperArchTest {
 
+    @Deprecated
     private static final String MAPPER_PACKAGE = "..winston.mapper..";
+    private static final String MAPPERS_PACKAGE = "..winston.mappers..";
 
     @ArchTest
-    private final ArchRule classesNamedAsMappersAreInMapperPackage = classes()
-            .that().haveSimpleNameEndingWith("Mapper")
-            .should().resideInAPackage(MAPPER_PACKAGE);
+    private final ArchRule classesNamedAsMappersAreInMappersPackage = classes()
+            .that().areTopLevelClasses()
+            .and().haveSimpleNameEndingWith("Mapper")
+            .should().resideInAPackage(MAPPER_PACKAGE)
+            .orShould().resideInAPackage(MAPPERS_PACKAGE);
 
     @ArchTest
-    private final ArchRule classesNotNamedAsMappersAreNotInMapperPackage = classes()
-            .that().haveSimpleNameNotEndingWith("Mapper")
+    private final ArchRule classesNotNamedAsMappersAreNotInMappersPackage = classes()
+            .that().areTopLevelClasses()
+            .and().haveSimpleNameNotEndingWith("Mapper")
             .and().haveSimpleNameNotEndingWith("MapperImpl")
-            .should().resideOutsideOfPackage(MAPPER_PACKAGE);
+            .should().resideOutsideOfPackage(MAPPER_PACKAGE)
+            .andShould().resideOutsideOfPackage(MAPPERS_PACKAGE);
 
     @ArchTest
     private final ArchRule classesAnnotatedWithMapperAreNamedAsMappers = classes()

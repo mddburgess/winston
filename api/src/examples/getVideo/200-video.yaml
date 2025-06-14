@@ -1,0 +1,18 @@
+summary: Video
+description: The video data for the requested video.
+value:
+  id: ZgfiV2g5DPY
+  title: Laws and Blogs
+  description: An introduction to laws and blogs.
+  channel:
+    title: Bob Loblaw's Law Blog
+    handle: "@bobloblawslawblog"
+  thumbnail_url: /api/v1/videos/ZgfiV2g5DPY/thumbnail
+  comments:
+    comments_disabled: false
+    comment_count: 0
+    reply_count: 0
+    total_reply_count: 0
+    last_fetched_at: 2025-06-08T14:32:00Z
+  published_at: 2005-12-19T12:34:56Z
+  last_fetched_at: 2025-06-08T13:17:00Z

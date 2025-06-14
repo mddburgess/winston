@@ -1,36 +1,37 @@
 package ca.metricalsky.winston.web;
 
-import ca.metricalsky.winston.dto.ChannelDto;
+import ca.metricalsky.winston.api.ChannelsApi;
+import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.api.model.ListChannelsResponse;
+import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.ChannelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/channels")
-public class ChannelController {
+@RequiredArgsConstructor
+public class ChannelController implements ChannelsApi {
 
+    private final ChannelDataService channelDataService;
     private final ChannelService channelService;
 
-    @Autowired
-    public ChannelController(ChannelService channelService) {
-        this.channelService = channelService;
+    @Override
+    public ResponseEntity<ListChannelsResponse> listChannels() {
+        var channels = channelService.getAllChannels();
+        var response = new ListChannelsResponse()
+                .channels(channels);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public List<ChannelDto> list() {
-        return channelService.findAll();
-    }
+    @Override
+    public ResponseEntity<Channel> getChannel(String handle) {
+        var channel = channelDataService.findChannelByHandle(handle)
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested channel was not found."));
 
-    @GetMapping("/{channelHandle}")
-    public ChannelDto findByHandle(@PathVariable String channelHandle) {
-        return channelService.findByHandle(channelHandle).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "The requested channel was not found."));
+        return ResponseEntity.ok(channel);
     }
 }

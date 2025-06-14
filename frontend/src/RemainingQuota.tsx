@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-import { useGetFetchLimitsQuery } from "./store/slices/api";
+import { useGetFetchLimitsQuery } from "#/api";
 
 export const RemainingQuota = () => {
     const { data } = useGetFetchLimitsQuery();

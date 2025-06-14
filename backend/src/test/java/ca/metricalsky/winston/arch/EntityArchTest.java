@@ -37,14 +37,14 @@ class EntityArchTest {
 
     @ArchTest
     private final ArchRule viewClassNamesEndWithView = classes()
-            .that().resideInAPackage(VIEW_PACKAGE)
-            .and().areTopLevelClasses()
+            .that().areTopLevelClasses()
+            .and().resideInAPackage(VIEW_PACKAGE)
             .should().haveSimpleNameEndingWith("View");
 
     @ArchTest
     private final ArchRule viewClassesAreInViewPackage = classes()
-            .that().resideInAPackage(ENTITY_PACKAGE)
-            .and().areInterfaces()
+            .that().areInterfaces()
+            .and().resideInAPackage(ENTITY_PACKAGE)
             .should().resideInAPackage(VIEW_PACKAGE);
 
     @ArchTest
