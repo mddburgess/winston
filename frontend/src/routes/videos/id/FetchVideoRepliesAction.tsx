@@ -3,6 +3,7 @@ import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/api";
+import { appendReplies } from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
@@ -29,24 +30,7 @@ export const FetchVideoRepliesAction = ({
     const handleDataEvent = (event: FetchCommentsEvent) => {
         if (event.items.length > 0) {
             const commentId = event.objectId;
-            // dispatch(
-            //     commentsApiUtils.updateQueryData(
-            //         "listCommentsByVideoId",
-            //         videoId,
-            //         (draft) => {
-            //             const comment = commentsAdapter
-            //                 .getSelectors()
-            //                 .selectById(draft, commentId);
-            //             commentsAdapter.setOne(draft, {
-            //                 ...comment,
-            //                 replies: repliesAdapter.addMany(
-            //                     comment.replies,
-            //                     event.items,
-            //                 ),
-            //             });
-            //         },
-            //     ),
-            // );
+            dispatch(appendReplies(videoId, commentId, event.items));
         }
     };
 

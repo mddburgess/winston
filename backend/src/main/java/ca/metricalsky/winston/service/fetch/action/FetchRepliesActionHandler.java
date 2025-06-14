@@ -1,52 +1,37 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.dto.CommentDto;
+import ca.metricalsky.winston.api.model.Comment;
+import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
-import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
-import ca.metricalsky.winston.service.CommentService;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentListResponse;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchRepliesActionHandler extends FetchActionHandler<CommentDto> {
+public class FetchRepliesActionHandler extends FetchActionHandler<Comment> {
 
-    private final CommentEntityMapper commentEntityMapper = Mappers.getMapper(CommentEntityMapper.class);
-    private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
-
-    private final CommentService commentService;
+    private final CommentDataService commentDataService;
     private final YouTubeService youTubeService;
 
     public FetchRepliesActionHandler(
             FetchActionService fetchActionService,
-            CommentService commentService,
+            CommentDataService commentDataService,
             YouTubeService youTubeService
     ) {
         super(fetchActionService);
-        this.commentService = commentService;
+        this.commentDataService = commentDataService;
         this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<CommentDto> doFetch(FetchActionEntity fetchAction) {
+    protected FetchResult<Comment> doFetch(FetchActionEntity fetchAction) {
         var commentListResponse = youTubeService.getReplies(fetchAction);
-        var replyEntities = commentListResponse.getItems()
-                .stream()
-                .map(commentEntityMapper::toCommentEntity)
-                .toList();
-        commentService.findById(fetchAction.getObjectId()).ifPresent(topLevelComment -> {
-            replyEntities.forEach(replyEntity -> replyEntity.setVideoId(topLevelComment.getVideoId()));
-        });
-        commentService.saveAll(replyEntities);
-        var replyDtos = replyEntities.stream()
-                .map(commentDtoMapper::fromEntity)
-                .toList();
+        var replies = commentDataService.saveReplies(fetchAction.getObjectId(), commentListResponse);
         var nextFetchAction = getNextFetchAction(fetchAction, commentListResponse);
-        return new FetchResult<>(fetchAction, replyDtos, nextFetchAction);
+
+        return new FetchResult<>(fetchAction, replies, nextFetchAction);
     }
 
     private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentListResponse youTubeResponse) {

@@ -52,8 +52,32 @@ const appendComments = (videoId: string, comments: TopLevelComment[]) =>
         topLevelCommentsAdapter.addMany(draft, transformComments(comments)),
     );
 
+const appendReplies = (
+    videoId: string,
+    commentId: string,
+    replies: Comment[],
+) => {
+    return commentsApi.util.updateQueryData(
+        "listComments",
+        { id: videoId },
+        (draft) => {
+            const topLevelComment = topLevelCommentsAdapter
+                .getSelectors()
+                .selectById(draft, commentId);
+            topLevelCommentsAdapter.setOne(draft, {
+                ...topLevelComment,
+                replies: repliesAdapter.addMany(
+                    topLevelComment.replies,
+                    replies,
+                ),
+            });
+        },
+    );
+};
+
 export {
     appendComments,
+    appendReplies,
     selectAllReplies,
     selectAllTopLevelComments,
     selectReplyCount,

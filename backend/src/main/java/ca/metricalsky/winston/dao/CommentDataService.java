@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.dao;
 
+import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
@@ -7,6 +8,7 @@ import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
+import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
@@ -49,6 +51,23 @@ public class CommentDataService {
 
         return commentEntities.stream()
                 .map(commentMapper::toTopLevelComment)
+                .toList();
+    }
+
+    public List<Comment> saveReplies(String parentCommentId, CommentListResponse commentListResponse) {
+        var videoId = commentRepository.findById(parentCommentId)
+                .map(CommentEntity::getVideoId)
+                .orElse(null);
+        var replyEntities = commentListResponse.getItems()
+                .stream()
+                .map(commentEntityMapper::toCommentEntity)
+                .peek(replyEntity -> replyEntity.setVideoId(videoId))
+                .toList();
+
+        replyEntities = saveComments(replyEntities);
+
+        return replyEntities.stream()
+                .map(commentMapper::toComment)
                 .toList();
     }
 
