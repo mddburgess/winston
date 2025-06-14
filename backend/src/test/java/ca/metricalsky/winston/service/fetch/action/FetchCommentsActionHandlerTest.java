@@ -1,14 +1,14 @@
 package ca.metricalsky.winston.service.fetch.action;
 
+import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.service.YouTubeService;
+import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
-import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.VideoCommentsService;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
-import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentThread;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
 import com.google.api.services.youtube.model.CommentThreadSnippet;
@@ -25,7 +25,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -42,7 +41,7 @@ class FetchCommentsActionHandlerTest {
     @Mock
     private FetchActionService fetchActionService;
     @Mock
-    private CommentService commentService;
+    private CommentDataService commentDataService;
     @Mock
     private VideoCommentsService videoCommentsService;
     @Mock
@@ -58,27 +57,33 @@ class FetchCommentsActionHandlerTest {
                 .actionType(FetchActionEntity.Type.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
-        var commentThreadListResponse = buildCommentThreadListResponse();
-
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
+
+        var commentThreadListResponse = buildCommentThreadListResponse();
         when(youTubeService.getComments(fetchAction))
                 .thenReturn(commentThreadListResponse);
 
+        var comment = new TopLevelComment();
+        when(commentDataService.saveComments(commentThreadListResponse))
+                .thenReturn(List.of(comment));
+
         var nextFetchAction = fetchCommentsActionHandler.fetch(fetchAction, ssePublisher);
 
-        assertThat(nextFetchAction).isNull();
+        assertThat(nextFetchAction)
+                .as("nextFetchAction")
+                .isNull();
 
-        verify(commentService).saveAll(anyList());
         verify(fetchActionService).actionSuccessful(fetchAction, commentThreadListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
-                .hasFieldOrPropertyWithValue("objectId", VIDEO_ID);
+                .as("fetchDataEvent")
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId());
         assertThat(fetchDataEvent.getValue().items())
-                .hasSize(commentThreadListResponse.getItems().size())
-                .first()
-                .hasFieldOrPropertyWithValue("id", COMMENT_ID);
+                .as("fetchDataEvent.items")
+                .hasSize(1)
+                .first().isEqualTo(comment);
     }
 
     @Test
@@ -87,9 +92,9 @@ class FetchCommentsActionHandlerTest {
                 .actionType(FetchActionEntity.Type.COMMENTS)
                 .objectId(VIDEO_ID)
                 .build();
-
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
+
         when(youTubeService.getComments(fetchAction))
                 .thenThrow(new CommentsDisabledException(null));
 
@@ -112,17 +117,14 @@ class FetchCommentsActionHandlerTest {
     }
 
     private static CommentThread buildCommentThread() {
+        var comment = new com.google.api.services.youtube.model.Comment();
+        comment.setId(COMMENT_ID);
+
         var snippet = new CommentThreadSnippet();
-        snippet.setTopLevelComment(buildTopLevelComment());
+        snippet.setTopLevelComment(comment);
 
         var commentThread = new CommentThread();
         commentThread.setSnippet(snippet);
         return commentThread;
-    }
-
-    private static Comment buildTopLevelComment() {
-        var comment = new Comment();
-        comment.setId(COMMENT_ID);
-        return comment;
     }
 }

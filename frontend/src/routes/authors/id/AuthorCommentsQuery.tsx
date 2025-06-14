@@ -3,7 +3,7 @@ import {
     useListCommentsQuery,
 } from "#/store/slices/comments";
 import type { Author, Video } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
+import type { CommentState } from "#/store/slices/backend";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     video: Video;
     children: {
         isLoading?: () => ReactNode;
-        isSuccess: (summary: TopLevelComment[]) => ReactNode;
+        isSuccess: (summary: CommentState[]) => ReactNode;
     };
 };
 

@@ -20,16 +20,15 @@ type ListVideosDefinition = OverrideResultType<
     EntityState<Video, string>
 >;
 
-type TopLevelComment = Omit<
-    ListCommentsResponse["comments"][number],
-    "replies"
-> & {
+type TopLevelComment = ListCommentsResponse["comments"][number];
+
+type CommentState = Omit<TopLevelComment, "replies"> & {
     replies: EntityState<Comment, string>;
 };
 
 type ListCommentsDefinition = OverrideResultType<
     Definitions["listComments"],
-    EntityState<TopLevelComment, string>
+    EntityState<CommentState, string>
 >;
 
 type UpdatedDefinitions = Omit<
@@ -47,4 +46,4 @@ const enhancedBackendApi = backendApi.enhanceEndpoints<
 >({});
 
 export { enhancedBackendApi };
-export type { TopLevelComment };
+export type { CommentState, TopLevelComment };

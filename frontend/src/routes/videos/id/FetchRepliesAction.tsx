@@ -27,7 +27,7 @@ export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
     const handleDataEvent = (event: FetchCommentsEvent) => {
         dispatch(fetchedReplies(event));
         if (event.items.length > 0) {
-            const videoId = event.items[0].videoId;
+            const videoId = event.items[0].video_id;
             // dispatch(
             //     commentsApiUtils.updateQueryData(
             //         "listCommentsByVideoId",

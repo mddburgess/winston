@@ -9,6 +9,7 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.collections4.map.DefaultedMap.defaultedMap;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class VideoDataService {
 

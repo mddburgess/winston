@@ -1,55 +1,43 @@
 package ca.metricalsky.winston.service.fetch.action;
 
+import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.dto.CommentDto;
+import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.mapper.dto.CommentDtoMapper;
-import ca.metricalsky.winston.service.CommentService;
 import ca.metricalsky.winston.service.VideoCommentsService;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchCommentsActionHandler extends FetchActionHandler<CommentDto> {
+public class FetchCommentsActionHandler extends FetchActionHandler<TopLevelComment> {
 
-    private final CommentEntityMapper commentEntityMapper = Mappers.getMapper(CommentEntityMapper.class);
-    private final CommentDtoMapper commentDtoMapper = Mappers.getMapper(CommentDtoMapper.class);
-
-    private final CommentService commentService;
+    private final CommentDataService commentDataService;
     private final VideoCommentsService videoCommentsService;
     private final YouTubeService youTubeService;
 
     public FetchCommentsActionHandler(
             FetchActionService fetchActionService,
-            CommentService commentService,
+            CommentDataService commentDataService,
             VideoCommentsService videoCommentsService,
             YouTubeService youTubeService
     ) {
         super(fetchActionService);
-        this.commentService = commentService;
+        this.commentDataService = commentDataService;
         this.videoCommentsService = videoCommentsService;
         this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<CommentDto> doFetch(FetchActionEntity fetchAction) {
+    protected FetchResult<TopLevelComment> doFetch(FetchActionEntity fetchAction) {
         try {
             var commentThreadListResponse = youTubeService.getComments(fetchAction);
-            var commentEntities = commentThreadListResponse.getItems()
-                    .stream()
-                    .map(commentEntityMapper::toCommentEntity)
-                    .toList();
-            commentService.saveAll(commentEntities);
-            var commentDtos = commentEntities.stream()
-                    .map(commentDtoMapper::fromEntity)
-                    .toList();
+            var comments = commentDataService.saveComments(commentThreadListResponse);
             var nextFetchAction = getNextFetchAction(fetchAction, commentThreadListResponse);
-            return new FetchResult<>(fetchAction, commentDtos, nextFetchAction);
+
+            return new FetchResult<>(fetchAction, comments, nextFetchAction);
         } catch (CommentsDisabledException ex) {
             videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
             throw ex;

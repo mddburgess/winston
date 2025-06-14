@@ -79,7 +79,7 @@ class FetchVideosActionHandlerTest {
 
         assertThat(fetchDataEvent.getValue())
                 .as("fetchDataEvent")
-                .hasFieldOrPropertyWithValue("objectId", CHANNEL_ID);
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId());
         assertThat(fetchDataEvent.getValue().items())
                 .as("fetchDataEvent.items")
                 .hasSize(1)

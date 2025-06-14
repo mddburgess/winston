@@ -5,10 +5,10 @@ import { HtmlText } from "#/components/HtmlText";
 import { selectAllReplies } from "#/store/slices/comments";
 import { routes } from "#/utils/links";
 import { ReplyList } from "./ReplyList";
-import type { TopLevelComment } from "#/store/slices/backend";
+import type { CommentState } from "#/store/slices/backend";
 
 type Props = {
-    comment: TopLevelComment;
+    comment: CommentState;
     highlightAuthorId?: string;
 };
 

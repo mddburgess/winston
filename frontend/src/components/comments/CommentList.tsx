@@ -1,9 +1,9 @@
 import { ListGroup } from "react-bootstrap";
 import { CommentListItem } from "./CommentListItem";
-import type { TopLevelComment } from "#/store/slices/backend";
+import type { CommentState } from "#/store/slices/backend";
 
 type Props = {
-    comments?: TopLevelComment[];
+    comments?: CommentState[];
     highlightAuthorId?: string;
 };
 
