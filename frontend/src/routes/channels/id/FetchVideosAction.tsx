@@ -4,6 +4,7 @@ import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/api";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
+import { appendVideos } from "#/store/slices/videos";
 import type { Channel } from "#/api";
 import type { FetchStatusEvent, FetchVideosEvent } from "#/types";
 
@@ -24,14 +25,14 @@ export const FetchVideosAction = ({
             "X-Notify-Subscription": subscriptionId,
             body: {
                 fetch: "videos",
-                channel_handle: channel.handle,
+                channel_id: channel.id,
                 range: mode,
             },
         });
     };
 
     const handleDataEvent = (event: FetchVideosEvent) => {
-        // dispatch(appendVideosForChannel(channel.handle, event.items));
+        dispatch(appendVideos(channel.handle, event.items));
         dispatch(fetchedVideos(event));
     };
 
@@ -39,7 +40,7 @@ export const FetchVideosAction = ({
         dispatch(
             updateFetchStatus({
                 fetchType: "videos",
-                objectId: channel.handle,
+                objectId: channel.id,
                 status: event.status,
             }),
         );

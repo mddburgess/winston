@@ -1,5 +1,5 @@
-import type { Channel } from "#/api";
-import type { Comment, ProblemDetail, Video } from "#/types";
+import type { Channel, Video } from "#/api";
+import type { Comment, ProblemDetail } from "#/types";
 
 type FetchDataEvent<T> = {
     objectId: string;

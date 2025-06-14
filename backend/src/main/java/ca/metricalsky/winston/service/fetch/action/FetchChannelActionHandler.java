@@ -31,6 +31,7 @@ public class FetchChannelActionHandler extends FetchActionHandler<Channel> {
         var channelListResponse = youTubeService.getChannels(fetchAction);
         var channel = channelDataService.saveChannel(channelListResponse)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested channel does not exist."));
+
         return new FetchResult<>(fetchAction, channel, null);
     }
 }

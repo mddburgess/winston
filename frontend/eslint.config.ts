@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import javascript from "@eslint/js";
 import vitestPlugin from "@vitest/eslint-plugin";
 import { globalIgnores } from "eslint/config";
