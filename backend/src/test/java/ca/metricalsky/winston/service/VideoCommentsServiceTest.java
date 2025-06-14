@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
 import ca.metricalsky.winston.entity.view.CommentCountView;
+import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.repository.VideoCommentsRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,7 +33,7 @@ class VideoCommentsServiceTest {
     @Mock
     private CommentCountView commentCount;
     @Mock
-    private CommentService commentService;
+    private CommentRepository commentRepository;
     @Mock
     private VideoCommentsRepository videoCommentsRepository;
     @Captor
@@ -43,7 +44,7 @@ class VideoCommentsServiceTest {
     void updateVideoComments(String testCase, VideoCommentsEntity existingEntity) {
         when(videoCommentsRepository.findById(VIDEO_ID))
                 .thenReturn(Optional.ofNullable(existingEntity));
-        when(commentService.getCommentCountByVideoId(VIDEO_ID))
+        when(commentRepository.countCommentsForVideoId(VIDEO_ID))
                 .thenReturn(commentCount);
         when(commentCount.getComments()).thenReturn(2L);
         when(commentCount.getReplies()).thenReturn(3L);

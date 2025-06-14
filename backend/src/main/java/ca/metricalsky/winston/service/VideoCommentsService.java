@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
+import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.repository.VideoCommentsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,14 +11,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VideoCommentsService {
 
-    private final CommentService commentService;
+    private final CommentRepository commentRepository;
     private final VideoCommentsRepository videoCommentsRepository;
 
     @Transactional
     public void updateVideoComments(String videoId) {
         var videoComments = videoCommentsRepository.findById(videoId)
                 .orElse(new VideoCommentsEntity());
-        var commentCount = commentService.getCommentCountByVideoId(videoId);
+        var commentCount = commentRepository.countCommentsForVideoId(videoId);
 
         videoComments.setVideoId(videoId);
         videoComments.setCommentCount(commentCount.getComments());
