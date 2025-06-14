@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - OpenAPI specification that documents the backend endpoints. (mddburgess/winston#70)
 
+### Changed
+
+- Updated backend to use code generated from the OpenAPI specification. (mddburgess/winston#70)
+- Updated frontend to use code generated from the OpenAPI specification. (mddburgess/winston#70)
+
 ## [1.3.0] — 2025-05-24
 
 ### Added
