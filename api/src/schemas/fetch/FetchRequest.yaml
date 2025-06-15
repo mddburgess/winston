@@ -1,0 +1,25 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+type: object
+required:
+  - fetch
+properties:
+  fetch:
+    type: string
+    enum:
+      - channel
+      - videos
+      - comments
+      - replies
+  channel_handle:
+    type: string
+  channel_id:
+    type: string
+  video_id:
+    type: string
+  comment_id:
+    type: string
+  range:
+    type: string
+    enum:
+      - all
+      - latest

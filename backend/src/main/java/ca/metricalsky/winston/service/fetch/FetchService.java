@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.dto.fetch.FetchRequest;
+import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
@@ -29,7 +29,7 @@ public class FetchService {
     private int dailyQuota;
 
     public Long save(FetchRequest fetchRequest) {
-        var fetchRequestEntity = fetchRequestMapper.toFetchRequest(fetchRequest);
+        var fetchRequestEntity = fetchRequestMapper.toFetchRequestEntity(fetchRequest);
         fetchRequestEntity = fetchRequestRepository.save(fetchRequestEntity);
         return fetchRequestEntity.getId();
     }

@@ -1,17 +1,16 @@
 import { render } from "@testing-library/react";
 import { AuthorStatistics } from "./AuthorStatistics";
-import type { AuthorWithStatistics } from "#/types";
 
 describe(AuthorStatistics, () => {
-    const author: AuthorWithStatistics = {
+    const author = {
         id: "authorId",
-        displayName: "@displayName",
-        channelUrl: "https://www.example.com/@channelUrl",
-        profileImageUrl: "https://www.example.com/profileImageUrl",
+        handle: "@displayName",
+        channel_url: "https://www.example.com/@channelUrl",
+        profile_image_url: "https://www.example.com/profileImageUrl",
         statistics: {
-            commentedVideos: 1,
-            totalComments: 2,
-            totalReplies: 3,
+            video_count: 1,
+            comment_count: 2,
+            reply_count: 3,
         },
     };
 
@@ -21,7 +20,7 @@ describe(AuthorStatistics, () => {
 
         expect(commentedVideos).toBeInTheDocument();
         expect(commentedVideos).toHaveTextContent(
-            `${author.statistics.commentedVideos}`,
+            `${author.statistics.video_count}`,
         );
 
         const icon = commentedVideos.firstChild;
@@ -36,7 +35,7 @@ describe(AuthorStatistics, () => {
 
         expect(totalComments).toBeInTheDocument();
         expect(totalComments).toHaveTextContent(
-            `${author.statistics.totalComments}`,
+            `${author.statistics.comment_count}`,
         );
 
         const icon = totalComments.firstChild;
@@ -51,7 +50,7 @@ describe(AuthorStatistics, () => {
 
         expect(totalReplies).toBeInTheDocument();
         expect(totalReplies).toHaveTextContent(
-            `${author.statistics.totalReplies}`,
+            `${author.statistics.reply_count}`,
         );
 
         const icon = totalReplies.firstChild;

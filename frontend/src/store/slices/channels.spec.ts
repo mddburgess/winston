@@ -3,8 +3,8 @@ import { waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { backend } from "#/mocks/backend";
 import { renderHookWithProviders } from "#/utils/test-utils";
-import { appendFetchedChannels, useListChannelsQuery } from "./channels";
-import type { Channel } from "#/types";
+import { appendChannels, useListChannelsQuery } from "./channels.ts";
+import type { Channel } from "#/api";
 
 describe("channelsApi", () => {
     const entityAdapter = createEntityAdapter<Channel>();
@@ -40,7 +40,9 @@ describe("channelsApi", () => {
         it("handles a 200 response with an empty list", async () => {
             backend.use(
                 http.get("/api/v1/channels", () => {
-                    return HttpResponse.json([]);
+                    return HttpResponse.json({
+                        channels: [],
+                    });
                 }),
             );
             const { result } = renderHookWithProviders(() =>
@@ -57,25 +59,26 @@ describe("channelsApi", () => {
         });
     });
 
-    describe(appendFetchedChannels, () => {
-        it("updates the listChannels cache with the newly fetched list of channels", async () => {
+    describe(appendChannels, () => {
+        it("adds a list of channels to the listChannels cache", async () => {
             const { store, result } = renderHookWithProviders(() =>
                 useListChannelsQuery(),
             );
             await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
             store.dispatch(
-                appendFetchedChannels([
+                appendChannels([
                     {
                         id: "channel.2",
                         title: "channel.2.title",
                         description: "channel.2.description",
-                        customUrl: "@channel2url",
-                        thumbnailUrl: "/api/v1/channels/2/thumbnail",
+                        handle: "@channel2url",
+                        thumbnail_url: "/api/v1/channels/2/thumbnail",
                         topics: ["https://en.wikipedia.org/wiki/Topic"],
                         keywords: ["keyword"],
-                        videoCount: 1,
-                        publishedAt: "2025-02-01T00:00:00Z",
-                        lastFetchedAt: "2025-02-02T00:00:00.000000Z",
+                        video_count: 1,
+                        published_at: "2025-02-01T00:00:00Z",
+                        last_fetched_at: "2025-02-02T00:00:00.000000Z",
                     },
                 ]),
             );

@@ -4,5 +4,5 @@ public interface VideoCountView {
 
     String getChannelId();
 
-    Long getVideos();
+    Integer getVideos();
 }

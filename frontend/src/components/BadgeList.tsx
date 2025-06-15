@@ -1,14 +1,14 @@
 import { Badge } from "react-bootstrap";
 
 type BadgeListProps = {
-    values: string[];
+    values?: string[];
     transformer?: (value: string) => string;
 };
 
 const identity = (value: string) => value;
 
 export const BadgeList = ({
-    values,
+    values = [],
     transformer = identity,
 }: BadgeListProps) => {
     const badges = values.map(transformer).map((value) => (

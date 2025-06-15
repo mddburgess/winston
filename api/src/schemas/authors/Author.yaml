@@ -1,0 +1,45 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Author
+description: An author of a comment.
+type: object
+required:
+  - id
+  - handle
+  - channel_url
+  - profile_image_url
+properties:
+  id:
+    description: The unique identifier for the author.
+    type: string
+  handle:
+    description: The unique channel handle used in the author's channel URL.
+    type: string
+  channel_url:
+    description: An URL to the author's YouTube channel page.
+    type: string
+  profile_image_url:
+    description: An URL to a thumbnail image for the author's channel.
+    type: string
+  statistics:
+    description: Statistics of the author's comment activity.
+    type: object
+    required:
+      - video_count
+      - comment_count
+      - reply_count
+    properties:
+      video_count:
+        description: The number of fetched videos that the author has commented on.
+        type: integer
+        format: int32
+        minimum: 0
+      comment_count:
+        description: The number of top-level comments across all fetched videos that were published by the author.
+        type: integer
+        format: int32
+        minimum: 0
+      reply_count:
+        description: The number of replies to comments across all fetched videos that were published by the author.
+        type: integer
+        format: int32
+        minimum: 0

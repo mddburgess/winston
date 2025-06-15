@@ -20,14 +20,11 @@ export const AuthorDetailsRoute = () => {
                                 Authors
                             </BreadcrumbItem>
                             <BreadcrumbItem active>
-                                {summary.author.displayName}
+                                {summary.author.handle}
                             </BreadcrumbItem>
                         </Breadcrumb>
-                        <h1>{summary.author.displayName}</h1>
-                        <AuthorSummary
-                            {...summary}
-                            authorHandle={authorHandle!}
-                        />
+                        <h1>{summary.author.handle}</h1>
+                        <AuthorSummary {...summary} />
                     </>
                 ),
             }}

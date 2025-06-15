@@ -1,0 +1,8 @@
+summary: Author not found
+description: The requested author was not found.
+value:
+  type: about:blank
+  title: Not Found
+  status: 404
+  detail: The requested author was not found.
+  instance: /api/v1/authors/@alice

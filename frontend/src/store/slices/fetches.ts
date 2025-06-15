@@ -1,10 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type {
-    Channel,
-    FetchCommentsEvent,
-    FetchVideosEvent,
-    Maybe,
-} from "#/types";
+import type { Channel } from "#/api";
+import type { FetchCommentsEvent, FetchVideosEvent, Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
@@ -31,7 +27,7 @@ const initialState: FetchStates = {
 
 type FetchVideosRequest = {
     channelId: string;
-    mode: "ALL" | "LATEST";
+    mode: "all" | "latest";
 };
 
 type UpdateFetchStatus = {
@@ -42,7 +38,7 @@ type UpdateFetchStatus = {
 
 export type FetchState = {
     id: string;
-    mode?: "ALL" | "LATEST";
+    mode?: "all" | "latest";
     status: "READY" | "REQUESTED" | "FETCHING" | "COMPLETED" | "FAILED";
     count: number;
 };

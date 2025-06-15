@@ -1,8 +1,11 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +15,6 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -23,66 +25,44 @@ import static org.mockito.Mockito.when;
 class ChannelServiceTest {
 
     private static final String CHANNEL_ID = "channelId";
-    private static final String CHANNEL_HANDLE = "channelHandle";
 
     @InjectMocks
     private ChannelService channelService;
 
     @Mock
+    private ChannelDataService channelDataService;
+    @Mock
     private ChannelRepository channelRepository;
     @Mock
-    private VideoService videoService;
+    private VideoDataService videoDataService;
 
     @Test
-    void findAll() {
-        when(videoService.countAllByChannelId())
-                .thenReturn(Map.of(CHANNEL_ID, 1L));
-        when(channelRepository.findAll())
-                .thenReturn(List.of(buildChannel()));
+    void getAllChannels() {
+        var channel = buildChannel();
 
-        var channelDtos = channelService.findAll();
+        when(channelDataService.getAllChannels())
+                .thenReturn(List.of(channel));
+        when(videoDataService.countAllVideosByChannelId())
+                .thenReturn(Map.of(channel.getId(), 1));
 
-        assertThat(channelDtos)
-                .hasSize(1)
-                .first()
-                .hasFieldOrPropertyWithValue("id", CHANNEL_ID)
-                .hasFieldOrPropertyWithValue("customUrl", CHANNEL_HANDLE)
-                .hasFieldOrPropertyWithValue("videoCount", 1L);
+        var channels = channelService.getAllChannels();
+
+        assertThat(channels).first()
+                .isSameAs(channel);
+        assertThat(channel.getVideoCount())
+                .isEqualTo(1);
     }
 
     @Test
-    void findAll_empty() {
-        when(videoService.countAllByChannelId())
-                .thenReturn(Map.of());
-        when(channelRepository.findAll())
+    void getAllChannels_empty() {
+        when(channelDataService.getAllChannels())
                 .thenReturn(List.of());
+        when(videoDataService.countAllVideosByChannelId())
+                .thenReturn(Map.of());
 
-        var channelDtos = channelService.findAll();
+        var channels = channelService.getAllChannels();
 
-        assertThat(channelDtos)
-                .isEmpty();
-    }
-
-    @Test
-    void findByHandle() {
-        when(channelRepository.findByCustomUrl(CHANNEL_HANDLE))
-                .thenReturn(Optional.of(buildChannel()));
-
-        var channelDto = channelService.findByHandle(CHANNEL_HANDLE);
-
-        assertThat(channelDto).get()
-                .hasFieldOrPropertyWithValue("id", CHANNEL_ID)
-                .hasFieldOrPropertyWithValue("customUrl", CHANNEL_HANDLE);
-    }
-
-    @Test
-    void findByHandle_notFound() {
-        when(channelRepository.findByCustomUrl(CHANNEL_HANDLE))
-                .thenReturn(Optional.empty());
-
-        var channelDto = channelService.findByHandle(CHANNEL_HANDLE);
-
-        assertThat(channelDto)
+        assertThat(channels)
                 .isEmpty();
     }
 
@@ -106,10 +86,9 @@ class ChannelServiceTest {
                 .hasMessageEndingWith("The requested channel was not found.");
     }
 
-    private static ChannelEntity buildChannel() {
-        var channel = new ChannelEntity();
-        channel.setId(CHANNEL_ID);
-        channel.setCustomUrl(CHANNEL_HANDLE);
-        return channel;
+    private static Channel buildChannel() {
+        return new Channel()
+                .id(TestUtils.randomId())
+                .handle(TestUtils.randomString());
     }
 }

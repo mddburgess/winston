@@ -1,70 +1,85 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
+import { enhancedBackendApi } from "#/store/slices/backend";
 import { ascBy } from "#/utils";
-import { api } from "#/utils/links";
-import { apiSlice } from "./api";
-import type { Comment, CommentListResponse } from "#/types";
-import type { EntityState } from "@reduxjs/toolkit";
+import type { Comment, ListCommentsResponse } from "#/api";
+import type { CommentState, TopLevelComment } from "#/store/slices/backend";
 
-type ListCommentsByVideoIdAuthorParams = {
-    videoId: string;
-    authorHandle: string;
-};
+const commentsApi = enhancedBackendApi.enhanceEndpoints({
+    endpoints: {
+        listComments: {
+            transformResponse: (response: ListCommentsResponse) =>
+                topLevelCommentsAdapter.addMany(
+                    topLevelCommentsAdapter.getInitialState(),
+                    transformComments(response.comments),
+                ),
+        },
+    },
+});
 
-const responseTransformer = (response: CommentListResponse) => {
-    const comments = response.map((comment) => ({
+const { useListCommentsQuery } = commentsApi;
+
+const topLevelCommentsAdapter = createEntityAdapter<CommentState>({
+    sortComparer: ascBy((topLevelComment) =>
+        DateTime.fromISO(topLevelComment.published_at).valueOf(),
+    ),
+});
+
+const repliesAdapter = createEntityAdapter<Comment>({
+    sortComparer: ascBy((comment) =>
+        DateTime.fromISO(comment.published_at).valueOf(),
+    ),
+});
+
+const transformComments = (comments: TopLevelComment[]) => {
+    return comments.map((comment) => ({
         ...comment,
         replies: repliesAdapter.addMany(
             repliesAdapter.getInitialState(),
-            comment.replies,
+            comment.replies ?? [],
         ),
     }));
-    return commentsAdapter.addMany(commentsAdapter.getInitialState(), comments);
 };
 
-export type CommentState = Omit<Comment, "replies"> & {
-    replies: EntityState<Comment, string>;
+const { selectAll: selectAllTopLevelComments } =
+    topLevelCommentsAdapter.getSelectors();
+
+const { selectAll: selectAllReplies, selectTotal: selectReplyCount } =
+    repliesAdapter.getSelectors();
+
+const appendComments = (videoId: string, comments: TopLevelComment[]) =>
+    commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) =>
+        topLevelCommentsAdapter.addMany(draft, transformComments(comments)),
+    );
+
+const appendReplies = (
+    videoId: string,
+    commentId: string,
+    replies: Comment[],
+) => {
+    return commentsApi.util.updateQueryData(
+        "listComments",
+        { id: videoId },
+        (draft) => {
+            const topLevelComment = topLevelCommentsAdapter
+                .getSelectors()
+                .selectById(draft, commentId);
+            topLevelCommentsAdapter.setOne(draft, {
+                ...topLevelComment,
+                replies: repliesAdapter.addMany(
+                    topLevelComment.replies,
+                    replies,
+                ),
+            });
+        },
+    );
 };
 
-export const commentsAdapter = createEntityAdapter<CommentState>({
-    sortComparer: ascBy((comment) =>
-        DateTime.fromISO(comment.publishedAt).valueOf(),
-    ),
-});
-
-export const repliesAdapter = createEntityAdapter<Comment>({
-    sortComparer: ascBy((comment) =>
-        DateTime.fromISO(comment.publishedAt).valueOf(),
-    ),
-});
-
-export const commentsApi = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
-        listCommentsByVideoId: builder.query<
-            EntityState<CommentState, string>,
-            string
-        >({
-            query: api.v1.videos.id.comments.get,
-            transformResponse: responseTransformer,
-        }),
-        listCommentsByVideoIdAuthor: builder.query<
-            EntityState<CommentState, string>,
-            ListCommentsByVideoIdAuthorParams
-        >({
-            query: ({ videoId, authorHandle }) => ({
-                url: api.v1.videos.id.comments.get(videoId),
-                params: {
-                    author: authorHandle,
-                },
-            }),
-            transformResponse: responseTransformer,
-        }),
-    }),
-    overrideExisting: "throw",
-});
-
-export const {
-    useListCommentsByVideoIdQuery,
-    useListCommentsByVideoIdAuthorQuery,
-    util: commentsApiUtils,
-} = commentsApi;
+export {
+    appendComments,
+    appendReplies,
+    selectAllReplies,
+    selectAllTopLevelComments,
+    selectReplyCount,
+    useListCommentsQuery,
+};

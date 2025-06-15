@@ -4,36 +4,34 @@ import { Link, useParams } from "react-router";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { useAppDispatch } from "#/store/hooks";
-import { useFindChannelByHandleQuery } from "#/store/slices/channels";
+import { useGetChannelQuery } from "#/store/slices/channels";
 import { initFetchStateForChannel } from "#/store/slices/fetches";
-import {
-    useListVideosByChannelHandleQuery,
-    videosAdapter,
-} from "#/store/slices/videos";
+import { selectAllVideos, useListVideosQuery } from "#/store/slices/videos";
 import { routes } from "#/utils/links";
 import { ChannelDetails } from "./ChannelDetails";
 import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
-    const { channelHandle } = useParams();
+    const { handle } = useParams();
 
     const dispatch = useAppDispatch();
 
     const [search, setSearch] = useState("");
 
-    const { data: channel } = useFindChannelByHandleQuery(channelHandle!);
+    const { data: channel } = useGetChannelQuery({ handle: handle! });
     useEffect(() => {
         if (channel) {
             dispatch(initFetchStateForChannel(channel));
         }
     }, [channel, dispatch]);
 
-    const { data: videos, isSuccess } = useListVideosByChannelHandleQuery(
-        channelHandle!,
-    );
+    const { data: videos, isSuccess } = useListVideosQuery({
+        handle: handle!,
+    });
+
     const videoList = useMemo(() => {
-        return isSuccess ? videosAdapter.getSelectors().selectAll(videos) : [];
+        return isSuccess ? selectAllVideos(videos) : [];
     }, [isSuccess, videos]);
 
     const filteredVideoList = useMemo(() => {

@@ -1,0 +1,5 @@
+summary: Empty video list
+description: Video list is empty when no videos have been fetched for the requested channel.
+value:
+  channel_handle: "@bobloblawslawblog"
+  videos: []
