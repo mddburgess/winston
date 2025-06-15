@@ -8,8 +8,8 @@ import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
-import com.google.api.services.youtube.model.CommentListResponse;
-import com.google.api.services.youtube.model.CommentSnippet;
+import ca.metricalsky.winston.test.ClientTestObjectFactory;
+import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -26,10 +26,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FetchRepliesActionHandlerTest {
-
-    private static final String VIDEO_ID = "videoId";
-    private static final String COMMENT_ID = "commentId";
-    private static final String REPLY_ID = "replyId";
 
     @InjectMocks
     private FetchRepliesActionHandler fetchRepliesActionHandler;
@@ -49,12 +45,12 @@ class FetchRepliesActionHandlerTest {
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
                 .actionType(Type.REPLIES)
-                .objectId(COMMENT_ID)
+                .objectId(TestUtils.randomId())
                 .build();
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
 
-        var commentListResponse = buildCommentListResponse();
+        var commentListResponse = ClientTestObjectFactory.buildCommentListResponse();
         when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
 
@@ -78,21 +74,5 @@ class FetchRepliesActionHandlerTest {
                 .as("fetchDataEvent.items")
                 .hasSize(1)
                 .first().isEqualTo(comment);
-    }
-
-    private static CommentListResponse buildCommentListResponse() {
-        var commentListResponse = new CommentListResponse();
-        commentListResponse.setItems(List.of(buildReply()));
-        return commentListResponse;
-    }
-
-    private static com.google.api.services.youtube.model.Comment buildReply() {
-        var snippet = new CommentSnippet();
-        snippet.setParentId(COMMENT_ID);
-
-        var comment = new com.google.api.services.youtube.model.Comment();
-        comment.setId(REPLY_ID);
-        comment.setSnippet(snippet);
-        return comment;
     }
 }

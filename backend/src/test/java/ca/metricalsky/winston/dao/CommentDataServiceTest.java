@@ -1,10 +1,13 @@
 package ca.metricalsky.winston.dao;
 
+import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
+import ca.metricalsky.winston.repository.AuthorRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +16,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +30,8 @@ class CommentDataServiceTest {
     @InjectMocks
     private CommentDataService commentDataService;
 
+    @Mock
+    private AuthorRepository authorRepository;
     @Mock
     private CommentMapper commentMapper;
     @Mock
@@ -86,6 +95,45 @@ class CommentDataServiceTest {
 
         assertThat(comments)
                 .isEmpty();
+    }
+
+    @Test
+    void saveComments() {
+        var commentThreadListResponse = ClientTestObjectFactory.buildCommentThreadListResponse();
+
+        when(commentRepository.saveAll(anyList()))
+                .thenAnswer(returnsFirstArg());
+
+        var topLevelComment = new TopLevelComment();
+        when(commentMapper.toTopLevelComment(any(CommentEntity.class)))
+                .thenReturn(topLevelComment);
+
+        var comments = commentDataService.saveComments(commentThreadListResponse);
+
+        assertThat(comments)
+                .containsExactly(topLevelComment);
+    }
+
+    @Test
+    void saveReplies() {
+        var parentCommentId = TestUtils.randomId();
+        var commentListResponse = ClientTestObjectFactory.buildCommentListResponse();
+
+        var commentEntity = buildCommentEntity();
+        when(commentRepository.findById(parentCommentId))
+                .thenReturn(Optional.of(commentEntity));
+
+        when(commentRepository.saveAll(anyList()))
+                .thenAnswer(returnsFirstArg());
+
+        var comment = new Comment();
+        when(commentMapper.toComment(any(CommentEntity.class)))
+                .thenReturn(comment);
+
+        var comments = commentDataService.saveReplies(parentCommentId, commentListResponse);
+
+        assertThat(comments)
+                .containsExactly(comment);
     }
 
     private static CommentEntity buildCommentEntity() {

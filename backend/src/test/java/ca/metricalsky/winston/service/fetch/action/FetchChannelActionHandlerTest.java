@@ -9,6 +9,8 @@ import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
+import ca.metricalsky.winston.test.ClientTestObjectFactory;
+import ca.metricalsky.winston.test.TestUtils;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,8 +33,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FetchChannelActionHandlerTest {
 
-    private static final String CHANNEL_HANDLE = "channelHandle";
-
     @InjectMocks
     private FetchChannelActionHandler fetchChannelActionHandler;
 
@@ -51,13 +51,12 @@ class FetchChannelActionHandlerTest {
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
                 .actionType(Type.CHANNELS)
-                .objectId(CHANNEL_HANDLE)
+                .objectId(TestUtils.randomId())
                 .build();
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
 
-        var channelListResponse = new ChannelListResponse();
-        channelListResponse.setItems(List.of(new com.google.api.services.youtube.model.Channel()));
+        var channelListResponse = ClientTestObjectFactory.buildChannelListResponse();
         when(youTubeService.getChannels(fetchAction))
                 .thenReturn(channelListResponse);
 
@@ -87,7 +86,7 @@ class FetchChannelActionHandlerTest {
     void fetch_notFound() {
         var fetchAction = FetchActionEntity.builder()
                 .actionType(Type.CHANNELS)
-                .objectId(CHANNEL_HANDLE)
+                .objectId(TestUtils.randomId())
                 .build();
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
