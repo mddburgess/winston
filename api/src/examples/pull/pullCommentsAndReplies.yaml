@@ -1,0 +1,8 @@
+summary: Pull comments and replies
+description: Request to pull the comments and replies for the specified video.
+value:
+  operations:
+    - pull: comments
+      video_id: ZgfVi2g5DPY
+    - pull: replies
+      video_id: ZgfVi2g5DPY

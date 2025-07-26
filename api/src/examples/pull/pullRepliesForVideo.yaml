@@ -1,0 +1,6 @@
+summary: Pull replies for video
+description: Request to pull the replies to all comments for the specified video.
+value:
+  operations:
+    - pull: replies
+      video_id: ZgfVi2g5DPY

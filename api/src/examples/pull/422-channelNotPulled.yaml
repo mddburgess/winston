@@ -1,0 +1,12 @@
+summary: Channel not pulled
+description: The requested videos cannot be pulled because the specified channel hasn't been pulled yet.
+value:
+  type: about:blank
+  title: Unprocessable Entity
+  status: 422
+  detail: The request cannot be processed.
+  errors:
+    - type: CHANNEL_NOT_PULLED
+      detail: The specified channel must be pulled before videos for that channel may be pulled.
+      location: body
+      path: /operations/0/channel_handle

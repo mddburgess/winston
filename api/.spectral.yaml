@@ -39,6 +39,15 @@ rules:
       functionOptions:
         type: camel
 
+  # Spring codegen doesn't work if an operation is missing the "responses" property.
+  operation-responses:
+    description: Operations must have a response.
+    severity: error
+    given: $.paths[*][*]
+    then:
+      field: responses
+      function: truthy
+
   property-description:
     description: Properties should have a description.
     severity: warn

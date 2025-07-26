@@ -268,10 +268,124 @@ paths:
                 items:
                   type: string
 
+  /api/v1/pull:
+    post:
+      summary: Pull data
+      description: Submits a request to pull data from YouTube.
+      tags:
+        - Pull
+      operationId: pull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_listener_id:
+                  type: string
+                  format: uuid
+                operations:
+                  $ref: "#/components/schemas/PullOperations"
+              additionalProperties: false
+            examples:
+              Pull channel:
+                $ref: ./examples/pull/pullChannel.yaml
+              Pull channel and videos:
+                $ref: ./examples/pull/pullChannelAndVideos.yaml
+              Pull latest videos:
+                $ref: ./examples/pull/pullLatestVideos.yaml
+              Pull comments:
+                $ref: ./examples/pull/pullComments.yaml
+              Pull comments and replies:
+                $ref: ./examples/pull/pullCommentsAndReplies.yaml
+              Pull replies for comment:
+                $ref: ./examples/pull/pullRepliesForComment.yaml
+              Pull replies for video:
+                $ref: ./examples/pull/pullRepliesForVideo.yaml
+      responses:
+        "202":
+          description: The request was accepted for processing.
+        "422":
+          description: The request cannot be processed.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              examples:
+                Channel not pulled:
+                  $ref: ./examples/pull/422-channelNotPulled.yaml
+                Video not pulled:
+                  $ref: ./examples/pull/422-videoNotPulled.yaml
+                Comment not pulled:
+                  $ref: ./examples/pull/422-commentNotPulled.yaml
+
 components:
   schemas:
     Problem:
       $ref: schemas/Problem.yaml
+    PullOperations:
+      type: array
+      items:
+        $ref: "#/components/schemas/PullOperation"
+    PullOperation:
+      type: object
+      properties:
+        pull:
+          type: string
+          enum:
+            - channel
+            - videos
+            - comments
+            - replies
+      discriminator:
+        propertyName: pull
+        mapping:
+          channel: "#/components/schemas/PullChannelOperation"
+          videos: "#/components/schemas/PullVideosOperation"
+          comments: "#/components/schemas/PullCommentsOperation"
+          replies: "#/components/schemas/PullRepliesOperation"
+    PullChannelOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - channel_handle
+          properties:
+            channel_handle:
+              type: string
+    PullVideosOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - channel_handle
+            - range
+          properties:
+            channel_handle:
+              type: string
+            range:
+              type: string
+              enum:
+                - all
+                - latest
+    PullCommentsOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - video_id
+          properties:
+            video_id:
+              type: string
+    PullRepliesOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          properties:
+            video_id:
+              type: string
+            comment_id:
+              type: string
   parameters:
     authorHandle:
       name: handle
@@ -360,3 +474,5 @@ tags:
     description: Endpoints related to fetching data from YouTube.
   - name: Notifications
     description: Endpoints related to getting fetch events.
+  - name: Pull
+    description: Endpoints related to pulling data from YouTube.

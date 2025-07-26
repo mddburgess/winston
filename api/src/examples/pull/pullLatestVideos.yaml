@@ -1,0 +1,7 @@
+summary: Pull latest videos
+description: Request to pull the latest videos for the specified channel handle.
+value:
+  operations:
+    - pull: videos
+      channel_handle: "@alice"
+      range: latest
