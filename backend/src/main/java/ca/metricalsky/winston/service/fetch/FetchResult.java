@@ -8,7 +8,7 @@ import java.util.List;
 public record FetchResult<T>(
         FetchActionEntity.Type actionType,
         String objectId,
-        Collection<T> items,
+        List<T> items,
         FetchActionEntity nextFetchAction
 ) {
 

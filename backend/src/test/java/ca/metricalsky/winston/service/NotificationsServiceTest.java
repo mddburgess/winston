@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service;
 
+import ca.metricalsky.winston.events.FetchDataEventBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +12,7 @@ class NotificationsServiceTest {
     @Test
     void openSubscription() {
         var ssePublisher = notificationsService.openSubscription();
+        ssePublisher.setEventBuilder(new FetchDataEventBuilder());
 
         assertThat(ssePublisher)
                 .hasNoNullFieldsOrProperties();

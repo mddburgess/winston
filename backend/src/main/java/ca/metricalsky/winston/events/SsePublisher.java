@@ -3,6 +3,7 @@ package ca.metricalsky.winston.events;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -18,6 +19,9 @@ public class SsePublisher {
     private final UUID id;
     private final SseEmitter sseEmitter;
     private boolean open;
+
+    @Setter
+    private EventBuilder eventBuilder;
 
     public SsePublisher(Long timeout) {
         this(new SseEmitter(timeout));
@@ -47,11 +51,11 @@ public class SsePublisher {
                 .data(subscriptionEvent, MediaType.APPLICATION_JSON));
     }
 
-    public void publish(FetchResult<?> fetchResult) {
-        publish(FetchDataEvent.of(fetchResult));
+    public void publish(FetchResult fetchResult) {
+        publish(eventBuilder.buildEvent(fetchResult));
     }
 
-    public void publish(FetchDataEvent fetchDataEvent) {
+    public void publish(Object fetchDataEvent) {
         publish(SseEmitter.event()
                 .id(UUID.randomUUID().toString())
                 .name("fetch-data")
@@ -72,7 +76,7 @@ public class SsePublisher {
                 .data(error, MediaType.APPLICATION_PROBLEM_JSON));
     }
 
-    private void publish(SseEmitter.SseEventBuilder builder) {
+    protected void publish(SseEmitter.SseEventBuilder builder) {
         if (open) {
             try {
                 sseEmitter.send(builder);

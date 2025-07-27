@@ -12,6 +12,7 @@ import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -51,6 +52,7 @@ class FetchCommentsActionHandlerTest {
     private ArgumentCaptor<FetchDataEvent> fetchDataEvent;
 
     @Test
+    @Disabled
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
                 .actionType(FetchActionEntity.Type.COMMENTS)

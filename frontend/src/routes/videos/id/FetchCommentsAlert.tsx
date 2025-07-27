@@ -1,8 +1,8 @@
 import { Alert, Button, Col } from "react-bootstrap";
 import { CheckCircleFill } from "react-bootstrap-icons";
+import { PullCommentsAndRepliesAction } from "#/routes/videos/id/PullCommentsAndRepliesAction";
 import { useAppSelector } from "#/store/hooks";
 import { pluralize } from "#/utils";
-import { FetchCommentsAction } from "./FetchCommentsAction";
 import type { Video } from "#/api";
 import type { FetchState } from "#/store/slices/fetches";
 
@@ -28,7 +28,7 @@ const FetchingCommentsAlert = ({
                 disabled
             >
                 Fetching...
-                <FetchCommentsAction videoId={video.id} />
+                <PullCommentsAndRepliesAction video={video} />
             </Button>
         </Col>
     </Alert>

@@ -8,7 +8,7 @@ type FVRProps = {
     videoId: string;
 };
 
-export const FetchVideoRepliesButton = ({ videoId }: FVRProps) => {
+const FetchVideoRepliesButton = ({ videoId }: FVRProps) => {
     const fetchState = useAppSelector(
         (state) => state.fetches.replies[videoId],
     );
@@ -35,3 +35,5 @@ const FVRButton = ({ videoId }: FVRProps) => {
         </Button>
     );
 };
+
+export { FetchVideoRepliesButton };
