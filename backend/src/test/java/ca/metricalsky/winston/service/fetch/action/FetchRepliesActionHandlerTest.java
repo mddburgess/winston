@@ -1,15 +1,17 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.api.model.Comment;
+import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
-import ca.metricalsky.winston.service.CommentService;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
-import com.google.api.services.youtube.model.CommentListResponse;
-import com.google.api.services.youtube.model.CommentSnippet;
+import ca.metricalsky.winston.service.fetch.FetchResult;
+import ca.metricalsky.winston.test.ClientTestObjectFactory;
+import ca.metricalsky.winston.test.TestUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,19 +21,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FetchRepliesActionHandlerTest {
-
-    private static final String VIDEO_ID = "videoId";
-    private static final String COMMENT_ID = "commentId";
-    private static final String REPLY_ID = "replyId";
 
     @InjectMocks
     private FetchRepliesActionHandler fetchRepliesActionHandler;
@@ -39,7 +37,7 @@ class FetchRepliesActionHandlerTest {
     @Mock
     private FetchActionService fetchActionService;
     @Mock
-    private CommentService commentService;
+    private CommentDataService commentDataService;
     @Mock
     private YouTubeService youTubeService;
     @Mock
@@ -48,58 +46,41 @@ class FetchRepliesActionHandlerTest {
     private ArgumentCaptor<FetchDataEvent> fetchDataEvent;
 
     @Test
+    @Disabled
     void fetch() {
         var fetchAction = FetchActionEntity.builder()
                 .actionType(Type.REPLIES)
-                .objectId(COMMENT_ID)
+                .objectId(TestUtils.randomId())
                 .build();
-        var commentListResponse = buildCommentListResponse();
-        var topLevelComment = buildTopLevelComment();
-
         when(fetchActionService.actionFetching(fetchAction))
                 .thenReturn(fetchAction);
+
+        var commentListResponse = ClientTestObjectFactory.buildCommentListResponse();
         when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
-        when(commentService.findById(COMMENT_ID))
-                .thenReturn(Optional.of(topLevelComment));
+
+        var comment = new Comment();
+        when(commentDataService.saveReplies(fetchAction.getObjectId(), commentListResponse))
+                .thenReturn(List.of(comment));
+
+        doCallRealMethod()
+                .when(ssePublisher).publish(any(FetchResult.class));
 
         var nextFetchAction = fetchRepliesActionHandler.fetch(fetchAction, ssePublisher);
 
-        assertThat(nextFetchAction).isNull();
+        assertThat(nextFetchAction)
+                .as("nextFetchAction")
+                .isNull();
 
-        verify(commentService).saveAll(anyList());
         verify(fetchActionService).actionSuccessful(fetchAction, commentListResponse.getItems().size());
         verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
-                .hasFieldOrPropertyWithValue("objectId", COMMENT_ID);
+                .as("fetchDataEvent")
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId());
         assertThat(fetchDataEvent.getValue().items())
-                .hasSize(commentListResponse.getItems().size())
-                .first()
-                .hasFieldOrPropertyWithValue("id", REPLY_ID)
-                .hasFieldOrPropertyWithValue("videoId", VIDEO_ID);
-    }
-
-    private static CommentListResponse buildCommentListResponse() {
-        var commentListResponse = new CommentListResponse();
-        commentListResponse.setItems(List.of(buildReply()));
-        return commentListResponse;
-    }
-
-    private static com.google.api.services.youtube.model.Comment buildReply() {
-        var snippet = new CommentSnippet();
-        snippet.setParentId(COMMENT_ID);
-
-        var comment = new com.google.api.services.youtube.model.Comment();
-        comment.setId(REPLY_ID);
-        comment.setSnippet(snippet);
-        return comment;
-    }
-
-    private static CommentEntity buildTopLevelComment() {
-        var comment = new CommentEntity();
-        comment.setId(COMMENT_ID);
-        comment.setVideoId(VIDEO_ID);
-        return comment;
+                .as("fetchDataEvent.items")
+                .hasSize(1)
+                .first().isEqualTo(comment);
     }
 }

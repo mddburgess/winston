@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "./slices/api";
+import { enhancedBackendApi } from "#/store/slices/backend";
 import fetches from "./slices/fetches";
 
 const reducer = combineReducers({
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
     fetches,
 });
 
@@ -11,7 +11,7 @@ const setupStore = (preloadedState?: Partial<AppState>) => {
     return configureStore({
         reducer,
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(apiSlice.middleware),
+            getDefaultMiddleware().concat(enhancedBackendApi.middleware),
         preloadedState,
     });
 };

@@ -1,15 +1,9 @@
 import { EventSourceProvider } from "react-sse-hooks";
+import { useFetchMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
-import {
-    invalidateFetchLimits,
-    useFetchRepliesByCommentIdMutation,
-} from "#/store/slices/api";
-import {
-    commentsAdapter,
-    commentsApiUtils,
-    repliesAdapter,
-} from "#/store/slices/comments";
+import { invalidateFetchLimits } from "#/store/slices/api";
+import { appendReplies } from "#/store/slices/comments";
 import { fetchedReplies, updateFetchStatus } from "#/store/slices/fetches";
 import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
 
@@ -18,36 +12,25 @@ type FetchRepliesActionProps = {
 };
 
 export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
-    const [fetchRepliesByCommentId] = useFetchRepliesByCommentIdMutation();
+    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
 
     const handleSubscribed = (subscriptionId: string) => {
-        void fetchRepliesByCommentId({ subscriptionId, commentId });
+        void fetch({
+            "X-Notify-Subscription": subscriptionId,
+            body: {
+                fetch: "replies",
+                comment_id: commentId,
+            },
+        });
     };
 
     const handleDataEvent = (event: FetchCommentsEvent) => {
-        dispatch(fetchedReplies(event));
         if (event.items.length > 0) {
-            const videoId = event.items[0].videoId;
-            dispatch(
-                commentsApiUtils.updateQueryData(
-                    "listCommentsByVideoId",
-                    videoId,
-                    (draft) => {
-                        const comment = commentsAdapter
-                            .getSelectors()
-                            .selectById(draft, commentId);
-                        commentsAdapter.setOne(draft, {
-                            ...comment,
-                            replies: repliesAdapter.addMany(
-                                comment.replies,
-                                event.items,
-                            ),
-                        });
-                    },
-                ),
-            );
+            const videoId = event.items[0].video_id;
+            dispatch(appendReplies(videoId, commentId, event.items));
         }
+        dispatch(fetchedReplies(event));
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {

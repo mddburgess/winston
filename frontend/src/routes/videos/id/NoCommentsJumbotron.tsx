@@ -2,11 +2,15 @@ import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch } from "#/store/hooks";
 import { requestedCommentsForVideoId } from "#/store/slices/fetches";
-import type { VideoWithChannelProps } from "#/types";
+import type { Video } from "#/api";
 
-export const NoCommentsJumbotron = ({ video }: VideoWithChannelProps) => {
+type Props = {
+    video: Video;
+};
+
+export const NoCommentsJumbotron = ({ video }: Props) => {
     const dispatch = useAppDispatch();
-    const hasBeenFetched = video.comments?.lastFetchedAt !== undefined;
+    const hasBeenFetched = video.comments?.last_fetched_at !== undefined;
     return (
         <Row className={"border border-dashed mx-0 my-3 p-5 rounded-3"}>
             <Col className={"text-center"}>

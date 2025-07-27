@@ -17,7 +17,7 @@ type MultiPagePaginationRowProps = PaginationRowProps & {
     totalPages: number;
 };
 
-export const PaginationRow = (props: PaginationRowProps) => {
+const PaginationRow = (props: PaginationRowProps) => {
     const totalPages = Math.ceil(props.total / props.pageSize);
     return (
         <Row className={"mb-2"}>
@@ -112,3 +112,5 @@ const last = (props: PaginationRowProps) => {
         ? props.total
         : props.pageSize * props.page;
 };
+
+export { PaginationRow };

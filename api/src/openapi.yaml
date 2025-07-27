@@ -1,0 +1,478 @@
+openapi: 3.1.1
+
+info:
+  title: Winston
+  description: OpenAPI specification for the Winston backend.
+  contact:
+    name: Mike Burgess
+  license:
+    name: MIT Non-AI License
+    url: https://github.com/mddburgess/winston/blob/main/LICENSE.md
+  version: v1
+
+servers:
+  - description: Local server used for development.
+    url: http://localhost:8080
+
+paths:
+  /api/v1/channels:
+    get:
+      summary: List channels
+      description: Lists the channel data for all the fetched channels.
+      tags:
+        - Channels
+      operationId: listChannels
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/channels/ListChannelsResponse.yaml
+              examples:
+                Channel list:
+                  $ref: ./examples/listChannels/200-channelList.yaml
+                Empty channel list:
+                  $ref: ./examples/listChannels/200-emptyChannelList.yaml
+
+  /api/v1/channels/{handle}:
+    get:
+      summary: Get channel
+      description: Gets the channel data for a single fetched channel.
+      tags:
+        - Channels
+      operationId: getChannel
+      parameters:
+        - $ref: "#/components/parameters/channelHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/channels/Channel.yaml
+              examples:
+                Channel:
+                  $ref: ./examples/getChannel/200-channel.yaml
+        "404":
+          $ref: "#/components/responses/404-channelNotFound"
+
+  /api/v1/channels/{handle}/videos:
+    get:
+      summary: List videos
+      description: Lists the video data for all the fetched videos for a single channel.
+      tags:
+        - Videos
+      operationId: listVideos
+      parameters:
+        - $ref: "#/components/parameters/channelHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/videos/ListVideosResponse.yaml
+              examples:
+                Video list:
+                  $ref: ./examples/listVideos/200-videoList.yaml
+                Empty video list:
+                  $ref: ./examples/listVideos/200-emptyVideoList.yaml
+        "404":
+          $ref: "#/components/responses/404-channelNotFound"
+
+  /api/v1/videos/{id}:
+    get:
+      summary: Get video
+      description: Gets the video data for a single fetched video.
+      tags:
+        - Videos
+      operationId: getVideo
+      parameters:
+        - $ref: "#/components/parameters/videoId"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/videos/Video.yaml
+              examples:
+                Video:
+                  $ref: ./examples/getVideo/200-video.yaml
+        "404":
+          $ref: "#/components/responses/404-videoNotFound"
+
+  /api/v1/videos/{id}/comments:
+    get:
+      summary: List comments
+      description: Lists all the fetched comments for a single video.
+      tags:
+        - Comments
+      operationId: listComments
+      parameters:
+        - $ref: "#/components/parameters/videoId"
+        - name: author
+          description:
+            The unique channel handle used in the author's channel URL.
+            Set this parameter to filter the response so that only comments published by this author are returned.
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/comments/ListCommentsResponse.yaml
+        "404":
+          $ref: "#/components/responses/404-videoNotFound"
+
+  /api/v1/authors:
+    get:
+      summary: List authors
+      description: Lists the authors for all the fetched comments.
+      tags:
+        - Authors
+      operationId: listAuthors
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/ListAuthorsResponse.yaml
+
+  /api/v1/authors/{handle}:
+    get:
+      summary: Get author
+      description: Gets the author summary data for a single author.
+      tags:
+        - Authors
+      operationId: getAuthor
+      parameters:
+        - $ref: "#/components/parameters/authorHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/GetAuthorResponse.yaml
+        "404":
+          $ref: "#/components/responses/404-authorNotFound"
+
+  /api/v1/channels/{id}/thumbnail:
+    get:
+      summary: Get channel thumbnail
+      description: Gets the thumbnail image for a channel.
+      tags:
+        - Thumbnails
+      operationId: getChannelThumbnail
+      parameters:
+        - $ref: "#/components/parameters/channelId"
+      responses:
+        "200":
+          $ref: "#/components/responses/200-thumbnail"
+        "404":
+          $ref: "#/components/responses/404-channelNotFound"
+
+  /api/v1/videos/{id}/thumbnail:
+    get:
+      summary: Get video thumbnail
+      description: Gets the thumbnail image for a video.
+      tags:
+        - Thumbnails
+      operationId: getVideoThumbnail
+      parameters:
+        - $ref: "#/components/parameters/videoId"
+      responses:
+        "200":
+          $ref: "#/components/responses/200-thumbnail"
+        "404":
+          $ref: "#/components/responses/404-videoNotFound"
+
+  /api/v1/authors/{id}/thumbnail:
+    get:
+      summary: Get author thumbnail
+      description: Gets the thumbnail image for an author.
+      tags:
+        - Thumbnails
+      operationId: getAuthorThumbnail
+      parameters:
+        - $ref: "#/components/parameters/authorId"
+      responses:
+        "200":
+          $ref: "#/components/responses/200-thumbnail"
+        "404":
+          $ref: "#/components/responses/404-videoNotFound"
+
+  /api/v1/fetch:
+    post:
+      summary: Fetch
+      description: Submits a request to fetch data from YouTube.
+      tags:
+        - Fetch
+      operationId: fetch
+      parameters:
+        - name: X-Notify-Subscription
+          description: The unique identifier of an event subscription that is listening for fetch events.
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/fetch/FetchRequest.yaml
+
+        required: true
+      responses:
+        "202":
+          description: The fetch request was accepted for processing.
+
+  /api/v1/fetch/limits:
+    get:
+      summary: Get fetch limits
+      description: Gets the limits on calling the fetch API.
+      tags:
+        - Fetch
+      operationId: getFetchLimits
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/fetch/FetchLimitsResponse.yaml
+
+  /api/v1/notifications:
+    get:
+      summary: Get notifications
+      description: Opens an event subscription to receive fetch events.
+      tags:
+        - Notifications
+      operationId: subscribe
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            text/event-stream:
+              schema:
+                type: array
+                format: event-stream
+                items:
+                  type: string
+
+  /api/v1/pull:
+    post:
+      summary: Pull data
+      description: Submits a request to pull data from YouTube.
+      tags:
+        - Pull
+      operationId: pull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_listener_id:
+                  type: string
+                  format: uuid
+                operations:
+                  $ref: "#/components/schemas/PullOperations"
+              additionalProperties: false
+            examples:
+              Pull channel:
+                $ref: ./examples/pull/pullChannel.yaml
+              Pull channel and videos:
+                $ref: ./examples/pull/pullChannelAndVideos.yaml
+              Pull latest videos:
+                $ref: ./examples/pull/pullLatestVideos.yaml
+              Pull comments:
+                $ref: ./examples/pull/pullComments.yaml
+              Pull comments and replies:
+                $ref: ./examples/pull/pullCommentsAndReplies.yaml
+              Pull replies for comment:
+                $ref: ./examples/pull/pullRepliesForComment.yaml
+              Pull replies for video:
+                $ref: ./examples/pull/pullRepliesForVideo.yaml
+      responses:
+        "202":
+          description: The request was accepted for processing.
+        "422":
+          description: The request cannot be processed.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+              examples:
+                Channel not pulled:
+                  $ref: ./examples/pull/422-channelNotPulled.yaml
+                Video not pulled:
+                  $ref: ./examples/pull/422-videoNotPulled.yaml
+                Comment not pulled:
+                  $ref: ./examples/pull/422-commentNotPulled.yaml
+
+components:
+  schemas:
+    Problem:
+      $ref: schemas/Problem.yaml
+    PullOperations:
+      type: array
+      items:
+        $ref: "#/components/schemas/PullOperation"
+    PullOperation:
+      type: object
+      properties:
+        pull:
+          type: string
+          enum:
+            - channel
+            - videos
+            - comments
+            - replies
+      discriminator:
+        propertyName: pull
+        mapping:
+          channel: "#/components/schemas/PullChannelOperation"
+          videos: "#/components/schemas/PullVideosOperation"
+          comments: "#/components/schemas/PullCommentsOperation"
+          replies: "#/components/schemas/PullRepliesOperation"
+    PullChannelOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - channel_handle
+          properties:
+            channel_handle:
+              type: string
+    PullVideosOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - channel_handle
+            - range
+          properties:
+            channel_handle:
+              type: string
+            range:
+              type: string
+              enum:
+                - all
+                - latest
+    PullCommentsOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          required:
+            - video_id
+          properties:
+            video_id:
+              type: string
+    PullRepliesOperation:
+      allOf:
+        - $ref: "#/components/schemas/PullOperation"
+        - type: object
+          properties:
+            video_id:
+              type: string
+            comment_id:
+              type: string
+  parameters:
+    authorHandle:
+      name: handle
+      description: The unique channel handle used in the author's channel URL.
+      in: path
+      required: true
+      schema:
+        type: string
+    authorId:
+      name: id
+      description: The unique identifier for the author.
+      in: path
+      required: true
+      schema:
+        type: string
+    channelHandle:
+      name: handle
+      description: The unique channel handle used in the channel's URL.
+      in: path
+      required: true
+      schema:
+        type: string
+    channelId:
+      name: id
+      description: The unique identifier for the channel.
+      in: path
+      required: true
+      schema:
+        type: string
+    videoId:
+      name: id
+      description: The unique identifier for the video.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    200-thumbnail:
+      description: The request was successful.
+      content:
+        image/jpeg:
+          schema:
+            description: The requested thumbnail image.
+            type: string
+            format: byte
+    404-authorNotFound:
+      description: The requested author was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            Author not found:
+              $ref: ./examples/404-authorNotFound.yaml
+    404-channelNotFound:
+      description: The requested channel was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            Channel not found:
+              $ref: ./examples/404-channelNotFound.yaml
+    404-videoNotFound:
+      description: The requested video was not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+          examples:
+            Video not found:
+              $ref: ./examples/404-videoNotFound.yaml
+
+tags:
+  - name: Channels
+    description: Endpoints to get data related to channels.
+  - name: Videos
+    description: Endpoints to get data related to videos.
+  - name: Comments
+    description: Endpoints to get data related to comments and replies.
+  - name: Authors
+    description: Endpoints to get data related to comment authors.
+  - name: Thumbnails
+    description: Endpoints to get thumbnail images.
+  - name: Fetch
+    description: Endpoints related to fetching data from YouTube.
+  - name: Notifications
+    description: Endpoints related to getting fetch events.
+  - name: Pull
+    description: Endpoints related to pulling data from YouTube.

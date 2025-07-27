@@ -1,0 +1,6 @@
+summary: Pull replies for comment
+description: Request to pull the replies to the specified comment.
+value:
+  operations:
+    - pull: replies
+      comment_id: UgxOglOpM6JOdYaY2Gt4AaABAg

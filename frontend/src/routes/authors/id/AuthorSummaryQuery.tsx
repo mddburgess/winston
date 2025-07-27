@@ -1,20 +1,19 @@
-import { useFindAuthorSummaryByHandleQuery } from "#/store/slices/authors";
-import type { AuthorHandleProps, AuthorSummaryResponse } from "#/types";
+import { useGetAuthorQuery } from "#/api";
+import type { GetAuthorResponse } from "#/api";
 import type { ReactNode } from "react";
 
-type AuthorSummaryQueryProps = AuthorHandleProps & {
+type Props = {
+    authorHandle: string;
     children: {
         isLoading?: () => ReactNode;
-        isSuccess: (summary: AuthorSummaryResponse) => ReactNode;
+        isSuccess: (summary: GetAuthorResponse) => ReactNode;
     };
 };
 
-export const AuthorSummaryQuery = ({
-    authorHandle,
-    children,
-}: AuthorSummaryQueryProps) => {
-    const { isLoading, isSuccess, data } =
-        useFindAuthorSummaryByHandleQuery(authorHandle);
+export const AuthorSummaryQuery = ({ authorHandle, children }: Props) => {
+    const { isLoading, isSuccess, data } = useGetAuthorQuery({
+        handle: authorHandle,
+    });
 
     return isLoading && children.isLoading ? (
         children.isLoading()

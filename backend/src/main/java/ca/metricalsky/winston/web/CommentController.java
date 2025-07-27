@@ -1,34 +1,25 @@
 package ca.metricalsky.winston.web;
 
-import ca.metricalsky.winston.dto.CommentDto;
-import ca.metricalsky.winston.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import ca.metricalsky.winston.api.CommentsApi;
+import ca.metricalsky.winston.api.model.ListCommentsResponse;
+import ca.metricalsky.winston.dao.CommentDataService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-public class CommentController {
+@RequiredArgsConstructor
+public class CommentController implements CommentsApi {
 
-    private final CommentService commentService;
+    private final CommentDataService commentDataService;
 
-    @Autowired
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
+    @Override
+    public ResponseEntity<ListCommentsResponse> listComments(String id, String author) {
+        var comments = commentDataService.getCommentsForVideo(id, author);
+        var response = new ListCommentsResponse()
+                .videoId(id)
+                .comments(comments);
 
-    @GetMapping("/api/v1/videos/{videoId}/comments")
-    public List<CommentDto> listByVideoId(
-            @PathVariable String videoId,
-            @RequestParam(name = "author", required = false) String authorHandle) {
-
-        if (authorHandle == null) {
-            return commentService.findAllByVideoId(videoId);
-        } else {
-            return commentService.findAllForVideoByAuthor(videoId, authorHandle);
-        }
+        return ResponseEntity.ok(response);
     }
 }

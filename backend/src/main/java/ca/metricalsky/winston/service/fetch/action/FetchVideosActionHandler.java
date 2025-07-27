@@ -1,59 +1,66 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.dto.VideoDto;
+import ca.metricalsky.winston.api.model.Video;
+import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.mapper.dto.VideoDtoMapper;
+import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
-import ca.metricalsky.winston.mapper.entity.VideoMapper;
-import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
-import org.mapstruct.factory.Mappers;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
 @Service
-public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
+public class FetchVideosActionHandler extends FetchActionHandler<Video> {
 
-    private final VideoMapper videoMapper = Mappers.getMapper(VideoMapper.class);
-    private final VideoDtoMapper videoDtoMapper = Mappers.getMapper(VideoDtoMapper.class);
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
-    private final VideoRepository videoRepository;
+    private final ChannelDataService channelDataService;
+    private final VideoDataService videoDataService;
     private final YouTubeService youTubeService;
 
     public FetchVideosActionHandler(
             FetchActionService fetchActionService,
-            VideoRepository videoRepository,
+            ChannelDataService channelDataService,
+            VideoDataService videoDataService,
             YouTubeService youTubeService
     ) {
         super(fetchActionService);
-        this.videoRepository = videoRepository;
+        this.channelDataService = channelDataService;
+        this.videoDataService = videoDataService;
         this.youTubeService = youTubeService;
     }
 
     @Override
-    protected FetchResult<VideoDto> doFetch(FetchActionEntity fetchAction) {
+    protected FetchResult<Video> doFetch(FetchActionEntity fetchAction) {
+        if (fetchAction.getObjectId().startsWith("@")) {
+            var channel = channelDataService.findChannelByHandle(fetchAction.getObjectId())
+                    .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
+                            "The specified channel must be pulled before videos for that channel may be pulled."));
+            fetchAction.setObjectId(channel.getId());
+        }
         var activityListResponse = youTubeService.getActivities(fetchAction);
-        var videoEntities = activityListResponse.getItems()
-                .stream()
-                .filter(activity -> activity.getContentDetails().getUpload() != null)
-                .map(videoMapper::fromYouTube)
-                .toList();
-        videoRepository.saveAll(videoEntities);
-        var videoDtos = videoEntities.stream()
-                .map(videoDtoMapper::fromEntity)
-                .toList();
+        var videos = videoDataService.saveVideos(activityListResponse);
         var nextFetchAction = getNextFetchAction(fetchAction, activityListResponse);
-        return new FetchResult<>(fetchAction, videoDtos, nextFetchAction);
+
+        return new FetchResult<>(fetchAction, videos, nextFetchAction);
     }
 
-    private FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, ActivityListResponse activityListResponse) {
+    private FetchActionEntity getNextFetchAction(
+            FetchActionEntity fetchAction,
+            ActivityListResponse activityListResponse
+    ) {
+        if (activityListResponse.getNextPageToken() == null) {
+            return null;
+        }
+
         var activities = activityListResponse.getItems()
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
@@ -69,7 +76,7 @@ public class FetchVideosActionHandler extends FetchActionHandler<VideoDto> {
                 .map(publishedAt -> publishedAt.minusSeconds(1))
                 .orElse(null);
 
-        return activityListResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+        return FetchActionEntity.builder()
                 .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())

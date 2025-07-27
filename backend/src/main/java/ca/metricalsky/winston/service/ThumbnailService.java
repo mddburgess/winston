@@ -3,6 +3,7 @@ package ca.metricalsky.winston.service;
 import ca.metricalsky.winston.entity.ThumbnailEntity;
 import ca.metricalsky.winston.entity.view.ThumbnailLookupView;
 import ca.metricalsky.winston.repository.ThumbnailRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +21,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ThumbnailService {
 
     private static final String THUMBNAIL_IMAGE_FORMAT = "jpg";
 
     private final ThumbnailRepository thumbnailRepository;
-
-    @Autowired
-    public ThumbnailService(ThumbnailRepository thumbnailRepository) {
-        this.thumbnailRepository = thumbnailRepository;
-    }
 
     public byte[] getChannelThumbnail(String channelId) {
         var lookup = thumbnailRepository.lookupByChannelId(channelId);

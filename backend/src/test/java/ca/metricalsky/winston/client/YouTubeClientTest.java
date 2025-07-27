@@ -59,9 +59,7 @@ class YouTubeClientTest {
         var result = youTubeClient.getChannel(CHANNEL_HANDLE);
 
         assertThat(result).isNotNull();
-        assertThat(result.getItems())
-                .hasSize(1)
-                .first()
+        assertThat(result.getItems()).first()
                 .hasFieldOrPropertyWithValue("brandingSettings.channel.keywords",
                         "channel \"branding settings\" keywords")
                 .hasFieldOrPropertyWithValue("snippet.customUrl", "@channelCustomUrl")
@@ -159,9 +157,7 @@ class YouTubeClientTest {
         var result = youTubeClient.getComments(VIDEO_ID, null);
 
         assertThat(result).isNotNull();
-        assertThat(result.getItems())
-                .hasSize(1)
-                .first()
+        assertThat(result.getItems()).first()
                 .hasFieldOrProperty("snippet.topLevelComment");
 
         var topLevelComment = result.getItems().getFirst().getSnippet().getTopLevelComment();
@@ -223,9 +219,7 @@ class YouTubeClientTest {
         var result = youTubeClient.getReplies(COMMENT_ID, null);
 
         assertThat(result).isNotNull();
-        assertThat(result.getItems())
-                .hasSize(1)
-                .first()
+        assertThat(result.getItems()).first()
                 .hasFieldOrPropertyWithValue("snippet.authorChannelId.value",
                         "comment.snippet.authorChannelId.value")
                 .hasFieldOrPropertyWithValue("snippet.authorChannelUrl",

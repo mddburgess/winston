@@ -1,0 +1,35 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Video Comments
+description: Additional data related to the comments on a video.
+type: object
+required:
+  - comments_disabled
+  - comment_count
+  - reply_count
+  - total_reply_count
+  - last_fetched_at
+properties:
+  comments_disabled:
+    description: A flag indicating if comments have been disabled for the video.
+    type: boolean
+  comment_count:
+    description: The number of top-level comments that have been fetched for the video.
+    type: integer
+    format: int32
+    minimum: 0
+  reply_count:
+    description: The number of replies to comments that have been fetched for the video.
+    type: integer
+    format: int32
+    minimum: 0
+  total_reply_count:
+    description:
+      The total number of replies to comments that can be fetched for the video.
+      This number may be less than the actual total number of replies on the video in YouTube.
+    type: integer
+    format: int32
+    minimum: 0
+  last_fetched_at:
+    description: The timestamp of the most recent time that comments or replies were fetched for the video.
+    type: string
+    format: date-time

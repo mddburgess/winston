@@ -1,0 +1,81 @@
+extends:
+  - ["spectral:oas", all]
+  - "@apisyouwonthate/style-guide"
+  - "@stoplight/spectral-documentation"
+
+rules:
+  api-health: off
+  api-home: off
+  contact-properties: off
+  docs-tags-alphabetical: off
+  hosts-https-only-oas3: off
+  no-security-schemes-defined: off
+  no-x-headers: off
+  openapi-tags-alphabetical: off
+
+  example-description:
+    description: Examples should have a description.
+    severity: warn
+    given: $..examples[*]
+    then:
+      field: description
+      function: truthy
+
+  example-summary:
+    description: Examples must have a summary.
+    severity: error
+    given: $..examples[*]
+    then:
+      field: summary
+      function: truthy
+
+  # RTK Query codegen doesn't read kebab-cased operationIds and uses default values instead.
+  operation-operationId-casing:
+    description: Operation "operationId" must be camelCased.
+    severity: error
+    given: $..operationId
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+
+  # Spring codegen doesn't work if an operation is missing the "responses" property.
+  operation-responses:
+    description: Operations must have a response.
+    severity: error
+    given: $.paths[*][*]
+    then:
+      field: responses
+      function: truthy
+
+  property-description:
+    description: Properties should have a description.
+    severity: warn
+    given: $..properties[*]
+    then:
+      field: description
+      function: truthy
+
+  requestBody-examples:
+    description: Request bodies should have an example.
+    severity: warn
+    given: $.paths..requestBody.content[*]
+    then:
+      - field: examples
+        function: truthy
+      - field: examples
+        function: length
+        functionOptions:
+          min: 1
+
+  response-examples:
+    description: Responses should have an example.
+    severity: warn
+    given: $.paths..responses[*].content[?( @property.match( /^application\/(.+\+)?json$/i ) )]
+    then:
+      - field: examples
+        function: truthy
+      - field: examples
+        function: length
+        functionOptions:
+          min: 1

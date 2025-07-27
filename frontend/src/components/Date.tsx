@@ -6,7 +6,7 @@ type DateProps = {
     date: string;
 };
 
-export const Date = ({ date }: DateProps) => (
+const Date = ({ date }: DateProps) => (
     <OverlayTrigger
         delay={{ show: 500, hide: 200 }}
         overlay={<DateTooltip date={date} />}
@@ -20,3 +20,5 @@ const DateTooltip = ({ date, ...props }: DateProps & TooltipProps) => (
         {DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_MED)}
     </Tooltip>
 );
+
+export { Date };

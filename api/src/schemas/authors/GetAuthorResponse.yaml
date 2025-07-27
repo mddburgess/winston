@@ -1,0 +1,15 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Get Author Response
+description: The response for the get author endpoint.
+type: object
+required:
+  - author
+  - videos
+properties:
+  author:
+    $ref: ./Author.yaml
+  videos:
+    description: The list of videos the author has commented on.
+    type: array
+    items:
+      $ref: ../videos/Video.yaml

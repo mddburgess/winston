@@ -1,7 +1,7 @@
 import { Col, Image, Row } from "react-bootstrap";
 import { BadgeList } from "#/components/BadgeList";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
-import type { ChannelProps } from "#/types";
+import type { Channel } from "#/api";
 
 const topicTransformer = (topic: string) => {
     return topic
@@ -9,7 +9,11 @@ const topicTransformer = (topic: string) => {
         .replace(/_/g, " ");
 };
 
-export const ChannelDetails = ({ channel }: ChannelProps) => (
+type Props = {
+    channel: Channel;
+};
+
+export const ChannelDetails = ({ channel }: Props) => (
     <Row className={"bg-body-tertiary border mx-0 my-3 p-3 rounded-3"}>
         <Col xs={"auto"}>
             <Image
@@ -17,21 +21,21 @@ export const ChannelDetails = ({ channel }: ChannelProps) => (
                 className={"border"}
                 width={120}
                 height={120}
-                src={channel.thumbnailUrl}
+                src={channel.thumbnail_url}
             />
         </Col>
         <Col>
             <p className={"h1"}>{channel.title}</p>
             <p className={"align-items-center d-flex h6"}>
                 <a
-                    href={`https://www.youtube.com/${channel.customUrl}`}
+                    href={`https://www.youtube.com/${channel.handle}`}
                     target={"_blank"}
                     rel={"noreferrer"}
                 >
-                    {channel.customUrl}
+                    {channel.handle}
                 </a>
                 <CopyToClipboard
-                    text={`https://www.youtube.com/${channel.customUrl}`}
+                    text={`https://www.youtube.com/${channel.handle}`}
                 />
             </p>
             <p className={"small"}>{channel.description}</p>

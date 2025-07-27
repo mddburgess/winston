@@ -18,7 +18,7 @@ public abstract class FetchActionHandler<T> {
         try {
             var fetchResult = fetch(fetchAction);
             nextFetchAction = fetchResult.nextFetchAction();
-            ssePublisher.publish(FetchDataEvent.of(fetchResult));
+            ssePublisher.publish(fetchResult);
             return nextFetchAction;
         } catch (PublisherException ex) {
             if (nextFetchAction == null) {
