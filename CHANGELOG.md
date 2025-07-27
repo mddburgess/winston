@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated backend to use code generated from the OpenAPI specification. (mddburgess/winston#70)
 - Updated frontend to use code generated from the OpenAPI specification. (mddburgess/winston#70)
+- Fetch comments action on the video page now also fetches all the replies. (mddburgess/winston#48)
 
 ## [1.3.0] — 2025-05-24
 

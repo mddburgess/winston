@@ -39,9 +39,8 @@ public class FetchService {
         try {
             var fetchOperations = fetchRequestService.startProcessingRequest(fetchRequestId);
 
-            var fetchOperation = fetchOperations.getFirst();
-            fetchOperationHandlerFactory.getHandler(fetchOperation)
-                    .fetch(fetchOperation, ssePublisher);
+            fetchOperations.forEach(fetchOperation ->
+                    fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation, ssePublisher));
 
             fetchRequestService.finishProcessingRequest(fetchRequestId);
             ssePublisher.publish(FetchStatusEvent.completed());

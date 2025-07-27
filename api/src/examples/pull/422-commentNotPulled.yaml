@@ -1,0 +1,12 @@
+summary: Video not pulled
+description: The requested replies cannot be pulled because the specified comment hasn't been pulled yet.
+value:
+  type: about:blank
+  title: Unprocessable Entity
+  status: 422
+  detail: The request cannot be processed.
+  errors:
+    - type: COMMENT_NOT_PULLED
+      detail: The specified comment must be pulled before replies for that comment may be pulled.
+      location: body
+      path: /operations/0/comment_id

@@ -1,0 +1,9 @@
+summary: Pull channel and videos
+description: Request to pull the channel and videos for the specified channel handle.
+value:
+  operations:
+    - pull: channel
+      channel_handle: "@alice"
+    - pull: videos
+      channel_handle: "@alice"
+      range: all

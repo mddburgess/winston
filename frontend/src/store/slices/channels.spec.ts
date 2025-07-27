@@ -3,7 +3,7 @@ import { waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { backend } from "#/mocks/backend";
 import { renderHookWithProviders } from "#/utils/test-utils";
-import { appendChannels, useListChannelsQuery } from "./channels.ts";
+import { appendChannels, useListChannelsQuery } from "./channels";
 import type { Channel } from "#/api";
 
 describe("channelsApi", () => {
