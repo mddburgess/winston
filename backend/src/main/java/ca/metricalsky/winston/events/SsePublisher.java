@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,10 @@ public class SsePublisher {
         publish(SseEmitter.event()
                 .id(UUID.randomUUID().toString())
                 .data(subscriptionEvent, MediaType.APPLICATION_JSON));
+    }
+
+    public void publish(FetchResult<?> fetchResult) {
+        publish(FetchDataEvent.of(fetchResult));
     }
 
     public void publish(FetchDataEvent fetchDataEvent) {

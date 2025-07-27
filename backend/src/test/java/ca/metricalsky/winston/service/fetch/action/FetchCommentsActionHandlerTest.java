@@ -9,6 +9,7 @@ import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
+import ca.metricalsky.winston.service.fetch.FetchResult;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -63,6 +66,9 @@ class FetchCommentsActionHandlerTest {
         var comment = new TopLevelComment();
         when(commentDataService.saveComments(commentThreadListResponse))
                 .thenReturn(List.of(comment));
+
+        doCallRealMethod()
+                .when(ssePublisher).publish(any(FetchResult.class));
 
         var nextFetchAction = fetchCommentsActionHandler.fetch(fetchAction, ssePublisher);
 
