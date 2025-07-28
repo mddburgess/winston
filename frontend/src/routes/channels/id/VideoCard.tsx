@@ -3,6 +3,7 @@ import { ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
 import { CommentCounts } from "#/components/comments/CommentCounts";
 import { Date } from "#/components/Date";
+import { VideoCardSelectionCheckbox } from "#/routes/channels/id/VideoCardSelectionCheckbox";
 import { routes } from "#/utils/links";
 import type { Video } from "#/api";
 
@@ -13,6 +14,7 @@ type Props = {
 export const VideoCard = ({ video }: Props) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
+            <VideoCardSelectionCheckbox video={video} />
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
                 <Link to={routes.videos.details(video.id)}>
                     <Card.Img variant={"top"} src={video.thumbnail_url} />

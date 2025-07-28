@@ -17,3 +17,10 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+.video-card-checkbox {
+    margin: 0.5rem 0.5rem -1.31rem auto;
+    position: relative;
+    z-index: 1;
+    zoom: 1.5;
+}
