@@ -3,6 +3,7 @@ import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
+import { BatchPullCommentsAlert } from "#/routes/channels/id/BatchPullCommentsAlert";
 import { useAppDispatch } from "#/store/hooks";
 import { useGetChannelQuery } from "#/store/slices/channels";
 import { initFetchStateForChannel } from "#/store/slices/fetches";
@@ -54,6 +55,7 @@ export const ChannelDetailsRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel} />}
             {channel && <FetchVideosAlert channel={channel} />}
+            <BatchPullCommentsAlert />
             <PaginationContext pageSize={24} items={filteredVideoList}>
                 {({
                     pageNumber,

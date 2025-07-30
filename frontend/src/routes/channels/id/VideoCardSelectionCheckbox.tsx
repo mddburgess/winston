@@ -13,9 +13,8 @@ const VideoCardSelectionCheckbox = ({ video }: Props) => {
         (state) => state.selections.videos[video.id] ?? false,
     );
 
-    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const onChange = () => {
         dispatch(toggleSelectVideo(video.id));
-        console.log(`clicked ${video.id}`);
     };
 
     return (
