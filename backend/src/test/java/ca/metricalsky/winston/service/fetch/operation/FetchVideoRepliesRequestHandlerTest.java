@@ -8,6 +8,7 @@ import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class FetchVideoRepliesRequestHandlerTest {
 

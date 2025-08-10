@@ -51,19 +51,21 @@ const PullCommentsAndRepliesAction = ({ video }: Props) => {
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(
-            updateFetchStatus({
-                fetchType: "comments",
-                objectId: video.id,
-                status: event.status,
-            }),
-        );
-        if (event.status === "FAILED") {
-            if (event.error.type === "/api/problem/comments-disabled") {
-                dispatch(markVideoCommentsDisabled(video.id));
+        if (event.status) {
+            dispatch(
+                updateFetchStatus({
+                    fetchType: "comments",
+                    objectId: video.id,
+                    status: event.status,
+                }),
+            );
+            if (event.status === "FAILED") {
+                if (event.error?.type === "/api/problem/comments-disabled") {
+                    dispatch(markVideoCommentsDisabled(video.id));
+                }
             }
+            dispatch(invalidateFetchLimits());
         }
-        dispatch(invalidateFetchLimits());
     };
 
     return (

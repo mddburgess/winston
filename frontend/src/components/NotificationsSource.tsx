@@ -7,6 +7,7 @@ type NotificationsSourceProps<T> = {
     onSubscribed: (subscriptionId: string) => void;
     onDataEvent: (dataEvent: T) => void;
     onStatusEvent: (statusEvent: FetchStatusEvent) => void;
+    hideSpinner?: boolean;
 };
 
 export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
@@ -78,5 +79,9 @@ export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
         [eventSource, props],
     );
 
-    return <Spinner size={"sm"} className={"ms-2"} />;
+    return props.hideSpinner ? (
+        <></>
+    ) : (
+        <Spinner size={"sm"} className={"ms-2"} />
+    );
 };

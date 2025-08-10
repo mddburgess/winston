@@ -45,5 +45,7 @@ const enhancedBackendApi = backendApi.enhanceEndpoints<
     UpdatedDefinitions
 >({});
 
-export { enhancedBackendApi };
+const invalidateVideos = () => backendApi.util.invalidateTags(["Videos"]);
+
+export { enhancedBackendApi, invalidateVideos };
 export type { CommentState, TopLevelComment };

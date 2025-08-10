@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
@@ -22,16 +23,18 @@ public class FetchVideoRepliesOperationHandler implements FetchOperationHandler 
     @Override
     public void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher) {
         fetchOperation = fetchOperationService.startFetch(fetchOperation);
+        ssePublisher.publish(FetchStatusEvent.operation(fetchOperation));
         try {
             var videoId = fetchOperation.getObjectId();
             for (var commentId : commentRepository.findIdsMissingRepliesByVideoId(videoId)) {
                 fetchReplies(fetchOperation, commentId, ssePublisher);
             }
-            fetchOperationService.fetchSuccessful(fetchOperation);
+            fetchOperation = fetchOperationService.fetchSuccessful(fetchOperation);
         } catch (RuntimeException ex) {
-            fetchOperationService.fetchFailed(fetchOperation, ex);
+            fetchOperation = fetchOperationService.fetchFailed(fetchOperation, ex);
             throw ex;
         } finally {
+            ssePublisher.publish(FetchStatusEvent.operation(fetchOperation));
             afterFetch(fetchOperation);
         }
     }
