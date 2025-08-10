@@ -1,31 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { xorBy } from "lodash";
+import type { Video } from "#/api";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type SelectionsState = {
-    videos: {
-        [videoId: string]: boolean;
-    };
+    videos: Video[];
 };
 
 const initialState: SelectionsState = {
-    videos: {},
+    videos: [],
 };
 
 const selectionsSlice = createSlice({
     name: "selections",
     initialState,
     reducers: {
-        selectVideos: (state, action: PayloadAction<string[]>) => {
-            action.payload.forEach((videoId) => (state.videos[videoId] = true));
+        selectVideos: (state, action: PayloadAction<Video[]>) => {
+            state.videos = action.payload;
         },
-        toggleSelectVideo: (state, action: PayloadAction<string>) => {
-            const checked = state.videos[action.payload];
-            state.videos[action.payload] = !checked;
+        toggleSelectVideo: (state, action: PayloadAction<Video>) => {
+            state.videos = xorBy(state.videos, [action.payload], "id");
         },
     },
 });
 
-const selections = selectionsSlice.reducer;
+const selectionsReducer = selectionsSlice.reducer;
 const { selectVideos, toggleSelectVideo } = selectionsSlice.actions;
 
-export { selections, selectVideos, toggleSelectVideo };
+export { selectionsReducer, selectVideos, toggleSelectVideo };

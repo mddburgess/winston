@@ -11,11 +11,23 @@
     cursor: pointer;
 }
 
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 .line-clamp {
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.height-fit {
+    min-height: fit-content;
+    max-height: fit-content;
 }
 
 .video-card-checkbox {

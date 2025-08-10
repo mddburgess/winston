@@ -37,14 +37,16 @@ export const FetchVideosAction = ({
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(
-            updateFetchStatus({
-                fetchType: "videos",
-                objectId: channel.id,
-                status: event.status,
-            }),
-        );
-        dispatch(invalidateFetchLimits());
+        if (event.status) {
+            dispatch(
+                updateFetchStatus({
+                    fetchType: "videos",
+                    objectId: channel.id,
+                    status: event.status,
+                }),
+            );
+            dispatch(invalidateFetchLimits());
+        }
     };
 
     return (

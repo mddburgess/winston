@@ -7,15 +7,6 @@ type FetchDataEvent<T> = {
     items: T[];
 };
 
-type FetchCompletedEvent = {
-    status: "COMPLETED";
-};
-
-type FetchFailedEvent = {
-    status: "FAILED";
-    error: ProblemDetail;
-};
-
 type SubscriptionEvent = {
     connected: boolean;
     subscriptionId: string;
@@ -24,7 +15,16 @@ type SubscriptionEvent = {
 type FetchChannelEvent = FetchDataEvent<Channel>;
 type FetchCommentsEvent = FetchDataEvent<TopLevelComment>;
 type FetchVideosEvent = FetchDataEvent<Video>;
-type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;
+
+type FetchStatusEvent = {
+    operation?: {
+        operationType: "CHANNELS" | "VIDEOS" | "COMMENTS" | "REPLIES";
+        objectId: string;
+        status: "READY" | "FETCHING" | "SUCCESSFUL" | "FAILED";
+    };
+    status?: "COMPLETED" | "FAILED";
+    error?: ProblemDetail;
+};
 
 export type {
     FetchChannelEvent,

@@ -1,7 +1,6 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { toggleSelectVideo } from "#/store/slices/selections";
 import type { Video } from "#/api";
-import type { ChangeEvent } from "react";
 
 type Props = {
     video: Video;
@@ -9,12 +8,12 @@ type Props = {
 
 const VideoCardSelectionCheckbox = ({ video }: Props) => {
     const dispatch = useAppDispatch();
-    const selected = useAppSelector(
-        (state) => state.selections.videos[video.id] ?? false,
+    const selected = useAppSelector((state) =>
+        state.selections.videos.includes(video),
     );
 
     const onChange = () => {
-        dispatch(toggleSelectVideo(video.id));
+        dispatch(toggleSelectVideo(video));
     };
 
     return (

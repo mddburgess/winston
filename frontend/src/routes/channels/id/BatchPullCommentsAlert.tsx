@@ -1,19 +1,37 @@
-import { filter } from "lodash";
 import { Alert, Button, Col } from "react-bootstrap";
-import { useAppSelector } from "#/store/hooks";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { batchPullComments } from "#/store/slices/pulls";
 import { pluralize } from "#/utils";
+import type { Channel, Video } from "#/api";
 
-const BatchPullCommentsAlert = () => {
+type Props = {
+    channel: Channel;
+    videosOnPage: Video[];
+};
+
+const BatchPullCommentsAlert = ({ channel, videosOnPage }: Props) => {
     const videos = useAppSelector((state) => state.selections.videos);
-    const selectedVideos = filter(videos, (value) => value).length;
+    const dispatch = useAppDispatch();
+
+    const handleClick = () => {
+        const videosToPull = videos.length > 0 ? videos : videosOnPage;
+        dispatch(
+            batchPullComments({ channelId: channel.id, videos: videosToPull }),
+        );
+    };
+
+    const label =
+        videos.length > 0
+            ? "Fetch comments for selected videos"
+            : "Fetch comments for videos on page";
 
     return (
         <Alert className={"alert-primary align-items-center d-flex"}>
             <Col>
-                <strong>{pluralize(selectedVideos, `video`)}</strong> selected.
+                <strong>{pluralize(videos.length, `video`)}</strong> selected.
             </Col>
             <Col xs={"auto"}>
-                <Button>Fetch comments...</Button>
+                <Button onClick={handleClick}>{label}</Button>
             </Col>
         </Alert>
     );

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Videos on the channel page can now be selected for batch operations. (mddburgess/winston#47)
+- Batch operation to pull comments and replies for all selected videos. (mddburgess/winston#47)
+- Batch operation to pull comments and replies for all videos shown on the page. (mddburgess/winston#47)
+
 ## [1.4.0] — 2025-07-27
 
 ### Added

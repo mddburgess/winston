@@ -35,14 +35,16 @@ export const FetchVideoRepliesAction = ({
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(
-            updateFetchStatus({
-                fetchType: "replies",
-                objectId: videoId,
-                status: event.status,
-            }),
-        );
-        dispatch(invalidateFetchLimits());
+        if (event.status) {
+            dispatch(
+                updateFetchStatus({
+                    fetchType: "replies",
+                    objectId: videoId,
+                    status: event.status,
+                }),
+            );
+            dispatch(invalidateFetchLimits());
+        }
     };
 
     return (

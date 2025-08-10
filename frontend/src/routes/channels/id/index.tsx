@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { BatchPullCommentsAlert } from "#/routes/channels/id/BatchPullCommentsAlert";
+import { BatchPullCommentsSidebar } from "#/routes/channels/id/BatchPullCommentsSidebar";
 import { useAppDispatch } from "#/store/hooks";
 import { useGetChannelQuery } from "#/store/slices/channels";
 import { initFetchStateForChannel } from "#/store/slices/fetches";
 import { selectAllVideos, useListVideosQuery } from "#/store/slices/videos";
+import { parseIntOrDefault } from "#/utils";
 import { routes } from "#/utils/links";
 import { ChannelDetails } from "./ChannelDetails";
 import { FetchVideosAlert } from "./FetchVideosAlert";
@@ -41,6 +43,19 @@ export const ChannelDetailsRoute = () => {
         );
     }, [videoList, search]);
 
+    const pageSize = 24;
+    const [searchParams] = useSearchParams();
+    const pageCount = Math.ceil(filteredVideoList.length / pageSize);
+    const pageNumber = Math.max(
+        1,
+        Math.min(parseIntOrDefault(searchParams.get("p"), 1), pageCount),
+    );
+    const videosOnPage = useMemo(() => {
+        const firstIndex = pageSize * (pageNumber - 1);
+        const lastIndex = pageSize * pageNumber;
+        return filteredVideoList.slice(firstIndex, lastIndex);
+    }, [pageSize, filteredVideoList, pageNumber]);
+
     return (
         <>
             <Breadcrumb>
@@ -55,7 +70,12 @@ export const ChannelDetailsRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel} />}
             {channel && <FetchVideosAlert channel={channel} />}
-            <BatchPullCommentsAlert />
+            {channel && (
+                <BatchPullCommentsAlert
+                    channel={channel}
+                    videosOnPage={videosOnPage}
+                />
+            )}
             <PaginationContext pageSize={24} items={filteredVideoList}>
                 {({
                     pageNumber,
@@ -88,6 +108,7 @@ export const ChannelDetailsRoute = () => {
                     </>
                 )}
             </PaginationContext>
+            {channel && <BatchPullCommentsSidebar channel={channel} />}
         </>
     );
 };

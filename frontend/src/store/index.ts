@@ -1,12 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import fetches from "#/store/slices/fetches";
-import { selections } from "#/store/slices/selections";
+import { pulls } from "#/store/slices/pulls";
+import { selectionsReducer } from "#/store/slices/selections";
 
 const reducer = combineReducers({
     [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
     fetches,
-    selections,
+    pulls,
+    selections: selectionsReducer,
 });
 
 const setupStore = (preloadedState?: Partial<AppState>) => {
