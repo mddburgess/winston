@@ -31,7 +31,12 @@ const AccordionContent = ({ author, video }: AccordionProps) => {
         <AuthorCommentsQuery author={author} video={video}>
             {{
                 isLoading: () => <small>Loading...</small>,
-                isSuccess: (comments) => <CommentList comments={comments} />,
+                isSuccess: (comments) => (
+                    <CommentList
+                        comments={comments}
+                        highlightAuthorId={author.id}
+                    />
+                ),
             }}
         </AuthorCommentsQuery>
     ) : (

@@ -6,6 +6,7 @@ import { selectAllReplies } from "#/store/slices/comments";
 import { routes } from "#/utils/links";
 import { ReplyList } from "./ReplyList";
 import type { CommentState } from "#/store/slices/backend";
+import { EyeSlash, Flag } from "react-bootstrap-icons";
 
 type Props = {
     comment: CommentState;
@@ -17,24 +18,22 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
 
     return (
         <ListGroupItem key={comment.id}>
-            <Row>
+            <Row
+                className={
+                    highlight
+                        ? "bg-info-subtle px-1 py-2 rounded text-info-emphasis"
+                        : ""
+                }
+            >
                 <Col xs={"auto"} className={"small"}>
                     <Link to={routes.authors.details(comment.author.handle)}>
                         {comment.author.handle}
                     </Link>
                 </Col>
-                <Col xs={"auto"} className={"ps-0 small"}>
+                <Col className={"ps-0 small"}>
                     <Date date={comment.published_at} />
                 </Col>
-            </Row>
-            <Row>
-                <Col
-                    className={
-                        highlight
-                            ? "bg-info-subtle py-1 rounded text-info-emphasis"
-                            : ""
-                    }
-                >
+                <Col xs={12}>
                     <HtmlText text={comment.text} />
                 </Col>
             </Row>

@@ -18,7 +18,12 @@ export const ReplyListItem = ({
     const highlight = highlightAuthorId === reply.author.id;
 
     return (
-        <ListGroupItem key={reply.id}>
+        <ListGroupItem
+            key={reply.id}
+            className={
+                highlight ? "bg-info-subtle rounded text-info-emphasis" : ""
+            }
+        >
             <Row>
                 <Col xs={"auto"} className={"align-items-center d-flex"}>
                     <ReplyFill className={"me-2"} />
@@ -34,13 +39,7 @@ export const ReplyListItem = ({
                 </Col>
             </Row>
             <Row>
-                <Col
-                    className={
-                        highlight
-                            ? "bg-info-subtle py-1 rounded text-info-emphasis"
-                            : ""
-                    }
-                >
+                <Col>
                     <HtmlText text={reply.text} />
                 </Col>
             </Row>
