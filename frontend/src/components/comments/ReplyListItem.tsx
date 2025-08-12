@@ -1,5 +1,5 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
-import { ReplyFill } from "react-bootstrap-icons";
+import { EyeSlash, Flag, ReplyFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
@@ -36,6 +36,11 @@ export const ReplyListItem = ({
                 </Col>
                 <Col xs={"auto"} className={"ps-0 small"}>
                     <Date date={reply.published_at} />
+                </Col>
+                <Col></Col>
+                <Col xs={"auto"} className={"pe-2 d-flex align-items-center"}>
+                    <Flag className={"me-1"} />
+                    <EyeSlash className={"ms-1"} />
                 </Col>
             </Row>
             <Row>

@@ -33,6 +33,11 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
                 <Col className={"ps-0 small"}>
                     <Date date={comment.published_at} />
                 </Col>
+                <Col></Col>
+                <Col xs={"auto"} className={"pe-2 d-flex align-items-center"}>
+                    <Flag className={"me-1"} />
+                    <EyeSlash className={"ms-1"} />
+                </Col>
                 <Col xs={12}>
                     <HtmlText text={comment.text} />
                 </Col>
