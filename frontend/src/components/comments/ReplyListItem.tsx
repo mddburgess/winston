@@ -1,5 +1,11 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
-import { EyeSlash, Flag, ReplyFill } from "react-bootstrap-icons";
+import {
+    EyeSlash,
+    EyeSlashFill,
+    Flag,
+    FlagFill,
+    ReplyFill,
+} from "react-bootstrap-icons";
 import { Link } from "react-router";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
@@ -16,20 +22,25 @@ export const ReplyListItem = ({
     highlightAuthorId = "",
 }: ReplyListItemProps) => {
     const highlight = highlightAuthorId === reply.author.id;
+    const ImportantFlag = reply.important ? FlagFill : Flag;
+    const HiddenFlag = reply.hidden ? EyeSlashFill : EyeSlash;
+    const listGroupItemClass = reply.important
+        ? "bg-warning-subtle rounded text-warning-emphasis"
+        : reply.hidden
+          ? "text-body-tertiary"
+          : highlight
+            ? "bg-info-subtle rounded text-info-emphasis"
+            : "";
+    const linkClass = reply.hidden ? "small text-body-tertiary" : "small";
 
     return (
-        <ListGroupItem
-            key={reply.id}
-            className={
-                highlight ? "bg-info-subtle rounded text-info-emphasis" : ""
-            }
-        >
+        <ListGroupItem key={reply.id} className={listGroupItemClass}>
             <Row>
                 <Col xs={"auto"} className={"align-items-center d-flex"}>
                     <ReplyFill className={"me-2"} />
                     <Link
                         to={routes.authors.details(reply.author.handle)}
-                        className={"small"}
+                        className={linkClass}
                     >
                         {reply.author.handle}
                     </Link>
@@ -39,8 +50,8 @@ export const ReplyListItem = ({
                 </Col>
                 <Col></Col>
                 <Col xs={"auto"} className={"pe-2 d-flex align-items-center"}>
-                    <Flag className={"me-1"} />
-                    <EyeSlash className={"ms-1"} />
+                    <ImportantFlag className={"me-1"} />
+                    <HiddenFlag className={"ms-1"} />
                 </Col>
             </Row>
             <Row>
