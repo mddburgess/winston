@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,6 +62,10 @@ public class CommentEntity {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
     private OffsetDateTime lastFetchedAt;
+
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "comment_id")
+    private CommentPropertiesEntity properties;
 
     @OneToMany(cascade = {PERSIST, MERGE})
     @JoinColumn(name = "parent_id", referencedColumnName = "id")

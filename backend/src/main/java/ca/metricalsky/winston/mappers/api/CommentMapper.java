@@ -10,8 +10,12 @@ import org.mapstruct.Mapping;
 public interface CommentMapper {
 
     @Mapping(target = "text", source = "textDisplay")
+    @Mapping(target = "important", source = "properties.important", defaultValue = "false")
+    @Mapping(target = "hidden", source = "properties.hidden", defaultValue = "false")
     TopLevelComment toTopLevelComment(CommentEntity comment);
 
     @Mapping(target = "text", source = "textDisplay")
+    @Mapping(target = "important", source = "properties.important", defaultValue = "false")
+    @Mapping(target = "hidden", source = "properties.hidden", defaultValue = "false")
     Comment toComment(CommentEntity comment);
 }

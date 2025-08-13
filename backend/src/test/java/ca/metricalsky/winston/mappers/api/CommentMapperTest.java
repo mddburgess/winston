@@ -84,7 +84,9 @@ class CommentMapperTest {
         var topLevelComment = commentMapper.toTopLevelComment(new CommentEntity());
 
         assertThat(topLevelComment)
-                .hasAllNullFieldsOrProperties();
+                .hasAllNullFieldsOrPropertiesExcept("hidden", "important")
+                .hasFieldOrPropertyWithValue("hidden", false)
+                .hasFieldOrPropertyWithValue("important", false);
     }
 
     @Test
@@ -100,7 +102,9 @@ class CommentMapperTest {
         var comment = commentMapper.toComment(new CommentEntity());
 
         assertThat(comment)
-                .hasAllNullFieldsOrProperties();
+                .hasAllNullFieldsOrPropertiesExcept("hidden", "important")
+                .hasFieldOrPropertyWithValue("hidden", false)
+                .hasFieldOrPropertyWithValue("important", false);
     }
 
     private static CommentEntity buildCommentEntity() {

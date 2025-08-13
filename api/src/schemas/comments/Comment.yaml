@@ -7,6 +7,8 @@ required:
   - video_id
   - author
   - text
+  - important
+  - flagged
   - published_at
   - updated_at
   - last_fetched_at
@@ -22,6 +24,12 @@ properties:
   text:
     description: The comment text.
     type: string
+  important:
+    description: Flag indicating if the comment should be highlighted as important.
+    type: boolean
+  hidden:
+    description: Flag indicating if the comment should be hidden from view.
+    type: boolean
   published_at:
     description: The timestamp of when the comment was published.
     type: string
