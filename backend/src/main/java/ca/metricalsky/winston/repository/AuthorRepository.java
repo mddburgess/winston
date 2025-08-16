@@ -19,11 +19,13 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
     @Query("""
             SELECT
                 a AS author,
+                COUNT(DISTINCT v.channelId) AS channelCount,
                 COUNT(DISTINCT c.videoId) AS videoCount,
                 COUNT(c.id) - COUNT(c.parentId) AS commentCount,
                 COUNT(c.parentId) AS replyCount
             FROM AuthorEntity a
                 LEFT JOIN CommentEntity c ON a.id = c.author.id
+                LEFT JOIN VideoEntity v ON c.videoId = v.id
             GROUP BY a.id
             """)
     List<AuthorDetailsView> findAllAuthorDetails();

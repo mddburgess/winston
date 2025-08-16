@@ -24,10 +24,16 @@ properties:
     description: Statistics of the author's comment activity.
     type: object
     required:
+      - channel_count
       - video_count
       - comment_count
       - reply_count
     properties:
+      channel_count:
+        description: The number of channels with fetched videos that the author has commented on.
+        type: integer
+        format: int32
+        minimum: 0
       video_count:
         description: The number of fetched videos that the author has commented on.
         type: integer
