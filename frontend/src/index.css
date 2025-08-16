@@ -11,6 +11,11 @@
     cursor: pointer;
 }
 
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
 .line-clamp-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;

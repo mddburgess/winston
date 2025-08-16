@@ -1,15 +1,5 @@
-import { Col, ListGroupItem, Row } from "react-bootstrap";
-import {
-    EyeSlash,
-    EyeSlashFill,
-    Flag,
-    FlagFill,
-    ReplyFill,
-} from "react-bootstrap-icons";
-import { usePatchCommentPropertiesMutation } from "#/api";
-import { AuthorLink } from "#/components/authors/AuthorLink";
-import { Date } from "#/components/Date";
-import { HtmlText } from "#/components/HtmlText";
+import { ListGroupItem } from "react-bootstrap";
+import { CommentDisplayRow } from "#/components/comments/CommentDisplayRow";
 import type { Comment } from "#/api";
 
 type ReplyListItemProps = {
@@ -19,87 +9,13 @@ type ReplyListItemProps = {
 
 export const ReplyListItem = ({
     reply,
-    highlightAuthorId = "",
-}: ReplyListItemProps) => {
-    const [patchCommentProperties] = usePatchCommentPropertiesMutation();
-
-    const highlight = highlightAuthorId === reply.author.id;
-    const ImportantFlag = reply.properties.important ? FlagFill : Flag;
-    const HiddenFlag = reply.properties.hidden ? EyeSlashFill : EyeSlash;
-    const listGroupItemClass = reply.properties.important
-        ? "bg-warning-subtle rounded text-warning-emphasis"
-        : reply.properties.hidden
-          ? "text-body-tertiary"
-          : highlight
-            ? "bg-info-subtle rounded text-info-emphasis"
-            : "";
-    const linkClass = reply.properties.hidden
-        ? "small text-body-tertiary"
-        : "small";
-
-    const handleClickImportant = () => {
-        void patchCommentProperties({
-            id: reply.id,
-            body: [
-                {
-                    op: "add",
-                    path: "/important",
-                    value: !reply.properties.important,
-                },
-                {
-                    op: "add",
-                    path: "/hidden",
-                    value: false,
-                },
-            ],
-        });
-    };
-
-    const handleClickHidden = () => {
-        void patchCommentProperties({
-            id: reply.id,
-            body: [
-                {
-                    op: "add",
-                    path: "/hidden",
-                    value: !reply.properties.hidden,
-                },
-                {
-                    op: "add",
-                    path: "/important",
-                    value: false,
-                },
-            ],
-        });
-    };
-
-    return (
-        <ListGroupItem key={reply.id} className={listGroupItemClass}>
-            <Row>
-                <Col xs={"auto"} className={"align-items-center d-flex"}>
-                    <ReplyFill className={"me-2"} />
-                    <AuthorLink author={reply.author} className={linkClass} />
-                </Col>
-                <Col xs={"auto"} className={"ps-0 small"}>
-                    <Date date={reply.published_at} />
-                </Col>
-                <Col></Col>
-                <Col xs={"auto"} className={"pe-2 d-flex align-items-center"}>
-                    <ImportantFlag
-                        className={"me-1"}
-                        onClick={handleClickImportant}
-                    />
-                    <HiddenFlag
-                        className={"ms-1"}
-                        onClick={handleClickHidden}
-                    />
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <HtmlText text={reply.text.display} />
-                </Col>
-            </Row>
-        </ListGroupItem>
-    );
-};
+    highlightAuthorId,
+}: ReplyListItemProps) => (
+    <ListGroupItem key={reply.id}>
+        <CommentDisplayRow
+            comment={reply}
+            highlightAuthorId={highlightAuthorId}
+            isReply={true}
+        />
+    </ListGroupItem>
+);
