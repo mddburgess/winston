@@ -1,0 +1,12 @@
+description: The text of a comment.
+type: object
+required:
+  - display
+  - original
+properties:
+  display:
+    description: The text of the comment formatted as HTML.
+    type: string
+  original:
+    description: The original text of the comment.
+    type: string

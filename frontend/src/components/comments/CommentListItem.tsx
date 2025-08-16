@@ -15,16 +15,16 @@ type Props = {
 
 export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
     const highlight = highlightAuthorId === comment.author.id;
-    const ImportantFlag = comment.important ? FlagFill : Flag;
-    const HiddenFlag = comment.hidden ? EyeSlashFill : EyeSlash;
-    const rowClass = comment.important
+    const ImportantFlag = comment.properties.important ? FlagFill : Flag;
+    const HiddenFlag = comment.properties.hidden ? EyeSlashFill : EyeSlash;
+    const rowClass = comment.properties.important
         ? "bg-warning-subtle px-1 py-2 rounded text-warning-emphasis"
-        : comment.hidden
+        : comment.properties.hidden
           ? "text-body-tertiary"
           : highlight
             ? "bg-info-subtle px-1 py-2 rounded text-info-emphasis"
             : "";
-    const linkClass = comment.hidden ? "text-body-tertiary" : "";
+    const linkClass = comment.properties.hidden ? "text-body-tertiary" : "";
 
     return (
         <ListGroupItem key={comment.id}>
@@ -46,7 +46,7 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
                     <HiddenFlag className={"ms-1"} />
                 </Col>
                 <Col xs={12}>
-                    <HtmlText text={comment.text} />
+                    <HtmlText text={comment.text.display} />
                 </Col>
             </Row>
             <Row>

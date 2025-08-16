@@ -2,6 +2,7 @@ package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.entity.CommentPropertiesEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +39,13 @@ class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("author.channelUrl", authorEntity.getChannelUrl())
                 .hasFieldOrPropertyWithValue("author.profileImageUrl",
                         "/api/v1/authors/" + authorEntity.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("text", commentEntity.getTextDisplay())
+                .hasFieldOrPropertyWithValue("text.display", commentEntity.getTextDisplay())
+                .hasFieldOrPropertyWithValue("text.original", commentEntity.getTextOriginal())
                 .hasFieldOrPropertyWithValue("publishedAt", commentEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", commentEntity.getUpdatedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", commentEntity.getLastFetchedAt())
+                .hasFieldOrPropertyWithValue("properties.important", commentEntity.getProperties().isImportant())
+                .hasFieldOrPropertyWithValue("properties.hidden", commentEntity.getProperties().isHidden())
                 .hasFieldOrPropertyWithValue("totalReplyCount", commentEntity.getTotalReplyCount().intValue())
                 .hasNoNullFieldsOrPropertiesExcept("replies");
     }
@@ -64,10 +68,13 @@ class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("author.channelUrl", replyAuthor.getChannelUrl())
                 .hasFieldOrPropertyWithValue("author.profileImageUrl",
                         "/api/v1/authors/" + replyAuthor.getId() + "/thumbnail")
-                .hasFieldOrPropertyWithValue("text", replyEntity.getTextDisplay())
+                .hasFieldOrPropertyWithValue("text.display", replyEntity.getTextDisplay())
+                .hasFieldOrPropertyWithValue("text.original", replyEntity.getTextOriginal())
                 .hasFieldOrPropertyWithValue("publishedAt", replyEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", replyEntity.getUpdatedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", replyEntity.getLastFetchedAt())
+                .hasFieldOrPropertyWithValue("properties.important", replyEntity.getProperties().isImportant())
+                .hasFieldOrPropertyWithValue("properties.hidden", replyEntity.getProperties().isHidden())
                 .hasNoNullFieldsOrProperties();
     }
 
@@ -84,9 +91,12 @@ class CommentMapperTest {
         var topLevelComment = commentMapper.toTopLevelComment(new CommentEntity());
 
         assertThat(topLevelComment)
-                .hasAllNullFieldsOrPropertiesExcept("hidden", "important")
-                .hasFieldOrPropertyWithValue("hidden", false)
-                .hasFieldOrPropertyWithValue("important", false);
+                .hasAllNullFieldsOrPropertiesExcept("text", "properties");
+        assertThat(topLevelComment.getText())
+                .hasAllNullFieldsOrProperties();
+        assertThat(topLevelComment.getProperties())
+                .hasFieldOrPropertyWithValue("important", false)
+                .hasFieldOrPropertyWithValue("hidden", false);
     }
 
     @Test
@@ -102,9 +112,12 @@ class CommentMapperTest {
         var comment = commentMapper.toComment(new CommentEntity());
 
         assertThat(comment)
-                .hasAllNullFieldsOrPropertiesExcept("hidden", "important")
-                .hasFieldOrPropertyWithValue("hidden", false)
-                .hasFieldOrPropertyWithValue("important", false);
+                .hasAllNullFieldsOrPropertiesExcept("text", "properties");
+        assertThat(comment.getText())
+                .hasAllNullFieldsOrProperties();
+        assertThat(comment.getProperties())
+                .hasFieldOrPropertyWithValue("important", false)
+                .hasFieldOrPropertyWithValue("hidden", false);
     }
 
     private static CommentEntity buildCommentEntity() {
@@ -114,14 +127,20 @@ class CommentMapperTest {
                 .channelUrl(TestUtils.randomString())
                 .profileImageUrl(TestUtils.randomString())
                 .build();
+        var commentPropertiesEntity = CommentPropertiesEntity.builder()
+                .important(true)
+                .hidden(false)
+                .build();
         return CommentEntity.builder()
                 .id(TestUtils.randomId())
                 .videoId(TestUtils.randomId())
                 .author(authorEntity)
                 .textDisplay(TestUtils.randomString())
+                .textOriginal(TestUtils.randomString())
                 .publishedAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())
                 .lastFetchedAt(OffsetDateTime.now())
+                .properties(commentPropertiesEntity)
                 .totalReplyCount(1L)
                 .build();
     }

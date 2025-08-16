@@ -22,16 +22,18 @@ export const ReplyListItem = ({
     highlightAuthorId = "",
 }: ReplyListItemProps) => {
     const highlight = highlightAuthorId === reply.author.id;
-    const ImportantFlag = reply.important ? FlagFill : Flag;
-    const HiddenFlag = reply.hidden ? EyeSlashFill : EyeSlash;
-    const listGroupItemClass = reply.important
+    const ImportantFlag = reply.properties.important ? FlagFill : Flag;
+    const HiddenFlag = reply.properties.hidden ? EyeSlashFill : EyeSlash;
+    const listGroupItemClass = reply.properties.important
         ? "bg-warning-subtle rounded text-warning-emphasis"
-        : reply.hidden
+        : reply.properties.hidden
           ? "text-body-tertiary"
           : highlight
             ? "bg-info-subtle rounded text-info-emphasis"
             : "";
-    const linkClass = reply.hidden ? "small text-body-tertiary" : "small";
+    const linkClass = reply.properties.hidden
+        ? "small text-body-tertiary"
+        : "small";
 
     return (
         <ListGroupItem key={reply.id} className={listGroupItemClass}>
@@ -56,7 +58,7 @@ export const ReplyListItem = ({
             </Row>
             <Row>
                 <Col>
-                    <HtmlText text={reply.text} />
+                    <HtmlText text={reply.text.display} />
                 </Col>
             </Row>
         </ListGroupItem>

@@ -13,6 +13,7 @@ googleApiClient = { module = "com.google.api-client:google-api-client", version 
 googleApiServicesYoutube = { module = "com.google.apis:google-api-services-youtube", version = "v3-rev20250422-2.0.0" }
 googleHttpClientGson = { module = "com.google.http-client:google-http-client-gson", version = "1.47.0" }
 jacksonDatabindNullable = { module = "org.openapitools:jackson-databind-nullable", version = "0.2.6" }
+jsonPatch = { module = "com.github.java-json-tools:json-patch", version = "1.13" }
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 lombok = { module = "org.projectlombok:lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
@@ -51,6 +52,6 @@ youtube = [
 
 [plugins]
 node = { id = "com.github.node-gradle.node", version = "7.1.0" }
-openapiGenerator = { id = "org.openapi.generator", version = "7.13.0" }
+openapiGenerator = { id = "org.openapi.generator", version = "7.14.0" }
 springBoot = { id = "org.springframework.boot", version = "3.4.5" }
 springDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.7" }

@@ -3,6 +3,7 @@ package ca.metricalsky.winston.mappers.api;
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,6 +21,11 @@ public abstract class AuthorMapper {
     @Mapping(target = "profileImageUrl", source = ".", qualifiedByName = "mapProfileImageUrl")
     @Mapping(target = "statistics", ignore = true)
     public abstract Author toAuthor(AuthorEntity authorEntity);
+
+    @InheritInverseConfiguration
+    @Mapping(target = "displayName", source = "handle")
+    @Mapping(target = "lastFetchedAt", ignore = true)
+    public abstract AuthorEntity toAuthorEntity(Author author);
 
     @Mapping(target = ".", source = "author")
     @Mapping(target = "handle", source = "author", qualifiedByName = "mapHandle")

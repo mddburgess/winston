@@ -44,13 +44,15 @@ export const VideoDetailsRoute = () => {
                     comment.author.handle
                         .toLowerCase()
                         .includes(search.toLowerCase()) ||
-                    comment.text.toLowerCase().includes(search.toLowerCase()) ||
+                    comment.text.original
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
                     selectAllReplies(comment.replies).filter(
                         (reply) =>
                             reply.author.handle
                                 .toLowerCase()
                                 .includes(search.toLowerCase()) ||
-                            reply.text
+                            reply.text.original
                                 .toLowerCase()
                                 .includes(search.toLowerCase()),
                     ).length > 0,
