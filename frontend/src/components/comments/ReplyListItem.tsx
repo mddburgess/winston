@@ -7,6 +7,7 @@ import {
     ReplyFill,
 } from "react-bootstrap-icons";
 import { Link } from "react-router";
+import { usePatchCommentPropertiesMutation } from "#/api";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
 import { routes } from "#/utils/links";
@@ -21,6 +22,8 @@ export const ReplyListItem = ({
     reply,
     highlightAuthorId = "",
 }: ReplyListItemProps) => {
+    const [patchCommentProperties] = usePatchCommentPropertiesMutation();
+
     const highlight = highlightAuthorId === reply.author.id;
     const ImportantFlag = reply.properties.important ? FlagFill : Flag;
     const HiddenFlag = reply.properties.hidden ? EyeSlashFill : EyeSlash;
@@ -34,6 +37,42 @@ export const ReplyListItem = ({
     const linkClass = reply.properties.hidden
         ? "small text-body-tertiary"
         : "small";
+
+    const handleClickImportant = () => {
+        void patchCommentProperties({
+            id: reply.id,
+            body: [
+                {
+                    op: "add",
+                    path: "/important",
+                    value: !reply.properties.important,
+                },
+                {
+                    op: "add",
+                    path: "/hidden",
+                    value: false,
+                },
+            ],
+        });
+    };
+
+    const handleClickHidden = () => {
+        void patchCommentProperties({
+            id: reply.id,
+            body: [
+                {
+                    op: "add",
+                    path: "/hidden",
+                    value: !reply.properties.hidden,
+                },
+                {
+                    op: "add",
+                    path: "/important",
+                    value: false,
+                },
+            ],
+        });
+    };
 
     return (
         <ListGroupItem key={reply.id} className={listGroupItemClass}>
@@ -52,8 +91,14 @@ export const ReplyListItem = ({
                 </Col>
                 <Col></Col>
                 <Col xs={"auto"} className={"pe-2 d-flex align-items-center"}>
-                    <ImportantFlag className={"me-1"} />
-                    <HiddenFlag className={"ms-1"} />
+                    <ImportantFlag
+                        className={"me-1"}
+                        onClick={handleClickImportant}
+                    />
+                    <HiddenFlag
+                        className={"ms-1"}
+                        onClick={handleClickHidden}
+                    />
                 </Col>
             </Row>
             <Row>
