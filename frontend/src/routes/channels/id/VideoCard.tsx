@@ -5,13 +5,9 @@ import { CommentCounts } from "#/components/comments/CommentCounts";
 import { Date } from "#/components/Date";
 import { VideoCardSelectionCheckbox } from "#/routes/channels/id/VideoCardSelectionCheckbox";
 import { routes } from "#/utils/links";
-import type { Video } from "#/api";
+import type { VideoProps } from "#/types";
 
-type Props = {
-    video: Video;
-};
-
-export const VideoCard = ({ video }: Props) => (
+export const VideoCard = ({ video }: VideoProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <VideoCardSelectionCheckbox video={video} />

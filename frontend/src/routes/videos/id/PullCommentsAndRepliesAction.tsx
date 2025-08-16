@@ -6,9 +6,9 @@ import { invalidateFetchLimits } from "#/store/slices/api";
 import { appendComments, appendReplies } from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import { markVideoCommentsDisabled } from "#/store/slices/videos";
-import type { Comment, Video } from "#/api";
+import type { Comment } from "#/api";
 import type { TopLevelComment } from "#/store/slices/backend";
-import type { FetchStatusEvent } from "#/types";
+import type { FetchStatusEvent, VideoProps } from "#/types";
 
 type PullDataEvent = {
     objectId: string;
@@ -16,11 +16,7 @@ type PullDataEvent = {
     replies?: Comment[];
 };
 
-type Props = {
-    video: Video;
-};
-
-const PullCommentsAndRepliesAction = ({ video }: Props) => {
+const PullCommentsAndRepliesAction = ({ video }: VideoProps) => {
     const [pull] = usePullMutation();
     const dispatch = useAppDispatch();
 

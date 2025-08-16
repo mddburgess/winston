@@ -1,12 +1,8 @@
 import { Col } from "react-bootstrap";
 import { ChatFill, ChatQuoteFill, Youtube } from "react-bootstrap-icons";
-import type { Author } from "#/api";
+import type { AuthorProps } from "#/types";
 
-type Props = {
-    author: Author;
-};
-
-export const AuthorStatistics = ({ author }: Props) => (
+export const AuthorStatistics = ({ author }: AuthorProps) => (
     <>
         <Col
             className={"align-items-center d-flex"}

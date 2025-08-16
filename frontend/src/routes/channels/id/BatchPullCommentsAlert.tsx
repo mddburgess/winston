@@ -2,10 +2,10 @@ import { Alert, Button, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { batchPullComments } from "#/store/slices/pulls";
 import { pluralize } from "#/utils";
-import type { Channel, Video } from "#/api";
+import type { Video } from "#/api";
+import type { ChannelProps } from "#/types";
 
-type Props = {
-    channel: Channel;
+type Props = ChannelProps & {
     videosOnPage: Video[];
 };
 
