@@ -1,11 +1,10 @@
 import { Col, ListGroupItem, Row } from "react-bootstrap";
 import { EyeSlash, EyeSlashFill, Flag, FlagFill } from "react-bootstrap-icons";
-import { Link } from "react-router";
 import { usePatchCommentPropertiesMutation } from "#/api";
+import { AuthorLink } from "#/components/authors/AuthorLink";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
 import { selectAllReplies } from "#/store/slices/comments";
-import { routes } from "#/utils/links";
 import { ReplyList } from "./ReplyList";
 import type { CommentState } from "#/store/slices/backend";
 
@@ -69,12 +68,7 @@ export const CommentListItem = ({ comment, highlightAuthorId = "" }: Props) => {
         <ListGroupItem key={comment.id}>
             <Row className={rowClass}>
                 <Col xs={"auto"} className={"small"}>
-                    <Link
-                        to={routes.authors.details(comment.author.handle)}
-                        className={linkClass}
-                    >
-                        {comment.author.handle}
-                    </Link>
+                    <AuthorLink author={comment.author} className={linkClass} />
                 </Col>
                 <Col className={"ps-0 small"}>
                     <Date date={comment.published_at} />
