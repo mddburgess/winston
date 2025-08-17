@@ -20,32 +20,10 @@ properties:
   profile_image_url:
     description: An URL to a thumbnail image for the author's channel.
     type: string
-  statistics:
-    description: Statistics of the author's comment activity.
-    type: object
-    required:
-      - channel_count
-      - video_count
-      - comment_count
-      - reply_count
-    properties:
-      channel_count:
-        description: The number of channels with fetched videos that the author has commented on.
-        type: integer
-        format: int32
-        minimum: 0
-      video_count:
-        description: The number of fetched videos that the author has commented on.
-        type: integer
-        format: int32
-        minimum: 0
-      comment_count:
-        description: The number of top-level comments across all fetched videos that were published by the author.
-        type: integer
-        format: int32
-        minimum: 0
-      reply_count:
-        description: The number of replies to comments across all fetched videos that were published by the author.
-        type: integer
-        format: int32
-        minimum: 0
+  author_statistics:
+    $ref: ./AuthorStatistics.yaml
+  video_statistics:
+    description: Statistics of the author's comment activity for each video that the author has commented on.
+    type: array
+    items:
+      $ref: ./VideoStatistics.yaml

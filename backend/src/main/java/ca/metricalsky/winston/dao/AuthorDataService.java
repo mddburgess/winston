@@ -2,9 +2,11 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.AuthorStatistics;
+import ca.metricalsky.winston.api.model.VideoStatistics;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class AuthorDataService {
 
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
+    private final ConversionService conversionService;
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAllAuthorDetails()
@@ -32,26 +35,23 @@ public class AuthorDataService {
     }
 
     public Optional<Author> findAuthorByHandle(String handle) {
-        var author = Optionals.firstNonEmpty(
+        var maybeAuthor = Optionals.firstNonEmpty(
                 () -> authorRepository.findByDisplayName(handle),
                 () -> authorRepository.findByChannelUrl(getChannelUrl(handle)),
                 () -> authorRepository.findById(handle)
-        ).map(authorMapper::toAuthor).orElse(null);
+        ).map(authorMapper::toAuthor);
 
-        if (author == null) {
-            return Optional.empty();
-        }
+        maybeAuthor.ifPresent(author -> {
+            var videoStatistics = authorRepository.findVideoStatisticsByAuthorId(author.getId())
+                    .stream()
+                    .map(entity -> conversionService.convert(entity, VideoStatistics.class))
+                    .toList();
 
-        authorRepository.findAuthorDetailsById(author.getId()).ifPresent(authorDetails -> {
-            var authorStatistics = new AuthorStatistics()
-                    .channelCount(authorDetails.getChannelCount().intValue())
-                    .videoCount(authorDetails.getVideoCount().intValue())
-                    .commentCount(authorDetails.getCommentCount().intValue())
-                    .replyCount(authorDetails.getReplyCount().intValue());
-            author.setStatistics(authorStatistics);
+            author.setVideoStatistics(videoStatistics);
+            author.setAuthorStatistics(conversionService.convert(videoStatistics, AuthorStatistics.class));
         });
 
-        return Optional.of(author);
+        return maybeAuthor;
     }
 
     private static String getChannelUrl(String authorHandle) {

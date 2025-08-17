@@ -1,0 +1,29 @@
+title: Author Statistics
+description: Statistics of the author's comment activity.
+type: object
+required:
+  - channel_count
+  - video_count
+  - comment_count
+  - reply_count
+properties:
+  channel_count:
+    description: The number of channels with fetched videos that the author has commented on.
+    type: integer
+    format: int64
+    minimum: 0
+  video_count:
+    description: The number of fetched videos that the author has commented on.
+    type: integer
+    format: int64
+    minimum: 0
+  comment_count:
+    description: The number of top-level comments across all fetched videos that were published by the author.
+    type: integer
+    format: int64
+    minimum: 0
+  reply_count:
+    description: The number of replies to comments across all fetched videos that were published by the author.
+    type: integer
+    format: int64
+    minimum: 0

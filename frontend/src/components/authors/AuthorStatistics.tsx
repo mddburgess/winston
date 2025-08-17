@@ -15,7 +15,7 @@ export const AuthorStatistics = ({ author }: AuthorProps) => (
             xs={"auto"}
         >
             <PersonVideo3 className={"me-2"} />
-            {author.statistics?.channel_count ?? 0}
+            {author.author_statistics?.channel_count ?? 0}
         </Col>
         <Col
             className={"flex-center"}
@@ -23,7 +23,7 @@ export const AuthorStatistics = ({ author }: AuthorProps) => (
             xs={"auto"}
         >
             <Youtube className={"me-2"} />
-            {author.statistics?.video_count ?? 0}
+            {author.author_statistics?.video_count ?? 0}
         </Col>
         <Col
             className={"flex-center"}
@@ -31,11 +31,11 @@ export const AuthorStatistics = ({ author }: AuthorProps) => (
             xs={"auto"}
         >
             <ChatFill className={"me-2"} />
-            {author.statistics?.comment_count ?? 0}
+            {author.author_statistics?.comment_count ?? 0}
         </Col>
         <Col className={"flex-center"} data-testid={"totalReplies"} xs={"auto"}>
             <ChatQuoteFill className={"me-2"} />
-            {author.statistics?.reply_count ?? 0}
+            {author.author_statistics?.reply_count ?? 0}
         </Col>
     </>
 );

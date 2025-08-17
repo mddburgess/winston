@@ -28,8 +28,8 @@ public class AuthorMapperTest {
                 .hasFieldOrPropertyWithValue("channelUrl", authorEntity.getChannelUrl())
                 .hasFieldOrPropertyWithValue("profileImageUrl",
                         "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
-        assertThat(author.getStatistics())
-                .as("author.statistics")
+        assertThat(author.getAuthorStatistics())
+                .as("author.authorStatistics")
                 .isNull();
     }
 
@@ -63,11 +63,11 @@ public class AuthorMapperTest {
                 .hasFieldOrPropertyWithValue("channelUrl", authorEntity.getChannelUrl())
                 .hasFieldOrPropertyWithValue("profileImageUrl",
                         "/api/v1/authors/" + authorEntity.getId() + "/thumbnail");
-        assertThat(author.getStatistics())
-                .as("author.statistics")
-                .hasFieldOrPropertyWithValue("videoCount", 1)
-                .hasFieldOrPropertyWithValue("commentCount", 2)
-                .hasFieldOrPropertyWithValue("replyCount", 3);
+        assertThat(author.getAuthorStatistics())
+                .as("author.authorStatistics")
+                .hasFieldOrPropertyWithValue("videoCount", authorDetailsView.getVideoCount())
+                .hasFieldOrPropertyWithValue("commentCount", authorDetailsView.getCommentCount())
+                .hasFieldOrPropertyWithValue("replyCount", authorDetailsView.getReplyCount());
     }
 
     @Test

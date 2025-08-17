@@ -19,7 +19,8 @@ public abstract class AuthorMapper {
 
     @Mapping(target = "handle", source = ".", qualifiedByName = "mapHandle")
     @Mapping(target = "profileImageUrl", source = ".", qualifiedByName = "mapProfileImageUrl")
-    @Mapping(target = "statistics", ignore = true)
+    @Mapping(target = "authorStatistics", ignore = true)
+    @Mapping(target = "videoStatistics", ignore = true)
     public abstract Author toAuthor(AuthorEntity authorEntity);
 
     @InheritInverseConfiguration
@@ -30,7 +31,8 @@ public abstract class AuthorMapper {
     @Mapping(target = ".", source = "author")
     @Mapping(target = "handle", source = "author", qualifiedByName = "mapHandle")
     @Mapping(target = "profileImageUrl", source = "author", qualifiedByName = "mapProfileImageUrl")
-    @Mapping(target = "statistics", source = ".")
+    @Mapping(target = "authorStatistics", source = ".")
+    @Mapping(target = "videoStatistics", ignore = true)
     public abstract Author toAuthor(AuthorDetailsView authorDetailsView);
 
     @Named("mapHandle")
