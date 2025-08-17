@@ -7,8 +7,7 @@ import { appendComments, appendReplies } from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
 import { markVideoCommentsDisabled } from "#/store/slices/videos";
 import type { Comment } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
-import type { FetchStatusEvent, VideoProps } from "#/types";
+import type { FetchStatusEvent, TopLevelComment, VideoProps } from "#/types";
 
 type PullDataEvent = {
     objectId: string;

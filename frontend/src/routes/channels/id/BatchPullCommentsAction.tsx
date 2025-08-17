@@ -8,9 +8,8 @@ import {
     batchPullCommentsStatus,
 } from "#/store/slices/pulls";
 import type { Comment, PullOperations } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
 import type { PullCommentsState } from "#/store/slices/pulls";
-import type { ChannelProps, FetchStatusEvent } from "#/types";
+import type { ChannelProps, FetchStatusEvent, TopLevelComment } from "#/types";
 
 type PullDataEvent = {
     objectId: string;
@@ -76,10 +75,6 @@ const BatchPullCommentsAction = ({ channel, pullComments }: Props) => {
             />
         </EventSourceProvider>
     );
-};
-
-const buildOperations = (videoIds: string[]) => {
-    return;
 };
 
 export { BatchPullCommentsAction };

@@ -44,7 +44,7 @@ const CommentCounts = ({
                 commentsDisabled={commentsDisabled}
                 hasBeenFetched={hasBeenFetched}
             />
-            {commentCount > 0 && (
+            {commentCount + replyCount > 0 && (
                 <RepliesCol
                     replyCount={replyCount}
                     totalReplyCount={totalReplyCount}

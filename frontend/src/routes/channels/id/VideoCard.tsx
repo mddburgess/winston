@@ -35,7 +35,7 @@ export const VideoCard = ({ video }: VideoProps) => (
                     />
                 </Row>
             </Card.Footer>
-            <Card.Footer className={"d-flex align-items-center"}>
+            <Card.Footer className={"bg-body-secondary flex-center"}>
                 <ArrowUpLeftCircleFill className={"me-2"} />
                 <Date date={video.published_at} />
             </Card.Footer>

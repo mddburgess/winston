@@ -3,8 +3,7 @@ import { uniq } from "lodash";
 import { DateTime } from "luxon";
 import { descBy } from "#/utils";
 import type { Comment, Video } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
-import type { Maybe } from "#/types";
+import type { Maybe, TopLevelComment } from "#/types";
 import type { EntityState, PayloadAction } from "@reduxjs/toolkit";
 
 type PullCommentsState = {

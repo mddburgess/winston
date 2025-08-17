@@ -9,20 +9,23 @@ import {
     Col,
     Row,
 } from "react-bootstrap";
+import { AuthorVideoCards } from "#/components/authors/AuthorVideoCards";
 import { CommentList } from "#/components/comments/CommentList";
 import { AuthorCommentsQuery } from "./AuthorCommentsQuery";
-import type { Author, GetAuthorResponse, Video } from "#/api";
+import type { GetAuthorResponse } from "#/api";
+import type {
+    AuthorProps,
+    ChannelSummary,
+    VideoListProps,
+    VideoProps,
+} from "#/types";
 
 type AuthorChannelSummaryProps = {
-    author: Author;
-    channel: Video["channel"];
-    videos: Video[];
-};
+    channel: ChannelSummary;
+} & AuthorProps &
+    VideoListProps;
 
-type AccordionProps = {
-    author: Author;
-    video: Video;
-};
+type AccordionProps = AuthorProps & VideoProps;
 
 const AccordionContent = ({ author, video }: AccordionProps) => {
     const { activeEventKey } = useContext(AccordionContext);
@@ -50,7 +53,8 @@ const AuthorChannelSummary = ({
     videos,
 }: AuthorChannelSummaryProps) => (
     <>
-        <h4>{channel.title}</h4>
+        <h2 className={"border-bottom"}>{channel.title}</h2>
+        <AuthorVideoCards author={author} videos={videos} />
         <Accordion>
             {videos.map((video) => (
                 <AccordionItem key={video.id} eventKey={video.id}>
