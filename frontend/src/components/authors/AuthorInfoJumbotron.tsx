@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import { AuthorProfileImage } from "#/components/authors/AuthorProfileImage";
-import { AuthorStatistics } from "#/routes/authors/AuthorStatistics";
+import { AuthorStatistics } from "#/components/authors/AuthorStatistics";
 import type { AuthorProps } from "#/types";
 
 const AuthorInfoJumbotron = ({ author }: AuthorProps) => (

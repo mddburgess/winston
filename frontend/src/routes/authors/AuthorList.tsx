@@ -1,7 +1,7 @@
 import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
 import { AuthorLink } from "#/components/authors/AuthorLink";
 import { AuthorProfileImage } from "#/components/authors/AuthorProfileImage";
-import { AuthorStatistics } from "#/routes/authors/AuthorStatistics";
+import { AuthorStatistics } from "#/components/authors/AuthorStatistics";
 import type { AuthorListProps, AuthorProps } from "#/types";
 
 const AuthorList = ({ authors }: AuthorListProps) => (
