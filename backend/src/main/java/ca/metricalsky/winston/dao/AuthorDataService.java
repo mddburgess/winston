@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
+import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,26 @@ public class AuthorDataService {
     }
 
     public Optional<Author> findAuthorByHandle(String handle) {
-        return Optionals.firstNonEmpty(
+        var author = Optionals.firstNonEmpty(
                 () -> authorRepository.findByDisplayName(handle),
                 () -> authorRepository.findByChannelUrl(getChannelUrl(handle)),
                 () -> authorRepository.findById(handle)
-        ).map(authorMapper::toAuthor);
+        ).map(authorMapper::toAuthor).orElse(null);
+
+        if (author == null) {
+            return Optional.empty();
+        }
+
+        authorRepository.findAuthorDetailsById(author.getId()).ifPresent(authorDetails -> {
+            var authorStatistics = new AuthorStatistics()
+                    .channelCount(authorDetails.getChannelCount().intValue())
+                    .videoCount(authorDetails.getVideoCount().intValue())
+                    .commentCount(authorDetails.getCommentCount().intValue())
+                    .replyCount(authorDetails.getReplyCount().intValue());
+            author.setStatistics(authorStatistics);
+        });
+
+        return Optional.of(author);
     }
 
     private static String getChannelUrl(String authorHandle) {

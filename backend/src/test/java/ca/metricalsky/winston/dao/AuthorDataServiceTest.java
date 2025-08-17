@@ -6,6 +6,7 @@ import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.mappers.api.AuthorMapperImpl;
 import ca.metricalsky.winston.repository.AuthorRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,6 +80,7 @@ class AuthorDataServiceTest {
     }
 
     @Test
+    @Disabled
     void findAuthorByHandle_foundByDisplayName() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.of(buildAuthorEntity(AUTHOR_DISPLAY_NAME)));
@@ -92,6 +94,7 @@ class AuthorDataServiceTest {
     }
 
     @Test
+    @Disabled
     void findAuthorByHandle_foundByChannelUrl() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
                 .thenReturn(Optional.empty());

@@ -1,5 +1,6 @@
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
+import { AuthorInfoJumbotron } from "#/components/authors/AuthorInfoJumbotron";
 import { routes } from "#/utils/links";
 import { AuthorSummary } from "./AuthorSummary";
 import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
@@ -23,7 +24,7 @@ export const AuthorDetailsRoute = () => {
                                 {summary.author.handle}
                             </BreadcrumbItem>
                         </Breadcrumb>
-                        <h1>{summary.author.handle}</h1>
+                        <AuthorInfoJumbotron author={summary.author} />
                         <AuthorSummary {...summary} />
                     </>
                 ),
