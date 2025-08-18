@@ -16,6 +16,10 @@
     align-items: center;
 }
 
+.hover-bg-info-subtle:hover {
+    background-color: var(--bs-info-bg-subtle) !important;
+}
+
 .line-clamp-1 {
     display: -webkit-box;
     -webkit-line-clamp: 1;
@@ -40,4 +44,14 @@
     position: relative;
     z-index: 1;
     zoom: 1.5;
+}
+
+@media print {
+    footer {
+        display: none;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
 }

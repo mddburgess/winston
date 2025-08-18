@@ -1,8 +1,8 @@
 import { Col, Image, Ratio, Row } from "react-bootstrap";
-import { ArrowUpLeftCircleFill, PersonVideo3 } from "react-bootstrap-icons";
 import { CommentCounts } from "#/components/comments/CommentCounts";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
-import { Date } from "#/components/Date";
+import { VideoChannelTitle } from "#/components/videos/VideoChannelTitle";
+import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
 import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
 import type { Video } from "#/api";
 
@@ -54,13 +54,11 @@ export const VideoDetails = ({
                     </Col>
                 </Row>
                 <Row className={"pb-2"}>
-                    <Col xs={"auto"} className={"align-items-center d-flex"}>
-                        <PersonVideo3 className={"me-2"} />
-                        {video.channel.title}
+                    <Col xs={"auto"}>
+                        <VideoChannelTitle video={video} />
                     </Col>
-                    <Col xs={"auto"} className={"align-items-center d-flex"}>
-                        <ArrowUpLeftCircleFill className={"me-2"} />
-                        <Date date={video.published_at} />
+                    <Col xs={"auto"}>
+                        <VideoPublishedAt video={video} />
                     </Col>
                     <CommentCounts {...comments} />
                     {videoComments.total_reply_count >
