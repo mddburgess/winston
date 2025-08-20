@@ -64,7 +64,7 @@ class CommentEntityTest {
                 .hasFieldOrPropertyWithValue("textDisplay", commentEntity.getTextDisplay())
                 .hasFieldOrPropertyWithValue("textOriginal", commentEntity.getTextOriginal())
                 .hasFieldOrPropertyWithValue("totalReplyCount", commentEntity.getTotalReplyCount())
-                .hasNoNullFieldsOrPropertiesExcept("author", "parentId");
+                .hasNoNullFieldsOrPropertiesExcept("author", "parentId", "properties");
         assertThat(persistedEntity.getReplies())
                 .isEmpty();
     }

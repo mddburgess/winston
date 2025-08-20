@@ -2,18 +2,17 @@ import {
     selectAllTopLevelComments,
     useListCommentsQuery,
 } from "#/store/slices/comments";
-import type { Author, Video } from "#/api";
 import type { CommentState } from "#/store/slices/backend";
+import type { AuthorProps, VideoProps } from "#/types";
 import type { ReactNode } from "react";
 
-type Props = {
-    author: Author;
-    video: Video;
-    children: {
-        isLoading?: () => ReactNode;
-        isSuccess: (summary: CommentState[]) => ReactNode;
+type Props = AuthorProps &
+    VideoProps & {
+        children: {
+            isLoading?: () => ReactNode;
+            isSuccess: (summary: CommentState[]) => ReactNode;
+        };
     };
-};
 
 export const AuthorCommentsQuery = ({ author, video, children }: Props) => {
     const { isLoading, isSuccess, data } = useListCommentsQuery({

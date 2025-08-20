@@ -3,7 +3,8 @@ import { DateTime } from "luxon";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import { ascBy } from "#/utils";
 import type { Comment, ListCommentsResponse } from "#/api";
-import type { CommentState, TopLevelComment } from "#/store/slices/backend";
+import type { CommentState } from "#/store/slices/backend";
+import type { TopLevelComment } from "#/types";
 
 const commentsApi = enhancedBackendApi.enhanceEndpoints({
     endpoints: {

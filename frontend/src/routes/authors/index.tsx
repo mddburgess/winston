@@ -1,18 +1,9 @@
 import { useMemo, useState } from "react";
-import {
-    Col,
-    Image,
-    ListGroup,
-    ListGroupItem,
-    Ratio,
-    Row,
-} from "react-bootstrap";
-import { Link } from "react-router";
+import { Col, Row } from "react-bootstrap";
 import { useListAuthorsQuery } from "#/api";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
-import { routes } from "#/utils/links";
-import { AuthorStatistics } from "./AuthorStatistics";
+import { AuthorList } from "#/routes/authors/AuthorList";
 
 export const AuthorListRoute = () => {
     const { data } = useListAuthorsQuery();
@@ -51,46 +42,7 @@ export const AuthorListRoute = () => {
                             search={search}
                             setSearch={setSearch}
                         />
-                        <ListGroup className={"mb-2"}>
-                            {pageItems.map((author) => (
-                                <ListGroupItem
-                                    className={"py-0"}
-                                    key={author.id}
-                                >
-                                    <Row>
-                                        <Col
-                                            xs={"auto"}
-                                            className={
-                                                "align-items-center d-flex pe-0"
-                                            }
-                                        >
-                                            <Ratio
-                                                aspectRatio={"1x1"}
-                                                style={{ minWidth: "32px" }}
-                                            >
-                                                <Image
-                                                    className={"border"}
-                                                    roundedCircle
-                                                    src={
-                                                        author.profile_image_url
-                                                    }
-                                                />
-                                            </Ratio>
-                                        </Col>
-                                        <Col className={"py-2"}>
-                                            <Link
-                                                to={routes.authors.details(
-                                                    author.handle,
-                                                )}
-                                            >
-                                                {author.handle}
-                                            </Link>
-                                        </Col>
-                                        <AuthorStatistics author={author} />
-                                    </Row>
-                                </ListGroupItem>
-                            ))}
-                        </ListGroup>
+                        <AuthorList authors={pageItems} />
                         {pageCount > 1 && (
                             <PaginationRow
                                 name={"author"}

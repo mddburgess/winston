@@ -7,13 +7,9 @@ import {
 import { Link } from "react-router";
 import { Date } from "#/components/Date";
 import { routes } from "#/utils/links";
-import type { Channel } from "#/api";
+import type { ChannelProps } from "#/types";
 
-type Props = {
-    channel: Channel;
-};
-
-export const ChannelCard = ({ channel }: Props) => (
+export const ChannelCard = ({ channel }: ChannelProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
             <Card.Body className={"p-2"}>

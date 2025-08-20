@@ -1,5 +1,6 @@
 import { backendApi } from "#/api";
-import type { Channel, Comment, ListCommentsResponse, Video } from "#/api";
+import type { Channel, Comment, Video } from "#/api";
+import type { TopLevelComment } from "#/types";
 import type { EntityState } from "@reduxjs/toolkit";
 import type {
     DefinitionsFromApi,
@@ -19,8 +20,6 @@ type ListVideosDefinition = OverrideResultType<
     Definitions["listVideos"],
     EntityState<Video, string>
 >;
-
-type TopLevelComment = ListCommentsResponse["comments"][number];
 
 type CommentState = Omit<TopLevelComment, "replies"> & {
     replies: EntityState<Comment, string>;
@@ -48,4 +47,4 @@ const enhancedBackendApi = backendApi.enhanceEndpoints<
 const invalidateVideos = () => backendApi.util.invalidateTags(["Videos"]);
 
 export { enhancedBackendApi, invalidateVideos };
-export type { CommentState, TopLevelComment };
+export type { CommentState };

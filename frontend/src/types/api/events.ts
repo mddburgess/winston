@@ -1,6 +1,5 @@
 import type { Channel, Video } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
-import type { ProblemDetail } from "#/types";
+import type { ProblemDetail, TopLevelComment } from "#/types";
 
 type FetchDataEvent<T> = {
     objectId: string;

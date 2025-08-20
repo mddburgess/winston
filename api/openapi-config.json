@@ -5,6 +5,7 @@
   "documentationProvider": "none",
   "exceptionHandler": false,
   "interfaceOnly": true,
+  "openApiNullable": false,
   "skipDefaultInterface": true,
   "useResponseEntity": true,
   "useSpringBoot3": true,

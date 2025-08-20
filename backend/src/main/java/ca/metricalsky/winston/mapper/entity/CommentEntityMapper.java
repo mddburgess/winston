@@ -44,6 +44,7 @@ public abstract class CommentEntityMapper {
     @Mapping(target = "updatedAt", source = "snippet.updatedAt")
     @Mapping(target = "lastFetchedAt", ignore = true)
     @Mapping(target = "totalReplyCount", ignore = true)
+    @Mapping(target = "properties", ignore = true)
     @Mapping(target = "replies", ignore = true)
     public abstract CommentEntity toCommentEntity(Comment ytComment);
 }

@@ -47,6 +47,7 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String> {
                 JOIN VideoEntity v ON ch.id = v.channelId
                 JOIN CommentEntity co ON v.id = co.videoId
             WHERE co.author.displayName = :authorDisplayName
+            ORDER BY v.publishedAt DESC
             """)
     @EntityGraph(attributePaths = "comments")
     List<ChannelVideoView> findAllChannelVideosByAuthorDisplayName(String authorDisplayName);

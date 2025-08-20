@@ -1,12 +1,8 @@
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { toggleSelectVideo } from "#/store/slices/selections";
-import type { Video } from "#/api";
+import type { VideoProps } from "#/types";
 
-type Props = {
-    video: Video;
-};
-
-const VideoCardSelectionCheckbox = ({ video }: Props) => {
+const VideoCardSelectionCheckbox = ({ video }: VideoProps) => {
     const dispatch = useAppDispatch();
     const selected = useAppSelector((state) =>
         state.selections.videos.includes(video),

@@ -17,14 +17,10 @@ import {
     selectAllPullComments,
 } from "#/store/slices/pulls";
 import { pluralize } from "#/utils";
-import type { Channel } from "#/api";
 import type { PullCommentsState } from "#/store/slices/pulls";
+import type { ChannelProps } from "#/types";
 
-type Props = {
-    channel: Channel;
-};
-
-const BatchPullCommentsSidebar = ({ channel }: Props) => {
+const BatchPullCommentsSidebar = ({ channel }: ChannelProps) => {
     const dispatch = useAppDispatch();
     const pullState = useAppSelector(
         (state) => state.pulls.batchPullComments[channel.id],

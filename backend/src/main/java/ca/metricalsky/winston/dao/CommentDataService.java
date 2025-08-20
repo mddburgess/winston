@@ -7,6 +7,7 @@ import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
+import ca.metricalsky.winston.repository.CommentPropertiesRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,7 +29,13 @@ public class CommentDataService {
 
     private final AuthorRepository authorRepository;
     private final CommentMapper commentMapper;
+    private final CommentPropertiesRepository commentPropertiesRepository;
     private final CommentRepository commentRepository;
+
+    public Optional<TopLevelComment> findCommentById(String commentId) {
+        return commentRepository.findById(commentId)
+                .map(commentMapper::toTopLevelComment);
+    }
 
     public List<TopLevelComment> getCommentsForVideo(String videoId, String authorHandle) {
         List<CommentEntity> comments;
@@ -69,6 +77,12 @@ public class CommentDataService {
         return replyEntities.stream()
                 .map(commentMapper::toComment)
                 .toList();
+    }
+
+    public void saveCommentProperties(TopLevelComment comment) {
+        var commentEntity = commentMapper.toCommentEntity(comment);
+        var commentPropertiesEntity = commentEntity.getProperties();
+        commentPropertiesRepository.save(commentPropertiesEntity);
     }
 
     private List<CommentEntity> saveComments(List<CommentEntity> commentEntities) {
