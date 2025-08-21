@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router";
 import { CommentList } from "#/components/comments/CommentList";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
-import { useAppSelector } from "#/store/hooks";
 import {
     selectAllReplies,
     selectAllTopLevelComments,
@@ -33,10 +32,6 @@ export const VideoDetailsRoute = () => {
         return isSuccess ? selectAllTopLevelComments(comments) : [];
     }, [isSuccess, comments]);
 
-    const fetchState = useAppSelector(
-        (state) => state.fetches.comments[videoId!],
-    );
-
     const filteredComments = useMemo(
         () =>
             commentsList.filter(
@@ -44,13 +39,15 @@ export const VideoDetailsRoute = () => {
                     comment.author.handle
                         .toLowerCase()
                         .includes(search.toLowerCase()) ||
-                    comment.text.toLowerCase().includes(search.toLowerCase()) ||
+                    comment.text.original
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
                     selectAllReplies(comment.replies).filter(
                         (reply) =>
                             reply.author.handle
                                 .toLowerCase()
                                 .includes(search.toLowerCase()) ||
-                            reply.text
+                            reply.text.original
                                 .toLowerCase()
                                 .includes(search.toLowerCase()),
                     ).length > 0,

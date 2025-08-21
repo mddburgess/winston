@@ -40,13 +40,15 @@ export const FetchChannelAction = ({
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(
-            updateFetchStatus({
-                fetchType: "channel",
-                objectId: channelHandle,
-                status: event.status,
-            }),
-        );
+        if (event.status) {
+            dispatch(
+                updateFetchStatus({
+                    fetchType: "channel",
+                    objectId: channelHandle,
+                    status: event.status,
+                }),
+            );
+        }
     };
 
     return (

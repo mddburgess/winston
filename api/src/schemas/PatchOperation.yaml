@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Patch Operation
+description: A single operation to be applied to the target JSON document.
+type: object
+required:
+  - op
+  - path
+properties:
+  op:
+    description: The operation to perform.
+    type: string
+    enum:
+      - add
+      - remove
+      - replace
+  path:
+    description: A JSON Pointer value that references the location in the target document where the operation is performed.
+    type: string
+    format: json-pointer
+  value:
+    description: The value to be added or replaced at the target location.

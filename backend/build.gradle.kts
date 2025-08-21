@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.youtube)
     implementation(libs.datasourceProxySpringBootStarter)
+    implementation(libs.jsonPatch)
     implementation(libs.mapstruct)
     implementation(project(":api"))
 

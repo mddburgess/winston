@@ -1,9 +1,12 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
+import ca.metricalsky.winston.api.model.AuthorStatistics;
+import ca.metricalsky.winston.api.model.VideoStatistics;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ public class AuthorDataService {
 
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
+    private final ConversionService conversionService;
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAllAuthorDetails()
@@ -31,11 +35,23 @@ public class AuthorDataService {
     }
 
     public Optional<Author> findAuthorByHandle(String handle) {
-        return Optionals.firstNonEmpty(
+        var maybeAuthor = Optionals.firstNonEmpty(
                 () -> authorRepository.findByDisplayName(handle),
                 () -> authorRepository.findByChannelUrl(getChannelUrl(handle)),
                 () -> authorRepository.findById(handle)
         ).map(authorMapper::toAuthor);
+
+        maybeAuthor.ifPresent(author -> {
+            var videoStatistics = authorRepository.findVideoStatisticsByAuthorId(author.getId())
+                    .stream()
+                    .map(entity -> conversionService.convert(entity, VideoStatistics.class))
+                    .toList();
+
+            author.setVideoStatistics(videoStatistics);
+            author.setAuthorStatistics(conversionService.convert(videoStatistics, AuthorStatistics.class));
+        });
+
+        return maybeAuthor;
     }
 
     private static String getChannelUrl(String authorHandle) {

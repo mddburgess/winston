@@ -6,6 +6,8 @@ public interface AuthorDetailsView {
 
     AuthorEntity getAuthor();
 
+    Long getChannelCount();
+
     Long getVideoCount();
 
     Long getCommentCount();

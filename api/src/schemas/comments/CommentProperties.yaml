@@ -1,0 +1,13 @@
+title: Comment Properties
+description: Additional non-YouTube properties for a comment.
+type: object
+required:
+  - important
+  - hidden
+properties:
+  important:
+    description: Flag indicating if the comment should be highlighted as important.
+    type: boolean
+  hidden:
+    description: Flag indicating if the comment should be hidden from view.
+    type: boolean

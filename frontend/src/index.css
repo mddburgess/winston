@@ -11,9 +11,47 @@
     cursor: pointer;
 }
 
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.hover-bg-info-subtle:hover {
+    background-color: var(--bs-info-bg-subtle) !important;
+}
+
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 .line-clamp {
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.height-fit {
+    min-height: fit-content;
+    max-height: fit-content;
+}
+
+.video-card-checkbox {
+    margin: 0.5rem 0.5rem -1.31rem auto;
+    position: relative;
+    z-index: 1;
+    zoom: 1.5;
+}
+
+@media print {
+    footer {
+        display: none;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
 }

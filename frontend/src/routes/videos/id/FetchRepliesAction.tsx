@@ -34,14 +34,16 @@ export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
-        dispatch(
-            updateFetchStatus({
-                fetchType: "replies",
-                objectId: commentId,
-                status: event.status,
-            }),
-        );
-        dispatch(invalidateFetchLimits());
+        if (event.status) {
+            dispatch(
+                updateFetchStatus({
+                    fetchType: "replies",
+                    objectId: commentId,
+                    status: event.status,
+                }),
+            );
+            dispatch(invalidateFetchLimits());
+        }
     };
 
     return (

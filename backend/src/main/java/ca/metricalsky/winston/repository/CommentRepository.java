@@ -18,7 +18,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
             AND c.parentId IS NULL
             ORDER BY c.publishedAt ASC
             """)
-    @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
+    @EntityGraph(attributePaths = {"author", "properties", "replies", "replies.properties", "replies.author"})
     List<CommentEntity> findCommentsForVideo(String videoId);
 
     @Query("""
@@ -32,7 +32,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
                 AND r.author.displayName = :authorDisplayName
             ))
             """)
-    @EntityGraph(attributePaths = {"author", "replies", "replies.author"})
+    @EntityGraph(attributePaths = {"author", "properties", "replies", "replies.properties", "replies.author"})
     List<CommentEntity> findCommentsForVideoByAuthor(String videoId, String authorDisplayName);
 
     @Query("""

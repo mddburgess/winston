@@ -1,18 +1,15 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
-import { ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
 import { CommentCounts } from "#/components/comments/CommentCounts";
-import { Date } from "#/components/Date";
+import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
+import { VideoCardSelectionCheckbox } from "#/routes/channels/id/VideoCardSelectionCheckbox";
 import { routes } from "#/utils/links";
-import type { Video } from "#/api";
+import type { VideoProps } from "#/types";
 
-type Props = {
-    video: Video;
-};
-
-export const VideoCard = ({ video }: Props) => (
+export const VideoCard = ({ video }: VideoProps) => (
     <Col className={"g-2"}>
         <Card className={"h-100"}>
+            <VideoCardSelectionCheckbox video={video} />
             <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
                 <Link to={routes.videos.details(video.id)}>
                     <Card.Img variant={"top"} src={video.thumbnail_url} />
@@ -37,9 +34,8 @@ export const VideoCard = ({ video }: Props) => (
                     />
                 </Row>
             </Card.Footer>
-            <Card.Footer className={"d-flex align-items-center"}>
-                <ArrowUpLeftCircleFill className={"me-2"} />
-                <Date date={video.published_at} />
+            <Card.Footer>
+                <VideoPublishedAt video={video} />
             </Card.Footer>
         </Card>
     </Col>

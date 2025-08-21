@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] — 2025-08-20
+
+### Added
+
+- Videos on the channel page can now be selected for batch operations. (mddburgess/winston#47)
+- Batch operation to pull comments and replies for all selected videos. (mddburgess/winston#47)
+- Batch operation to pull comments and replies for all videos shown on the page. (mddburgess/winston#47)
+- Comments can now be marked as important or hidden. (mddburgess/winston#77)
+
+### Changed
+
+- Comment statistics on the author list page now shows how many channels the author has commented on.
+  (mddburgess/winston#77)
+- Redesigned the author details page. (mddburgess/winston#77)
+
+### Fixed
+
+- Author's comments are now highlighted again on the author's detail page. (mddburgess/winston#69)
+
 ## [1.4.0] — 2025-07-27
 
 ### Added
@@ -111,6 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache channel and video thumbnails.
 
 [Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.5.0]: https://github.com/mddburgess/winston/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/mddburgess/winston/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/mddburgess/winston/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/mddburgess/winston/compare/v1.2.0...v1.2.1

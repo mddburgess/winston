@@ -130,6 +130,31 @@ paths:
         "404":
           $ref: "#/components/responses/404-videoNotFound"
 
+  /api/v1/comments/{id}/properties:
+    patch:
+      summary: Patch comment properties
+      description: Patches the non-YouTube properties for a single comment.
+      tags:
+        - Comments
+      operationId: patchCommentProperties
+      parameters:
+        - $ref: "#/components/parameters/commentId"
+      requestBody:
+        description: List of patch operations to apply to the comment properties.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+      responses:
+        "200":
+          description: The patch was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/comments/CommentProperties.yaml
+
   /api/v1/authors:
     get:
       summary: List authors
@@ -321,8 +346,10 @@ paths:
 
 components:
   schemas:
+    PatchOperation:
+      $ref: ./schemas/PatchOperation.yaml
     Problem:
-      $ref: schemas/Problem.yaml
+      $ref: ./schemas/Problem.yaml
     PullOperations:
       type: array
       items:
@@ -418,6 +445,13 @@ components:
     videoId:
       name: id
       description: The unique identifier for the video.
+      in: path
+      required: true
+      schema:
+        type: string
+    commentId:
+      name: id
+      description: The unique identifier for the comment.
       in: path
       required: true
       schema:

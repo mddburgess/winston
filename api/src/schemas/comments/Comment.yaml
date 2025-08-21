@@ -10,6 +10,7 @@ required:
   - published_at
   - updated_at
   - last_fetched_at
+  - properties
 properties:
   id:
     description: The unique identifier for the comment.
@@ -20,8 +21,7 @@ properties:
   author:
     $ref: ../authors/Author.yaml
   text:
-    description: The comment text.
-    type: string
+    $ref: ./CommentText.yaml
   published_at:
     description: The timestamp of when the comment was published.
     type: string
@@ -34,3 +34,5 @@ properties:
     description: The timestamp of the most recent time that the comment was fetched.
     type: string
     format: date-time
+  properties:
+    $ref: ./CommentProperties.yaml

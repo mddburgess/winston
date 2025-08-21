@@ -1,7 +1,7 @@
 import { Col, Image, Row } from "react-bootstrap";
 import { BadgeList } from "#/components/BadgeList";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
-import type { Channel } from "#/api";
+import type { ChannelProps } from "#/types";
 
 const topicTransformer = (topic: string) => {
     return topic
@@ -9,11 +9,7 @@ const topicTransformer = (topic: string) => {
         .replace(/_/g, " ");
 };
 
-type Props = {
-    channel: Channel;
-};
-
-export const ChannelDetails = ({ channel }: Props) => (
+export const ChannelDetails = ({ channel }: ChannelProps) => (
     <Row className={"bg-body-tertiary border mx-0 my-3 p-3 rounded-3"}>
         <Col xs={"auto"}>
             <Image

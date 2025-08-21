@@ -1,0 +1,29 @@
+title: Video Statistics
+description: Statistics of the author's comment activity on a single video.
+type: object
+required:
+  - video_id
+  - comment_count
+  - reply_count
+  - last_commented_at
+properties:
+  channel_id:
+    description: The unique identifier of the channel that published the video.
+    type: string
+  video_id:
+    description: The unique identifier of the video that the author commented on.
+    type: string
+  comment_count:
+    description: The number of top-level comments on the video that were published by the author.
+    type: integer
+    format: int64
+    minimum: 0
+  reply_count:
+    description: The number of replies to comments on the video that were published by the author.
+    type: integer
+    format: int64
+    minimum: 0
+  last_commented_at:
+    description: The timestamp of the most recent time that the author commented on the video.
+    type: string
+    format: date-time

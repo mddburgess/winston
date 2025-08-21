@@ -1,19 +1,9 @@
 import type { Channel, Video } from "#/api";
-import type { TopLevelComment } from "#/store/slices/backend";
-import type { ProblemDetail } from "#/types";
+import type { ProblemDetail, TopLevelComment } from "#/types";
 
 type FetchDataEvent<T> = {
     objectId: string;
     items: T[];
-};
-
-type FetchCompletedEvent = {
-    status: "COMPLETED";
-};
-
-type FetchFailedEvent = {
-    status: "FAILED";
-    error: ProblemDetail;
 };
 
 type SubscriptionEvent = {
@@ -24,7 +14,16 @@ type SubscriptionEvent = {
 type FetchChannelEvent = FetchDataEvent<Channel>;
 type FetchCommentsEvent = FetchDataEvent<TopLevelComment>;
 type FetchVideosEvent = FetchDataEvent<Video>;
-type FetchStatusEvent = FetchCompletedEvent | FetchFailedEvent;
+
+type FetchStatusEvent = {
+    operation?: {
+        operationType: "CHANNELS" | "VIDEOS" | "COMMENTS" | "REPLIES";
+        objectId: string;
+        status: "READY" | "FETCHING" | "SUCCESSFUL" | "FAILED";
+    };
+    status?: "COMPLETED" | "FAILED";
+    error?: ProblemDetail;
+};
 
 export type {
     FetchChannelEvent,

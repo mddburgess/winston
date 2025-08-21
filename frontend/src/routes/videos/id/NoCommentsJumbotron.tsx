@@ -2,13 +2,9 @@ import { Button, Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch } from "#/store/hooks";
 import { requestedCommentsForVideoId } from "#/store/slices/fetches";
-import type { Video } from "#/api";
+import type { VideoProps } from "#/types";
 
-type Props = {
-    video: Video;
-};
-
-export const NoCommentsJumbotron = ({ video }: Props) => {
+export const NoCommentsJumbotron = ({ video }: VideoProps) => {
     const dispatch = useAppDispatch();
     const hasBeenFetched = video.comments?.last_fetched_at !== undefined;
     return (
