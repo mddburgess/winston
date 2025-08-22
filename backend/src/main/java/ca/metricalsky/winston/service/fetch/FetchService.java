@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.api.model.FetchRequest;
+import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +43,10 @@ public class FetchService {
         try {
             var fetchOperations = fetchRequestService.startProcessingRequest(fetchRequestId);
 
-            fetchOperations.forEach(fetchOperation ->
-                    fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation, ssePublisher));
+            fetchOperations.stream()
+                    .sorted(Comparator.comparing(FetchOperationEntity::getId))
+                    .forEach(fetchOperation ->
+                            fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation, ssePublisher));
 
             fetchRequestService.finishProcessingRequest(fetchRequestId);
             ssePublisher.publish(FetchStatusEvent.completed());
