@@ -6,6 +6,7 @@ import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.FetchDataEvent;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -102,10 +103,11 @@ class FetchCommentsActionHandlerTest {
         when(youTubeService.getComments(fetchAction))
                 .thenThrow(new CommentsDisabledException(null));
 
-        var exception = catchThrowableOfType(CommentsDisabledException.class,
+        var exception = catchThrowableOfType(FetchOperationException.class,
                 () -> fetchCommentsActionHandler.fetch(fetchAction, ssePublisher));
 
-        assertThat(exception)
+        assertThat(exception).cause()
+                .isExactlyInstanceOf(CommentsDisabledException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.UNPROCESSABLE_ENTITY)
                 .hasMessageEndingWith("Comments are disabled for the requested video.");
 

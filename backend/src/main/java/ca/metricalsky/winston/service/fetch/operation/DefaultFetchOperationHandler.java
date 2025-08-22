@@ -4,6 +4,7 @@ import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,8 @@ public abstract class DefaultFetchOperationHandler implements FetchOperationHand
                 action = actionHandler.fetch(action, ssePublisher);
             }
             fetchOperation = fetchOperationService.fetchSuccessful(fetchOperation);
+        } catch (FetchOperationException ex) {
+            fetchOperation = fetchOperationService.fetchWarning(fetchOperation, ex.getCause());
         } catch (RuntimeException ex) {
             fetchOperation = fetchOperationService.fetchFailed(fetchOperation, ex);
             throw ex;

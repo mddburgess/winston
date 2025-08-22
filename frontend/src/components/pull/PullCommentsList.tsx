@@ -28,6 +28,7 @@ const pullCommentsItemVariants = {
     READY: "",
     FETCHING: "info",
     SUCCESSFUL: "success",
+    WARNING: "warning",
     FAILED: "danger",
 };
 

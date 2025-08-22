@@ -10,7 +10,7 @@ type PullCommentsState = {
     video: Video;
     commentIds: string[];
     replyIds: string[];
-    status: "READY" | "FETCHING" | "SUCCESSFUL" | "FAILED";
+    status: "READY" | "FETCHING" | "SUCCESSFUL" | "WARNING" | "FAILED";
 };
 
 const pullCommentsAdapter = createEntityAdapter<PullCommentsState, string>({
@@ -47,7 +47,7 @@ type BatchPullCommentsData = {
 type BatchPullCommentsStatus = {
     channelId: string;
     videoId: string;
-    status: "READY" | "FETCHING" | "SUCCESSFUL" | "FAILED";
+    status: "READY" | "FETCHING" | "SUCCESSFUL" | "WARNING" | "FAILED";
 };
 
 const pullsSlice = createSlice({

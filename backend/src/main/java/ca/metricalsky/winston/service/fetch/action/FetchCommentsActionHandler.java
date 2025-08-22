@@ -4,6 +4,7 @@ import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -40,7 +41,7 @@ public class FetchCommentsActionHandler extends FetchActionHandler<TopLevelComme
             return new FetchResult<>(fetchAction, comments, nextFetchAction);
         } catch (CommentsDisabledException ex) {
             videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
-            throw ex;
+            throw new FetchOperationException(ex);
         }
     }
 

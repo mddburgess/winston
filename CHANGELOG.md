@@ -15,11 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Refresh the available quota in the UI during pull comment requests. (mddburgess/winston#80)
 - Highlight the available quota in yellow or red as it approaches zero. (mddburgess/winston#80)
+- Highlight failed pull comments operations in yellow or red. (mddburgess/winston#79)
 
 ### Fixed
 
 - Execute pull operations in the order they appear in the pull request. (mddburgess/winston#83)
 - Starting a pull comments batch now clears any existing video selection. (mddburgess/winston#82)
+- Pull comments execution no longer stops on videos with comments disabled. (mddburgess/winston#79)
 
 ## [1.5.0] — 2025-08-20
 
