@@ -126,15 +126,15 @@ class FetchServiceTest {
     }
 
     @Test
-    void getRemainingQuota() {
+    void getAvailableQuota() {
         ReflectionTestUtils.setField(fetchService, "dailyQuota", 10000);
 
         when(youTubeRequestRepository.countAllByRequestedAtAfter(any(OffsetDateTime.class)))
                 .thenReturn(1);
 
-        var remainingQuota = fetchService.getRemainingQuota();
+        var availableQuota = fetchService.getAvailableQuota();
 
-        assertThat(remainingQuota)
+        assertThat(availableQuota)
                 .isEqualTo(9999);
     }
 

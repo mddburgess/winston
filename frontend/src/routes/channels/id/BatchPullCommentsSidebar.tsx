@@ -9,6 +9,7 @@ import {
     ProgressBar,
     Row,
 } from "react-bootstrap";
+import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { BatchPullCommentsAction } from "#/routes/channels/id/BatchPullCommentsAction";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateVideos } from "#/store/slices/backend";
@@ -69,8 +70,15 @@ const BatchPullCommentsSidebar = ({ channel }: ChannelProps) => {
                     <PullCommentsList pullComments={pullComments} />
                 </Container>
             </Offcanvas.Body>
-            <Offcanvas.Body className={"bg-secondary-subtle height-fit"}>
-                <Button onClick={handleClose}>Close</Button>
+            <Offcanvas.Body className={"bg-body-tertiary height-fit"}>
+                <Row className={"flex-center"}>
+                    <Col>
+                        <AvailableQuota />
+                    </Col>
+                    <Col xs={"auto"}>
+                        <Button onClick={handleClose}>Close</Button>
+                    </Col>
+                </Row>
             </Offcanvas.Body>
         </Offcanvas>
     );

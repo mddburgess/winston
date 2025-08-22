@@ -7,6 +7,7 @@ import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -25,6 +26,7 @@ public class FetchService {
     private final FetchRequestService fetchRequestService;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
+    @Getter
     @Value("${youtube.quota.daily}")
     private int dailyQuota;
 
@@ -53,7 +55,7 @@ public class FetchService {
         }
     }
 
-    public int getRemainingQuota() {
+    public int getAvailableQuota() {
         var startOfToday = LocalDate.now().atStartOfDay().atOffset(ZoneOffset.UTC);
         return dailyQuota - youTubeRequestRepository.countAllByRequestedAtAfter(startOfToday);
     }
