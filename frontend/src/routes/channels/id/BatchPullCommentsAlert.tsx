@@ -1,6 +1,7 @@
 import { Alert, Button, Col } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { batchPullComments } from "#/store/slices/pulls";
+import { clearVideoSelection } from "#/store/slices/selections";
 import { pluralize } from "#/utils";
 import type { Video } from "#/api";
 import type { ChannelProps } from "#/types";
@@ -18,6 +19,7 @@ const BatchPullCommentsAlert = ({ channel, videosOnPage }: Props) => {
         dispatch(
             batchPullComments({ channelId: channel.id, videos: videosToPull }),
         );
+        dispatch(clearVideoSelection());
     };
 
     const label =

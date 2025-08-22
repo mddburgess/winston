@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Execute pull operations in the order they appear in the pull request. (mddburgess/winston#83)
+- Starting a pull comments batch now clears any existing video selection. (mddburgess/winston#82)
 
 ## [1.5.0] — 2025-08-20
 

@@ -15,16 +15,16 @@ const selectionsSlice = createSlice({
     name: "selections",
     initialState,
     reducers: {
-        selectVideos: (state, action: PayloadAction<Video[]>) => {
-            state.videos = action.payload;
-        },
         toggleSelectVideo: (state, action: PayloadAction<Video>) => {
             state.videos = xorBy(state.videos, [action.payload], "id");
+        },
+        clearVideoSelection: (state) => {
+            state.videos = [];
         },
     },
 });
 
 const selectionsReducer = selectionsSlice.reducer;
-const { selectVideos, toggleSelectVideo } = selectionsSlice.actions;
+const { clearVideoSelection, toggleSelectVideo } = selectionsSlice.actions;
 
-export { selectionsReducer, selectVideos, toggleSelectVideo };
+export { clearVideoSelection, selectionsReducer, toggleSelectVideo };
