@@ -1,7 +1,7 @@
 import { Dropdown, Nav, NavDropdown } from "react-bootstrap";
 import { EyeFill, List } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { RemainingQuota } from "./RemainingQuota";
+import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { routes } from "./utils/links";
 
 export const Header = () => (
@@ -29,12 +29,7 @@ export const Header = () => (
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <Dropdown.Item disabled={true}>
-                    <div className={"small text-body-tertiary"}>
-                        Remaining quota
-                    </div>
-                    <div className={"text-body-tertiary fw-bold"}>
-                        <RemainingQuota />
-                    </div>
+                    <AvailableQuota />
                 </Dropdown.Item>
             </NavDropdown>
         </Nav>

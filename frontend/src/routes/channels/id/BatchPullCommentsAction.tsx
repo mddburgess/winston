@@ -3,6 +3,7 @@ import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { NotificationsSource } from "#/components/NotificationsSource";
 import { useAppDispatch } from "#/store/hooks";
+import { invalidateFetchLimits } from "#/store/slices/api";
 import {
     batchPullCommentsData,
     batchPullCommentsStatus,
@@ -45,6 +46,7 @@ const BatchPullCommentsAction = ({ channel, pullComments }: Props) => {
                 replies: event.replies,
             }),
         );
+        dispatch(invalidateFetchLimits());
     };
 
     const handleStatusEvent = (event: FetchStatusEvent) => {
@@ -62,6 +64,7 @@ const BatchPullCommentsAction = ({ channel, pullComments }: Props) => {
                     }),
                 );
             }
+            dispatch(invalidateFetchLimits());
         }
     };
 

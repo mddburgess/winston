@@ -45,9 +45,9 @@ public class FetchController implements FetchApi {
 
     @Override
     public ResponseEntity<FetchLimitsResponse> getFetchLimits() {
-        var remainingQuota = fetchService.getRemainingQuota();
         var response = new FetchLimitsResponse()
-                .remainingQuota(remainingQuota);
+                .dailyQuota(fetchService.getDailyQuota())
+                .availableQuota(fetchService.getAvailableQuota());
 
         return ResponseEntity.ok(response);
     }

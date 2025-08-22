@@ -2,11 +2,14 @@ $schema: https://json-schema.org/draft/2020-12/schema
 title: Fetch Limits Response
 type: object
 required:
-  - remainingQuota
+  - daily_quota
+  - available_quota
 properties:
-  remainingQuota:
-    description: The remaining daily quota available to use on fetch requests.
+  daily_quota:
+    description: The total API quota that can be used per day on fetch requests.
     type: integer
     format: int32
-    minimum: 0
-    maximum: 10000
+  available_quota:
+    description: The remaining available API quota that can be used today on fetch requests.
+    type: integer
+    format: int32

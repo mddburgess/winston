@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Show the available quota in the pull comments sidebar. (mddburgess/winston#80)
+
+### Changed
+
+- Refresh the available quota in the UI during pull comment requests. (mddburgess/winston#80)
+- Highlight the available quota in yellow or red as it approaches zero. (mddburgess/winston#80)
+
 ## [1.5.0] — 2025-08-20
 
 ### Added
