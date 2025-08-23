@@ -1,12 +1,13 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
-import ca.metricalsky.winston.service.fetch.action.FetchChannelActionHandler;
+import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,7 @@ class FetchChannelsOperationHandlerTest {
     @Mock
     private FetchOperationService fetchOperationService;
     @Mock
-    private FetchChannelActionHandler fetchChannelActionHandler;
+    private FetchActionHandler<Channel> fetchChannelActionHandler;
     @Mock
     private SsePublisher ssePublisher;
 

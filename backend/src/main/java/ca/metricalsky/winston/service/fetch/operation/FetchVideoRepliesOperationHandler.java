@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.FetchStatusEvent;
@@ -8,7 +9,7 @@ import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
-import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
+import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class FetchVideoRepliesOperationHandler implements FetchOperationHandler {
 
     private final CommentRepository commentRepository;
-    private final FetchRepliesActionHandler fetchRepliesActionHandler;
+    private final FetchActionHandler<Comment> fetchRepliesActionHandler;
     private final FetchOperationService fetchOperationService;
     private final VideoCommentsService videoCommentsService;
     private final SsePublisher ssePublisher;

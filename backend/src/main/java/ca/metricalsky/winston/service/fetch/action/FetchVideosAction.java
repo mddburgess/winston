@@ -4,22 +4,22 @@ import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
 @Service
-public class FetchVideosActionHandler extends FetchActionHandler<Video> {
+@RequiredArgsConstructor
+public class FetchVideosAction implements FetchAction<Video> {
 
     private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
@@ -27,21 +27,8 @@ public class FetchVideosActionHandler extends FetchActionHandler<Video> {
     private final VideoDataService videoDataService;
     private final YouTubeService youTubeService;
 
-    public FetchVideosActionHandler(
-            FetchActionService fetchActionService,
-            SsePublisher ssePublisher,
-            ChannelDataService channelDataService,
-            VideoDataService videoDataService,
-            YouTubeService youTubeService
-    ) {
-        super(fetchActionService, ssePublisher);
-        this.channelDataService = channelDataService;
-        this.videoDataService = videoDataService;
-        this.youTubeService = youTubeService;
-    }
-
     @Override
-    protected FetchResult<Video> doFetch(FetchActionEntity fetchAction) {
+    public FetchResult<Video> fetch(FetchActionEntity fetchAction) {
         if (fetchAction.getObjectId().startsWith("@")) {
             var channel = channelDataService.findChannelByHandle(fetchAction.getObjectId())
                     .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,

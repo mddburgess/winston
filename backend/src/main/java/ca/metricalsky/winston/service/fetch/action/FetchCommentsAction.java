@@ -4,37 +4,24 @@ import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchCommentsActionHandler extends FetchActionHandler<TopLevelComment> {
+@RequiredArgsConstructor
+public class FetchCommentsAction implements FetchAction<TopLevelComment> {
 
     private final CommentDataService commentDataService;
     private final VideoCommentsService videoCommentsService;
     private final YouTubeService youTubeService;
 
-    public FetchCommentsActionHandler(
-            FetchActionService fetchActionService,
-            SsePublisher ssePublisher,
-            CommentDataService commentDataService,
-            VideoCommentsService videoCommentsService,
-            YouTubeService youTubeService
-    ) {
-        super(fetchActionService, ssePublisher);
-        this.commentDataService = commentDataService;
-        this.videoCommentsService = videoCommentsService;
-        this.youTubeService = youTubeService;
-    }
-
     @Override
-    protected FetchResult<TopLevelComment> doFetch(FetchActionEntity fetchAction) {
+    public FetchResult<TopLevelComment> fetch(FetchActionEntity fetchAction) {
         try {
             var commentThreadListResponse = youTubeService.getComments(fetchAction);
             var comments = commentDataService.saveComments(commentThreadListResponse);

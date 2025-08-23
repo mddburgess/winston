@@ -29,10 +29,10 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-class FetchVideosActionHandlerTest {
+class FetchVideosActionTest {
 
     @InjectMocks
-    private FetchVideosActionHandler fetchVideosActionHandler;
+    private FetchVideosAction fetchVideosAction;
 
     @Mock
     private FetchActionService fetchActionService;
@@ -66,7 +66,7 @@ class FetchVideosActionHandlerTest {
         doCallRealMethod()
                 .when(ssePublisher).publish(any(FetchResult.class));
 
-        var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction);
+        var nextFetchAction = fetchVideosAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
                 .as("nextFetchAction")

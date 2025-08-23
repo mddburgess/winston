@@ -1,13 +1,13 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
-import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
+import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,7 @@ class FetchVideoRepliesRequestHandlerTest {
     @Mock
     private FetchOperationService fetchOperationService;
     @Mock
-    private FetchRepliesActionHandler fetchRepliesActionHandler;
+    private FetchActionHandler<Comment> fetchRepliesActionHandler;
     @Mock
     private VideoCommentsService videoCommentsService;
     @Captor

@@ -45,6 +45,13 @@ public class SsePublisher {
         sseEmitter.completeWithError(ex);
     }
 
+    public void publish(AppEvent appEvent) {
+        publish(SseEmitter.event()
+                .id(appEvent.getEventId().toString())
+                .name(appEvent.getEventType())
+                .data(appEvent, MediaType.APPLICATION_JSON));
+    }
+
     public void publish(SubscriptionEvent subscriptionEvent) {
         publish(SseEmitter.event()
                 .id(UUID.randomUUID().toString())
