@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 class FetchVideoRepliesRequestHandlerTest {
 
     @InjectMocks
-    private FetchVideoRepliesOperationHandler fetchVideoRepliesRequestHandler;
+    private FetchVideoRepliesOperation fetchVideoRepliesRequestHandler;
 
     @Mock
     private CommentRepository commentRepository;

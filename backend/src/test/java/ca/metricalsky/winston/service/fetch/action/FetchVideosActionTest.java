@@ -63,9 +63,6 @@ class FetchVideosActionTest {
         when(videoDataService.saveVideos(activityListResponse))
                 .thenReturn(List.of(video));
 
-        doCallRealMethod()
-                .when(ssePublisher).publish(any(FetchResult.class));
-
         var nextFetchAction = fetchVideosAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
@@ -73,7 +70,6 @@ class FetchVideosActionTest {
                 .isNull();
 
         verify(fetchActionService).actionSuccessful(fetchAction, 1);
-        verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
                 .as("fetchDataEvent")

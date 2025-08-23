@@ -68,10 +68,6 @@ class FetchChannelActionTest {
         when(channelDataService.saveChannel(channelListResponse))
                 .thenReturn(Optional.of(channel));
 
-
-        doCallRealMethod()
-                .when(ssePublisher).publish(any(FetchResult.class));
-
         var nextFetchAction = fetchChannelAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
@@ -79,7 +75,6 @@ class FetchChannelActionTest {
                 .isNull();
 
         verify(fetchActionService).actionSuccessful(fetchAction, channelListResponse.getItems().size());
-        verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
                 .as("fetchDataEvent")

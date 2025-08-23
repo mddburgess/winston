@@ -58,17 +58,6 @@ public class SsePublisher {
                 .data(subscriptionEvent, MediaType.APPLICATION_JSON));
     }
 
-    public void publish(FetchResult fetchResult) {
-        publish(eventBuilder.buildEvent(fetchResult));
-    }
-
-    public void publish(Object fetchDataEvent) {
-        publish(SseEmitter.event()
-                .id(UUID.randomUUID().toString())
-                .name("fetch-data")
-                .data(fetchDataEvent, MediaType.APPLICATION_JSON));
-    }
-
     public void publish(FetchStatusEvent fetchStatusEvent) {
         publish(SseEmitter.event()
                 .id(UUID.randomUUID().toString())

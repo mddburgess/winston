@@ -70,9 +70,6 @@ class FetchCommentsActionTest {
         when(commentDataService.saveComments(commentThreadListResponse))
                 .thenReturn(List.of(comment));
 
-        doCallRealMethod()
-                .when(ssePublisher).publish(any(FetchResult.class));
-
         var nextFetchAction = fetchCommentsAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
@@ -80,7 +77,6 @@ class FetchCommentsActionTest {
                 .isNull();
 
         verify(fetchActionService).actionSuccessful(fetchAction, commentThreadListResponse.getItems().size());
-        verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
                 .as("fetchDataEvent")

@@ -63,9 +63,6 @@ class FetchRepliesActionTest {
         when(commentDataService.saveReplies(fetchAction.getObjectId(), commentListResponse))
                 .thenReturn(List.of(comment));
 
-        doCallRealMethod()
-                .when(ssePublisher).publish(any(FetchResult.class));
-
         var nextFetchAction = fetchRepliesAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
@@ -73,7 +70,6 @@ class FetchRepliesActionTest {
                 .isNull();
 
         verify(fetchActionService).actionSuccessful(fetchAction, commentListResponse.getItems().size());
-        verify(ssePublisher).publish(fetchDataEvent.capture());
 
         assertThat(fetchDataEvent.getValue())
                 .as("fetchDataEvent")
