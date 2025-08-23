@@ -73,7 +73,7 @@ class FetchCommentsActionHandlerTest {
         doCallRealMethod()
                 .when(ssePublisher).publish(any(FetchResult.class));
 
-        var nextFetchAction = fetchCommentsActionHandler.fetch(fetchAction, ssePublisher);
+        var nextFetchAction = fetchCommentsActionHandler.fetch(fetchAction);
 
         assertThat(nextFetchAction)
                 .as("nextFetchAction")
@@ -104,7 +104,7 @@ class FetchCommentsActionHandlerTest {
                 .thenThrow(new CommentsDisabledException(null));
 
         var exception = catchThrowableOfType(FetchOperationException.class,
-                () -> fetchCommentsActionHandler.fetch(fetchAction, ssePublisher));
+                () -> fetchCommentsActionHandler.fetch(fetchAction));
 
         assertThat(exception).cause()
                 .isExactlyInstanceOf(CommentsDisabledException.class)

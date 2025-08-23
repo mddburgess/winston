@@ -4,6 +4,7 @@ import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -21,11 +22,12 @@ public class FetchCommentsActionHandler extends FetchActionHandler<TopLevelComme
 
     public FetchCommentsActionHandler(
             FetchActionService fetchActionService,
+            SsePublisher ssePublisher,
             CommentDataService commentDataService,
             VideoCommentsService videoCommentsService,
             YouTubeService youTubeService
     ) {
-        super(fetchActionService);
+        super(fetchActionService, ssePublisher);
         this.commentDataService = commentDataService;
         this.videoCommentsService = videoCommentsService;
         this.youTubeService = youTubeService;

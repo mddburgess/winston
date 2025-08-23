@@ -73,7 +73,7 @@ class FetchChannelActionHandlerTest {
         doCallRealMethod()
                 .when(ssePublisher).publish(any(FetchResult.class));
 
-        var nextFetchAction = fetchChannelActionHandler.fetch(fetchAction, ssePublisher);
+        var nextFetchAction = fetchChannelActionHandler.fetch(fetchAction);
 
         assertThat(nextFetchAction)
                 .as("nextFetchAction")
@@ -108,7 +108,7 @@ class FetchChannelActionHandlerTest {
                 .thenReturn(Optional.empty());
 
         var appException = catchThrowableOfType(AppException.class,
-                () -> fetchChannelActionHandler.fetch(fetchAction, ssePublisher));
+                () -> fetchChannelActionHandler.fetch(fetchAction));
 
         assertThat(appException)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.NOT_FOUND)

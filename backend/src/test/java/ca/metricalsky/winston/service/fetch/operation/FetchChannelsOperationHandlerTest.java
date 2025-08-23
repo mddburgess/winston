@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +41,7 @@ class FetchChannelsOperationHandlerTest {
         when(fetchOperationService.startFetch(operation))
                 .thenReturn(operation);
 
-        fetchChannelsOperationHandler.fetch(operation, ssePublisher);
+        fetchChannelsOperationHandler.fetch(operation);
 
         verify(fetchOperationService).fetchSuccessful(operation);
     }
@@ -56,10 +55,10 @@ class FetchChannelsOperationHandlerTest {
 
         when(fetchOperationService.startFetch(operation))
                 .thenReturn(operation);
-        when(fetchChannelActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
+        when(fetchChannelActionHandler.fetch(any(FetchActionEntity.class)))
                 .thenThrow(appException);
 
-        assertThatThrownBy(() -> fetchChannelsOperationHandler.fetch(operation, ssePublisher))
+        assertThatThrownBy(() -> fetchChannelsOperationHandler.fetch(operation))
                 .isEqualTo(appException);
 
         verify(fetchOperationService).fetchFailed(operation, appException);

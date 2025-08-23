@@ -4,6 +4,7 @@ import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.events.SsePublisherHolder;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
@@ -26,6 +27,7 @@ public class FetchService {
     private final FetchRequestMapper fetchRequestMapper;
     private final FetchRequestRepository fetchRequestRepository;
     private final FetchRequestService fetchRequestService;
+    private final SsePublisherHolder ssePublisherHolder;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
     @Getter
@@ -41,12 +43,13 @@ public class FetchService {
     @Async
     public void fetchAsync(Long fetchRequestId, SsePublisher ssePublisher) {
         try {
+            ssePublisherHolder.hold(ssePublisher);
             var fetchOperations = fetchRequestService.startProcessingRequest(fetchRequestId);
 
             fetchOperations.stream()
                     .sorted(Comparator.comparing(FetchOperationEntity::getId))
                     .forEach(fetchOperation ->
-                            fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation, ssePublisher));
+                            fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation));
 
             fetchRequestService.finishProcessingRequest(fetchRequestId);
             ssePublisher.publish(FetchStatusEvent.completed());
@@ -56,6 +59,8 @@ public class FetchService {
                 ssePublisher.publish(FetchStatusEvent.failed(ex));
                 ssePublisher.completeWithError(ex);
             }
+        } finally {
+            ssePublisherHolder.clear();
         }
     }
 

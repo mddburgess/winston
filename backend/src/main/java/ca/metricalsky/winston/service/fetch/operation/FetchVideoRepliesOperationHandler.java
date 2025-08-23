@@ -20,15 +20,16 @@ public class FetchVideoRepliesOperationHandler implements FetchOperationHandler 
     private final FetchRepliesActionHandler fetchRepliesActionHandler;
     private final FetchOperationService fetchOperationService;
     private final VideoCommentsService videoCommentsService;
+    private final SsePublisher ssePublisher;
 
     @Override
-    public void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher) {
+    public void fetch(FetchOperationEntity fetchOperation) {
         fetchOperation = fetchOperationService.startFetch(fetchOperation);
         ssePublisher.publish(FetchStatusEvent.operation(fetchOperation));
         try {
             var videoId = fetchOperation.getObjectId();
             for (var commentId : commentRepository.findIdsMissingRepliesByVideoId(videoId)) {
-                fetchReplies(fetchOperation, commentId, ssePublisher);
+                fetchReplies(fetchOperation, commentId);
             }
             fetchOperation = fetchOperationService.fetchSuccessful(fetchOperation);
         } catch (FetchOperationException ex) {
@@ -42,10 +43,10 @@ public class FetchVideoRepliesOperationHandler implements FetchOperationHandler 
         }
     }
 
-    private void fetchReplies(FetchOperationEntity fetchOperation, String commentId, SsePublisher ssePublisher) {
+    private void fetchReplies(FetchOperationEntity fetchOperation, String commentId) {
         var action = getFirstFetchAction(fetchOperation, commentId);
         while (action != null) {
-            action = fetchRepliesActionHandler.fetch(action, ssePublisher);
+            action = fetchRepliesActionHandler.fetch(action);
         }
     }
 

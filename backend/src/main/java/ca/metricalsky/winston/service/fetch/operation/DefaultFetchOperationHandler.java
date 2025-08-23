@@ -13,16 +13,17 @@ import lombok.RequiredArgsConstructor;
 public abstract class DefaultFetchOperationHandler implements FetchOperationHandler {
 
     private final FetchOperationService fetchOperationService;
+    private final SsePublisher ssePublisher;
 
     @Override
-    public void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher) {
+    public void fetch(FetchOperationEntity fetchOperation) {
         fetchOperation = fetchOperationService.startFetch(fetchOperation);
         ssePublisher.publish(FetchStatusEvent.operation(fetchOperation));
         var action = getFirstFetchAction(fetchOperation);
         try {
             while (action != null) {
                 var actionHandler = getFetchActionHandler();
-                action = actionHandler.fetch(action, ssePublisher);
+                action = actionHandler.fetch(action);
             }
             fetchOperation = fetchOperationService.fetchSuccessful(fetchOperation);
         } catch (FetchOperationException ex) {

@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
@@ -14,9 +15,10 @@ public class FetchCommentRepliesOperationHandler extends DefaultFetchOperationHa
     @Autowired
     public FetchCommentRepliesOperationHandler(
             FetchOperationService fetchOperationService,
+            SsePublisher ssePublisher,
             FetchRepliesActionHandler fetchRepliesActionHandler
     ) {
-        super(fetchOperationService);
+        super(fetchOperationService, ssePublisher);
         this.fetchRepliesActionHandler = fetchRepliesActionHandler;
     }
 

@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import ca.metricalsky.winston.service.fetch.action.FetchVideosActionHandler;
@@ -14,9 +15,10 @@ public class FetchVideosOperationHandler extends DefaultFetchOperationHandler {
     @Autowired
     public FetchVideosOperationHandler(
             FetchOperationService fetchOperationService,
+            SsePublisher ssePublisher,
             FetchVideosActionHandler fetchVideosActionHandler
     ) {
-        super(fetchOperationService);
+        super(fetchOperationService, ssePublisher);
         this.fetchVideosActionHandler = fetchVideosActionHandler;
     }
 

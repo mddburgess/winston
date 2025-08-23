@@ -3,6 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
@@ -17,10 +18,11 @@ public class FetchRepliesActionHandler extends FetchActionHandler<Comment> {
 
     public FetchRepliesActionHandler(
             FetchActionService fetchActionService,
+            SsePublisher ssePublisher,
             CommentDataService commentDataService,
             YouTubeService youTubeService
     ) {
-        super(fetchActionService);
+        super(fetchActionService, ssePublisher);
         this.commentDataService = commentDataService;
         this.youTubeService = youTubeService;
     }

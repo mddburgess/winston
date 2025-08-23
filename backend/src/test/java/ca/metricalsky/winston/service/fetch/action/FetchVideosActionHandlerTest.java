@@ -66,7 +66,7 @@ class FetchVideosActionHandlerTest {
         doCallRealMethod()
                 .when(ssePublisher).publish(any(FetchResult.class));
 
-        var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction, ssePublisher);
+        var nextFetchAction = fetchVideosActionHandler.fetch(fetchAction);
 
         assertThat(nextFetchAction)
                 .as("nextFetchAction")

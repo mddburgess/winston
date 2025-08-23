@@ -23,7 +23,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,8 +41,6 @@ class FetchVideoRepliesRequestHandlerTest {
     @Mock
     private FetchRepliesActionHandler fetchRepliesActionHandler;
     @Mock
-    private SsePublisher ssePublisher;
-    @Mock
     private VideoCommentsService videoCommentsService;
     @Captor
     private ArgumentCaptor<FetchActionEntity> fetchAction;
@@ -60,9 +57,9 @@ class FetchVideoRepliesRequestHandlerTest {
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
 
-        fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher);
+        fetchVideoRepliesRequestHandler.fetch(fetchRequest);
 
-        verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture(), eq(ssePublisher));
+        verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture());
         verify(fetchOperationService).fetchSuccessful(fetchRequest);
         verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
 
@@ -85,10 +82,10 @@ class FetchVideoRepliesRequestHandlerTest {
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
-        when(fetchRepliesActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
+        when(fetchRepliesActionHandler.fetch(any(FetchActionEntity.class)))
                 .thenThrow(appException);
 
-        assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher))
+        assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest))
                 .isEqualTo(appException);
 
         verify(fetchOperationService).fetchFailed(fetchRequest, appException);

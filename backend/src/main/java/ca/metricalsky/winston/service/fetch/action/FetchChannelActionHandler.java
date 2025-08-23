@@ -3,6 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
@@ -18,10 +19,11 @@ public class FetchChannelActionHandler extends FetchActionHandler<Channel> {
 
     public FetchChannelActionHandler(
             FetchActionService fetchActionService,
+            SsePublisher ssePublisher,
             ChannelDataService channelDataService,
             YouTubeService youTubeService
     ) {
-        super(fetchActionService);
+        super(fetchActionService, ssePublisher);
         this.channelDataService = channelDataService;
         this.youTubeService = youTubeService;
     }

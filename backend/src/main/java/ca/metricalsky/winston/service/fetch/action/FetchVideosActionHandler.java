@@ -4,6 +4,7 @@ import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -28,11 +29,12 @@ public class FetchVideosActionHandler extends FetchActionHandler<Video> {
 
     public FetchVideosActionHandler(
             FetchActionService fetchActionService,
+            SsePublisher ssePublisher,
             ChannelDataService channelDataService,
             VideoDataService videoDataService,
             YouTubeService youTubeService
     ) {
-        super(fetchActionService);
+        super(fetchActionService, ssePublisher);
         this.channelDataService = channelDataService;
         this.videoDataService = videoDataService;
         this.youTubeService = youTubeService;
