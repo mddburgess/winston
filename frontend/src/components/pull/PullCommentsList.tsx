@@ -6,18 +6,23 @@ import {
     Row,
 } from "react-bootstrap";
 import { pluralize } from "#/utils";
-import type { PullCommentsState } from "#/store/slices/pulls";
+import type {
+    PullVideoCommentsState,
+    VideoCommentsState,
+} from "#/store/slices/pullVideoComments";
+import type { VideoProps } from "#/types";
 
 type PullCommentsListProps = {
-    pullComments: PullCommentsState[];
+    state: PullVideoCommentsState;
 };
 
-const PullCommentsList = ({ pullComments }: PullCommentsListProps) => (
+const PullCommentsList = ({ state }: PullCommentsListProps) => (
     <ListGroup variant={"flush"}>
-        {pullComments.map((pullComment, index) => (
+        {state.active.map((video, index) => (
             <PullCommentsItem
-                key={pullComment.video.id}
-                pullComment={pullComment}
+                key={video.id}
+                video={video}
+                state={state.videos[video.id]}
                 index={index}
             />
         ))}
@@ -25,39 +30,45 @@ const PullCommentsList = ({ pullComments }: PullCommentsListProps) => (
 );
 
 const pullCommentsItemVariants = {
-    READY: "",
-    FETCHING: "info",
-    SUCCESSFUL: "success",
-    WARNING: "warning",
-    FAILED: "danger",
+    ready: "",
+    fetching: "info",
+    successful: "success",
+    warning: "warning",
+    failed: "danger",
 };
 
-type PullCommentsItemProps = {
-    pullComment: PullCommentsState;
+const getOverallStatus = (state: VideoCommentsState) => {
+    if (state.comments.status === "successful") {
+        return state.replies.status === "ready"
+            ? "fetching"
+            : state.replies.status;
+    }
+    return state.comments.status;
+};
+
+type PullCommentsItemProps = VideoProps & {
+    state: VideoCommentsState;
     index: number;
 };
 
-const PullCommentsItem = ({ pullComment, index }: PullCommentsItemProps) => {
-    const started = pullComment.status !== "READY";
-    const active = pullComment.status === "FETCHING";
+const PullCommentsItem = ({ video, state, index }: PullCommentsItemProps) => {
+    const overallStatus = getOverallStatus(state);
+    const started = overallStatus !== "ready";
+    const active = overallStatus === "fetching";
 
-    const commentsLabel = pluralize(pullComment.commentIds.length, "comment");
+    const commentsLabel = pluralize(state.comments.items.length, "comment");
     const repliesLabel = pluralize(
-        pullComment.replyIds.length,
+        state.replies.items.length,
         "reply",
         "replies",
     );
     const progressBarLabel = `${commentsLabel} and ${repliesLabel}`;
 
-    switch (pullComment.status) {
-        case "READY":
-    }
-
     return (
-        <ListGroupItem variant={pullCommentsItemVariants[pullComment.status]}>
+        <ListGroupItem variant={pullCommentsItemVariants[overallStatus]}>
             <Row>
                 <Col className={"line-clamp-1"}>
-                    <strong>{index + 1}.</strong> {pullComment.video.title}
+                    <strong>{index + 1}.</strong> {video.title}
                 </Col>
             </Row>
             <Row>
@@ -66,7 +77,7 @@ const PullCommentsItem = ({ pullComment, index }: PullCommentsItemProps) => {
                         animated={active}
                         label={progressBarLabel}
                         now={started ? 100 : 0}
-                        variant={pullCommentsItemVariants[pullComment.status]}
+                        variant={pullCommentsItemVariants[overallStatus]}
                     />
                 </Col>
             </Row>

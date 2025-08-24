@@ -1,46 +1,56 @@
 import { useState } from "react";
 import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
-import { NotificationsSource } from "#/components/NotificationsSource";
+import { AppEventsSource } from "#/components/events/AppEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/api";
 import {
-    batchPullCommentsData,
-    batchPullCommentsStatus,
-} from "#/store/slices/pulls";
-import type { Comment, PullOperations } from "#/api";
-import type { PullCommentsState } from "#/store/slices/pulls";
-import type { ChannelProps, FetchStatusEvent, TopLevelComment } from "#/types";
+    updatePullCommentsData,
+    updatePullCommentsStatus,
+} from "#/store/slices/pullVideoComments";
+import type { PullOperations } from "#/api";
+import type { AppEvent, VideoListProps } from "#/types";
 
-type PullDataEvent = {
-    objectId: string;
-    comments?: TopLevelComment[];
-    replies?: Comment[];
-};
-
-type Props = ChannelProps & {
-    pullComments: PullCommentsState[];
-};
-
-const BatchPullCommentsAction = ({ channel, pullComments }: Props) => {
-    const [pull] = usePullMutation();
+const BatchPullCommentsAction = ({ videos }: VideoListProps) => {
     const dispatch = useAppDispatch();
+    const [pull] = usePullMutation();
     const [videoId, setVideoId] = useState("");
 
     const handleSubscribed = (eventListenerId: string) => {
-        const operations: PullOperations = pullComments.flatMap(
-            (pullComment) => [
-                { pull: "comments", video_id: pullComment.video.id },
-                { pull: "replies", video_id: pullComment.video.id },
-            ],
-        );
+        const operations: PullOperations = videos.flatMap((video) => [
+            { pull: "comments", video_id: video.id },
+            { pull: "replies", video_id: video.id },
+        ]);
         void pull({ body: { event_listener_id: eventListenerId, operations } });
     };
 
-    const handleDataEvent = (event: PullDataEvent) => {
+    const handleOperationEvent = (event: AppEvent) => {
+        if (!event.operation) {
+            return;
+        }
+        if (event.operation.pull === "comments") {
+            setVideoId(event.operation.video_id);
+            dispatch(
+                updatePullCommentsStatus({
+                    videoId: event.operation.video_id,
+                    commentsStatus: event.operation.status,
+                }),
+            );
+        } else if (event.operation.pull === "replies") {
+            setVideoId(event.operation.video_id!);
+            dispatch(
+                updatePullCommentsStatus({
+                    videoId: event.operation.video_id!,
+                    repliesStatus: event.operation.status,
+                }),
+            );
+        }
+        dispatch(invalidateFetchLimits());
+    };
+
+    const handleDataEvent = (event: AppEvent) => {
         dispatch(
-            batchPullCommentsData({
-                channelId: channel.id,
+            updatePullCommentsData({
                 videoId: videoId,
                 comments: event.comments,
                 replies: event.replies,
@@ -49,31 +59,12 @@ const BatchPullCommentsAction = ({ channel, pullComments }: Props) => {
         dispatch(invalidateFetchLimits());
     };
 
-    const handleStatusEvent = (event: FetchStatusEvent) => {
-        if (event.operation) {
-            if (
-                event.operation.operationType !== "COMMENTS" ||
-                event.operation.status !== "SUCCESSFUL"
-            ) {
-                setVideoId(event.operation.objectId);
-                dispatch(
-                    batchPullCommentsStatus({
-                        channelId: channel.id,
-                        videoId: event.operation.objectId,
-                        status: event.operation.status,
-                    }),
-                );
-            }
-            dispatch(invalidateFetchLimits());
-        }
-    };
-
     return (
         <EventSourceProvider>
-            <NotificationsSource
+            <AppEventsSource
                 onSubscribed={handleSubscribed}
+                onOperationEvent={handleOperationEvent}
                 onDataEvent={handleDataEvent}
-                onStatusEvent={handleStatusEvent}
                 hideSpinner={true}
             />
         </EventSourceProvider>

@@ -1,4 +1,4 @@
-import { round } from "lodash";
+import { filter, round } from "lodash";
 import {
     Button,
     Col,
@@ -12,60 +12,70 @@ import { PullCommentsList } from "#/components/pull/PullCommentsList";
 import { BatchPullCommentsAction } from "#/routes/channels/id/BatchPullCommentsAction";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateVideos } from "#/store/slices/backend";
-import {
-    clearBatchPullComments,
-    selectAllPullComments,
-} from "#/store/slices/pulls";
+import { clearPullComments } from "#/store/slices/pullVideoComments";
 import { pluralize } from "#/utils";
-import type { ChannelProps } from "#/types";
+import type { PullOperationRead } from "#/api";
+import type { VideoCommentsState } from "#/store/slices/pullVideoComments";
 
-const BatchPullCommentsSidebar = ({ channel }: ChannelProps) => {
+const terminalStatuses: PullOperationRead["status"][] = [
+    "successful",
+    "warning",
+    "failed",
+];
+
+const getOverallStatus = (state: VideoCommentsState) => {
+    if (state.comments.status === "successful") {
+        return state.replies.status === "ready"
+            ? "fetching"
+            : state.replies.status;
+    }
+    return state.comments.status;
+};
+
+const BatchPullCommentsSidebar = () => {
     const dispatch = useAppDispatch();
-    const pullState = useAppSelector(
-        (state) => state.pulls.batchPullComments[channel.id],
-    );
-    const pullComments = pullState ? selectAllPullComments(pullState) : [];
 
-    const completed = pullComments.filter((pullComment) =>
-        ["SUCCESSFUL", "FAILED"].includes(pullComment.status),
+    const pullVideoComments = useAppSelector(
+        (state) => state.pullVideoComments,
+    );
+
+    const activeVideos = pullVideoComments.active;
+    const isActive = activeVideos.length > 0;
+    const completed = filter(pullVideoComments.videos, (videoState) =>
+        terminalStatuses.includes(getOverallStatus(videoState)),
     ).length;
 
     const handleClose = () => {
-        dispatch(clearBatchPullComments(channel.id));
+        dispatch(clearPullComments());
         dispatch(invalidateVideos());
     };
 
     return (
-        <Offcanvas show={pullComments.length > 0} placement={"end"}>
+        <Offcanvas show={isActive} placement={"end"}>
             <Offcanvas.Header>
                 <Offcanvas.Title>Pull comments</Offcanvas.Title>
-                {pullComments.length > 0 && (
-                    <BatchPullCommentsAction
-                        channel={channel}
-                        pullComments={pullComments}
-                    />
-                )}
+                {isActive && <BatchPullCommentsAction videos={activeVideos} />}
             </Offcanvas.Header>
             <Offcanvas.Body
                 className={"bg-primary-subtle height-fit text-primary-emphasis"}
             >
                 Pulling comments for{" "}
-                <strong>{pluralize(pullComments.length, "video")}</strong>
+                <strong>{pluralize(activeVideos.length, "video")}</strong>
                 <ProgressBar
-                    animated={completed < pullComments.length}
+                    animated={completed < activeVideos.length}
                     variant={
-                        completed === pullComments.length
+                        completed === activeVideos.length
                             ? "success"
                             : "primary"
                     }
                     now={completed}
-                    max={pullComments.length}
-                    label={`${round((completed * 100) / pullComments.length)}%`}
+                    max={activeVideos.length}
+                    label={`${round((completed * 100) / activeVideos.length)}%`}
                 />
             </Offcanvas.Body>
             <Offcanvas.Body className={"border-bottom border-top p-0"}>
                 <Container className={"px-0"}>
-                    <PullCommentsList pullComments={pullComments} />
+                    <PullCommentsList state={pullVideoComments} />
                 </Container>
             </Offcanvas.Body>
             <Offcanvas.Body className={"bg-body-tertiary height-fit"}>

@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import fetches from "#/store/slices/fetches";
-import { pulls } from "#/store/slices/pulls";
+import { pullVideoCommentsReducer } from "#/store/slices/pullVideoComments";
 import { selectionsReducer } from "#/store/slices/selections";
 
 const reducer = combineReducers({
     [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
     fetches,
-    pulls,
+    pullVideoComments: pullVideoCommentsReducer,
     selections: selectionsReducer,
 });
 
