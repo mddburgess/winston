@@ -1,4 +1,10 @@
-import type { Channel, Problem, PullOperationRead, Video } from "#/api";
+import type {
+    Channel,
+    Comment,
+    Problem,
+    PullOperationRead,
+    Video,
+} from "#/api";
 import type { ProblemDetail, TopLevelComment } from "#/types";
 
 type FetchDataEvent<T> = {
