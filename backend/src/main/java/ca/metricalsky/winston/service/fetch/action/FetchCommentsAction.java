@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
+import ca.metricalsky.winston.client.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
@@ -28,6 +29,8 @@ public class FetchCommentsAction implements FetchAction<TopLevelComment> {
             var nextFetchAction = getNextFetchAction(fetchAction, commentThreadListResponse);
 
             return new FetchResult<>(fetchAction, comments, nextFetchAction);
+        } catch (VideoNotFoundException ex) {
+            throw new FetchOperationException(ex);
         } catch (CommentsDisabledException ex) {
             videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
             throw new FetchOperationException(ex);

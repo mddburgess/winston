@@ -2,9 +2,9 @@ import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { AppEventsSource } from "#/components/events/AppEventsSource";
 import { useAppDispatch } from "#/store/hooks";
-import { invalidateFetchLimits } from "#/store/slices/api";
 import { appendReplies } from "#/store/slices/comments";
 import { fetchedReplies, updateFetchStatus } from "#/store/slices/fetches";
+import { invalidateFetchLimits } from "#/store/slices/limits";
 import type { AppEvent, FetchStatusEvent, IdProps } from "#/types";
 
 export const FetchRepliesAction = ({ id: commentId }: IdProps) => {

@@ -3,7 +3,7 @@ import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { AppEventsSource } from "#/components/events/AppEventsSource";
 import { useAppDispatch } from "#/store/hooks";
-import { invalidateFetchLimits } from "#/store/slices/api";
+import { invalidateFetchLimits } from "#/store/slices/limits";
 import {
     updatePullCommentsData,
     updatePullCommentsStatus,
