@@ -3,32 +3,29 @@ import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { requestedRepliesForId } from "#/store/slices/fetches";
 import { FetchVideoRepliesAction } from "./FetchVideoRepliesAction";
+import type { VideoProps } from "#/types";
 
-type FVRProps = {
-    videoId: string;
-};
-
-const FetchVideoRepliesButton = ({ videoId }: FVRProps) => {
+const FetchVideoRepliesButton = ({ video }: VideoProps) => {
     const fetchState = useAppSelector(
-        (state) => state.fetches.replies[videoId],
+        (state) => state.fetches.replies[video.id],
     );
 
     if (
         fetchState?.status === "REQUESTED" ||
         fetchState?.status === "FETCHING"
     ) {
-        return <FetchVideoRepliesAction videoId={videoId} />;
+        return <FetchVideoRepliesAction id={video.id} />;
     } else {
-        return <FVRButton videoId={videoId} />;
+        return <FVRButton video={video} />;
     }
 };
 
-const FVRButton = ({ videoId }: FVRProps) => {
+const FVRButton = ({ video }: VideoProps) => {
     const dispatch = useAppDispatch();
     return (
         <Button
             className={"align-items-center d-flex"}
-            onClick={() => dispatch(requestedRepliesForId(videoId))}
+            onClick={() => dispatch(requestedRepliesForId(video.id))}
             size={"sm"}
         >
             <ArrowDownRightCircleFill />

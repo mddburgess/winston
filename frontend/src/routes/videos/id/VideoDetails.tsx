@@ -64,7 +64,7 @@ export const VideoDetails = ({
                     {videoComments.total_reply_count >
                         videoComments.reply_count && (
                         <Col xs={"auto"}>
-                            <FetchVideoRepliesButton videoId={video.id} />
+                            <FetchVideoRepliesButton video={video} />
                         </Col>
                     )}
                 </Row>

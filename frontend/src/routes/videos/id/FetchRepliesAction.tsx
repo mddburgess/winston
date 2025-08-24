@@ -5,20 +5,16 @@ import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/api";
 import { appendReplies } from "#/store/slices/comments";
 import { fetchedReplies, updateFetchStatus } from "#/store/slices/fetches";
-import type { AppEvent, FetchStatusEvent } from "#/types";
+import type { AppEvent, FetchStatusEvent, IdProps } from "#/types";
 
-type FetchRepliesActionProps = {
-    commentId: string;
-};
-
-export const FetchRepliesAction = ({ commentId }: FetchRepliesActionProps) => {
+export const FetchRepliesAction = ({ id: commentId }: IdProps) => {
     const dispatch = useAppDispatch();
     const [pull] = usePullMutation();
 
-    const handleSubscribed = (subscriptionId: string) => {
+    const handleSubscribed = (eventListenerId: string) => {
         void pull({
             body: {
-                event_listener_id: subscriptionId,
+                event_listener_id: eventListenerId,
                 operations: [{ pull: "replies", comment_id: commentId }],
             },
         });

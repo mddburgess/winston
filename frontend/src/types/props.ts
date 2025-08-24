@@ -16,6 +16,10 @@ type ChannelProps = {
     channel: Channel;
 };
 
+type IdProps = {
+    id: string;
+};
+
 type VideoListProps = {
     videos: Video[];
 };
@@ -29,6 +33,7 @@ export type {
     AuthorProps,
     ChannelListProps,
     ChannelProps,
+    IdProps,
     VideoListProps,
     VideoProps,
 };
