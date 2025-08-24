@@ -104,13 +104,13 @@ export const fetchesSlice = createSlice({
                 count: 0,
             };
         },
-        fetchedReplies: (state, action: PayloadAction<FetchCommentsEvent>) => {
+        fetchedReplies: (state, action: PayloadAction<AppEvent>) => {
             const event = action.payload;
-            const fetchState = state.replies[event.objectId];
-            state.replies[event.objectId] = {
-                id: event.objectId,
+            const fetchState = state.replies[event.object_id];
+            state.replies[event.object_id] = {
+                id: event.object_id,
                 status: "FETCHING",
-                count: (fetchState?.count ?? 0) + event.items.length,
+                count: (fetchState?.count ?? 0) + (event.replies?.length ?? 0),
             };
         },
         updateFetchStatus: (
