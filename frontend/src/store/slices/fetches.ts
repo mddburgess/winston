@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { Channel } from "#/api";
-import type { FetchCommentsEvent, FetchVideosEvent, Maybe } from "#/types";
+import type { AppEvent, FetchCommentsEvent, Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
@@ -72,13 +72,13 @@ export const fetchesSlice = createSlice({
                 count: 0,
             };
         },
-        fetchedVideos: (state, action: PayloadAction<FetchVideosEvent>) => {
+        fetchedVideos: (state, action: PayloadAction<AppEvent>) => {
             const event = action.payload;
-            const fetchState = state.videos[event.objectId];
-            state.videos[event.objectId] = {
-                id: event.objectId,
+            const fetchState = state.videos[event.object_id];
+            state.videos[event.object_id] = {
+                id: event.object_id,
                 status: "FETCHING",
-                count: (fetchState?.count ?? 0) + event.items.length,
+                count: (fetchState?.count ?? 0) + (event.videos?.length ?? 0),
             };
         },
         requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {

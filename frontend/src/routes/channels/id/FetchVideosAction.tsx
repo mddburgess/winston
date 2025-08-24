@@ -1,12 +1,12 @@
 import { EventSourceProvider } from "react-sse-hooks";
-import { useFetchMutation } from "#/api";
-import { NotificationsSource } from "#/components/NotificationsSource";
+import { usePullMutation } from "#/api";
+import { AppEventsSource } from "#/components/events/AppEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/api";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
 import { appendVideos } from "#/store/slices/videos";
 import type { Channel } from "#/api";
-import type { FetchStatusEvent, FetchVideosEvent } from "#/types";
+import type { AppEvent, FetchStatusEvent } from "#/types";
 
 type FetchVideosWidgetProps = {
     channel: Channel;
@@ -17,22 +17,26 @@ export const FetchVideosAction = ({
     channel,
     mode,
 }: FetchVideosWidgetProps) => {
-    const [fetch] = useFetchMutation();
     const dispatch = useAppDispatch();
+    const [pull] = usePullMutation();
 
-    const handleSubscribed = (subscriptionId: string) => {
-        void fetch({
-            "X-Notify-Subscription": subscriptionId,
+    const handleSubscribed = (eventListenerId: string) => {
+        void pull({
             body: {
-                fetch: "videos",
-                channel_id: channel.id,
-                range: mode,
+                event_listener_id: eventListenerId,
+                operations: [
+                    {
+                        pull: "videos",
+                        channel_handle: channel.handle,
+                        range: mode,
+                    },
+                ],
             },
         });
     };
 
-    const handleDataEvent = (event: FetchVideosEvent) => {
-        dispatch(appendVideos(channel.handle, event.items));
+    const handleDataEvent = (event: AppEvent) => {
+        dispatch(appendVideos(channel.handle, event.videos ?? []));
         dispatch(fetchedVideos(event));
     };
 
@@ -51,7 +55,7 @@ export const FetchVideosAction = ({
 
     return (
         <EventSourceProvider>
-            <NotificationsSource
+            <AppEventsSource
                 onSubscribed={handleSubscribed}
                 onDataEvent={handleDataEvent}
                 onStatusEvent={handleStatusEvent}

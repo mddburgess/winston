@@ -22,6 +22,7 @@ public class PullDataEventMapper implements Converter<FetchResult, AppEvent> {
         var appEvent = new AppEvent();
         appEvent.setEventId(UUID.randomUUID());
         appEvent.setEventType(EVENT_TYPE);
+        appEvent.setObjectId(source.objectId());
 
         var items = source.items();
         if (!items.isEmpty()) {

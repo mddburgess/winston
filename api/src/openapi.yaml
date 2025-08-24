@@ -351,6 +351,10 @@ components:
   schemas:
     AppEvent:
       type: object
+      required:
+        - event_id
+        - event_type
+        - object_id
       properties:
         event_id:
           type: string
@@ -359,6 +363,8 @@ components:
           type: string
         operation:
           $ref: "#/components/schemas/PullOperation"
+        object_id:
+          type: string
         channel:
           $ref: ./schemas/channels/Channel.yaml
         videos:

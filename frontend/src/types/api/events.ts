@@ -11,9 +11,7 @@ type SubscriptionEvent = {
     subscriptionId: string;
 };
 
-type FetchChannelEvent = FetchDataEvent<Channel>;
 type FetchCommentsEvent = FetchDataEvent<TopLevelComment>;
-type FetchVideosEvent = FetchDataEvent<Video>;
 
 type FetchStatusEvent = {
     operation?: {
@@ -26,9 +24,10 @@ type FetchStatusEvent = {
 };
 
 type AppEvent = {
-    event_id?: string;
-    event_type?: string;
+    event_id: string;
+    event_type: string;
     operation?: PullOperationRead;
+    object_id: string;
     channel?: Channel;
     videos?: Video[];
     comments?: TopLevelComment[];
@@ -38,9 +37,7 @@ type AppEvent = {
 
 export type {
     AppEvent,
-    FetchChannelEvent,
     FetchCommentsEvent,
     FetchStatusEvent,
-    FetchVideosEvent,
     SubscriptionEvent,
 };
