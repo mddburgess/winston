@@ -1,4 +1,4 @@
-import type { Channel, Video } from "#/api";
+import type { Channel, Problem, PullOperationRead, Video } from "#/api";
 import type { ProblemDetail, TopLevelComment } from "#/types";
 
 type FetchDataEvent<T> = {
@@ -25,7 +25,19 @@ type FetchStatusEvent = {
     error?: ProblemDetail;
 };
 
+type AppEvent = {
+    event_id?: string;
+    event_type?: string;
+    operation?: PullOperationRead;
+    channel?: Channel;
+    videos?: Video[];
+    comments?: TopLevelComment[];
+    replies?: Comment[];
+    error?: Problem;
+};
+
 export type {
+    AppEvent,
     FetchChannelEvent,
     FetchCommentsEvent,
     FetchStatusEvent,
