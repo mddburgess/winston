@@ -1,9 +1,8 @@
 package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.service.fetch.FetchResult;
+import ca.metricalsky.winston.api.model.AppEvent;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -19,9 +18,6 @@ public class SsePublisher {
     private final UUID id;
     private final SseEmitter sseEmitter;
     private boolean open;
-
-    @Setter
-    private EventBuilder eventBuilder;
 
     public SsePublisher(Long timeout) {
         this(new SseEmitter(timeout));

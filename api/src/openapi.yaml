@@ -346,6 +346,32 @@ paths:
 
 components:
   schemas:
+    AppEvent:
+      type: object
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+        operation:
+          $ref: "#/components/schemas/PullOperation"
+        channel:
+          $ref: ./schemas/channels/Channel.yaml
+        videos:
+          type: array
+          items:
+            $ref: ./schemas/videos/Video.yaml
+        comments:
+          type: array
+          items:
+            $ref: ./schemas/comments/TopLevelComment.yaml
+        replies:
+          type: array
+          items:
+            $ref: ./schemas/comments/Comment.yaml
+        error:
+          $ref: "#/components/schemas/Problem"
     PatchOperation:
       $ref: ./schemas/PatchOperation.yaml
     Problem:
@@ -356,7 +382,12 @@ components:
         $ref: "#/components/schemas/PullOperation"
     PullOperation:
       type: object
+      required:
+        - pull
       properties:
+        id:
+          type: string
+          readOnly: true
         pull:
           type: string
           enum:
@@ -364,6 +395,15 @@ components:
             - videos
             - comments
             - replies
+        status:
+          type: string
+          readOnly: true
+          enum:
+            - ready
+            - fetching
+            - successful
+            - warning
+            - failed
       discriminator:
         propertyName: pull
         mapping:
