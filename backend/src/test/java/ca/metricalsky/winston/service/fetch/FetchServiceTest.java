@@ -7,6 +7,7 @@ import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.events.SsePublisherHolder;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
@@ -52,6 +53,8 @@ class FetchServiceTest {
     @Mock
     private SsePublisher ssePublisher;
     @Mock
+    private SsePublisherHolder ssePublisherHolder;
+    @Mock
     private YouTubeRequestRepository youTubeRequestRepository;
 
     @Test
@@ -81,9 +84,11 @@ class FetchServiceTest {
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
-        verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst(), ssePublisher);
+        verify(ssePublisherHolder).hold(ssePublisher);
+        verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst());
         verify(fetchRequestService).finishProcessingRequest(fetchRequest.getId());
         verify(ssePublisher).complete();
+        verify(ssePublisherHolder).clear();
     }
 
     @Test
@@ -96,14 +101,16 @@ class FetchServiceTest {
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
-                .when(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst(), ssePublisher);
+                .when(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst());
         when(ssePublisher.isOpen())
                 .thenReturn(true);
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
+        verify(ssePublisherHolder).hold(ssePublisher);
         verify(ssePublisher).publish(any(FetchStatusEvent.class));
         verify(ssePublisher).completeWithError(exception);
+        verify(ssePublisherHolder).clear();
     }
 
     @Test
@@ -116,12 +123,14 @@ class FetchServiceTest {
         when(fetchOperationHandlerFactory.getHandler(fetchRequest.getOperations().getFirst()))
                 .thenReturn(fetchOperationHandler);
         doThrow(exception)
-                .when(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst(), ssePublisher);
+                .when(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst());
         when(ssePublisher.isOpen())
                 .thenReturn(false);
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
+        verify(ssePublisherHolder).hold(ssePublisher);
+        verify(ssePublisherHolder).clear();
         verifyNoMoreInteractions(ssePublisher);
     }
 

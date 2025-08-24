@@ -4,29 +4,20 @@ import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.CommentListResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FetchRepliesActionHandler extends FetchActionHandler<Comment> {
+@RequiredArgsConstructor
+public class FetchRepliesAction implements FetchAction<Comment> {
 
     private final CommentDataService commentDataService;
     private final YouTubeService youTubeService;
 
-    public FetchRepliesActionHandler(
-            FetchActionService fetchActionService,
-            CommentDataService commentDataService,
-            YouTubeService youTubeService
-    ) {
-        super(fetchActionService);
-        this.commentDataService = commentDataService;
-        this.youTubeService = youTubeService;
-    }
-
     @Override
-    protected FetchResult<Comment> doFetch(FetchActionEntity fetchAction) {
+    public FetchResult<Comment> fetch(FetchActionEntity fetchAction) {
         var commentListResponse = youTubeService.getReplies(fetchAction);
         var replies = commentDataService.saveReplies(fetchAction.getObjectId(), commentListResponse);
         var nextFetchAction = getNextFetchAction(fetchAction, commentListResponse);

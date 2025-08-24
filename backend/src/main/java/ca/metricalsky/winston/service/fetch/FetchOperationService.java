@@ -23,6 +23,12 @@ public class FetchOperationService {
         return fetchOperationRepository.save(fetchOperation);
     }
 
+    public FetchOperationEntity fetchWarning(FetchOperationEntity fetchOperation, Throwable throwable) {
+        fetchOperation.setStatus(Status.WARNING);
+        fetchOperation.setError(Throwables.getStackTraceAsString(throwable));
+        return fetchOperationRepository.save(fetchOperation);
+    }
+
     public FetchOperationEntity fetchFailed(FetchOperationEntity fetchOperation, Throwable throwable) {
         fetchOperation.setStatus(Status.FAILED);
         fetchOperation.setError(Throwables.getStackTraceAsString(throwable));

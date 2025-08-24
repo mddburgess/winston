@@ -82,6 +82,7 @@ public class FetchOperationEntity {
         READY,
         FETCHING,
         SUCCESSFUL,
+        WARNING,
         FAILED,
     }
 }

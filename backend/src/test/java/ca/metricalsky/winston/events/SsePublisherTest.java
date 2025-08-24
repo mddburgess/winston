@@ -58,15 +58,6 @@ class SsePublisherTest {
         verify(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
     }
 
-    @Test
-    void publishFetchDataEvent() throws Exception {
-        var fetchResult = new FetchResult<>(new FetchActionEntity(), List.of(new Object()), null);
-        var fetchDataEvent = FetchDataEvent.of(fetchResult);
-
-        ssePublisher.publish(fetchDataEvent);
-
-        verify(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
-    }
 
     @Test
     void publishFetchStatusEvent() throws Exception {
