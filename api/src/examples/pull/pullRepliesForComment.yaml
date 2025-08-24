@@ -1,6 +1,7 @@
 summary: Pull replies for comment
 description: Request to pull the replies to the specified comment.
 value:
+  event_listener_id: cb0bda31-1322-45da-a4a6-80b211cd13cb
   operations:
     - pull: replies
       comment_id: UgxOglOpM6JOdYaY2Gt4AaABAg

@@ -305,6 +305,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - event_listener_id
+                - operations
               properties:
                 event_listener_id:
                   type: string

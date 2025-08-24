@@ -1,6 +1,7 @@
 summary: Pull comments and replies
 description: Request to pull the comments and replies for the specified video.
 value:
+  event_listener_id: cb0bda31-1322-45da-a4a6-80b211cd13cb
   operations:
     - pull: comments
       video_id: ZgfVi2g5DPY
