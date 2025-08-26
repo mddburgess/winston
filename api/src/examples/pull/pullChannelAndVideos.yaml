@@ -1,6 +1,7 @@
 summary: Pull channel and videos
 description: Request to pull the channel and videos for the specified channel handle.
 value:
+  event_listener_id: cb0bda31-1322-45da-a4a6-80b211cd13cb
   operations:
     - pull: channel
       channel_handle: "@alice"

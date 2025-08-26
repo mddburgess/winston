@@ -1,13 +1,13 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
-import ca.metricalsky.winston.service.fetch.action.FetchRepliesActionHandler;
+import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,16 +32,14 @@ import static org.mockito.Mockito.when;
 class FetchVideoRepliesRequestHandlerTest {
 
     @InjectMocks
-    private FetchVideoRepliesOperationHandler fetchVideoRepliesRequestHandler;
+    private FetchVideoRepliesOperation fetchVideoRepliesRequestHandler;
 
     @Mock
     private CommentRepository commentRepository;
     @Mock
     private FetchOperationService fetchOperationService;
     @Mock
-    private FetchRepliesActionHandler fetchRepliesActionHandler;
-    @Mock
-    private SsePublisher ssePublisher;
+    private FetchActionHandler<Comment> fetchRepliesActionHandler;
     @Mock
     private VideoCommentsService videoCommentsService;
     @Captor
@@ -60,9 +57,9 @@ class FetchVideoRepliesRequestHandlerTest {
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
 
-        fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher);
+        fetchVideoRepliesRequestHandler.fetch(fetchRequest);
 
-        verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture(), eq(ssePublisher));
+        verify(fetchRepliesActionHandler, times(2)).fetch(fetchAction.capture());
         verify(fetchOperationService).fetchSuccessful(fetchRequest);
         verify(videoCommentsService).updateVideoComments(fetchRequest.getObjectId());
 
@@ -85,10 +82,10 @@ class FetchVideoRepliesRequestHandlerTest {
                 .thenReturn(fetchRequest);
         when(commentRepository.findIdsMissingRepliesByVideoId(fetchRequest.getObjectId()))
                 .thenReturn(commentIds);
-        when(fetchRepliesActionHandler.fetch(any(FetchActionEntity.class), eq(ssePublisher)))
+        when(fetchRepliesActionHandler.fetch(any(FetchActionEntity.class)))
                 .thenThrow(appException);
 
-        assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest, ssePublisher))
+        assertThatThrownBy(() -> fetchVideoRepliesRequestHandler.fetch(fetchRequest))
                 .isEqualTo(appException);
 
         verify(fetchOperationService).fetchFailed(fetchRequest, appException);

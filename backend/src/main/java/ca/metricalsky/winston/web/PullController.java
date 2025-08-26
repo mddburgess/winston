@@ -3,7 +3,6 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.api.PullApi;
 import ca.metricalsky.winston.api.model.PullRequest;
 import ca.metricalsky.winston.dao.PullRequestDataService;
-import ca.metricalsky.winston.events.PullDataEventBuilder;
 import ca.metricalsky.winston.service.NotificationsService;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import jakarta.validation.Valid;
@@ -25,7 +24,6 @@ public class PullController implements PullApi {
     @Override
     public ResponseEntity<Void> pull(PullRequest pullRequest) {
         var ssePublisher = notificationsService.requireSubscription(pullRequest.getEventListenerId());
-        ssePublisher.setEventBuilder(new PullDataEventBuilder());
         var fetchRequestId = pullRequestDataService.savePullRequest(pullRequest);
         fetchService.fetchAsync(fetchRequestId, ssePublisher);
 
@@ -35,7 +33,6 @@ public class PullController implements PullApi {
     @PostMapping("/api/dev/pull")
     public ResponseEntity<SseEmitter> debugPull(@Valid @RequestBody PullRequest pullRequest) {
         var ssePublisher = notificationsService.openSubscription();
-        ssePublisher.setEventBuilder(new PullDataEventBuilder());
         var fetchRequestId = pullRequestDataService.savePullRequest(pullRequest);
         fetchService.fetchAsync(fetchRequestId, ssePublisher);
 

@@ -64,7 +64,7 @@ const FetchingRepliesItem = ({
                     "more replies...",
                 )}
             </span>
-            <FetchRepliesAction commentId={commentId} />
+            <FetchRepliesAction id={commentId} />
         </ListGroupItem>
     );
 };

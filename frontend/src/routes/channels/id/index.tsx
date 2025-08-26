@@ -70,12 +70,7 @@ export const ChannelDetailsRoute = () => {
             </Breadcrumb>
             {channel && <ChannelDetails channel={channel} />}
             {channel && <FetchVideosAlert channel={channel} />}
-            {channel && (
-                <BatchPullCommentsAlert
-                    channel={channel}
-                    videosOnPage={videosOnPage}
-                />
-            )}
+            <BatchPullCommentsAlert videos={videosOnPage} />
             <PaginationContext pageSize={24} items={filteredVideoList}>
                 {({
                     pageNumber,
@@ -108,7 +103,7 @@ export const ChannelDetailsRoute = () => {
                     </>
                 )}
             </PaginationContext>
-            {channel && <BatchPullCommentsSidebar channel={channel} />}
+            <BatchPullCommentsSidebar />
         </>
     );
 };

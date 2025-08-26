@@ -1,36 +1,29 @@
 import { EventSourceProvider } from "react-sse-hooks";
-import { useFetchMutation } from "#/api";
-import { NotificationsSource } from "#/components/NotificationsSource";
+import { usePullMutation } from "#/api";
+import { AppEventsSource } from "#/components/events/AppEventsSource";
 import { useAppDispatch } from "#/store/hooks";
-import { invalidateFetchLimits } from "#/store/slices/api";
 import { appendReplies } from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
-import type { FetchCommentsEvent, FetchStatusEvent } from "#/types";
+import { invalidateFetchLimits } from "#/store/slices/limits";
+import type { AppEvent, FetchStatusEvent, IdProps } from "#/types";
 
-type FetchRepliesActionProps = {
-    videoId: string;
-};
-
-export const FetchVideoRepliesAction = ({
-    videoId,
-}: FetchRepliesActionProps) => {
-    const [fetch] = useFetchMutation();
+export const FetchVideoRepliesAction = ({ id: videoId }: IdProps) => {
     const dispatch = useAppDispatch();
+    const [pull] = usePullMutation();
 
-    const handleSubscribed = (subscriptionId: string) => {
-        void fetch({
-            "X-Notify-Subscription": subscriptionId,
+    const handleSubscribed = (eventListenerId: string) => {
+        void pull({
             body: {
-                fetch: "replies",
-                video_id: videoId,
+                event_listener_id: eventListenerId,
+                operations: [{ pull: "replies", video_id: videoId }],
             },
         });
     };
 
-    const handleDataEvent = (event: FetchCommentsEvent) => {
-        if (event.items.length > 0) {
-            const commentId = event.objectId;
-            dispatch(appendReplies(videoId, commentId, event.items));
+    const handleDataEvent = (event: AppEvent) => {
+        if (event.replies && event.replies.length > 0) {
+            const commentId = event.object_id;
+            dispatch(appendReplies(videoId, commentId, event.replies));
         }
     };
 
@@ -49,7 +42,7 @@ export const FetchVideoRepliesAction = ({
 
     return (
         <EventSourceProvider>
-            <NotificationsSource
+            <AppEventsSource
                 onSubscribed={handleSubscribed}
                 onDataEvent={handleDataEvent}
                 onStatusEvent={handleStatusEvent}

@@ -33,6 +33,8 @@ public class YouTubeException extends AppException {
 
             return switch (reason) {
                 case "commentsDisabled" -> new CommentsDisabledException(googleException);
+                case "quotaExceeded" -> new QuotaExceededException(googleException);
+                case "videoNotFound" -> new VideoNotFoundException(googleException);
                 default -> new YouTubeException(googleException);
             };
         }
