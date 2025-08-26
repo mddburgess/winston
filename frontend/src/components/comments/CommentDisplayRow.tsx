@@ -9,6 +9,7 @@ import {
 import { usePatchCommentPropertiesMutation } from "#/api";
 import { AuthorLink } from "#/components/authors/AuthorLink";
 import { AuthorProfileImage } from "#/components/authors/AuthorProfileImage";
+import { CommentLikeCount } from "#/components/comments/CommentLikeCount";
 import { Date } from "#/components/Date";
 import { HtmlText } from "#/components/HtmlText";
 import type { Comment } from "#/api";
@@ -59,6 +60,9 @@ const CommentDisplayRow = ({
                 </Col>
                 <Col xs={"auto"} className={"flex-center small"}>
                     <Date date={comment.published_at} />
+                </Col>
+                <Col xs={"auto"} className={"flex-center small"}>
+                    <CommentLikeCount comment={comment} />
                 </Col>
                 <Col className={"flex-center justify-content-end"}>
                     <ToggleImportantLink comment={comment} />

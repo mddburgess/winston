@@ -51,6 +51,7 @@ class CommentEntityTest {
                 .videoId(videoEntity.getId())
                 .textDisplay(TestUtils.randomString())
                 .textOriginal(TestUtils.randomString())
+                .likeCount(TestUtils.randomLong())
                 .totalReplyCount(TestUtils.randomLong())
                 .publishedAt(OffsetDateTime.now())
                 .updatedAt(OffsetDateTime.now())
@@ -63,6 +64,7 @@ class CommentEntityTest {
                 .hasFieldOrPropertyWithValue("videoId", commentEntity.getVideoId())
                 .hasFieldOrPropertyWithValue("textDisplay", commentEntity.getTextDisplay())
                 .hasFieldOrPropertyWithValue("textOriginal", commentEntity.getTextOriginal())
+                .hasFieldOrPropertyWithValue("likeCount", commentEntity.getLikeCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", commentEntity.getTotalReplyCount())
                 .hasNoNullFieldsOrPropertiesExcept("author", "parentId", "properties");
         assertThat(persistedEntity.getReplies())

@@ -50,6 +50,9 @@ public class CommentEntity {
     @Column(name = "text_original")
     private String textOriginal;
 
+    @Column(name = "like_count")
+    private Long likeCount;
+
     @Column(name = "total_reply_count")
     private Long totalReplyCount;
 
