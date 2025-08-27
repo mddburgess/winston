@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Show the available quota in the pull comments sidebar. (mddburgess/winston#80)
+- Save the comment like counts when pulling comment data. (mddburgess/winston#88)
+- Show the comment like counts in the UI. (mddburgess/winston#88)
 
 ### Changed
 

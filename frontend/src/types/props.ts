@@ -1,4 +1,4 @@
-import type { Author, Channel, Video } from "#/api";
+import type { Author, Channel, Comment, Video } from "#/api";
 
 type AuthorListProps = {
     authors: Author[];
@@ -14,6 +14,10 @@ type ChannelListProps = {
 
 type ChannelProps = {
     channel: Channel;
+};
+
+type CommentProps = {
+    comment: Comment;
 };
 
 type IdProps = {
@@ -33,6 +37,7 @@ export type {
     AuthorProps,
     ChannelListProps,
     ChannelProps,
+    CommentProps,
     IdProps,
     VideoListProps,
     VideoProps,
