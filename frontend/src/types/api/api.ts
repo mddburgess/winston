@@ -1,9 +1,4 @@
-import type {
-    Author,
-    ListCommentsResponse,
-    PullOperationRead,
-    Video,
-} from "#/api";
+import type { Author, ListCommentsResponse, PullOperationRead, Video } from "#/api";
 
 type ChannelSummary = Video["channel"];
 
@@ -13,9 +8,4 @@ type TopLevelComment = ListCommentsResponse["comments"][number];
 
 type VideoStatistics = NonNullable<Author["video_statistics"]>[number];
 
-export type {
-    ChannelSummary,
-    PullOperationStatus,
-    TopLevelComment,
-    VideoStatistics,
-};
+export type { ChannelSummary, PullOperationStatus, TopLevelComment, VideoStatistics };

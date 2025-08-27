@@ -1,44 +1,44 @@
 import type { Author, Channel, Comment, Video } from "#/api";
 
 type AuthorListProps = {
-    authors: Author[];
+  authors: Author[];
 };
 
 type AuthorProps = {
-    author: Author;
+  author: Author;
 };
 
 type ChannelListProps = {
-    channels: Channel[];
+  channels: Channel[];
 };
 
 type ChannelProps = {
-    channel: Channel;
+  channel: Channel;
 };
 
 type CommentProps = {
-    comment: Comment;
+  comment: Comment;
 };
 
 type IdProps = {
-    id: string;
+  id: string;
 };
 
 type VideoListProps = {
-    videos: Video[];
+  videos: Video[];
 };
 
 type VideoProps = {
-    video: Video;
+  video: Video;
 };
 
 export type {
-    AuthorListProps,
-    AuthorProps,
-    ChannelListProps,
-    ChannelProps,
-    CommentProps,
-    IdProps,
-    VideoListProps,
-    VideoProps,
+  AuthorListProps,
+  AuthorProps,
+  ChannelListProps,
+  ChannelProps,
+  CommentProps,
+  IdProps,
+  VideoListProps,
+  VideoProps,
 };

@@ -4,24 +4,24 @@ import type { Video } from "#/api";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type SelectionsState = {
-    videos: Video[];
+  videos: Video[];
 };
 
 const initialState: SelectionsState = {
-    videos: [],
+  videos: [],
 };
 
 const selectionsSlice = createSlice({
-    name: "selections",
-    initialState,
-    reducers: {
-        toggleSelectVideo: (state, action: PayloadAction<Video>) => {
-            state.videos = xorBy(state.videos, [action.payload], "id");
-        },
-        clearVideoSelection: (state) => {
-            state.videos = [];
-        },
+  name: "selections",
+  initialState,
+  reducers: {
+    toggleSelectVideo: (state, action: PayloadAction<Video>) => {
+      state.videos = xorBy(state.videos, [action.payload], "id");
     },
+    clearVideoSelection: (state) => {
+      state.videos = [];
+    },
+  },
 });
 
 const selectionsReducer = selectionsSlice.reducer;

@@ -9,11 +9,11 @@ import "./index.css";
 
 const root = document.getElementById("root")!;
 createRoot(root).render(
-    <StrictMode>
-        <Provider store={setupStore()}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Provider>
-    </StrictMode>,
+  <StrictMode>
+    <Provider store={setupStore()}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>,
 );

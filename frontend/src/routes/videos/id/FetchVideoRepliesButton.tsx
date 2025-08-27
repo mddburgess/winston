@@ -6,31 +6,26 @@ import { FetchVideoRepliesAction } from "./FetchVideoRepliesAction";
 import type { VideoProps } from "#/types";
 
 const FetchVideoRepliesButton = ({ video }: VideoProps) => {
-    const fetchState = useAppSelector(
-        (state) => state.fetches.replies[video.id],
-    );
+  const fetchState = useAppSelector((state) => state.fetches.replies[video.id]);
 
-    if (
-        fetchState?.status === "REQUESTED" ||
-        fetchState?.status === "FETCHING"
-    ) {
-        return <FetchVideoRepliesAction id={video.id} />;
-    } else {
-        return <FVRButton video={video} />;
-    }
+  if (fetchState?.status === "REQUESTED" || fetchState?.status === "FETCHING") {
+    return <FetchVideoRepliesAction id={video.id} />;
+  } else {
+    return <FVRButton video={video} />;
+  }
 };
 
 const FVRButton = ({ video }: VideoProps) => {
-    const dispatch = useAppDispatch();
-    return (
-        <Button
-            className={"align-items-center d-flex"}
-            onClick={() => dispatch(requestedRepliesForId(video.id))}
-            size={"sm"}
-        >
-            <ArrowDownRightCircleFill />
-        </Button>
-    );
+  const dispatch = useAppDispatch();
+  return (
+    <Button
+      className={"align-items-center d-flex"}
+      onClick={() => dispatch(requestedRepliesForId(video.id))}
+      size={"sm"}
+    >
+      <ArrowDownRightCircleFill />
+    </Button>
+  );
 };
 
 export { FetchVideoRepliesButton };
