@@ -4,84 +4,71 @@ import { useEventSource, useEventSourceListener } from "react-sse-hooks";
 import type { FetchStatusEvent, SubscriptionEvent } from "#/types";
 
 type NotificationsSourceProps<T> = {
-    onSubscribed: (subscriptionId: string) => void;
-    onDataEvent: (dataEvent: T) => void;
-    onStatusEvent: (statusEvent: FetchStatusEvent) => void;
-    hideSpinner?: boolean;
+  onSubscribed: (subscriptionId: string) => void;
+  onDataEvent: (dataEvent: T) => void;
+  onStatusEvent: (statusEvent: FetchStatusEvent) => void;
+  hideSpinner?: boolean;
 };
 
 export const NotificationsSource = <T,>(props: NotificationsSourceProps<T>) => {
-    const eventSource = useEventSource({
-        source: `/api/v1/notifications`,
-    });
+  const eventSource = useEventSource({
+    source: `/api/v1/notifications`,
+  });
 
-    useEffect(() => {
-        eventSource.onerror = (event) => {
-            console.debug("Unsubscribed from notifications:", event);
-            eventSource.close();
-        };
-    }, [eventSource]);
+  useEffect(() => {
+    eventSource.onerror = (event) => {
+      console.debug("Unsubscribed from notifications:", event);
+      eventSource.close();
+    };
+  }, [eventSource]);
 
-    useEventSourceListener<SubscriptionEvent>(
-        {
-            source: eventSource,
-            startOnInit: true,
-            event: {
-                name: "message",
-                listener: (event) => {
-                    console.debug(
-                        "Subscribed to notifications:",
-                        event.data.subscriptionId,
-                    );
-                    props.onSubscribed(event.data.subscriptionId);
-                },
-                options: {
-                    once: true,
-                },
-            },
+  useEventSourceListener<SubscriptionEvent>(
+    {
+      source: eventSource,
+      startOnInit: true,
+      event: {
+        name: "message",
+        listener: (event) => {
+          console.debug("Subscribed to notifications:", event.data.subscriptionId);
+          props.onSubscribed(event.data.subscriptionId);
         },
-        [eventSource, props],
-    );
-
-    useEventSourceListener<T>(
-        {
-            source: eventSource,
-            startOnInit: true,
-            event: {
-                name: "fetch-data",
-                listener: (event) => {
-                    console.debug(
-                        `Received event of type 'fetch-data':`,
-                        event,
-                    );
-                    props.onDataEvent(event.data);
-                },
-            },
+        options: {
+          once: true,
         },
-        [eventSource, props],
-    );
+      },
+    },
+    [eventSource, props],
+  );
 
-    useEventSourceListener<FetchStatusEvent>(
-        {
-            source: eventSource,
-            startOnInit: true,
-            event: {
-                name: "fetch-status",
-                listener: (event) => {
-                    console.debug(
-                        `Received event of type 'fetch-status':`,
-                        event,
-                    );
-                    props.onStatusEvent(event.data);
-                },
-            },
+  useEventSourceListener<T>(
+    {
+      source: eventSource,
+      startOnInit: true,
+      event: {
+        name: "fetch-data",
+        listener: (event) => {
+          console.debug(`Received event of type 'fetch-data':`, event);
+          props.onDataEvent(event.data);
         },
-        [eventSource, props],
-    );
+      },
+    },
+    [eventSource, props],
+  );
 
-    return props.hideSpinner ? (
-        <></>
-    ) : (
-        <Spinner size={"sm"} className={"ms-2"} />
-    );
+  useEventSourceListener<FetchStatusEvent>(
+    {
+      source: eventSource,
+      startOnInit: true,
+      event: {
+        name: "fetch-status",
+        listener: (event) => {
+          console.debug(`Received event of type 'fetch-status':`, event);
+          props.onStatusEvent(event.data);
+        },
+      },
+    },
+    [eventSource, props],
+  );
+
+  return props.hideSpinner ? <></> : <Spinner size={"sm"} className={"ms-2"} />;
 };

@@ -7,80 +7,58 @@ import type { CommentState } from "#/store/slices/backend";
 import type { TopLevelComment } from "#/types";
 
 const commentsApi = enhancedBackendApi.enhanceEndpoints({
-    endpoints: {
-        listComments: {
-            transformResponse: (response: ListCommentsResponse) =>
-                topLevelCommentsAdapter.addMany(
-                    topLevelCommentsAdapter.getInitialState(),
-                    transformComments(response.comments),
-                ),
-        },
+  endpoints: {
+    listComments: {
+      transformResponse: (response: ListCommentsResponse) =>
+        topLevelCommentsAdapter.addMany(
+          topLevelCommentsAdapter.getInitialState(),
+          transformComments(response.comments),
+        ),
     },
+  },
 });
 
 const { useListCommentsQuery } = commentsApi;
 
 const topLevelCommentsAdapter = createEntityAdapter<CommentState>({
-    sortComparer: ascBy((topLevelComment) =>
-        DateTime.fromISO(topLevelComment.published_at).valueOf(),
-    ),
+  sortComparer: ascBy((topLevelComment) => DateTime.fromISO(topLevelComment.published_at).valueOf()),
 });
 
 const repliesAdapter = createEntityAdapter<Comment>({
-    sortComparer: ascBy((comment) =>
-        DateTime.fromISO(comment.published_at).valueOf(),
-    ),
+  sortComparer: ascBy((comment) => DateTime.fromISO(comment.published_at).valueOf()),
 });
 
 const transformComments = (comments: TopLevelComment[]) => {
-    return comments.map((comment) => ({
-        ...comment,
-        replies: repliesAdapter.addMany(
-            repliesAdapter.getInitialState(),
-            comment.replies ?? [],
-        ),
-    }));
+  return comments.map((comment) => ({
+    ...comment,
+    replies: repliesAdapter.addMany(repliesAdapter.getInitialState(), comment.replies ?? []),
+  }));
 };
 
-const { selectAll: selectAllTopLevelComments } =
-    topLevelCommentsAdapter.getSelectors();
+const { selectAll: selectAllTopLevelComments } = topLevelCommentsAdapter.getSelectors();
 
-const { selectAll: selectAllReplies, selectTotal: selectReplyCount } =
-    repliesAdapter.getSelectors();
+const { selectAll: selectAllReplies, selectTotal: selectReplyCount } = repliesAdapter.getSelectors();
 
 const appendComments = (videoId: string, comments: TopLevelComment[]) =>
-    commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) =>
-        topLevelCommentsAdapter.addMany(draft, transformComments(comments)),
-    );
+  commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) =>
+    topLevelCommentsAdapter.addMany(draft, transformComments(comments)),
+  );
 
-const appendReplies = (
-    videoId: string,
-    commentId: string,
-    replies: Comment[],
-) => {
-    return commentsApi.util.updateQueryData(
-        "listComments",
-        { id: videoId },
-        (draft) => {
-            const topLevelComment = topLevelCommentsAdapter
-                .getSelectors()
-                .selectById(draft, commentId);
-            topLevelCommentsAdapter.setOne(draft, {
-                ...topLevelComment,
-                replies: repliesAdapter.addMany(
-                    topLevelComment.replies,
-                    replies,
-                ),
-            });
-        },
-    );
+const appendReplies = (videoId: string, commentId: string, replies: Comment[]) => {
+  return commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) => {
+    const topLevelComment = topLevelCommentsAdapter.getSelectors().selectById(draft, commentId);
+    topLevelCommentsAdapter.setOne(draft, {
+      ...topLevelComment,
+      replies: repliesAdapter.addMany(topLevelComment.replies, replies),
+    });
+  });
 };
 
 export {
-    appendComments,
-    appendReplies,
-    selectAllReplies,
-    selectAllTopLevelComments,
-    selectReplyCount,
-    useListCommentsQuery,
+  appendComments,
+  appendReplies,
+  selectAllReplies,
+  selectAllTopLevelComments,
+  selectReplyCount,
+  useListCommentsQuery,
 };

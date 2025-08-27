@@ -8,89 +8,57 @@ import { ReplyListItem } from "./ReplyListItem";
 import type { Comment } from "#/api";
 
 type ReplyListProps = {
-    commentId: string;
-    totalReplyCount: number;
-    replies: Comment[];
-    highlightAuthorId?: string;
+  commentId: string;
+  totalReplyCount: number;
+  replies: Comment[];
+  highlightAuthorId?: string;
 };
 
 const ReplyListPart = (props: Partial<ReplyListProps>) => {
-    return props.replies?.map((reply) => (
-        <ReplyListItem
-            key={reply.id}
-            reply={reply}
-            highlightAuthorId={props.highlightAuthorId}
-        />
-    ));
+  return props.replies?.map((reply) => (
+    <ReplyListItem key={reply.id} reply={reply} highlightAuthorId={props.highlightAuthorId} />
+  ));
 };
 
-const MoreRepliesItem = ({
-    commentId,
-    totalReplyCount,
-    replies,
-}: ReplyListProps) => {
-    const dispatch = useAppDispatch();
+const MoreRepliesItem = ({ commentId, totalReplyCount, replies }: ReplyListProps) => {
+  const dispatch = useAppDispatch();
 
-    return (
-        <ListGroupItem key={"more"} className={"align-items-center d-flex"}>
-            <ReplyAll className={"me-2"} />
-            <a
-                className={"small"}
-                onClick={() => dispatch(requestedRepliesForId(commentId))}
-            >
-                {pluralize(
-                    totalReplyCount - replies.length,
-                    "more reply...",
-                    "more replies...",
-                )}
-            </a>
-        </ListGroupItem>
-    );
+  return (
+    <ListGroupItem key={"more"} className={"align-items-center d-flex"}>
+      <ReplyAll className={"me-2"} />
+      <a className={"small"} onClick={() => dispatch(requestedRepliesForId(commentId))}>
+        {pluralize(totalReplyCount - replies.length, "more reply...", "more replies...")}
+      </a>
+    </ListGroupItem>
+  );
 };
 
-const FetchingRepliesItem = ({
-    commentId,
-    totalReplyCount,
-    replies,
-}: ReplyListProps) => {
-    return (
-        <ListGroupItem key={"fetching"} className={"align-items-center d-flex"}>
-            <ReplyAll className={"me-2"} />
-            <span className={"small"}>
-                Fetching{" "}
-                {pluralize(
-                    totalReplyCount - replies.length,
-                    "more reply...",
-                    "more replies...",
-                )}
-            </span>
-            <FetchRepliesAction id={commentId} />
-        </ListGroupItem>
-    );
+const FetchingRepliesItem = ({ commentId, totalReplyCount, replies }: ReplyListProps) => {
+  return (
+    <ListGroupItem key={"fetching"} className={"align-items-center d-flex"}>
+      <ReplyAll className={"me-2"} />
+      <span className={"small"}>
+        Fetching {pluralize(totalReplyCount - replies.length, "more reply...", "more replies...")}
+      </span>
+      <FetchRepliesAction id={commentId} />
+    </ListGroupItem>
+  );
 };
 
-export const ReplyList = ({
-    highlightAuthorId = "",
-    ...props
-}: ReplyListProps) => {
-    const fetchState = useAppSelector(
-        (state) => state.fetches.replies[props.commentId],
-    );
+export const ReplyList = ({ highlightAuthorId = "", ...props }: ReplyListProps) => {
+  const fetchState = useAppSelector((state) => state.fetches.replies[props.commentId]);
 
-    let moreRepliesElement = <></>;
-    if (
-        fetchState?.status === "REQUESTED" ||
-        fetchState?.status === "FETCHING"
-    ) {
-        moreRepliesElement = <FetchingRepliesItem {...props} />;
-    } else if (props.totalReplyCount > props.replies.length) {
-        moreRepliesElement = <MoreRepliesItem {...props} />;
-    }
+  let moreRepliesElement = <></>;
+  if (fetchState?.status === "REQUESTED" || fetchState?.status === "FETCHING") {
+    moreRepliesElement = <FetchingRepliesItem {...props} />;
+  } else if (props.totalReplyCount > props.replies.length) {
+    moreRepliesElement = <MoreRepliesItem {...props} />;
+  }
 
-    return (
-        <ListGroup variant={"flush"} className={"ps-4"}>
-            <ReplyListPart {...props} highlightAuthorId={highlightAuthorId} />
-            {moreRepliesElement}
-        </ListGroup>
-    );
+  return (
+    <ListGroup variant={"flush"} className={"ps-4"}>
+      <ReplyListPart {...props} highlightAuthorId={highlightAuthorId} />
+      {moreRepliesElement}
+    </ListGroup>
+  );
 };

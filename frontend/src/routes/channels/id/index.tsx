@@ -16,94 +16,78 @@ import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
-    const { handle } = useParams();
+  const { handle } = useParams();
 
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-    const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
 
-    const { data: channel } = useGetChannelQuery({ handle: handle! });
-    useEffect(() => {
-        if (channel) {
-            dispatch(initFetchStateForChannel(channel));
-        }
-    }, [channel, dispatch]);
+  const { data: channel } = useGetChannelQuery({ handle: handle! });
+  useEffect(() => {
+    if (channel) {
+      dispatch(initFetchStateForChannel(channel));
+    }
+  }, [channel, dispatch]);
 
-    const { data: videos, isSuccess } = useListVideosQuery({
-        handle: handle!,
-    });
+  const { data: videos, isSuccess } = useListVideosQuery({
+    handle: handle!,
+  });
 
-    const videoList = useMemo(() => {
-        return isSuccess ? selectAllVideos(videos) : [];
-    }, [isSuccess, videos]);
+  const videoList = useMemo(() => {
+    return isSuccess ? selectAllVideos(videos) : [];
+  }, [isSuccess, videos]);
 
-    const filteredVideoList = useMemo(() => {
-        return videoList.filter((video) =>
-            video.title.toLowerCase().includes(search.toLowerCase()),
-        );
-    }, [videoList, search]);
+  const filteredVideoList = useMemo(() => {
+    return videoList.filter((video) => video.title.toLowerCase().includes(search.toLowerCase()));
+  }, [videoList, search]);
 
-    const pageSize = 24;
-    const [searchParams] = useSearchParams();
-    const pageCount = Math.ceil(filteredVideoList.length / pageSize);
-    const pageNumber = Math.max(
-        1,
-        Math.min(parseIntOrDefault(searchParams.get("p"), 1), pageCount),
-    );
-    const videosOnPage = useMemo(() => {
-        const firstIndex = pageSize * (pageNumber - 1);
-        const lastIndex = pageSize * pageNumber;
-        return filteredVideoList.slice(firstIndex, lastIndex);
-    }, [pageSize, filteredVideoList, pageNumber]);
+  const pageSize = 24;
+  const [searchParams] = useSearchParams();
+  const pageCount = Math.ceil(filteredVideoList.length / pageSize);
+  const pageNumber = Math.max(1, Math.min(parseIntOrDefault(searchParams.get("p"), 1), pageCount));
+  const videosOnPage = useMemo(() => {
+    const firstIndex = pageSize * (pageNumber - 1);
+    const lastIndex = pageSize * pageNumber;
+    return filteredVideoList.slice(firstIndex, lastIndex);
+  }, [pageSize, filteredVideoList, pageNumber]);
 
-    return (
-        <>
-            <Breadcrumb>
-                <BreadcrumbItem linkAs={Link} linkProps={{ to: routes.home }}>
-                    Channels
-                </BreadcrumbItem>
-                {channel && (
-                    <BreadcrumbItem active={true}>
-                        {channel.title}
-                    </BreadcrumbItem>
-                )}
-            </Breadcrumb>
-            {channel && <ChannelDetails channel={channel} />}
-            {channel && <FetchVideosAlert channel={channel} />}
-            <BatchPullCommentsAlert videos={videosOnPage} />
-            <PaginationContext pageSize={24} items={filteredVideoList}>
-                {({
-                    pageNumber,
-                    setPageNumber,
-                    pageSize,
-                    pageCount,
-                    pageItems,
-                    totalItemCount,
-                }) => (
-                    <>
-                        <PaginationRow
-                            name={"video"}
-                            total={totalItemCount}
-                            pageSize={pageSize}
-                            page={pageNumber}
-                            setPage={setPageNumber}
-                            search={search}
-                            setSearch={setSearch}
-                        />
-                        <VideoCards videos={pageItems} />
-                        {pageCount > 1 && (
-                            <PaginationRow
-                                name={"video"}
-                                total={totalItemCount}
-                                pageSize={pageSize}
-                                page={pageNumber}
-                                setPage={setPageNumber}
-                            />
-                        )}
-                    </>
-                )}
-            </PaginationContext>
-            <BatchPullCommentsSidebar />
-        </>
-    );
+  return (
+    <>
+      <Breadcrumb>
+        <BreadcrumbItem linkAs={Link} linkProps={{ to: routes.home }}>
+          Channels
+        </BreadcrumbItem>
+        {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
+      </Breadcrumb>
+      {channel && <ChannelDetails channel={channel} />}
+      {channel && <FetchVideosAlert channel={channel} />}
+      <BatchPullCommentsAlert videos={videosOnPage} />
+      <PaginationContext pageSize={24} items={filteredVideoList}>
+        {({ pageNumber, setPageNumber, pageSize, pageCount, pageItems, totalItemCount }) => (
+          <>
+            <PaginationRow
+              name={"video"}
+              total={totalItemCount}
+              pageSize={pageSize}
+              page={pageNumber}
+              setPage={setPageNumber}
+              search={search}
+              setSearch={setSearch}
+            />
+            <VideoCards videos={pageItems} />
+            {pageCount > 1 && (
+              <PaginationRow
+                name={"video"}
+                total={totalItemCount}
+                pageSize={pageSize}
+                page={pageNumber}
+                setPage={setPageNumber}
+              />
+            )}
+          </>
+        )}
+      </PaginationContext>
+      <BatchPullCommentsSidebar />
+    </>
+  );
 };

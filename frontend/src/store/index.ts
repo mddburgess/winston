@@ -5,19 +5,18 @@ import { pullVideoCommentsReducer } from "#/store/slices/pullVideoComments";
 import { selectionsReducer } from "#/store/slices/selections";
 
 const reducer = combineReducers({
-    [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
-    fetches,
-    pullVideoComments: pullVideoCommentsReducer,
-    selections: selectionsReducer,
+  [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
+  fetches,
+  pullVideoComments: pullVideoCommentsReducer,
+  selections: selectionsReducer,
 });
 
 const setupStore = (preloadedState?: Partial<AppState>) => {
-    return configureStore({
-        reducer,
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(enhancedBackendApi.middleware),
-        preloadedState,
-    });
+  return configureStore({
+    reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(enhancedBackendApi.middleware),
+    preloadedState,
+  });
 };
 
 type AppState = ReturnType<typeof reducer>;

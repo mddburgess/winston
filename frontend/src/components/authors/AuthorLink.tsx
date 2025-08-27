@@ -6,9 +6,9 @@ import type { ComponentProps } from "react";
 type AuthorLinkProps = AuthorProps & Omit<ComponentProps<typeof Link>, "to">;
 
 const AuthorLink = ({ author, ...linkProps }: AuthorLinkProps) => (
-    <Link to={routes.authors.details(author.handle)} {...linkProps}>
-        {author.handle}
-    </Link>
+  <Link to={routes.authors.details(author.handle)} {...linkProps}>
+    {author.handle}
+  </Link>
 );
 
 export { AuthorLink };
