@@ -4,6 +4,7 @@ import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 
 @RequiredArgsConstructor
 public class FetchOperationHandler<T> {
@@ -11,18 +12,20 @@ public class FetchOperationHandler<T> {
     private final FetchOperationService fetchOperationService;
     private final FetchOperation<T> delegate;
 
-    public void fetch(FetchOperationEntity fetchOperation) {
+    public void fetch(
+            @NonNull FetchOperationEntity fetchOperationEntity
+    ) {
         try {
-            fetchOperation = fetchOperationService.startFetch(fetchOperation);
-            delegate.fetch(fetchOperation);
-            fetchOperation = fetchOperationService.fetchSuccessful(fetchOperation);
+            fetchOperationEntity = fetchOperationService.startFetch(fetchOperationEntity);
+            delegate.fetch(fetchOperationEntity);
+            fetchOperationEntity = fetchOperationService.fetchSuccessful(fetchOperationEntity);
         } catch (FetchOperationException ex) {
-            fetchOperation = fetchOperationService.fetchWarning(fetchOperation, ex.getCause());
+            fetchOperationEntity = fetchOperationService.fetchWarning(fetchOperationEntity, ex.getCause());
         } catch (RuntimeException ex) {
-            fetchOperation = fetchOperationService.fetchFailed(fetchOperation, ex);
+            fetchOperationEntity = fetchOperationService.fetchFailed(fetchOperationEntity, ex);
             throw ex;
         } finally {
-            delegate.afterFetch(fetchOperation);
+            delegate.afterFetch(fetchOperationEntity);
         }
     }
 }

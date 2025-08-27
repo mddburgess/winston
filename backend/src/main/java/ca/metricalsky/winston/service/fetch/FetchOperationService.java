@@ -6,6 +6,7 @@ import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.repository.fetch.FetchOperationRepository;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,31 +16,41 @@ public class FetchOperationService {
     private final EventPublisher eventPublisher;
     private final FetchOperationRepository fetchOperationRepository;
 
-    public FetchOperationEntity startFetch(FetchOperationEntity fetchOperation) {
-        return saveAndPublish(fetchOperation, Status.FETCHING, null);
+    public FetchOperationEntity startFetch(
+            @NonNull FetchOperationEntity fetchOperationEntity
+    ) {
+        return saveAndPublish(fetchOperationEntity, Status.FETCHING, null);
     }
 
-    public FetchOperationEntity fetchSuccessful(FetchOperationEntity fetchOperation) {
-        return saveAndPublish(fetchOperation, Status.SUCCESSFUL, null);
+    public FetchOperationEntity fetchSuccessful(
+            @NonNull FetchOperationEntity fetchOperationEntity
+    ) {
+        return saveAndPublish(fetchOperationEntity, Status.SUCCESSFUL, null);
     }
 
-    public FetchOperationEntity fetchWarning(FetchOperationEntity fetchOperation, Throwable throwable) {
-        return saveAndPublish(fetchOperation, Status.WARNING, throwable);
+    public FetchOperationEntity fetchWarning(
+            @NonNull FetchOperationEntity fetchOperationEntity,
+            @NonNull Throwable throwable
+    ) {
+        return saveAndPublish(fetchOperationEntity, Status.WARNING, throwable);
     }
 
-    public FetchOperationEntity fetchFailed(FetchOperationEntity fetchOperation, Throwable throwable) {
-        return saveAndPublish(fetchOperation, Status.FAILED, throwable);
+    public FetchOperationEntity fetchFailed(
+            @NonNull FetchOperationEntity fetchOperationEntity,
+            @NonNull Throwable throwable
+    ) {
+        return saveAndPublish(fetchOperationEntity, Status.FAILED, throwable);
     }
 
     private FetchOperationEntity saveAndPublish(
-            FetchOperationEntity fetchOperation,
-            Status fetchOperationStatus,
+            @NonNull FetchOperationEntity fetchOperationEntity,
+            @NonNull Status fetchOperationStatus,
             Throwable throwable
     ) {
-        fetchOperation.setStatus(fetchOperationStatus);
-        fetchOperation.setError(throwable == null ? null : Throwables.getStackTraceAsString(throwable));
-        fetchOperation = fetchOperationRepository.save(fetchOperation);
-        eventPublisher.publishEvent(fetchOperation, throwable);
-        return fetchOperation;
+        fetchOperationEntity.setStatus(fetchOperationStatus);
+        fetchOperationEntity.setError(throwable == null ? null : Throwables.getStackTraceAsString(throwable));
+        fetchOperationEntity = fetchOperationRepository.save(fetchOperationEntity);
+        eventPublisher.publishEvent(fetchOperationEntity, throwable);
+        return fetchOperationEntity;
     }
 }
