@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
-import { PaginationContext } from "./PaginationContext";
+import { PaginationContext } from "#/components/PaginationContext";
 
 describe(PaginationContext, () => {
   const items = ["first", "second", "third"];

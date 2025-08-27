@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { CopyToClipboard } from "./CopyToClipboard";
+import { CopyToClipboard } from "#/components/CopyToClipboard";
 
 describe(CopyToClipboard, () => {
   it("displays a clipboard icon", () => {

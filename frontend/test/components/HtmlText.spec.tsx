@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { HtmlText } from "./HtmlText";
+import { HtmlText } from "#/components/HtmlText";
 
 describe(HtmlText, () => {
   it("renders HTML from a text string", () => {

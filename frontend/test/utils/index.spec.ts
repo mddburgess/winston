@@ -1,4 +1,4 @@
-import { ascBy, descBy, parseIntOrDefault, pluralize, sumBy } from "./index";
+import { ascBy, descBy, parseIntOrDefault, pluralize, sumBy } from "#/utils";
 
 describe(ascBy, () => {
   it("sorts values in ascending order by the specified property", () => {

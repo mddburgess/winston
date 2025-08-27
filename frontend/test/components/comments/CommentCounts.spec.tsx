@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import { DateTime } from "luxon";
-import { CommentCounts } from "./CommentCounts";
+import { CommentCounts } from "#/components/comments/CommentCounts";
 
 describe(CommentCounts, () => {
   describe("the comment count", () => {

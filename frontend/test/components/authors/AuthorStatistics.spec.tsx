@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { AuthorStatistics } from "./AuthorStatistics";
+import { AuthorStatistics } from "#/components/authors/AuthorStatistics";
 import type { Author } from "#/api";
 
 describe(AuthorStatistics, () => {

@@ -32,6 +32,7 @@ export default defineConfig({
       reporter: ["cobertura", ["html", { subdir: "report" }], "text-summary"],
     },
     globals: true,
+    include: ["**/test/**/*.spec.ts?(x)"],
     reporters: [
       "default",
       [
