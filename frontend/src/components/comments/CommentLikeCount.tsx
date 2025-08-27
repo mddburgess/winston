@@ -4,11 +4,13 @@ import type { CommentProps } from "#/types";
 
 const CommentLikeCount = ({ comment }: CommentProps) =>
     comment.like_count > 0 && (
-        <Row className={"ms-2 g-1"}>
+        <Row className={"g-1"}>
             <Col xs={"auto"}>
                 <Heart />
             </Col>
-            <Col xs={"auto"}>{comment.like_count}</Col>
+            <Col xs={"auto"} data-testid={"likeCount"}>
+                {comment.like_count}
+            </Col>
         </Row>
     );
 

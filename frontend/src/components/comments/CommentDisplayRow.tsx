@@ -61,7 +61,7 @@ const CommentDisplayRow = ({
                 <Col xs={"auto"} className={"flex-center small"}>
                     <Date date={comment.published_at} />
                 </Col>
-                <Col xs={"auto"} className={"flex-center small"}>
+                <Col xs={"auto"} className={"flex-center small ps-3"}>
                     <CommentLikeCount comment={comment} />
                 </Col>
                 <Col className={"flex-center justify-content-end"}>

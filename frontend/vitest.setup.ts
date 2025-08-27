@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { backend } from "./src/mocks/backend";
+import { backend } from "#/mocks/backend";
 
 beforeAll(() => {
     backend.listen({
