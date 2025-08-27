@@ -14,13 +14,14 @@ public class EventPublisher {
     private final SsePublisher ssePublisher;
 
     public void publishEvent(Object object) {
-        var appEvent = conversionService.convert(object, AppEvent.class);
-        ssePublisher.publish(appEvent);
+        publishEvent(object, null);
     }
 
     public void publishEvent(Object object, Throwable throwable) {
         var appEvent = conversionService.convert(object, AppEvent.class);
-        appEvent.setError(conversionService.convert(throwable, Problem.class));
+        if (throwable != null) {
+            appEvent.setError(conversionService.convert(throwable, Problem.class));
+        }
         ssePublisher.publish(appEvent);
     }
 }
