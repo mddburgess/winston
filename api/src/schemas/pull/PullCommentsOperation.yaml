@@ -1,0 +1,23 @@
+title: Pull Comments Operation
+type: object
+required:
+  - pull
+  - video_id
+properties:
+  id:
+    type: string
+    readOnly: true
+  pull:
+    type: string
+    const: comments
+  video_id:
+    type: string
+  status:
+    type: string
+    readOnly: true
+    enum:
+      - ready
+      - fetching
+      - successful
+      - warning
+      - failed

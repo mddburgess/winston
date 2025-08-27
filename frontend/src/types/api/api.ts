@@ -1,8 +1,8 @@
-import type { Author, ListCommentsResponse, PullOperationRead, Video } from "#/api";
+import type { Author, ListCommentsResponse, PullOperationsRead, Video } from "#/api";
 
 type ChannelSummary = Video["channel"];
 
-type PullOperationStatus = NonNullable<PullOperationRead["status"]>;
+type PullOperationStatus = NonNullable<PullOperationsRead[number]["status"]>;
 
 type TopLevelComment = ListCommentsResponse["comments"][number];
 

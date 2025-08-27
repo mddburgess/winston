@@ -1,0 +1,24 @@
+title: Pull Replies Operation
+type: object
+required:
+  - pull
+properties:
+  id:
+    type: string
+    readOnly: true
+  pull:
+    type: string
+    const: replies
+  video_id:
+    type: string
+  comment_id:
+    type: string
+  status:
+    type: string
+    readOnly: true
+    enum:
+      - ready
+      - fetching
+      - successful
+      - warning
+      - failed
