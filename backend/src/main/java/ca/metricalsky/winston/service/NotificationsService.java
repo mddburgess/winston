@@ -1,9 +1,8 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.config.exception.AppProblemDetail;
-import ca.metricalsky.winston.events.SubscriptionEvent;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
+import ca.metricalsky.winston.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.http.HttpStatus;
@@ -46,7 +45,7 @@ public class NotificationsService implements SmartLifecycle {
         subscriptions.put(subscriptionId, ssePublisher);
 
         log.info("Notifications subscription {} opened", subscriptionId);
-        ssePublisher.publish(new SubscriptionEvent(true, subscriptionId));
+        ssePublisher.publish(new EventSubscriptionEvent(subscriptionId, true));
         return ssePublisher;
     }
 
@@ -68,7 +67,6 @@ public class NotificationsService implements SmartLifecycle {
                     "The server is shutting down and is no longer available.");
             Map.copyOf(subscriptions).forEach((subscriptionId, ssePublisher) -> {
                 log.warn("Closing notifications subscription {}", subscriptionId);
-                ssePublisher.publish(AppProblemDetail.forException(ex));
                 ssePublisher.completeWithError(ex);
             });
         }

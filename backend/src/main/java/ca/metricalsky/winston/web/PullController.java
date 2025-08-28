@@ -23,7 +23,7 @@ public class PullController implements PullApi {
 
     @Override
     public ResponseEntity<Void> pull(PullRequest pullRequest) {
-        var ssePublisher = notificationsService.requireSubscription(pullRequest.getEventListenerId());
+        var ssePublisher = notificationsService.requireSubscription(pullRequest.getEventSubscriptionId());
         var fetchRequestId = pullRequestDataService.savePullRequest(pullRequest);
         fetchService.fetchAsync(fetchRequestId, ssePublisher);
 

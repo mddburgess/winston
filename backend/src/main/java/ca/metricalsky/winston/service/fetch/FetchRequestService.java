@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FetchRequestService {
 
+    private final EventPublisher eventPublisher;
     private final FetchRequestRepository fetchRequestRepository;
 
     @Transactional
     public List<FetchOperationEntity> startProcessingRequest(Long fetchRequestId) {
         var fetchRequest = fetchRequestRepository.findById(fetchRequestId).orElseThrow();
         fetchRequest.setStatus(FetchRequestEntity.Status.FETCHING);
-        fetchRequestRepository.save(fetchRequest);
+        fetchRequest = fetchRequestRepository.save(fetchRequest);
+        eventPublisher.publishEvent(fetchRequest);
         return fetchRequest.getOperations();
     }
 
@@ -27,6 +30,7 @@ public class FetchRequestService {
     public void finishProcessingRequest(Long fetchRequestId) {
         var fetchRequest = fetchRequestRepository.findById(fetchRequestId).orElseThrow();
         fetchRequest.setStatus(FetchRequestEntity.Status.COMPLETED);
-        fetchRequestRepository.save(fetchRequest);
+        fetchRequest = fetchRequestRepository.save(fetchRequest);
+        eventPublisher.publishEvent(fetchRequest);
     }
 }

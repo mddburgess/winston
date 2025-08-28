@@ -306,15 +306,25 @@ paths:
             schema:
               type: object
               required:
-                - event_listener_id
+                - event_subscription_id
                 - operations
               properties:
-                event_listener_id:
+                event_subscription_id:
                   type: string
                   format: uuid
                 operations:
                   $ref: "#/components/schemas/PullOperations"
-              additionalProperties: false
+                status:
+                  type: string
+                  readOnly: true
+                  enum:
+                    - accepted
+                    - fetching
+                    - paused
+                    - completed
+                id:
+                  type: string
+                  readOnly: true
             examples:
               Pull channel:
                 $ref: ./examples/pull/pullChannel.yaml
@@ -349,38 +359,6 @@ paths:
 
 components:
   schemas:
-    AppEvent:
-      type: object
-      required:
-        - event_id
-        - event_type
-        - object_id
-      properties:
-        event_id:
-          type: string
-          format: uuid
-        event_type:
-          type: string
-        operation:
-          $ref: ./schemas/pull/PullOperation.yaml
-        object_id:
-          type: string
-        channel:
-          $ref: ./schemas/channels/Channel.yaml
-        videos:
-          type: array
-          items:
-            $ref: ./schemas/videos/Video.yaml
-        comments:
-          type: array
-          items:
-            $ref: ./schemas/comments/TopLevelComment.yaml
-        replies:
-          type: array
-          items:
-            $ref: ./schemas/comments/Comment.yaml
-        error:
-          $ref: "#/components/schemas/Problem"
     PatchOperation:
       $ref: ./schemas/PatchOperation.yaml
     Problem:

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { PullChannelRequest } from "#/components/events/PullChannelRequest";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { requestedChannelForHandle } from "#/store/slices/fetches";
-import { FetchChannelAction } from "./FetchChannelAction";
 import type { ChangeEvent, FormEvent } from "react";
 
 const handleRegex = /^@([A-Za-z0-9_\-.]{0,30})$/;
@@ -90,7 +90,7 @@ export const FetchChannelModal = (props: FetchChannelModalProps) => {
         {fetchState.channel[channelHandle]?.status === "REQUESTED" && (
           <Button variant={"primary"} disabled={true} className={"align-items-center d-flex"}>
             Fetching...
-            <FetchChannelAction channelHandle={channelHandle} />
+            <PullChannelRequest channelHandle={channelHandle} />
           </Button>
         )}
       </Modal.Footer>

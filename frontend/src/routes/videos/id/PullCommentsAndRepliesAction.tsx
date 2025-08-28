@@ -1,6 +1,6 @@
 import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
-import { AppEventsSource } from "#/components/events/AppEventsSource";
+import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { appendComments, appendReplies } from "#/store/slices/comments";
 import { updateFetchStatus } from "#/store/slices/fetches";
@@ -15,7 +15,7 @@ const PullCommentsAndRepliesAction = ({ video }: VideoProps) => {
   const handleSubscribed = (eventListenerId: string) => {
     void pull({
       body: {
-        event_listener_id: eventListenerId,
+        event_subscription_id: eventListenerId,
         operations: [
           { pull: "comments", video_id: video.id },
           { pull: "replies", video_id: video.id },
@@ -52,11 +52,7 @@ const PullCommentsAndRepliesAction = ({ video }: VideoProps) => {
 
   return (
     <EventSourceProvider>
-      <AppEventsSource
-        onSubscribed={handleSubscribed}
-        onDataEvent={handleDataEvent}
-        onStatusEvent={handleStatusEvent}
-      />
+      <PullEventsSource whenSubscribed={handleSubscribed} />
     </EventSourceProvider>
   );
 };

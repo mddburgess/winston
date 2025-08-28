@@ -26,22 +26,23 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.apacheCommons)
+    implementation(libs.bundles.mapstruct)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.youtube)
     implementation(libs.datasourceProxySpringBootStarter)
     implementation(libs.jsonPatch)
-    implementation(libs.mapstruct)
     implementation(project(":api"))
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
-    annotationProcessor(libs.mapstructProcessor)
+    annotationProcessor(libs.bundles.mapstructProcessor)
     annotationProcessor(libs.springBootConfigurationProcessor)
 
     runtimeOnly(libs.bundles.database)
     developmentOnly(libs.springBootDevtools)
 
     testImplementation(libs.archunitJunit5)
+    testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
 

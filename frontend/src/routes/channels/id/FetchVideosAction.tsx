@@ -1,6 +1,6 @@
 import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
-import { AppEventsSource } from "#/components/events/AppEventsSource";
+import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { fetchedVideos, updateFetchStatus } from "#/store/slices/fetches";
 import { invalidateFetchLimits } from "#/store/slices/limits";
@@ -20,7 +20,7 @@ export const FetchVideosAction = ({ channel, mode }: FetchVideosWidgetProps) => 
   const handleSubscribed = (eventListenerId: string) => {
     void pull({
       body: {
-        event_listener_id: eventListenerId,
+        event_subscription_id: eventListenerId,
         operations: [
           {
             pull: "videos",
@@ -52,11 +52,7 @@ export const FetchVideosAction = ({ channel, mode }: FetchVideosWidgetProps) => 
 
   return (
     <EventSourceProvider>
-      <AppEventsSource
-        onSubscribed={handleSubscribed}
-        onDataEvent={handleDataEvent}
-        onStatusEvent={handleStatusEvent}
-      />
+      <PullEventsSource whenSubscribed={handleSubscribed} />
     </EventSourceProvider>
   );
 };

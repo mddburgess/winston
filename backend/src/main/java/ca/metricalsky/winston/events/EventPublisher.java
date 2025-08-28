@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.api.model.AppEvent;
 import ca.metricalsky.winston.api.model.Problem;
+import ca.metricalsky.winston.events.model.AppEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;

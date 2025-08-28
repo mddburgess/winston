@@ -1,6 +1,6 @@
 import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
-import { AppEventsSource } from "#/components/events/AppEventsSource";
+import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { appendReplies } from "#/store/slices/comments";
 import { fetchedReplies, updateFetchStatus } from "#/store/slices/fetches";
@@ -14,7 +14,7 @@ export const FetchRepliesAction = ({ id: commentId }: IdProps) => {
   const handleSubscribed = (eventListenerId: string) => {
     void pull({
       body: {
-        event_listener_id: eventListenerId,
+        event_subscription_id: eventListenerId,
         operations: [{ pull: "replies", comment_id: commentId }],
       },
     });
@@ -43,11 +43,7 @@ export const FetchRepliesAction = ({ id: commentId }: IdProps) => {
 
   return (
     <EventSourceProvider>
-      <AppEventsSource
-        onSubscribed={handleSubscribed}
-        onDataEvent={handleDataEvent}
-        onStatusEvent={handleStatusEvent}
-      />
+      <PullEventsSource whenSubscribed={handleSubscribed} />
     </EventSourceProvider>
   );
 };

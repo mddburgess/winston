@@ -2,7 +2,6 @@ package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.FetchStatusEvent;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
 import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
@@ -52,13 +51,9 @@ public class FetchService {
                             fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation));
 
             fetchRequestService.finishProcessingRequest(fetchRequestId);
-            ssePublisher.publish(FetchStatusEvent.completed());
             ssePublisher.complete();
         } catch (RuntimeException ex) {
-            if (ssePublisher.isOpen()) {
-                ssePublisher.publish(FetchStatusEvent.failed(ex));
-                ssePublisher.completeWithError(ex);
-            }
+            ssePublisher.completeWithError(ex);
         } finally {
             ssePublisherHolder.clear();
         }

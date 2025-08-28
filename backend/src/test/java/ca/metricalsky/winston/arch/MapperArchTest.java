@@ -31,5 +31,6 @@ public class MapperArchTest {
     @ArchTest
     private final ArchRule classesAnnotatedWithMapperAreNamedAsMappers = classes()
             .that().areAnnotatedWith(Mapper.class)
-            .should().haveSimpleNameEndingWith("Mapper");
+            .should().haveSimpleNameEndingWith("Mapper")
+            .orShould().haveSimpleNameEndingWith("Converter");
 }
