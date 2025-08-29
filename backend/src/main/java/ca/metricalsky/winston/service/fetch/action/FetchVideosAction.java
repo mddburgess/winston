@@ -5,6 +5,7 @@ import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
@@ -12,7 +13,6 @@ import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -31,8 +31,7 @@ public class FetchVideosAction implements FetchAction<Video> {
     public FetchResult<Video> fetch(FetchActionEntity fetchAction) {
         if (fetchAction.getObjectId().startsWith("@")) {
             var channel = channelDataService.findChannelByHandle(fetchAction.getObjectId())
-                    .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
-                            "The specified channel must be pulled before videos for that channel may be pulled."));
+                    .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_PULLED));
             fetchAction.setObjectId(channel.getId());
         }
         var activityListResponse = youTubeService.getActivities(fetchAction);
