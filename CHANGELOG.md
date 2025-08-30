@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Save the comment like counts when pulling comment data. (mddburgess/winston#88)
 - Show the comment like counts in the UI. (mddburgess/winston#88)
 - Show error messages on the pull channel modal. (mddburgess/winston#91)
+- Show channel video, view, and subscriber counts on channel cards. (mddburgess/winston#91)
 
 ### Changed
 

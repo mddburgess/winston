@@ -1,0 +1,23 @@
+title: Channel Statistics
+description: Statistics associated with a channel.
+type: object
+required:
+  - video_count
+  - view_count
+  - subscriber_count
+properties:
+  video_count:
+    description: The number of public videos uploaded to the channel.
+    type: integer
+    format: int64
+    minimum: 0
+  view_count:
+    description: The number of times all the videos have been viewed for the channel.
+    type: integer
+    format: int64
+    minimum: 0
+  subscriber_count:
+    description: The number of users subscribed to the channel.
+    type: integer
+    format: int64
+    minimum: 0

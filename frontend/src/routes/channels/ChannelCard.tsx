@@ -1,6 +1,7 @@
 import { Card, Col, Image, Row } from "react-bootstrap";
-import { ArrowDownRightCircle, ArrowUpLeftCircleFill, Youtube } from "react-bootstrap-icons";
+import { ArrowDownRightCircle, ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
+import { ChannelStatistics } from "#/components/channels/ChannelStatistics";
 import { Date } from "#/components/Date";
 import { routes } from "#/utils/links";
 import type { ChannelProps } from "#/types";
@@ -22,12 +23,7 @@ export const ChannelCard = ({ channel }: ChannelProps) => (
         </Row>
       </Card.Body>
       <Card.Footer>
-        <Row>
-          <Col className={"align-items-center col-auto d-flex"}>
-            <Youtube className={"me-2"} />
-            {channel.video_count}
-          </Col>
-        </Row>
+        <ChannelStatistics channel={channel} />
       </Card.Footer>
       <Card.Footer>
         <Row>

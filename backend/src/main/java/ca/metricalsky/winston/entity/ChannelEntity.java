@@ -36,6 +36,18 @@ public class ChannelEntity {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    @Column(name = "uploads_playlist_id")
+    private String uploadsPlaylistId;
+
+    @Column(name = "video_count")
+    private Long videoCount;
+
+    @Column(name = "view_count")
+    private Long viewCount;
+
+    @Column(name = "subscriber_count")
+    private Long subscriberCount;
+
     @Column(name = "published_at")
     private OffsetDateTime publishedAt;
 

@@ -30,6 +30,11 @@ class ChannelMapperTest {
                         "/api/v1/channels/" + channelEntity.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("publishedAt", channelEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", channelEntity.getLastFetchedAt());
+        assertThat(channel.getStatistics())
+                .as("channel.statistics")
+                .hasFieldOrPropertyWithValue("videoCount", channel.getStatistics().getVideoCount())
+                .hasFieldOrPropertyWithValue("viewCount", channel.getStatistics().getViewCount())
+                .hasFieldOrPropertyWithValue("subscriberCount", channel.getStatistics().getSubscriberCount());
         assertThat(channel.getTopics())
                 .as("channel.topics")
                 .containsExactly(URI.create("https://www.example.com"));
@@ -54,7 +59,7 @@ class ChannelMapperTest {
         var channel = channelMapper.toChannel(new ChannelEntity());
 
         assertThat(channel)
-                .hasAllNullFieldsOrProperties();
+                .hasAllNullFieldsOrPropertiesExcept("statistics");
     }
 
     private static ChannelEntity buildChannelEntity() {
@@ -64,6 +69,9 @@ class ChannelMapperTest {
                 .description(TestUtils.randomString())
                 .customUrl(TestUtils.randomString())
                 .thumbnailUrl(TestUtils.randomString())
+                .videoCount(TestUtils.randomLong())
+                .viewCount(TestUtils.randomLong())
+                .subscriberCount(TestUtils.randomLong())
                 .topics(Set.of("https://www.example.com"))
                 .keywords(Set.of(TestUtils.randomString(), TestUtils.randomString()))
                 .publishedAt(OffsetDateTime.now())

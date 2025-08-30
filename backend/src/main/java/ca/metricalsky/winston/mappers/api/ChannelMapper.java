@@ -12,6 +12,9 @@ public abstract class ChannelMapper {
 
     @Mapping(target = "handle", source = "customUrl")
     @Mapping(target = "thumbnailUrl", source = ".")
+    @Mapping(target = "statistics.videoCount", source = "videoCount", defaultValue = "0L")
+    @Mapping(target = "statistics.viewCount", source = "viewCount", defaultValue = "0L")
+    @Mapping(target = "statistics.subscriberCount", source = "subscriberCount", defaultValue = "0L")
     @Mapping(target = "videoCount", ignore = true)
     public abstract Channel toChannel(ChannelEntity channelEntity);
 

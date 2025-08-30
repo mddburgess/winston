@@ -39,7 +39,7 @@ const PullEventsSource = ({
       eventSource.close();
       whenUnsubscribed();
     };
-  }, [eventSource]);
+  }, [eventSource, whenUnsubscribed]);
 
   useEventSourceListener<EventSubscriptionEvent>(
     {

@@ -68,6 +68,11 @@ describe("channelsApi", () => {
             description: "channel.2.description",
             handle: "@channel2url",
             thumbnail_url: "/api/v1/channels/2/thumbnail",
+            statistics: {
+              video_count: 1,
+              view_count: 2,
+              subscriber_count: 3,
+            },
             topics: ["https://en.wikipedia.org/wiki/Topic"],
             keywords: ["keyword"],
             video_count: 1,
