@@ -12,12 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show the available quota in the pull comments sidebar. (mddburgess/winston#80)
 - Save the comment like counts when pulling comment data. (mddburgess/winston#88)
 - Show the comment like counts in the UI. (mddburgess/winston#88)
+- Show error messages on the pull channel modal. (mddburgess/winston#91)
 
 ### Changed
 
 - Refresh the available quota in the UI during pull comment requests. (mddburgess/winston#80)
 - Highlight the available quota in yellow or red as it approaches zero. (mddburgess/winston#80)
 - Highlight failed pull comments operations in yellow or red. (mddburgess/winston#79)
+- Prevent pulling a channel that has already been pulled. (mddburgess/winston#91)
+- Prevent attempting to pull a channel that had an error on a previous attempt. (mddburgess/winston#91)
+- Pulling a channel no longer navigates to the channel page automatically on success. (mddburgess/winston#91)
 
 ### Fixed
 
