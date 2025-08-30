@@ -18,6 +18,7 @@ type AppEventsSourceProps = {
   onPullVideosEvent?: (pullVideosEvent: PullVideosEvent) => void;
   onPullCommentsEvent?: (pullCommentsEvent: PullCommentsEvent) => void;
   onPullRepliesEvent?: (pullRepliesEvent: PullRepliesEvent) => void;
+  whenUnsubscribed?: () => void;
 };
 
 const PullEventsSource = ({
@@ -28,6 +29,7 @@ const PullEventsSource = ({
   onPullVideosEvent = () => {},
   onPullCommentsEvent = () => {},
   onPullRepliesEvent = () => {},
+  whenUnsubscribed = () => {},
 }: AppEventsSourceProps) => {
   const eventSource = useEventSource({ source: `/api/v1/notifications` });
 
@@ -35,6 +37,7 @@ const PullEventsSource = ({
     eventSource.onerror = (event) => {
       console.debug("Event source closed:", event);
       eventSource.close();
+      whenUnsubscribed();
     };
   }, [eventSource]);
 

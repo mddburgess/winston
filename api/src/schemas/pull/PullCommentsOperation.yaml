@@ -3,10 +3,9 @@ type: object
 required:
   - pull
   - video_id
+  - status
+  - id
 properties:
-  id:
-    type: string
-    readOnly: true
   pull:
     type: string
     const: comments
@@ -21,3 +20,6 @@ properties:
       - successful
       - warning
       - failed
+  id:
+    type: string
+    readOnly: true

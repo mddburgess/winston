@@ -1,55 +1,54 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
 import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
-import { useAppDispatch } from "#/store/hooks";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { appendChannels } from "#/store/slices/channels";
-import { routes } from "#/utils/links";
-import type { Channel, Problem } from "#/api";
-import type { PullChannelsEvent, PullRequestEvent } from "#/components/events/types";
+import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannel";
+import type { PullChannelsEvent, PullOperationEvent } from "#/components/events/types";
 
-const PullChannelRequest = (props: {
-  channelHandle: string;
-  onSuccess?: (channel: Channel) => void;
-  onError?: (error: Problem) => void;
-}) => {
+const PullChannelRequest = () => {
   const dispatch = useAppDispatch();
-  const [pull] = usePullMutation();
+  const { active, requested = "" } = useAppSelector((state) => state.pullChannel);
 
-  const navigate = useNavigate();
-  const [channel, setChannel] = useState<Channel>();
+  const [pull] = usePullMutation();
 
   const requestPullChannel = (eventSubscriptionId: string) => {
     void pull({
       body: {
         event_subscription_id: eventSubscriptionId,
-        operations: [{ pull: "channel", channel_handle: props.channelHandle }],
+        operations: [{ pull: "channel", channel_handle: requested }],
       },
     });
   };
 
-  const handlePullRequestEvent = (event: PullRequestEvent) => {
-    if (event.request.status === "completed" && channel) {
-      void navigate(routes.channels.details(channel.handle));
+  const handlePullOperationEvent = (event: PullOperationEvent) => {
+    dispatch(pullChannelResponse({ channelHandle: requested, status: event.operation.status }));
+    if (event.error) {
+      dispatch(pullChannelError({ channelHandle: requested, error: event.error }));
     }
   };
 
   const handlePullChannelsEvent = (event: PullChannelsEvent) => {
     if (event.channels.length > 0) {
       dispatch(appendChannels(event.channels));
-      setChannel(event.channels[0]);
     }
   };
 
+  const handleUnsubscribed = () => {
+    dispatch(pullChannelActive(false));
+  };
+
   return (
-    <EventSourceProvider>
-      <PullEventsSource
-        whenSubscribed={requestPullChannel}
-        onPullRequestEvent={handlePullRequestEvent}
-        onPullChannelsEvent={handlePullChannelsEvent}
-      />
-    </EventSourceProvider>
+    active && (
+      <EventSourceProvider>
+        <PullEventsSource
+          whenSubscribed={requestPullChannel}
+          onPullOperationEvent={handlePullOperationEvent}
+          onPullChannelsEvent={handlePullChannelsEvent}
+          whenUnsubscribed={handleUnsubscribed}
+        />
+      </EventSourceProvider>
+    )
   );
 };
 

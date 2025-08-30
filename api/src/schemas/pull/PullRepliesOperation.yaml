@@ -2,10 +2,9 @@ title: Pull Replies Operation
 type: object
 required:
   - pull
+  - status
+  - id
 properties:
-  id:
-    type: string
-    readOnly: true
   pull:
     type: string
     const: replies
@@ -22,3 +21,6 @@ properties:
       - successful
       - warning
       - failed
+  id:
+    type: string
+    readOnly: true

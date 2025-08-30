@@ -3,10 +3,9 @@ type: object
 required:
   - pull
   - channel_handle
+  - status
+  - id
 properties:
-  id:
-    type: string
-    readOnly: true
   pull:
     type: string
     const: videos
@@ -26,3 +25,6 @@ properties:
       - successful
       - warning
       - failed
+  id:
+    type: string
+    readOnly: true

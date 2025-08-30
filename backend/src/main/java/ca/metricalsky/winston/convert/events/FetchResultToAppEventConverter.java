@@ -19,7 +19,7 @@ public class FetchResultToAppEventConverter implements Converter<FetchResult, Ap
     public AppEvent convert(FetchResult source) {
         Class<? extends AppEvent> eventClass = switch (source.actionType()) {
             case CHANNELS -> PullChannelsEvent.class;
-            default -> AppEvent.class;
+            default -> throw new IllegalArgumentException(source.actionType() + " is not supported");
         };
         return conversionService.convert(source, eventClass);
     }
