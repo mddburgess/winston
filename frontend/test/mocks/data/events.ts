@@ -10,10 +10,10 @@ import type {
 } from "#/components/events/types";
 import type { PullOperationRead } from "#/types";
 
-const eventSubscriptionEvent = (subscribed: boolean): EventSubscriptionEvent => ({
+const eventSubscriptionEvent = (eventSubscriptionId: string, subscribed: boolean): EventSubscriptionEvent => ({
   event_id: faker.string.uuid(),
   event_type: "event-subscription",
-  event_subscription_id: faker.string.uuid(),
+  event_subscription_id: eventSubscriptionId,
   subscribed,
 });
 

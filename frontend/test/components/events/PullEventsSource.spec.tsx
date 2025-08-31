@@ -1,6 +1,7 @@
+import { faker } from "@faker-js/faker";
 import { render } from "@testing-library/react";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
-import { backend } from "?/mocks/backend";
+import { backend } from "=/mocks/backend";
 import {
   eventSubscriptionEvent,
   pullChannelsEvent,
@@ -9,8 +10,8 @@ import {
   pullRepliesEvent,
   pullRequestEvent,
   pullVideosEvent,
-} from "?/mocks/data/events";
-import { eventsHandler } from "?/mocks/handlers/events";
+} from "=/mocks/data/events";
+import { simpleEventsHandler } from "=/mocks/handlers/simpleEventsHandler";
 
 describe(PullEventsSource, () => {
   const callback = vi.fn();
@@ -20,15 +21,17 @@ describe(PullEventsSource, () => {
   });
 
   describe("whenSubscribed callback", () => {
+    const eventSubscriptionId = faker.string.uuid();
+
     it("is called when an event-subscription event is received with subscribed = true", async () => {
-      backend.use(eventsHandler(eventSubscriptionEvent(true)));
+      backend.use(simpleEventsHandler(eventSubscriptionEvent(eventSubscriptionId, true)));
       render(<PullEventsSource whenSubscribed={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
 
     it("is not called when an event-subscription event is received with subscribed = false", async () => {
-      backend.use(eventsHandler(eventSubscriptionEvent(false)));
+      backend.use(simpleEventsHandler(eventSubscriptionEvent(eventSubscriptionId, false)));
       const whenUnsubscribed = vi.fn();
       render(<PullEventsSource whenSubscribed={callback} whenUnsubscribed={whenUnsubscribed} />);
 
@@ -39,7 +42,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullRequest callback", () => {
     it("is called when a pull-request event is received", async () => {
-      backend.use(eventsHandler(pullRequestEvent()));
+      backend.use(simpleEventsHandler(pullRequestEvent()));
       render(<PullEventsSource onPullRequestEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
@@ -48,7 +51,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullOperation callback", () => {
     it("is called when a pull-operation event is received", async () => {
-      backend.use(eventsHandler(pullOperationEvent()));
+      backend.use(simpleEventsHandler(pullOperationEvent()));
       render(<PullEventsSource onPullOperationEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
@@ -57,7 +60,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullChannelsEvent callback", () => {
     it("is called when a pull-channels event is received", async () => {
-      backend.use(eventsHandler(pullChannelsEvent()));
+      backend.use(simpleEventsHandler(pullChannelsEvent()));
       render(<PullEventsSource onPullChannelsEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
@@ -66,7 +69,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullVideosEvent callback", () => {
     it("is called when a pull-videos event is received", async () => {
-      backend.use(eventsHandler(pullVideosEvent()));
+      backend.use(simpleEventsHandler(pullVideosEvent()));
       render(<PullEventsSource onPullVideosEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
@@ -75,7 +78,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullCommentsEvent callback", () => {
     it("is called when a pull-comments event is received", async () => {
-      backend.use(eventsHandler(pullCommentsEvent()));
+      backend.use(simpleEventsHandler(pullCommentsEvent()));
       render(<PullEventsSource onPullCommentsEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
@@ -84,7 +87,7 @@ describe(PullEventsSource, () => {
 
   describe("onPullRepliesEvent callback", () => {
     it("is called when a pull-replies event is received", async () => {
-      backend.use(eventsHandler(pullRepliesEvent()));
+      backend.use(simpleEventsHandler(pullRepliesEvent()));
       render(<PullEventsSource onPullRepliesEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();

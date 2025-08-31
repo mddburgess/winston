@@ -60,6 +60,7 @@ const PullEventsSourceInternal = ({
             whenSubscribed(event.data.event_subscription_id);
           } else {
             console.debug("Unsubscribed from app events:", event.data);
+            eventSource.close();
           }
         },
       },
