@@ -1,4 +1,4 @@
-import type { AppEvent } from "#/components/events/types.tsx";
+import type { AppEvent } from "#/components/events/types";
 
 const encoder = new TextEncoder();
 
