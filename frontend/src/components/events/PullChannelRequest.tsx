@@ -1,4 +1,3 @@
-import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
@@ -40,14 +39,12 @@ const PullChannelRequest = () => {
 
   return (
     active && (
-      <EventSourceProvider>
-        <PullEventsSource
-          whenSubscribed={requestPullChannel}
-          onPullOperationEvent={handlePullOperationEvent}
-          onPullChannelsEvent={handlePullChannelsEvent}
-          whenUnsubscribed={handleUnsubscribed}
-        />
-      </EventSourceProvider>
+      <PullEventsSource
+        whenSubscribed={requestPullChannel}
+        onPullOperationEvent={handlePullOperationEvent}
+        onPullChannelsEvent={handlePullChannelsEvent}
+        whenUnsubscribed={handleUnsubscribed}
+      />
     )
   );
 };

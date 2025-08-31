@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
@@ -56,11 +55,7 @@ const BatchPullCommentsAction = ({ videos }: VideoListProps) => {
     dispatch(invalidateFetchLimits());
   };
 
-  return (
-    <EventSourceProvider>
-      <PullEventsSource whenSubscribed={handleSubscribed} />
-    </EventSourceProvider>
-  );
+  return <PullEventsSource whenSubscribed={handleSubscribed} />;
 };
 
 export { BatchPullCommentsAction };

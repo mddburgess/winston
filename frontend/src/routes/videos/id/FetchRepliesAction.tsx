@@ -1,4 +1,3 @@
-import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
@@ -41,9 +40,5 @@ export const FetchRepliesAction = ({ id: commentId }: IdProps) => {
     }
   };
 
-  return (
-    <EventSourceProvider>
-      <PullEventsSource whenSubscribed={handleSubscribed} />
-    </EventSourceProvider>
-  );
+  return <PullEventsSource whenSubscribed={handleSubscribed} />;
 };

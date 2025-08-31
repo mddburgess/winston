@@ -1,5 +1,6 @@
+import { EventSource } from "eventsource";
 import { useEffect } from "react";
-import { useEventSource, useEventSourceListener } from "react-sse-hooks";
+import { EventSourceProvider, useEventSource, useEventSourceListener } from "react-sse-hooks";
 import type {
   EventSubscriptionEvent,
   PullChannelsEvent,
@@ -10,7 +11,7 @@ import type {
   PullVideosEvent,
 } from "#/components/events/types";
 
-type AppEventsSourceProps = {
+type PullEventsSourceProps = {
   whenSubscribed?: (subscriptionId: string) => void;
   onPullRequestEvent?: (pullRequestEvent: PullRequestEvent) => void;
   onPullOperationEvent?: (pullOperationEvent: PullOperationEvent) => void;
@@ -21,7 +22,13 @@ type AppEventsSourceProps = {
   whenUnsubscribed?: () => void;
 };
 
-const PullEventsSource = ({
+const PullEventsSource = (props: PullEventsSourceProps) => (
+  <EventSourceProvider eventSource={EventSource}>
+    <PullEventsSourceInternal {...props} />
+  </EventSourceProvider>
+);
+
+const PullEventsSourceInternal = ({
   whenSubscribed = () => {},
   onPullRequestEvent = () => {},
   onPullOperationEvent = () => {},
@@ -30,7 +37,7 @@ const PullEventsSource = ({
   onPullCommentsEvent = () => {},
   onPullRepliesEvent = () => {},
   whenUnsubscribed = () => {},
-}: AppEventsSourceProps) => {
+}: PullEventsSourceProps) => {
   const eventSource = useEventSource({ source: `/api/v1/notifications` });
 
   useEffect(() => {

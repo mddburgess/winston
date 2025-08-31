@@ -1,6 +1,4 @@
 import { render } from "@testing-library/react";
-import { EventSource } from "eventsource";
-import { EventSourceProvider } from "react-sse-hooks";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { backend } from "?/mocks/backend";
 import {
@@ -24,11 +22,7 @@ describe(PullEventsSource, () => {
   describe("whenSubscribed callback", () => {
     it("is called when an event-subscription event is received with subscribed = true", async () => {
       backend.use(eventsHandler(eventSubscriptionEvent(true)));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource whenSubscribed={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource whenSubscribed={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -36,11 +30,7 @@ describe(PullEventsSource, () => {
     it("is not called when an event-subscription event is received with subscribed = false", async () => {
       backend.use(eventsHandler(eventSubscriptionEvent(false)));
       const whenUnsubscribed = vi.fn();
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource whenSubscribed={callback} whenUnsubscribed={whenUnsubscribed} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource whenSubscribed={callback} whenUnsubscribed={whenUnsubscribed} />);
 
       await expect.poll(() => whenUnsubscribed).toHaveBeenCalled();
       expect(callback).not.toHaveBeenCalled();
@@ -50,11 +40,7 @@ describe(PullEventsSource, () => {
   describe("onPullRequest callback", () => {
     it("is called when a pull-request event is received", async () => {
       backend.use(eventsHandler(pullRequestEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullRequestEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullRequestEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -63,11 +49,7 @@ describe(PullEventsSource, () => {
   describe("onPullOperation callback", () => {
     it("is called when a pull-operation event is received", async () => {
       backend.use(eventsHandler(pullOperationEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullOperationEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullOperationEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -76,11 +58,7 @@ describe(PullEventsSource, () => {
   describe("onPullChannelsEvent callback", () => {
     it("is called when a pull-channels event is received", async () => {
       backend.use(eventsHandler(pullChannelsEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullChannelsEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullChannelsEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -89,11 +67,7 @@ describe(PullEventsSource, () => {
   describe("onPullVideosEvent callback", () => {
     it("is called when a pull-videos event is received", async () => {
       backend.use(eventsHandler(pullVideosEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullVideosEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullVideosEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -102,11 +76,7 @@ describe(PullEventsSource, () => {
   describe("onPullCommentsEvent callback", () => {
     it("is called when a pull-comments event is received", async () => {
       backend.use(eventsHandler(pullCommentsEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullCommentsEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullCommentsEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
@@ -115,11 +85,7 @@ describe(PullEventsSource, () => {
   describe("onPullRepliesEvent callback", () => {
     it("is called when a pull-replies event is received", async () => {
       backend.use(eventsHandler(pullRepliesEvent()));
-      render(
-        <EventSourceProvider eventSource={EventSource}>
-          <PullEventsSource onPullRepliesEvent={callback} />
-        </EventSourceProvider>,
-      );
+      render(<PullEventsSource onPullRepliesEvent={callback} />);
 
       await expect.poll(() => callback).toHaveBeenCalled();
     });
