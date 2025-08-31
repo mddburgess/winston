@@ -60,12 +60,13 @@ const PullEventsSourceInternal = ({
             whenSubscribed(event.data.event_subscription_id);
           } else {
             console.debug("Unsubscribed from app events:", event.data);
+            whenUnsubscribed();
             eventSource.close();
           }
         },
       },
     },
-    [eventSource, whenSubscribed],
+    [eventSource, whenSubscribed, whenUnsubscribed],
   );
 
   const handleEvent = <T,>(name: string, handler: (event: T) => void) => ({
