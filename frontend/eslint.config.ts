@@ -71,7 +71,7 @@ export default typescript.config(
       ],
     },
     settings: {
-      "import/internal-regex": "^#/",
+      "import/internal-regex": "^[#?]/",
       "import/resolver": {
         vite: {
           viteConfig,

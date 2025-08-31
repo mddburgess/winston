@@ -1,55 +1,68 @@
 import type { Channel, Comment, Problem, Video } from "#/api";
 import type { PullOperationRead, PullRequestRead, TopLevelComment } from "#/types";
 
-type AppEvent = {
-  event_id: string;
-};
+type AppEvent =
+  | EventSubscriptionEvent
+  | PullRequestEvent
+  | PullOperationEvent
+  | PullChannelsEvent
+  | PullVideosEvent
+  | PullCommentsEvent
+  | PullRepliesEvent;
 
-type EventSubscriptionEvent = AppEvent & {
+type EventSubscriptionEvent = {
+  event_id: string;
   event_type: "event-subscription";
   event_subscription_id: string;
   subscribed: boolean;
   error?: Problem;
 };
 
-type PullRequestEvent = AppEvent & {
+type PullRequestEvent = {
+  event_id: string;
   event_type: "pull-request";
   request: PullRequestRead;
   error?: Problem;
 };
 
-type PullOperationEvent = AppEvent & {
+type PullOperationEvent = {
+  event_id: string;
   event_type: "pull-operation";
   operation: PullOperationRead;
   error?: Problem;
 };
 
-type PullChannelsEvent = AppEvent & {
+type PullChannelsEvent = {
+  event_id: string;
   event_type: "pull-channels";
   channel_handle: Channel["handle"];
   channels: Channel[];
 };
 
-type PullVideosEvent = AppEvent & {
+type PullVideosEvent = {
+  event_id: string;
   event_type: "pull-videos";
   channel_handle: Channel["handle"];
   videos: Video[];
 };
 
-type PullCommentsEvent = AppEvent & {
+type PullCommentsEvent = {
+  event_id: string;
   event_type: "pull-comments";
   video_id: Video["id"];
   comments: TopLevelComment[];
 };
 
-type PullRepliesEvent = AppEvent & {
+type PullRepliesEvent = {
+  event_id: string;
   event_type: "pull-replies";
   video_id: Video["id"];
   comment_id: TopLevelComment["id"];
-  comments: Comment[];
+  replies: Comment[];
 };
 
 export type {
+  AppEvent,
   EventSubscriptionEvent,
   PullChannelsEvent,
   PullCommentsEvent,

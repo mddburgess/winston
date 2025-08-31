@@ -1,7 +1,6 @@
-import { describe, expect } from "vitest";
-import { formatNumber } from "#/utils/formatNumber";
+import { formatInteger } from "#/utils/formatInteger";
 
-describe(formatNumber, () => {
+describe(formatInteger, () => {
   it.each([
     { value: 1, expected: "1" },
     { value: 12, expected: "12" },
@@ -20,6 +19,6 @@ describe(formatNumber, () => {
     { value: 123456789012345, expected: "123T" },
     { value: 1234567890123456, expected: "1230T" },
   ])("formats $value as '$expected'", ({ value, expected }) => {
-    expect(formatNumber(value)).toStrictEqual(expected);
+    expect(formatInteger(value)).toStrictEqual(expected);
   });
 });

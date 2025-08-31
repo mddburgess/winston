@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import { BellFill, EyeFill, Youtube } from "react-bootstrap-icons";
-import { formatNumber } from "#/utils/formatNumber";
+import { formatInteger } from "#/utils/formatInteger";
 import type { ChannelProps } from "#/types";
 
 const ChannelStatistics = ({ channel }: ChannelProps) => (
@@ -18,7 +18,7 @@ const ChannelStatistics = ({ channel }: ChannelProps) => (
         <Col xs={"auto"} className={"flex-center"}>
           <EyeFill />
         </Col>
-        <Col xs={"auto"}>{formatNumber(channel.statistics.view_count)}</Col>
+        <Col xs={"auto"}>{formatInteger(channel.statistics.view_count)}</Col>
       </Row>
     </Col>
     <Col xs={"auto"}>
@@ -26,7 +26,7 @@ const ChannelStatistics = ({ channel }: ChannelProps) => (
         <Col xs={"auto"} className={"flex-center"}>
           <BellFill />
         </Col>
-        <Col xs={"auto"}>{formatNumber(channel.statistics.subscriber_count)}</Col>
+        <Col xs={"auto"}>{formatInteger(channel.statistics.subscriber_count)}</Col>
       </Row>
     </Col>
   </Row>
