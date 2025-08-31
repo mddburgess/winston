@@ -7,10 +7,10 @@ import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateVideos } from "#/store/slices/backend";
 import { clearPullComments } from "#/store/slices/pullVideoComments";
 import { pluralize } from "#/utils";
-import type { PullOperationRead } from "#/api";
 import type { VideoCommentsState } from "#/store/slices/pullVideoComments";
+import type { PullOperationStatus } from "#/types";
 
-const terminalStatuses: PullOperationRead["status"][] = ["successful", "warning", "failed"];
+const terminalStatuses: PullOperationStatus[] = ["successful", "warning", "failed"];
 
 const getOverallStatus = (state: VideoCommentsState) => {
   if (state.comments.status === "successful") {

@@ -12,7 +12,6 @@ import viteConfig from "./vite.config";
 
 export default typescript.config(
   {
-    files: ["src/**/*.{ts,tsx}"],
     languageOptions: {
       globals: globals.browser,
     },
@@ -71,7 +70,7 @@ export default typescript.config(
       ],
     },
     settings: {
-      "import/internal-regex": "^#/",
+      "import/internal-regex": "^[#=]/",
       "import/resolver": {
         vite: {
           viteConfig,
@@ -137,6 +136,13 @@ export default typescript.config(
       vitest: {
         typecheck: true,
       },
+    },
+  },
+  {
+    // Overrides for test files
+    files: ["**/*.{spec,test}.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/require-await": "warn",
     },
   },
   globalIgnores(["eslint.config.ts", "src/api/index.ts"]),

@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.client;
 
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import org.springframework.http.HttpStatus;
@@ -10,8 +11,8 @@ import java.util.Optional;
 
 public class YouTubeException extends AppException {
 
-    protected YouTubeException(HttpStatus status, String reason, Throwable cause) {
-        super(status, reason, cause);
+    protected YouTubeException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
     }
 
     private YouTubeException(GoogleJsonResponseException cause) {

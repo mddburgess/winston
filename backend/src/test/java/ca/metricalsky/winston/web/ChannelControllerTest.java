@@ -2,6 +2,7 @@ package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.config.AppResourceResolver;
+import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.service.ChannelService;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({ChannelController.class, AppResourceResolver.class})
+@WebMvcTest({ChannelController.class, AppResourceResolver.class, ConversionServiceAdapter.class})
 class ChannelControllerTest {
 
     private static final String CHANNEL_HANDLE = "@channelHandle";

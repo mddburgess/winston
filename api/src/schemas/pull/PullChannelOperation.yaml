@@ -1,0 +1,25 @@
+title: Pull Channel Operation
+type: object
+required:
+  - pull
+  - channel_handle
+  - status
+  - id
+properties:
+  pull:
+    type: string
+    const: channel
+  channel_handle:
+    type: string
+  status:
+    type: string
+    readOnly: true
+    enum:
+      - ready
+      - fetching
+      - successful
+      - warning
+      - failed
+  id:
+    type: string
+    readOnly: true

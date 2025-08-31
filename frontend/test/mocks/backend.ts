@@ -1,4 +1,4 @@
 import { setupServer } from "msw/node";
-import { handlers } from "./handlers.ts";
+import { handlers } from "=/mocks/handlers";
 
 export const backend = setupServer(...handlers);

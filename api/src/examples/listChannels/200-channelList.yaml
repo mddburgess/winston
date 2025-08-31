@@ -7,6 +7,10 @@ value:
       description: Videos about laws and blogs.
       handle: "@bobloblawslawblog"
       thumbnail_url: /api/v1/channels/MtbbyMUCmDf0OqyENPcG3Dbw/thumbnail
+      statistics:
+        video_count: 0
+        view_count: 0
+        subscriber_count: 3
       topics:
         - https://en.wikipedia.org/wiki/Law
         - https://en.wikipedia.org/wiki/Blog

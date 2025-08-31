@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { EventSourceProvider } from "react-sse-hooks";
 import { usePullMutation } from "#/api";
-import { AppEventsSource } from "#/components/events/AppEventsSource";
+import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch } from "#/store/hooks";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { updatePullCommentsData, updatePullCommentsStatus } from "#/store/slices/pullVideoComments";
@@ -18,7 +17,7 @@ const BatchPullCommentsAction = ({ videos }: VideoListProps) => {
       { pull: "comments", video_id: video.id },
       { pull: "replies", video_id: video.id },
     ]);
-    void pull({ body: { event_listener_id: eventListenerId, operations } });
+    void pull({ body: { event_subscription_id: eventListenerId, operations } });
   };
 
   const handleOperationEvent = (event: AppEvent) => {
@@ -56,16 +55,7 @@ const BatchPullCommentsAction = ({ videos }: VideoListProps) => {
     dispatch(invalidateFetchLimits());
   };
 
-  return (
-    <EventSourceProvider>
-      <AppEventsSource
-        onSubscribed={handleSubscribed}
-        onOperationEvent={handleOperationEvent}
-        onDataEvent={handleDataEvent}
-        hideSpinner={true}
-      />
-    </EventSourceProvider>
-  );
+  return <PullEventsSource whenSubscribed={handleSubscribed} />;
 };
 
 export { BatchPullCommentsAction };

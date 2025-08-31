@@ -3,6 +3,7 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.config.AppResourceResolver;
+import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.test.TestUtils;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest({AuthorController.class, AppResourceResolver.class})
+@WebMvcTest({AuthorController.class, AppResourceResolver.class, ConversionServiceAdapter.class})
 class AuthorControllerTest {
 
     @Autowired

@@ -1,0 +1,6 @@
+title: Pull Operation
+oneOf:
+  - $ref: ./PullChannelOperation.yaml
+  - $ref: ./PullVideosOperation.yaml
+  - $ref: ./PullCommentsOperation.yaml
+  - $ref: ./PullRepliesOperation.yaml

@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { PullChannelModal } from "#/components/channels/PullChannelModal";
+import { IconButton } from "#/components/IconButton";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
 import { ChannelCards } from "./ChannelCards";
-import { FetchChannelModal } from "./FetchChannelModal";
 
-export const ChannelListRoute = () => {
+const ChannelListRoute = () => {
   const { isSuccess, data } = useListChannelsQuery();
   const channels = isSuccess ? selectAllChannels(data) : [];
+
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -19,10 +21,7 @@ export const ChannelListRoute = () => {
           <p className={"h1 m-0"}>Channels</p>
         </Col>
         <Col xs={"auto"} className={"align-items-center d-flex"}>
-          <Button className={"align-items-center d-flex"} onClick={() => setShowModal(true)}>
-            Fetch...
-            <ArrowDownRightCircleFill className={"ms-2"} />
-          </Button>
+          <IconButton icon={ArrowDownRightCircleFill} label={"Pull..."} onClick={() => setShowModal(true)} />
         </Col>
       </Row>
       <PaginationContext pageSize={12} items={channels}>
@@ -39,7 +38,9 @@ export const ChannelListRoute = () => {
           </>
         )}
       </PaginationContext>
-      <FetchChannelModal show={showModal} setShow={setShowModal} />
+      <PullChannelModal show={showModal} onHide={() => setShowModal(false)} />
     </>
   );
 };
+
+export { ChannelListRoute };

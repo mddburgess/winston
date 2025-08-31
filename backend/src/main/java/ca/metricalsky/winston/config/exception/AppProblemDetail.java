@@ -23,10 +23,6 @@ public class AppProblemDetail extends ProblemDetail {
         super(other);
     }
 
-    protected AppProblemDetail() {
-        super();
-    }
-
     public static AppProblemDetail forStatus(HttpStatusCode status) {
         Assert.notNull(status, "HttpStatusCode is required");
         return forStatus(status.value());
