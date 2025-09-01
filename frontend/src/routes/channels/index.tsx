@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { PullChannelActions } from "#/components/channels/PullChannelActions";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
-import { IconButton } from "#/components/IconButton";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
@@ -17,11 +16,15 @@ const ChannelListRoute = () => {
   return (
     <>
       <Row className={"mb-2"}>
-        <Col className={"align-items-center d-flex"}>
+        <Col className={"flex-center"}>
           <p className={"h1 m-0"}>Channels</p>
         </Col>
-        <Col xs={"auto"} className={"align-items-center d-flex"}>
-          <IconButton icon={ArrowDownRightCircleFill} label={"Pull..."} onClick={() => setShowModal(true)} />
+        <Col xs={"auto"} className={"flex-center"}>
+          <PullChannelActions
+            channels={channels}
+            onPullChannel={() => setShowModal(true)}
+            onRefreshAllChannels={() => {}}
+          />
         </Col>
       </Row>
       <PaginationContext pageSize={12} items={channels}>

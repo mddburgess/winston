@@ -1,4 +1,5 @@
 import { Button } from "react-bootstrap";
+import { IconLabel } from "#/components/IconLabel";
 import type { ButtonProps } from "react-bootstrap";
 import type { Icon } from "react-bootstrap-icons";
 
@@ -7,11 +8,9 @@ type IconButtonProps = ButtonProps & {
   label: string;
 };
 
-const IconButton = ({ icon: ButtonIcon, label, ...buttonProps }: IconButtonProps) => (
+const IconButton = ({ icon, label, ...buttonProps }: IconButtonProps) => (
   <Button {...buttonProps}>
-    <span className={"flex-center"}>
-      {label} <ButtonIcon className={"ms-2"} />
-    </span>
+    <IconLabel icon={icon} label={label} reverse />
   </Button>
 );
 

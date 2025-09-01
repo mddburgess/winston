@@ -2,13 +2,13 @@ import { Col, Row } from "react-bootstrap";
 import type { ReactNode } from "react";
 import type { Icon } from "react-bootstrap-icons";
 
-type IconLabelProps = { icon: Icon } & (
+type IconLabelProps = { icon: Icon; reverse?: boolean } & (
   | { children: ReactNode; label?: never }
   | { label: string | number; children?: never }
 );
 
-const IconLabel = ({ icon: LabelIcon, ...props }: IconLabelProps) => (
-  <Row className={"gx-2"}>
+const IconLabel = ({ icon: LabelIcon, reverse = false, ...props }: IconLabelProps) => (
+  <Row className={`${reverse && "flex-row-reverse"} flex-nowrap gx-2`}>
     <Col xs={"auto"} className={"flex-center"}>
       <LabelIcon data-testid={"icon"} />
     </Col>
