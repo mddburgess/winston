@@ -29,16 +29,21 @@ const pullRequestEvent = (): PullRequestEvent => ({
   },
 });
 
-const pullOperationEvent = (error?: Problem): PullOperationEvent => ({
+type PullOperationEventOptions = {
+  channelHandle?: string;
+  error?: Problem;
+};
+
+const pullOperationEvent = (options?: PullOperationEventOptions): PullOperationEvent => ({
   event_id: faker.string.uuid(),
   event_type: "pull-operation",
   operation: {
     pull: "channel",
-    channel_handle: `@${faker.internet.username()}`,
-    status: error ? "failed" : "successful",
+    channel_handle: options?.channelHandle ?? `@${faker.internet.username()}`,
+    status: options?.error ? "failed" : "successful",
     id: faker.string.numeric(),
   },
-  error,
+  error: options?.error,
 });
 
 const pullChannelsEvent = (channel?: Channel): PullChannelsEvent => ({

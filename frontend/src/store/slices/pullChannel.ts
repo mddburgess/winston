@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { isArray } from "lodash";
 import type { Problem } from "#/api";
 import type { PullOperationStatus } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -6,13 +7,14 @@ import type { Dictionary } from "lodash";
 
 type PullChannelState = {
   active: boolean;
-  requested?: string;
+  requested: string[];
   responses: Partial<Dictionary<PullOperationStatus>>;
   errors: Partial<Dictionary<Problem>>;
 };
 
 const initialState: PullChannelState = {
   active: false,
+  requested: [],
   responses: {},
   errors: {},
 };
@@ -24,9 +26,9 @@ const pullChannel = createSlice({
     pullChannelActive: (state, { payload }: PayloadAction<boolean>) => {
       state.active = payload;
     },
-    pullChannelRequested: (state, { payload }: PayloadAction<string>) => {
+    pullChannelRequested: (state, { payload }: PayloadAction<string | string[]>) => {
       state.active = true;
-      state.requested = payload;
+      state.requested = isArray(payload) ? payload : [payload];
     },
     pullChannelResponse: (
       state,
