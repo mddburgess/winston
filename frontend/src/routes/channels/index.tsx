@@ -1,17 +1,29 @@
+import { map } from "lodash";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { PullChannelActions } from "#/components/channels/PullChannelActions";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
+import { RefreshAllChannelsSidebar } from "#/components/channels/RefreshAllChannelsSidebar";
+import { PullChannelsRequest } from "#/components/events/PullChannelsRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
+import { ChannelCards } from "#/routes/channels/ChannelCards";
+import { useAppDispatch } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
-import { ChannelCards } from "./ChannelCards";
+import { pullChannelRequested } from "#/store/slices/pullChannels";
 
 const ChannelListRoute = () => {
+  const dispatch = useAppDispatch();
   const { isSuccess, data } = useListChannelsQuery();
   const channels = isSuccess ? selectAllChannels(data) : [];
 
-  const [showModal, setShowModal] = useState(false);
+  const [showPullChannel, setShowPullChannel] = useState(false);
+  const [showRefreshAllChannels, setShowRefreshAllChannels] = useState(false);
+
+  const handleRefreshAllChannels = () => {
+    setShowRefreshAllChannels(true);
+    dispatch(pullChannelRequested(map(channels, "handle")));
+  };
 
   return (
     <>
@@ -22,8 +34,8 @@ const ChannelListRoute = () => {
         <Col xs={"auto"} className={"flex-center"}>
           <PullChannelActions
             channels={channels}
-            onPullChannel={() => setShowModal(true)}
-            onRefreshAllChannels={() => {}}
+            onPullChannel={() => setShowPullChannel(true)}
+            onRefreshAllChannels={handleRefreshAllChannels}
           />
         </Col>
       </Row>
@@ -41,7 +53,9 @@ const ChannelListRoute = () => {
           </>
         )}
       </PaginationContext>
-      <PullChannelModal show={showModal} onHide={() => setShowModal(false)} />
+      <PullChannelModal show={showPullChannel} onHide={() => setShowPullChannel(false)} />
+      <RefreshAllChannelsSidebar show={showRefreshAllChannels} onHide={() => setShowRefreshAllChannels(false)} />
+      <PullChannelsRequest />
     </>
   );
 };

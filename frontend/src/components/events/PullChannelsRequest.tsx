@@ -2,13 +2,14 @@ import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateChannels } from "#/store/slices/backend";
-import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannel";
+import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannels";
 import type { PullChannelsEvent, PullOperationEvent } from "#/components/events/types";
 import type { PullOperation } from "#/types";
+import { invalidateFetchLimits } from "#/store/slices/limits.ts";
 
-const PullChannelRequest = () => {
+const PullChannelsRequest = () => {
   const dispatch = useAppDispatch();
-  const { active, requested } = useAppSelector((state) => state.pullChannel);
+  const { active, requested } = useAppSelector((state) => state.pullChannels);
 
   const [pull] = usePullMutation();
 
@@ -28,6 +29,7 @@ const PullChannelRequest = () => {
   };
 
   const handlePullChannelsEvent = (event: PullChannelsEvent) => {
+    dispatch(invalidateFetchLimits());
     if (event.channels.length > 0) {
       dispatch(invalidateChannels());
     }
@@ -49,4 +51,4 @@ const PullChannelRequest = () => {
   );
 };
 
-export { PullChannelRequest };
+export { PullChannelsRequest };
