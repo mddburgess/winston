@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import type { Channel, Problem } from "#/api";
 import type {
   EventSubscriptionEvent,
   PullChannelsEvent,
@@ -9,7 +10,6 @@ import type {
   PullVideosEvent,
 } from "#/components/events/types";
 import type { PullOperationRead } from "#/types";
-import type { Channel, Problem } from "#/api";
 
 const eventSubscriptionEvent = (eventSubscriptionId: string, subscribed: boolean): EventSubscriptionEvent => ({
   event_id: faker.string.uuid(),

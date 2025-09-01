@@ -11,20 +11,20 @@ import type { Channel } from "#/api";
  * @param partial channel data to set in the mock channel
  * @returns the mock channel
  */
-const mockChannel = (partial?: Partial<Channel>): Channel => ({
+const mockChannel = (partial: Partial<Channel> = {}): Channel => ({
   id: faker.string.nanoid(),
   title: faker.string.alpha(),
   description: faker.string.alpha(),
   handle: `@${faker.internet.username()}`,
   thumbnail_url: faker.internet.url(),
   statistics: {
-    video_count: faker.number.int({ min: 0 }),
-    view_count: faker.number.int({ min: 0 }),
-    subscriber_count: faker.number.int({ min: 0 }),
+    video_count: faker.number.int({ min: 0, max: 10_000 }),
+    view_count: faker.number.int({ min: 0, max: 10_000_000 }),
+    subscriber_count: faker.number.int({ min: 0, max: 10_000_000 }),
   },
   topics: [],
   keywords: [],
-  video_count: faker.number.int({ min: 0 }),
+  video_count: faker.number.int({ min: 0, max: 10_000 }),
   published_at: DateTime.fromJSDate(faker.date.recent()).toISO()!,
   last_fetched_at: DateTime.fromJSDate(faker.date.recent()).toISO()!,
   ...partial,
