@@ -10,9 +10,9 @@ type IconLabelProps = { icon: Icon } & (
 const IconLabel = ({ icon: LabelIcon, ...props }: IconLabelProps) => (
   <Row className={"gx-2"}>
     <Col xs={"auto"} className={"flex-center"}>
-      <LabelIcon />
+      <LabelIcon data-testid={"icon"} />
     </Col>
-    <Col xs={"auto"}>
+    <Col xs={"auto"} data-testid={"label"}>
       {props.children}
       {props.label}
     </Col>
