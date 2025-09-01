@@ -39,6 +39,13 @@
   max-height: fit-content;
 }
 
+.spin {
+  animation-name: spin;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
 .video-card-checkbox {
   margin: 0.5rem 0.5rem -1.31rem auto;
   position: relative;
@@ -53,5 +60,14 @@
 
   .breadcrumb {
     display: none;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

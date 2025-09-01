@@ -3,9 +3,6 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.api.ChannelsApi;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.api.model.ListChannelsResponse;
-import ca.metricalsky.winston.dao.ChannelDataService;
-import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ChannelController implements ChannelsApi {
 
-    private final ChannelDataService channelDataService;
     private final ChannelService channelService;
 
     @Override
@@ -29,8 +25,7 @@ public class ChannelController implements ChannelsApi {
 
     @Override
     public ResponseEntity<Channel> getChannel(String handle) {
-        var channel = channelDataService.findChannelByHandle(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+        var channel = channelService.getChannelByHandle(handle);
 
         return ResponseEntity.ok(channel);
     }

@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface VideoRepository extends JpaRepository<VideoEntity, String> {
 
+    Integer countByChannelId(String channelId);
+
     @Query("""
             SELECT c.id AS channelId, COUNT(v.id) AS videos
             FROM ChannelEntity c

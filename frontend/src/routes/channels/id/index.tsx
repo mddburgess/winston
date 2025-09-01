@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router";
+import { ChannelDetailsJumbotron } from "#/components/channels/ChannelDetailsJumbotron";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { BatchPullCommentsAlert } from "#/routes/channels/id/BatchPullCommentsAlert";
@@ -11,7 +12,6 @@ import { initFetchStateForChannel } from "#/store/slices/fetches";
 import { selectAllVideos, useListVideosQuery } from "#/store/slices/videos";
 import { parseIntOrDefault } from "#/utils";
 import { routes } from "#/utils/links";
-import { ChannelDetails } from "./ChannelDetails";
 import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
@@ -59,7 +59,7 @@ export const ChannelDetailsRoute = () => {
         </BreadcrumbItem>
         {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
       </Breadcrumb>
-      {channel && <ChannelDetails channel={channel} />}
+      {channel && <ChannelDetailsJumbotron channel={channel} />}
       {channel && <FetchVideosAlert channel={channel} />}
       <BatchPullCommentsAlert videos={videosOnPage} />
       <PaginationContext pageSize={24} items={filteredVideoList}>

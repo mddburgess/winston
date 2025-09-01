@@ -1,7 +1,7 @@
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
-import { appendChannels } from "#/store/slices/channels";
+import { invalidateChannels } from "#/store/slices/backend";
 import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannel";
 import type { PullChannelsEvent, PullOperationEvent } from "#/components/events/types";
 
@@ -29,7 +29,7 @@ const PullChannelRequest = () => {
 
   const handlePullChannelsEvent = (event: PullChannelsEvent) => {
     if (event.channels.length > 0) {
-      dispatch(appendChannels(event.channels));
+      dispatch(invalidateChannels());
     }
   };
 

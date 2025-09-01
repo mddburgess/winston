@@ -30,6 +30,16 @@ public class ChannelService {
                 .toList();
     }
 
+    public Channel getChannelByHandle(String handle) {
+        var channel = channelDataService.findChannelByHandle(handle)
+                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+
+        var videoCount = videoDataService.countByChannelId(channel.getId());
+        channel.setVideoCount(videoCount);
+
+        return channel;
+    }
+
     public void requireChannelExists(String channelId) {
         if (!channelRepository.existsById(channelId)) {
             throw new AppException(ErrorCode.CHANNEL_NOT_FOUND);
