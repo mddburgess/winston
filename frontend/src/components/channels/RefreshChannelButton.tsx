@@ -18,11 +18,15 @@ const RefreshChannelButton = ({ channel }: ChannelProps) => {
   };
 
   const icon = error ? (
-    <XOctagonFill className={"text-danger"} />
+    <XOctagonFill className={"text-danger"} data-testid={"refreshChannelFailedIcon"} />
   ) : isPulledRecently ? (
-    <CheckCircleFill className={"text-success"} />
+    <CheckCircleFill className={"text-success"} data-testid={"refreshChannelSuccessIcon"} />
   ) : (
-    <ArrowClockwise className={pullChannel.active ? "spin" : "cursor-pointer"} onClick={handleClick} />
+    <ArrowClockwise
+      className={pullChannel.active ? "spin" : "cursor-pointer"}
+      data-testid={"refreshChannelIcon"}
+      onClick={handleClick}
+    />
   );
 
   return (
