@@ -9,7 +9,7 @@ import type {
   PullVideosEvent,
 } from "#/components/events/types";
 import type { PullOperationRead } from "#/types";
-import type { Channel } from "#/api";
+import type { Channel, Problem } from "#/api";
 
 const eventSubscriptionEvent = (eventSubscriptionId: string, subscribed: boolean): EventSubscriptionEvent => ({
   event_id: faker.string.uuid(),
@@ -29,15 +29,16 @@ const pullRequestEvent = (): PullRequestEvent => ({
   },
 });
 
-const pullOperationEvent = (): PullOperationEvent => ({
+const pullOperationEvent = (error?: Problem): PullOperationEvent => ({
   event_id: faker.string.uuid(),
   event_type: "pull-operation",
   operation: {
     pull: "channel",
     channel_handle: `@${faker.internet.username()}`,
-    status: "ready",
+    status: error ? "failed" : "successful",
     id: faker.string.numeric(),
   },
+  error,
 });
 
 const pullChannelsEvent = (channel?: Channel): PullChannelsEvent => ({
