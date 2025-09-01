@@ -3,6 +3,7 @@ import { ArrowDownRightCircle, ArrowUpLeftCircleFill } from "react-bootstrap-ico
 import { Link } from "react-router";
 import { ChannelStatistics } from "#/components/channels/ChannelStatistics";
 import { Date } from "#/components/Date";
+import { IconLabel } from "#/components/IconLabel";
 import { routes } from "#/utils/links";
 import type { ChannelProps } from "#/types";
 
@@ -27,13 +28,15 @@ export const ChannelCard = ({ channel }: ChannelProps) => (
       </Card.Footer>
       <Card.Footer>
         <Row>
-          <Col className={"align-items-center col-auto d-flex"}>
-            <ArrowUpLeftCircleFill className={"me-2"} />
-            <Date date={channel.published_at} />
+          <Col xs={"auto"}>
+            <IconLabel icon={ArrowUpLeftCircleFill}>
+              <Date date={channel.published_at} />
+            </IconLabel>
           </Col>
-          <Col className={"align-items-center d-flex"}>
-            <ArrowDownRightCircle className={"me-2"} />
-            <Date date={channel.last_fetched_at} />
+          <Col xs={"auto"}>
+            <IconLabel icon={ArrowDownRightCircle}>
+              <Date date={channel.last_fetched_at} />
+            </IconLabel>
           </Col>
         </Row>
       </Card.Footer>

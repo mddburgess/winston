@@ -4,9 +4,6 @@ import type { AppEvent, FetchCommentsEvent, Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
-  channel: {
-    [id: string]: Maybe<FetchState>;
-  };
   videos: {
     [id: string]: Maybe<FetchState>;
   };
@@ -19,7 +16,6 @@ type FetchStates = {
 };
 
 const initialState: FetchStates = {
-  channel: {},
   videos: {},
   comments: {},
   replies: {},
@@ -47,13 +43,6 @@ export const fetchesSlice = createSlice({
   name: "fetches",
   initialState,
   reducers: {
-    requestedChannelForHandle: (state, action: PayloadAction<string>) => {
-      state.channel[action.payload] = {
-        id: action.payload,
-        status: "REQUESTED",
-        count: 0,
-      };
-    },
     initFetchStateForChannel: (state, action: PayloadAction<Channel>) => {
       state.videos[action.payload.id] = {
         id: action.payload.id,
@@ -123,7 +112,6 @@ export const fetchesSlice = createSlice({
 });
 
 export const {
-  requestedChannelForHandle,
   initFetchStateForChannel,
   requestedVideosForChannelId,
   fetchedVideos,

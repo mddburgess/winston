@@ -30,6 +30,7 @@ export default typescript.config(
     rules: {
       "@typescript-eslint/consistent-type-exports": "error",
       "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-deprecated": "warn",
       "@typescript-eslint/no-import-type-side-effects": "error",
       "@typescript-eslint/no-unnecessary-condition": "warn",
       "@typescript-eslint/no-unused-vars": "warn",

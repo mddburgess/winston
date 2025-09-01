@@ -20,6 +20,7 @@ const channelsAdapter = createEntityAdapter<Channel>({
 
 const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
 
+/** @deprecated */
 const appendChannels = (channels: Channel[]) =>
   channelsApi.util.updateQueryData("listChannels", undefined, (draft: EntityState<Channel, string>) => {
     channelsAdapter.setMany(draft, channels);

@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import type { Channel, Problem } from "#/api";
 import type {
   EventSubscriptionEvent,
   PullChannelsEvent,
@@ -28,22 +29,23 @@ const pullRequestEvent = (): PullRequestEvent => ({
   },
 });
 
-const pullOperationEvent = (): PullOperationEvent => ({
+const pullOperationEvent = (error?: Problem): PullOperationEvent => ({
   event_id: faker.string.uuid(),
   event_type: "pull-operation",
   operation: {
     pull: "channel",
     channel_handle: `@${faker.internet.username()}`,
-    status: "ready",
+    status: error ? "failed" : "successful",
     id: faker.string.numeric(),
   },
+  error,
 });
 
-const pullChannelsEvent = (): PullChannelsEvent => ({
+const pullChannelsEvent = (channel?: Channel): PullChannelsEvent => ({
   event_id: faker.string.uuid(),
   event_type: "pull-channels",
   channel_handle: `@${faker.internet.username()}`,
-  channels: [],
+  channels: channel ? [channel] : [],
 });
 
 const pullVideosEvent = (): PullVideosEvent => ({

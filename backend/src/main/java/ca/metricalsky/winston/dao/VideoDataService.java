@@ -48,6 +48,10 @@ public class VideoDataService {
                 .toList();
     }
 
+    public Integer countByChannelId(String channelId) {
+        return videoRepository.countByChannelId(channelId);
+    }
+
     public Map<String, Integer> countAllVideosByChannelId() {
         var counts = videoRepository.countAllByChannelId()
                 .stream()

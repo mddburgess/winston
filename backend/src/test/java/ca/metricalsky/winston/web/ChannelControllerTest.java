@@ -3,7 +3,8 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.config.AppResourceResolver;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.dao.ChannelDataService;
+import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.ChannelService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
@@ -32,8 +32,6 @@ class ChannelControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockitoBean
-    private ChannelDataService channelDataService;
     @MockitoBean
     private ChannelService channelService;
 
@@ -65,8 +63,8 @@ class ChannelControllerTest {
 
     @Test
     void findByHandle() throws Exception {
-        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
-                .thenReturn(Optional.of(buildChannel()));
+        when(channelService.getChannelByHandle(CHANNEL_HANDLE))
+                .thenReturn(buildChannel());
 
         mvc.perform(get("/api/v1/channels/{handle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isOk(),
@@ -79,8 +77,8 @@ class ChannelControllerTest {
 
     @Test
     void findByHandle_notFound() throws Exception {
-        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
-                .thenReturn(Optional.empty());
+        when(channelService.getChannelByHandle(CHANNEL_HANDLE))
+                .thenThrow(new AppException(ErrorCode.CHANNEL_NOT_FOUND));
 
         mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isNotFound(),

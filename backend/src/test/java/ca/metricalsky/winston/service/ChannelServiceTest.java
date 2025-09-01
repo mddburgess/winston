@@ -4,27 +4,29 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.UnitTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@UnitTest
 class ChannelServiceTest {
 
     private static final String CHANNEL_ID = "channelId";
+    private static final String CHANNEL_HANDLE = "channelHandle";
 
     @InjectMocks
     private ChannelService channelService;
@@ -64,6 +66,33 @@ class ChannelServiceTest {
 
         assertThat(channels)
                 .isEmpty();
+    }
+
+    @Test
+    void getChannelByHandle() {
+        var channel = buildChannel();
+        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
+                .thenReturn(Optional.of(channel));
+
+        var videoCount = 1;
+        when(videoDataService.countByChannelId(channel.getId()))
+                .thenReturn(videoCount);
+
+        var result = channelService.getChannelByHandle(CHANNEL_HANDLE);
+
+        assertThat(result)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("videoCount", videoCount);
+    }
+
+    @Test
+    void getChannelByHandle_notFound() {
+        var exception = new AppException(ErrorCode.CHANNEL_NOT_FOUND);
+        when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
+                .thenThrow(exception);
+
+        assertThatThrownBy(() -> channelService.getChannelByHandle(CHANNEL_HANDLE))
+                .isEqualTo(exception);
     }
 
     @Test
