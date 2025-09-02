@@ -2,10 +2,10 @@ import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateChannels } from "#/store/slices/backend";
+import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannels";
 import type { PullChannelsEvent, PullOperationEvent } from "#/components/events/types";
 import type { PullOperation } from "#/types";
-import { invalidateFetchLimits } from "#/store/slices/limits.ts";
 
 const PullChannelsRequest = () => {
   const dispatch = useAppDispatch();

@@ -39,10 +39,19 @@ const pullChannels = createSlice({
     pullChannelError: (state, { payload }: PayloadAction<{ channelHandle: string; error: Problem }>) => {
       state.errors[payload.channelHandle] = payload.error;
     },
+    pullChannelReset: () => initialState,
   },
 });
 
 const pullChannelsReducer = pullChannels.reducer;
-const { pullChannelActive, pullChannelError, pullChannelRequested, pullChannelResponse } = pullChannels.actions;
+const { pullChannelActive, pullChannelError, pullChannelRequested, pullChannelReset, pullChannelResponse } =
+  pullChannels.actions;
 
-export { pullChannelActive, pullChannelError, pullChannelRequested, pullChannelResponse, pullChannelsReducer };
+export {
+  pullChannelActive,
+  pullChannelError,
+  pullChannelRequested,
+  pullChannelReset,
+  pullChannelResponse,
+  pullChannelsReducer,
+};

@@ -1,11 +1,15 @@
 import { Col, ListGroup, ListGroupItem, Row, Spinner } from "react-bootstrap";
 import { CheckCircleFill, ExclamationDiamondFill, XOctagonFill } from "react-bootstrap-icons";
-import { useAppSelector } from "#/store/hooks";
 import type { Channel, Problem } from "#/api";
 import type { ChannelListProps, PullOperationStatus } from "#/types";
+import type { Dictionary } from "lodash";
 
-const RefreshChannelsList = ({ channels }: ChannelListProps) => {
-  const { responses, errors } = useAppSelector((state) => state.pullChannels);
+type RefreshChannelsListProps = ChannelListProps & {
+  responses: Partial<Dictionary<PullOperationStatus>>;
+  errors: Partial<Dictionary<Problem>>;
+};
+
+const RefreshChannelsList = ({ channels, responses, errors }: RefreshChannelsListProps) => {
   return (
     <ListGroup variant={"flush"}>
       {channels.map((channel, index) => (

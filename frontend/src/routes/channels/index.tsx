@@ -10,7 +10,7 @@ import { PaginationRow } from "#/components/PaginationRow";
 import { ChannelCards } from "#/routes/channels/ChannelCards";
 import { useAppDispatch } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
-import { pullChannelRequested } from "#/store/slices/pullChannels";
+import { pullChannelRequested, pullChannelReset } from "#/store/slices/pullChannels";
 
 const ChannelListRoute = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +22,7 @@ const ChannelListRoute = () => {
 
   const handleRefreshAllChannels = () => {
     setShowRefreshAllChannels(true);
+    dispatch(pullChannelReset());
     dispatch(pullChannelRequested(map(channels, "handle")));
   };
 

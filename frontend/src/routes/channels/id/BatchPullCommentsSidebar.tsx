@@ -1,5 +1,6 @@
-import { filter, round } from "lodash";
-import { Button, Col, Container, Offcanvas, ProgressBar, Row } from "react-bootstrap";
+import { filter } from "lodash";
+import { Button, Col, Container, Offcanvas, Row } from "react-bootstrap";
+import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { PullCommentsList } from "#/components/pull/PullCommentsList";
 import { BatchPullCommentsAction } from "#/routes/channels/id/BatchPullCommentsAction";
@@ -43,13 +44,7 @@ const BatchPullCommentsSidebar = () => {
       </Offcanvas.Header>
       <Offcanvas.Body className={"bg-primary-subtle height-fit text-primary-emphasis"}>
         Pulling comments for <strong>{pluralize(activeVideos.length, "video")}</strong>
-        <ProgressBar
-          animated={completed < activeVideos.length}
-          variant={completed === activeVideos.length ? "success" : "primary"}
-          now={completed}
-          max={activeVideos.length}
-          label={`${round((completed * 100) / activeVideos.length)}%`}
-        />
+        <BasicProgressBar completed={completed} total={activeVideos.length} />
       </Offcanvas.Body>
       <Offcanvas.Body className={"border-bottom border-top p-0"}>
         <Container className={"px-0"}>
