@@ -4,34 +4,35 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { ArrowDownRightCircleFill, BoxArrowInUpRight, ExclamationDiamond, InfoCircleFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router";
 import { ChannelInput } from "#/components/channels/ChannelInput";
-import { PullChannelRequest } from "#/components/events/PullChannelRequest";
 import { IconAlert } from "#/components/IconAlert";
 import { IconButton } from "#/components/IconButton";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
-import { pullChannelRequested } from "#/store/slices/pullChannel";
+import { pullChannelRequested } from "#/store/slices/pullChannels";
 import { routes } from "#/utils/links";
 import type { FormEvent } from "react";
 import type { ButtonProps } from "react-bootstrap";
 
 const PullChannelModal = (props: { show: boolean; onHide: () => void }) => {
   const dispatch = useAppDispatch();
-  const { active, requested = "", errors } = useAppSelector((state) => state.pullChannel);
+  const { active, errors } = useAppSelector((state) => state.pullChannels);
 
   const { isSuccess, data } = useListChannelsQuery();
   const channels = isSuccess ? map(selectAllChannels(data), "handle") : [];
 
   const navigate = useNavigate();
   const [channelHandle, setChannelHandle] = useState("");
+  const [lastRequested, setLastRequested] = useState("");
 
   const isBlank = channelHandle === "";
-  const isLastRequested = channelHandle === requested;
+  const isLastRequested = channelHandle === lastRequested;
   const isAlreadyPulled = channels.includes(`@${channelHandle.toLowerCase()}`);
   const isPullError = errors[channelHandle] !== undefined;
   const mayPull = !(isBlank || isLastRequested || isAlreadyPulled || isPullError);
 
   const handleShow = () => {
     setChannelHandle("");
+    setLastRequested("");
   };
 
   const handleSubmit = () => {
@@ -39,6 +40,7 @@ const PullChannelModal = (props: { show: boolean; onHide: () => void }) => {
       navigateToChannel();
     } else if (mayPull) {
       dispatch(pullChannelRequested(channelHandle));
+      setLastRequested(channelHandle);
     }
   };
 
@@ -72,7 +74,6 @@ const PullChannelModal = (props: { show: boolean; onHide: () => void }) => {
         ) : (
           <PullChannelButton disabled={!mayPull} onClick={handleSubmit} />
         )}
-        <PullChannelRequest />
       </Modal.Footer>
     </Modal>
   );

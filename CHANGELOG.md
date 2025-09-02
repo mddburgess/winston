@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show channel video, view, and subscriber counts on channel cards. (mddburgess/winston#91)
 - Add button on channel details page to refresh channel data. (mddburgess/winston#92)
 - Show channel statistics on channel details page. (mddburgess/winston#94)
+- Add button on channel list page to refresh all channel data. (mddburgess/winston#93)
 
 ### Changed
 

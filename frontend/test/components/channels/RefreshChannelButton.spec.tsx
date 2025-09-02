@@ -19,7 +19,7 @@ describe(RefreshChannelButton, () => {
   });
 
   it("refreshes channel data when the icon is clicked", async () => {
-    backend.use(...eventsHandler(pullChannelsEvent(channel), pullOperationEvent()));
+    backend.use(...eventsHandler(pullChannelsEvent(channel), pullOperationEvent({ channelHandle: channel.handle })));
 
     const result = renderWithProviders(<RefreshChannelButton channel={channel} />);
     const refreshChannelIcon = result.getByTestId("refreshChannelIcon");
@@ -33,7 +33,9 @@ describe(RefreshChannelButton, () => {
   });
 
   it("displays an error icon when the refresh request fails", async () => {
-    backend.use(...eventsHandler(pullOperationEvent(apiErrors.channelNotFound)));
+    backend.use(
+      ...eventsHandler(pullOperationEvent({ channelHandle: channel.handle, error: apiErrors.channelNotFound })),
+    );
 
     const result = renderWithProviders(<RefreshChannelButton channel={channel} />);
     const refreshChannelIcon = result.getByTestId("refreshChannelIcon");

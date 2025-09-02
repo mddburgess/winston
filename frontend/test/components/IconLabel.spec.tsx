@@ -27,4 +27,20 @@ describe(IconLabel, () => {
 
     expect(label).toBeInTheDocument();
   });
+
+  it("displays the icon and label in reverse order when the reverse prop is true", () => {
+    const result = render(<IconLabel icon={Star} label={"text"} reverse={true} />);
+    const row = result.getByTestId("row");
+
+    expect(row).toBeInTheDocument();
+    expect(row).toHaveClass("flex-row-reverse");
+  });
+
+  it("displays the icon and label in normal order when the reverse prop is false", () => {
+    const result = render(<IconLabel icon={Star} label={"text"} reverse={false} />);
+    const row = result.getByTestId("row");
+
+    expect(row).toBeInTheDocument();
+    expect(row).not.toHaveClass("flex-row-reverse");
+  });
 });

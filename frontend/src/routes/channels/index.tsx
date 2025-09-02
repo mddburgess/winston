@@ -1,27 +1,43 @@
+import { map } from "lodash";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { PullChannelActions } from "#/components/channels/PullChannelActions";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
-import { IconButton } from "#/components/IconButton";
+import { RefreshChannelsSidebar } from "#/components/channels/RefreshChannelsSidebar";
+import { PullChannelsRequest } from "#/components/events/PullChannelsRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
+import { ChannelCards } from "#/routes/channels/ChannelCards";
+import { useAppDispatch } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
-import { ChannelCards } from "./ChannelCards";
+import { pullChannelRequested, pullChannelReset } from "#/store/slices/pullChannels";
 
 const ChannelListRoute = () => {
+  const dispatch = useAppDispatch();
   const { isSuccess, data } = useListChannelsQuery();
   const channels = isSuccess ? selectAllChannels(data) : [];
 
-  const [showModal, setShowModal] = useState(false);
+  const [showPullChannel, setShowPullChannel] = useState(false);
+  const [showRefreshChannels, setShowRefreshChannels] = useState(false);
+
+  const handleRefreshChannels = () => {
+    setShowRefreshChannels(true);
+    dispatch(pullChannelReset());
+    dispatch(pullChannelRequested(map(channels, "handle")));
+  };
 
   return (
     <>
       <Row className={"mb-2"}>
-        <Col className={"align-items-center d-flex"}>
+        <Col className={"flex-center"}>
           <p className={"h1 m-0"}>Channels</p>
         </Col>
-        <Col xs={"auto"} className={"align-items-center d-flex"}>
-          <IconButton icon={ArrowDownRightCircleFill} label={"Pull..."} onClick={() => setShowModal(true)} />
+        <Col xs={"auto"} className={"flex-center"}>
+          <PullChannelActions
+            channels={channels}
+            onPullChannel={() => setShowPullChannel(true)}
+            onRefreshChannels={handleRefreshChannels}
+          />
         </Col>
       </Row>
       <PaginationContext pageSize={12} items={channels}>
@@ -38,7 +54,9 @@ const ChannelListRoute = () => {
           </>
         )}
       </PaginationContext>
-      <PullChannelModal show={showModal} onHide={() => setShowModal(false)} />
+      <PullChannelModal show={showPullChannel} onHide={() => setShowPullChannel(false)} />
+      <RefreshChannelsSidebar show={showRefreshChannels} onHide={() => setShowRefreshChannels(false)} />
+      <PullChannelsRequest />
     </>
   );
 };
