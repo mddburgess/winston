@@ -8,7 +8,7 @@ type IconLabelProps = { icon: Icon; reverse?: boolean } & (
 );
 
 const IconLabel = ({ icon: LabelIcon, reverse = false, ...props }: IconLabelProps) => (
-  <Row className={`${reverse && "flex-row-reverse"} flex-nowrap gx-2`}>
+  <Row className={`${reverse && "flex-row-reverse"} flex-nowrap gx-2`} data-testid={"row"}>
     <Col xs={"auto"} className={"flex-center"}>
       <LabelIcon data-testid={"icon"} />
     </Col>
