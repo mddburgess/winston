@@ -7,35 +7,32 @@ import type { ChannelListProps } from "#/types";
 
 type PullChannelActionsProps = ChannelListProps & {
   onPullChannel: () => void;
-  onRefreshAllChannels: () => void;
+  onRefreshChannels: () => void;
 };
 
-const PullChannelActions = (props: PullChannelActionsProps) => {
-  return isEmpty(props.channels) ? (
+const PullChannelActions = (props: PullChannelActionsProps) =>
+  isEmpty(props.channels) ? (
     <PullChannelButton onPullChannel={props.onPullChannel} />
   ) : (
     <PullChannelDropdown {...props} />
   );
-};
 
-const PullChannelDropdown = (props: PullChannelActionsProps) => {
-  return (
-    <Dropdown as={ButtonGroup}>
-      <PullChannelButton onPullChannel={props.onPullChannel} />
-      <Dropdown.Toggle />
-      <Dropdown.Menu align={"end"}>
-        <RefreshAllChannelsDropdownItem onRefreshAllChannels={props.onRefreshAllChannels} />
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-};
+const PullChannelDropdown = (props: PullChannelActionsProps) => (
+  <Dropdown as={ButtonGroup}>
+    <PullChannelButton onPullChannel={props.onPullChannel} />
+    <Dropdown.Toggle />
+    <Dropdown.Menu align={"end"}>
+      <RefreshChannelsDropdownItem onRefreshChannels={props.onRefreshChannels} />
+    </Dropdown.Menu>
+  </Dropdown>
+);
 
 const PullChannelButton = (props: { onPullChannel: () => void }) => (
   <IconButton icon={ArrowDownRightCircleFill} label={"Pull..."} onClick={props.onPullChannel} />
 );
 
-const RefreshAllChannelsDropdownItem = (props: { onRefreshAllChannels: () => void }) => (
-  <Dropdown.Item onClick={props.onRefreshAllChannels}>
+const RefreshChannelsDropdownItem = (props: { onRefreshChannels: () => void }) => (
+  <Dropdown.Item onClick={props.onRefreshChannels}>
     <IconLabel icon={ArrowRepeat} label={"Refresh all channels"} reverse />
   </Dropdown.Item>
 );

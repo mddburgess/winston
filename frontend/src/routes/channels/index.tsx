@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { PullChannelActions } from "#/components/channels/PullChannelActions";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
-import { RefreshAllChannelsSidebar } from "#/components/channels/RefreshAllChannelsSidebar";
+import { RefreshChannelsSidebar } from "#/components/channels/RefreshChannelsSidebar";
 import { PullChannelsRequest } from "#/components/events/PullChannelsRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
@@ -18,10 +18,10 @@ const ChannelListRoute = () => {
   const channels = isSuccess ? selectAllChannels(data) : [];
 
   const [showPullChannel, setShowPullChannel] = useState(false);
-  const [showRefreshAllChannels, setShowRefreshAllChannels] = useState(false);
+  const [showRefreshChannels, setShowRefreshChannels] = useState(false);
 
-  const handleRefreshAllChannels = () => {
-    setShowRefreshAllChannels(true);
+  const handleRefreshChannels = () => {
+    setShowRefreshChannels(true);
     dispatch(pullChannelReset());
     dispatch(pullChannelRequested(map(channels, "handle")));
   };
@@ -36,7 +36,7 @@ const ChannelListRoute = () => {
           <PullChannelActions
             channels={channels}
             onPullChannel={() => setShowPullChannel(true)}
-            onRefreshAllChannels={handleRefreshAllChannels}
+            onRefreshChannels={handleRefreshChannels}
           />
         </Col>
       </Row>
@@ -55,7 +55,7 @@ const ChannelListRoute = () => {
         )}
       </PaginationContext>
       <PullChannelModal show={showPullChannel} onHide={() => setShowPullChannel(false)} />
-      <RefreshAllChannelsSidebar show={showRefreshAllChannels} onHide={() => setShowRefreshAllChannels(false)} />
+      <RefreshChannelsSidebar show={showRefreshChannels} onHide={() => setShowRefreshChannels(false)} />
       <PullChannelsRequest />
     </>
   );

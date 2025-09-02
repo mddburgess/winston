@@ -10,7 +10,7 @@ import type { PullOperationStatus } from "#/types";
 
 const terminalStatuses: PullOperationStatus[] = ["successful", "warning", "failed"];
 
-const RefreshAllChannelsSidebar = (props: { show: boolean; onHide: () => void }) => {
+const RefreshChannelsSidebar = (props: { show: boolean; onHide: () => void }) => {
   const { responses, errors } = useAppSelector((state) => state.pullChannels);
   const { isSuccess, data } = useListChannelsQuery();
 
@@ -43,4 +43,4 @@ const RefreshAllChannelsSidebar = (props: { show: boolean; onHide: () => void })
   );
 };
 
-export { RefreshAllChannelsSidebar };
+export { RefreshChannelsSidebar };
