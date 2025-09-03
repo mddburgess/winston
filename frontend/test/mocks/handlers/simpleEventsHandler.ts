@@ -13,7 +13,9 @@ const simpleEventsHandler = (...events: AppEvent[]) =>
   http.get("/api/v1/notifications", () => {
     const stream = new ReadableStream({
       start: (controller) => {
-        events.forEach((event) => controller.enqueue(encodeEvent(event)));
+        events.forEach((event) => {
+          controller.enqueue(encodeEvent(event));
+        });
         controller.close();
       },
     });

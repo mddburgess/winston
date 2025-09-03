@@ -8,7 +8,9 @@ type CopyToClipboardProps = {
 export const CopyToClipboard = ({ text }: CopyToClipboardProps) => {
   const [copied, setCopied] = useState(false);
   const handleOnClick = () => {
-    void navigator.clipboard.writeText(text).then(() => setCopied(true));
+    void navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+    });
   };
   const ClipboardIcon = copied ? ClipboardCheckFill : Clipboard;
 

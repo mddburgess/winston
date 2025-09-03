@@ -12,7 +12,9 @@ describe("channelsApi", () => {
   describe("listChannels", () => {
     it("handles a 200 response with a list of channels", async () => {
       const { result } = renderHookWithProviders(() => useListChannelsQuery());
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
 
       expect(result.current.data).toBeDefined();
 
@@ -44,7 +46,9 @@ describe("channelsApi", () => {
         }),
       );
       const { result } = renderHookWithProviders(() => useListChannelsQuery());
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
 
       expect(result.current.data).toBeDefined();
 
@@ -58,7 +62,9 @@ describe("channelsApi", () => {
   describe(appendChannels, () => {
     it("adds a list of channels to the listChannels cache", async () => {
       const { store, result } = renderHookWithProviders(() => useListChannelsQuery());
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
 
       store.dispatch(
         appendChannels([

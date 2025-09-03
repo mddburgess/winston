@@ -25,8 +25,8 @@ const mockChannel = (partial: Partial<Channel> = {}): Channel => ({
   topics: [],
   keywords: [],
   video_count: faker.number.int({ min: 0, max: 10_000 }),
-  published_at: DateTime.fromJSDate(faker.date.recent()).toISO()!,
-  last_fetched_at: DateTime.fromJSDate(faker.date.recent()).toISO()!,
+  published_at: DateTime.fromJSDate(faker.date.recent()).toISO() ?? "",
+  last_fetched_at: DateTime.fromJSDate(faker.date.recent()).toISO() ?? "",
   ...partial,
 });
 

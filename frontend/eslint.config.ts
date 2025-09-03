@@ -20,7 +20,7 @@ export default typescript.config(
     extends: [javascript.configs.recommended],
   },
   {
-    extends: [typescript.configs.recommendedTypeChecked],
+    extends: [typescript.configs.strictTypeChecked],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -32,8 +32,18 @@ export default typescript.config(
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-deprecated": "warn",
       "@typescript-eslint/no-import-type-side-effects": "error",
-      "@typescript-eslint/no-unnecessary-condition": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allowAny: false,
+          allowBoolean: false,
+          allowNever: false,
+          allowNullish: true,
+          allowNumber: true,
+          allowRegExp: false,
+        },
+      ],
     },
   },
   {
@@ -143,6 +153,7 @@ export default typescript.config(
     // Overrides for test files
     files: ["**/*.{spec,test}.{ts,tsx}"],
     rules: {
+      "@typescript-eslint/no-non-null-assertion": "warn",
       "@typescript-eslint/require-await": "warn",
     },
   },

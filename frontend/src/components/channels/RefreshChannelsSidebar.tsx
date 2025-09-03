@@ -15,7 +15,7 @@ const RefreshChannelsSidebar = (props: { show: boolean; onHide: () => void }) =>
   const { isSuccess, data } = useListChannelsQuery();
 
   const channels = isSuccess ? selectAllChannels(data) : [];
-  const completed = filter(responses, (response) => terminalStatuses.includes(response!)).length;
+  const completed = filter(responses, (response) => terminalStatuses.includes(response ?? "ready")).length;
 
   return (
     <Offcanvas show={props.show} onHide={props.onHide} placement={"end"}>

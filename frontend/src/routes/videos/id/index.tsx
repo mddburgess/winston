@@ -19,14 +19,14 @@ import { NoCommentsJumbotron } from "./NoCommentsJumbotron";
 import { VideoDetails } from "./VideoDetails";
 
 export const VideoDetailsRoute = () => {
-  const { videoId } = useParams();
+  const { videoId = "" } = useParams();
 
   const [search, setSearch] = useState("");
 
-  const { data: video } = useGetVideoQuery({ id: videoId! });
+  const { data: video } = useGetVideoQuery({ id: videoId });
 
   const { isSuccess, data: comments } = useListCommentsQuery({
-    id: videoId!,
+    id: videoId,
   });
   const commentsList = useMemo(() => {
     return isSuccess ? selectAllTopLevelComments(comments) : [];

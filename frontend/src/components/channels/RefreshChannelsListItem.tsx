@@ -2,6 +2,7 @@ import { Col, ListGroupItem, Row, Spinner } from "react-bootstrap";
 import { CheckCircleFill, ExclamationDiamondFill, XOctagonFill } from "react-bootstrap-icons";
 import type { Channel, Problem } from "#/api";
 import type { PullOperationStatus } from "#/types";
+import type { ReactNode } from "react";
 
 const RefreshChannelsListItem = (props: {
   index: number;
@@ -26,7 +27,7 @@ const RefreshChannelsListItem = (props: {
   </ListGroupItem>
 );
 
-const statuses = {
+const statuses: Record<PullOperationStatus, { icon: ReactNode; className: string }> = {
   ready: {
     icon: <></>,
     className: "",

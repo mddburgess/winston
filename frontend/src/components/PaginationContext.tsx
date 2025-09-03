@@ -30,7 +30,9 @@ export const PaginationContext = <T,>({ pageSize, items, children }: PaginationC
 
   return children({
     pageNumber,
-    setPageNumber: (nextPageNumber) => setSearchParams({ p: `${nextPageNumber}` }),
+    setPageNumber: (nextPageNumber) => {
+      setSearchParams({ p: `${nextPageNumber}` });
+    },
     pageSize,
     pageCount: Math.ceil(items.length / pageSize),
     pageItems,

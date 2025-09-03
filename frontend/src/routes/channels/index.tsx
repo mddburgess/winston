@@ -20,10 +20,22 @@ const ChannelListRoute = () => {
   const [showPullChannel, setShowPullChannel] = useState(false);
   const [showRefreshChannels, setShowRefreshChannels] = useState(false);
 
-  const handleRefreshChannels = () => {
+  const handleShowPullChannel = () => {
+    setShowPullChannel(true);
+  };
+
+  const handleHidePullChannel = () => {
+    setShowPullChannel(false);
+  };
+
+  const handleShowRefreshChannels = () => {
     setShowRefreshChannels(true);
     dispatch(pullChannelReset());
     dispatch(pullChannelRequested(map(channels, "handle")));
+  };
+
+  const handleHideRefreshChannels = () => {
+    setShowRefreshChannels(false);
   };
 
   return (
@@ -35,8 +47,8 @@ const ChannelListRoute = () => {
         <Col xs={"auto"} className={"flex-center"}>
           <PullChannelActions
             channels={channels}
-            onPullChannel={() => setShowPullChannel(true)}
-            onRefreshChannels={handleRefreshChannels}
+            onPullChannel={handleShowPullChannel}
+            onRefreshChannels={handleShowRefreshChannels}
           />
         </Col>
       </Row>
@@ -54,8 +66,8 @@ const ChannelListRoute = () => {
           </>
         )}
       </PaginationContext>
-      <PullChannelModal show={showPullChannel} onHide={() => setShowPullChannel(false)} />
-      <RefreshChannelsSidebar show={showRefreshChannels} onHide={() => setShowRefreshChannels(false)} />
+      <PullChannelModal show={showPullChannel} onHide={handleHidePullChannel} />
+      <RefreshChannelsSidebar show={showRefreshChannels} onHide={handleHideRefreshChannels} />
       <PullChannelsRequest />
     </>
   );

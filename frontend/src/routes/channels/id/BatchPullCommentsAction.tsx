@@ -32,11 +32,11 @@ const BatchPullCommentsAction = ({ videos }: VideoListProps) => {
           commentsStatus: event.operation.status,
         }),
       );
-    } else if (event.operation.pull === "replies") {
-      setVideoId(event.operation.video_id!);
+    } else if (event.operation.pull === "replies" && event.operation.video_id) {
+      setVideoId(event.operation.video_id);
       dispatch(
         updatePullCommentsStatus({
-          videoId: event.operation.video_id!,
+          videoId: event.operation.video_id,
           repliesStatus: event.operation.status,
         }),
       );

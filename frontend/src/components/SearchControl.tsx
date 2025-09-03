@@ -26,7 +26,13 @@ export const SearchControl = ({ value, setValue }: SearchControlProps) => {
         </Button>
       )}
       {value && (
-        <Button variant={"danger"} className={"align-items-center d-flex"} onClick={() => setValue("")}>
+        <Button
+          variant={"danger"}
+          className={"align-items-center d-flex"}
+          onClick={() => {
+            setValue("");
+          }}
+        >
           <XCircleFill />
         </Button>
       )}

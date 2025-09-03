@@ -8,10 +8,10 @@ import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
 import type { GetAuthorResponse } from "#/api";
 
 const AuthorDetailsRoute = () => {
-  const { authorHandle } = useParams();
+  const { authorHandle = "" } = useParams();
 
   return (
-    <AuthorSummaryQuery authorHandle={authorHandle!}>
+    <AuthorSummaryQuery authorHandle={authorHandle}>
       {{
         isLoading: () => <div>Loading...</div>,
         isSuccess: (summary) => <AuthorDetailsContent summary={summary} />,
@@ -35,7 +35,12 @@ const AuthorDetailsContent = ({ summary }: AuthorDetailsContentProps) => {
         <BreadcrumbItem linkAs={Link} linkProps={{ to: routes.authors.list }}>
           Authors
         </BreadcrumbItem>
-        <BreadcrumbItem active={video === undefined} onClick={() => setSearchParams({})}>
+        <BreadcrumbItem
+          active={video === undefined}
+          onClick={() => {
+            setSearchParams({});
+          }}
+        >
           {summary.author.handle}
         </BreadcrumbItem>
         {video && <BreadcrumbItem active>{video.title}</BreadcrumbItem>}

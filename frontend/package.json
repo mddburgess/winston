@@ -14,7 +14,7 @@
     "test": "vitest --dom --coverage --no-watch"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.8.2",
+    "@reduxjs/toolkit": "^2.9.0",
     "bootstrap": "^5.3.8",
     "dompurify": "^3.2.6",
     "lodash": "^4.17.21",
