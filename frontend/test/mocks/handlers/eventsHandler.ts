@@ -32,7 +32,9 @@ const eventsHandler = (...events: AppEvent[]) => {
   });
 
   const postPull = http.post("/api/v1/pull", () => {
-    events.forEach((event) => streamController.enqueue(encodeEvent(event)));
+    events.forEach((event) => {
+      streamController.enqueue(encodeEvent(event));
+    });
     streamController.enqueue(encodeEvent(eventSubscriptionEvent(eventSubscriptionId, false)));
     streamController.close();
     return new HttpResponse(null, { status: 202 });

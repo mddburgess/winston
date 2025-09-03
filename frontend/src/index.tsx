@@ -7,8 +7,12 @@ import { setupStore } from "./store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
-const root = document.getElementById("root")!;
-createRoot(root).render(
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  throw new Error("Cannot render app because element with id 'root' is not in the document.");
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <Provider store={setupStore()}>
       <BrowserRouter>

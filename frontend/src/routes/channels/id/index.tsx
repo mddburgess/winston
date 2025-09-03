@@ -16,13 +16,13 @@ import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
-  const { handle } = useParams();
+  const { handle = "" } = useParams();
 
   const dispatch = useAppDispatch();
 
   const [search, setSearch] = useState("");
 
-  const { data: channel } = useGetChannelQuery({ handle: handle! });
+  const { data: channel } = useGetChannelQuery({ handle: handle });
   useEffect(() => {
     if (channel) {
       dispatch(initFetchStateForChannel(channel));
@@ -30,7 +30,7 @@ export const ChannelDetailsRoute = () => {
   }, [channel, dispatch]);
 
   const { data: videos, isSuccess } = useListVideosQuery({
-    handle: handle!,
+    handle: handle,
   });
 
   const videoList = useMemo(() => {

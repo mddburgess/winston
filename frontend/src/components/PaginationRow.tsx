@@ -45,7 +45,13 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
   const paginationItems: ReactElement[] = [];
   for (let page = firstPageNumber; page <= lastPageNumber; ++page) {
     paginationItems.push(
-      <Pagination.Item key={page} active={page === props.page} onClick={() => props.setPage(page)}>
+      <Pagination.Item
+        key={page}
+        active={page === props.page}
+        onClick={() => {
+          props.setPage(page);
+        }}
+      >
         {page}
       </Pagination.Item>,
     );
@@ -58,13 +64,33 @@ const MultiPagePaginationRow = (props: MultiPagePaginationRowProps) => {
       </Col>
       <Col xs={"auto"}>
         <Pagination className={"mb-0"}>
-          <Pagination.First disabled={props.page === 1} onClick={() => props.setPage(1)} />
-          <Pagination.Prev disabled={props.page === 1} onClick={() => props.setPage(props.page - 1)} />
+          <Pagination.First
+            disabled={props.page === 1}
+            onClick={() => {
+              props.setPage(1);
+            }}
+          />
+          <Pagination.Prev
+            disabled={props.page === 1}
+            onClick={() => {
+              props.setPage(props.page - 1);
+            }}
+          />
           {firstPageNumber > 1 && <Pagination.Ellipsis disabled />}
           {...paginationItems}
           {lastPageNumber < props.totalPages && <Pagination.Ellipsis disabled />}
-          <Pagination.Next disabled={props.page === props.totalPages} onClick={() => props.setPage(props.page + 1)} />
-          <Pagination.Last disabled={props.page === props.totalPages} onClick={() => props.setPage(props.totalPages)} />
+          <Pagination.Next
+            disabled={props.page === props.totalPages}
+            onClick={() => {
+              props.setPage(props.page + 1);
+            }}
+          />
+          <Pagination.Last
+            disabled={props.page === props.totalPages}
+            onClick={() => {
+              props.setPage(props.totalPages);
+            }}
+          />
         </Pagination>
       </Col>
     </>
