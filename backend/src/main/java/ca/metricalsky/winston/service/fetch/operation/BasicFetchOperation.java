@@ -18,7 +18,7 @@ public class BasicFetchOperation<T> implements FetchOperation<T> {
         }
     }
 
-    private static FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation) {
+    FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation) {
         return FetchActionEntity.builder()
                 .fetchOperationId(fetchOperation.getId())
                 .actionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()))
