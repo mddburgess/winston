@@ -2,6 +2,7 @@ package ca.metricalsky.winston.convert.events;
 
 import ca.metricalsky.winston.events.model.AppEvent;
 import ca.metricalsky.winston.events.model.PullChannelsEvent;
+import ca.metricalsky.winston.events.model.PullVideosEvent;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -19,6 +20,7 @@ public class FetchResultToAppEventConverter implements Converter<FetchResult, Ap
     public AppEvent convert(FetchResult source) {
         Class<? extends AppEvent> eventClass = switch (source.actionType()) {
             case CHANNELS -> PullChannelsEvent.class;
+            case VIDEOS -> PullVideosEvent.class;
             default -> throw new IllegalArgumentException(source.actionType() + " is not supported");
         };
         return conversionService.convert(source, eventClass);
