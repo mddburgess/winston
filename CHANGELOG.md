@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent pulling a channel that has already been pulled. (mddburgess/winston#91)
 - Prevent attempting to pull a channel that had an error on a previous attempt. (mddburgess/winston#91)
 - Pulling a channel no longer navigates to the channel page automatically on success. (mddburgess/winston#91)
+- Redesigned the pull videos action on the channel details page. (mddburgess/winston#98)
+- Use the playlist items API when pulling all videos for a channel. (mddburgess/winston#98)
 
 ### Fixed
 

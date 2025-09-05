@@ -70,9 +70,10 @@ public class YouTubeRequestEntity {
     private OffsetDateTime respondedAt;
 
     public enum RequestType {
-        CHANNELS,
         ACTIVITIES,
+        CHANNELS,
         COMMENTS,
+        PLAYLIST_ITEMS,
         REPLIES,
     }
 }

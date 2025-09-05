@@ -6,6 +6,7 @@ import ca.metricalsky.winston.mapper.entity.VideoEntityMapper;
 import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import com.google.api.services.youtube.model.ActivityListResponse;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,22 @@ public class VideoDataService {
                 .orElse(Collections.emptyList())
                 .stream()
                 .filter(activity -> activity.getContentDetails().getUpload() != null)
+                .map(videoEntityMapper::toVideoEntity)
+                .toList();
+
+        videoEntities = videoRepository.saveAll(videoEntities);
+
+        return videoEntities.stream()
+                .map(videoMapper::toVideo)
+                .toList();
+    }
+
+    public List<Video> saveVideos(PlaylistItemListResponse playlistItemListResponse) {
+        var videoEntities = Optional.ofNullable(playlistItemListResponse)
+                .map(PlaylistItemListResponse::getItems)
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(playlistItem -> playlistItem.getContentDetails().getVideoId() != null)
                 .map(videoEntityMapper::toVideoEntity)
                 .toList();
 

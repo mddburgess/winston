@@ -40,10 +40,15 @@ public class FetchVideosOperation extends BasicFetchOperation<Video> {
                     .orElse(null);
         }
 
+        var objectId = fetchOperation.getObjectId();
+        if (publishedAfter == null) {
+            objectId = channel.getUploadsPlaylistId();
+        }
+
         return FetchActionEntity.builder()
                 .fetchOperationId(fetchOperation.getId())
                 .actionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()))
-                .objectId(fetchOperation.getObjectId())
+                .objectId(objectId)
                 .publishedAfter(publishedAfter)
                 .publishedBefore(fetchOperation.getPublishedBefore())
                 .build();
