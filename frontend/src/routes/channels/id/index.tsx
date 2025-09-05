@@ -1,37 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router";
 import { ChannelDetailsJumbotron } from "#/components/channels/ChannelDetailsJumbotron";
+import { PullVideosRequest } from "#/components/events/PullVideosRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { BatchPullCommentsAlert } from "#/routes/channels/id/BatchPullCommentsAlert";
 import { BatchPullCommentsSidebar } from "#/routes/channels/id/BatchPullCommentsSidebar";
-import { useAppDispatch } from "#/store/hooks";
 import { useGetChannelQuery } from "#/store/slices/channels";
-import { initFetchStateForChannel } from "#/store/slices/fetches";
 import { selectAllVideos, useListVideosQuery } from "#/store/slices/videos";
 import { parseIntOrDefault } from "#/utils";
 import { routes } from "#/utils/links";
-import { FetchVideosAlert } from "./FetchVideosAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
   const { handle = "" } = useParams();
-
-  const dispatch = useAppDispatch();
+  const { data: channel } = useGetChannelQuery({ handle: handle });
+  const { data: videos, isSuccess } = useListVideosQuery({ handle: handle });
 
   const [search, setSearch] = useState("");
-
-  const { data: channel } = useGetChannelQuery({ handle: handle });
-  useEffect(() => {
-    if (channel) {
-      dispatch(initFetchStateForChannel(channel));
-    }
-  }, [channel, dispatch]);
-
-  const { data: videos, isSuccess } = useListVideosQuery({
-    handle: handle,
-  });
 
   const videoList = useMemo(() => {
     return isSuccess ? selectAllVideos(videos) : [];
@@ -60,7 +47,6 @@ export const ChannelDetailsRoute = () => {
         {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
       </Breadcrumb>
       {channel && <ChannelDetailsJumbotron channel={channel} />}
-      {channel && <FetchVideosAlert channel={channel} />}
       <BatchPullCommentsAlert videos={videosOnPage} />
       <PaginationContext pageSize={24} items={filteredVideoList}>
         {({ pageNumber, setPageNumber, pageSize, pageCount, pageItems, totalItemCount }) => (
@@ -88,6 +74,7 @@ export const ChannelDetailsRoute = () => {
         )}
       </PaginationContext>
       <BatchPullCommentsSidebar />
+      <PullVideosRequest />
     </>
   );
 };
