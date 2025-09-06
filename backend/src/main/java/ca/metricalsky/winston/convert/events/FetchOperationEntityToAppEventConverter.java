@@ -12,11 +12,11 @@ import org.springframework.core.convert.converter.Converter;
         componentModel = "spring",
         uses = ConversionServiceAdapter.class
 )
-public abstract class FetchOperationEntityToAppEventConverter
-        implements Converter<FetchOperationEntity, AppEvent> {
+public interface FetchOperationEntityToAppEventConverter
+        extends Converter<FetchOperationEntity, AppEvent> {
 
     @Override
     @Mapping(target = "operation", source = ".")
     @Mapping(target = "error", ignore = true)
-    public abstract PullOperationEvent convert(FetchOperationEntity source);
+    PullOperationEvent convert(FetchOperationEntity source);
 }
