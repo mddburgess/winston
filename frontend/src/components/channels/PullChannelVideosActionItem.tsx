@@ -18,7 +18,7 @@ const PullChannelVideosActionItem = ({ channel }: ChannelProps) => {
   const { responses, errors } = useAppSelector((state) => state.pullVideos);
 
   const status = responses[channel.handle]?.status ?? "ready";
-  const count = responses[channel.uploads_playlist_id ?? ""]?.count ?? 0;
+  const count = responses[channel.handle]?.count ?? 0;
   const error = errors[channel.handle];
 
   return (

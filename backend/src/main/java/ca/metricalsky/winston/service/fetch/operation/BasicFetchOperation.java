@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.domain.PullOperationContext;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
@@ -12,9 +13,13 @@ public class BasicFetchOperation<T> implements FetchOperation<T> {
 
     @Override
     public void fetch(FetchOperationEntity fetchOperation) {
-        var action = getFirstFetchAction(fetchOperation);
-        while (action != null) {
-            action = fetchActionHandler.fetch(action);
+        var operationContext = PullOperationContext.builder()
+                .operation(fetchOperation)
+                .nextAction(getFirstFetchAction(fetchOperation))
+                .build();
+
+        while (operationContext.hasNextAction()) {
+            fetchActionHandler.fetch(operationContext);
         }
     }
 

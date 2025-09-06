@@ -2,12 +2,9 @@ import { faker } from "@faker-js/faker";
 import type { Channel, Problem } from "#/api";
 import type {
   EventSubscriptionEvent,
-  PullChannelsEvent,
-  PullCommentsEvent,
   PullOperationEvent,
-  PullRepliesEvent,
   PullRequestEvent,
-  PullVideosEvent,
+  PullResultsEvent,
 } from "#/components/events/types";
 import type { PullOperationRead } from "#/types";
 
@@ -46,41 +43,16 @@ const pullOperationEvent = (options?: PullOperationEventOptions): PullOperationE
   error: options?.error,
 });
 
-const pullChannelsEvent = (channel?: Channel): PullChannelsEvent => ({
+const pullChannelsEvent = (channel?: Channel): PullResultsEvent<Channel> => ({
   event_id: faker.string.uuid(),
-  event_type: "pull-channels",
-  channel_handle: `@${faker.internet.username()}`,
-  channels: channel ? [channel] : [],
+  event_type: "pull-results",
+  operation: {
+    pull: "channel",
+    channel_handle: `@${faker.internet.username()}`,
+    status: "fetching",
+    id: faker.string.numeric(),
+  },
+  results: channel ? { count: 1, total_count: 1, items: [channel] } : { count: 0, total_count: 0, items: [] },
 });
 
-const pullVideosEvent = (): PullVideosEvent => ({
-  event_id: faker.string.uuid(),
-  event_type: "pull-videos",
-  channel_handle: `@${faker.internet.username()}`,
-  videos: [],
-});
-
-const pullCommentsEvent = (): PullCommentsEvent => ({
-  event_id: faker.string.uuid(),
-  event_type: "pull-comments",
-  video_id: faker.string.nanoid(),
-  comments: [],
-});
-
-const pullRepliesEvent = (): PullRepliesEvent => ({
-  event_id: faker.string.uuid(),
-  event_type: "pull-replies",
-  video_id: faker.string.nanoid(),
-  comment_id: faker.string.nanoid(),
-  replies: [],
-});
-
-export {
-  eventSubscriptionEvent,
-  pullChannelsEvent,
-  pullCommentsEvent,
-  pullOperationEvent,
-  pullRepliesEvent,
-  pullRequestEvent,
-  pullVideosEvent,
-};
+export { eventSubscriptionEvent, pullChannelsEvent, pullOperationEvent, pullRequestEvent };

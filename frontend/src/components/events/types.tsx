@@ -5,10 +5,7 @@ type AppEvent =
   | EventSubscriptionEvent
   | PullRequestEvent
   | PullOperationEvent
-  | PullChannelsEvent
-  | PullVideosEvent
-  | PullCommentsEvent
-  | PullRepliesEvent;
+  | PullResultsEvent<Channel | Video | TopLevelComment | Comment>;
 
 type EventSubscriptionEvent = {
   event_id: string;
@@ -32,42 +29,15 @@ type PullOperationEvent = {
   error?: Problem;
 };
 
-type PullChannelsEvent = {
+type PullResultsEvent<T> = {
   event_id: string;
-  event_type: "pull-channels";
-  channel_handle: Channel["handle"];
-  channels: Channel[];
+  event_type: "pull-results";
+  operation: PullOperationRead;
+  results: {
+    count: number;
+    total_count: number;
+    items: T[];
+  };
 };
 
-type PullVideosEvent = {
-  event_id: string;
-  event_type: "pull-videos";
-  channel_handle: Channel["handle"];
-  videos: Video[];
-};
-
-type PullCommentsEvent = {
-  event_id: string;
-  event_type: "pull-comments";
-  video_id: Video["id"];
-  comments: TopLevelComment[];
-};
-
-type PullRepliesEvent = {
-  event_id: string;
-  event_type: "pull-replies";
-  video_id: Video["id"];
-  comment_id: TopLevelComment["id"];
-  replies: Comment[];
-};
-
-export type {
-  AppEvent,
-  EventSubscriptionEvent,
-  PullChannelsEvent,
-  PullCommentsEvent,
-  PullOperationEvent,
-  PullRepliesEvent,
-  PullRequestEvent,
-  PullVideosEvent,
-};
+export type { AppEvent, EventSubscriptionEvent, PullOperationEvent, PullRequestEvent, PullResultsEvent };

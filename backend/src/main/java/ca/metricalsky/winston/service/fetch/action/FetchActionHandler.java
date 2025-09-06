@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.service.fetch.action;
 
+import ca.metricalsky.winston.domain.PullOperationContext;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.events.PublisherException;
-import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +15,17 @@ public class FetchActionHandler<T> {
     private final FetchActionService fetchActionService;
     private final FetchAction<T> delegate;
 
-    public FetchActionEntity fetch(FetchActionEntity fetchAction) {
-        FetchActionEntity nextFetchAction = null;
+    public void fetch(PullOperationContext operationContext) {
         try {
-            var fetchResult = fetchInternal(fetchAction);
-            nextFetchAction = fetchResult.nextFetchAction();
-            eventPublisher.publishEvent(fetchResult);
-            return nextFetchAction;
+            var fetchResult = fetchInternal(operationContext.getNextAction());
+            operationContext.setResults(fetchResult.items());
+            operationContext.setNextAction(fetchResult.nextFetchAction());
+            eventPublisher.publishEvent(operationContext);
         } catch (PublisherException ex) {
-            if (nextFetchAction == null) {
-                return null;
+            if (operationContext.getNextAction() == null) {
+                return;
             }
-            fetchActionService.actionReady(nextFetchAction);
+            fetchActionService.actionReady(operationContext.getNextAction());
             throw ex;
         }
     }

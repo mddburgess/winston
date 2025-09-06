@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateVideos } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullVideosActive, pullVideosError, pullVideosResponse } from "#/store/slices/pullVideos";
-import type { PullOperationEvent, PullVideosEvent } from "#/components/events/types";
+import type { Video } from "#/api";
+import type { PullOperationEvent, PullResultsEvent } from "#/components/events/types";
 
 const PullVideosRequest = () => {
   const dispatch = useAppDispatch();
@@ -37,15 +38,17 @@ const PullVideosRequest = () => {
     }
   };
 
-  const handlePullVideosEvent = (event: PullVideosEvent) => {
-    dispatch(invalidateFetchLimits());
-    dispatch(
-      pullVideosResponse({
-        channelHandle: event.channel_handle,
-        status: "fetching",
-        count: event.videos.length,
-      }),
-    );
+  const handlePullResultsEvent = (event: PullResultsEvent<Video>) => {
+    if (event.operation.pull === "videos") {
+      dispatch(invalidateFetchLimits());
+      dispatch(
+        pullVideosResponse({
+          channelHandle: event.operation.channel_handle,
+          status: event.operation.status,
+          count: event.results.count,
+        }),
+      );
+    }
   };
 
   const handleUnsubscribed = () => {
@@ -57,7 +60,7 @@ const PullVideosRequest = () => {
       <PullEventsSource
         whenSubscribed={requestPullVideos}
         onPullOperationEvent={handlePullOperationEvent}
-        onPullVideosEvent={handlePullVideosEvent}
+        onPullResultsEvent={handlePullResultsEvent}
         whenUnsubscribed={handleUnsubscribed}
       ></PullEventsSource>
     )
