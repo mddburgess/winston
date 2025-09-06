@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class FetchVideosActionTest {
 
     @InjectMocks
-    private FetchVideosAction fetchVideosAction;
+    private FetchVideosFromActivitiesAction fetchVideosAction;
 
     @Mock
     private FetchActionService fetchActionService;

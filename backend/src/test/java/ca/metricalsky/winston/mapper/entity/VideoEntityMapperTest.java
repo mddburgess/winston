@@ -38,7 +38,7 @@ public class VideoEntityMapperTest {
 
     @Test
     void toVideoEntity_nullActivity() {
-        var videoEntity = videoEntityMapper.toVideoEntity(null);
+        var videoEntity = videoEntityMapper.toVideoEntity((Activity) null);
 
         assertThat(videoEntity)
                 .isNull();

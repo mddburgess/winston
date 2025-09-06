@@ -50,3 +50,5 @@ properties:
     description: The timestamp of the most recent time that the channel data was fetched.
     type: string
     format: date-time
+  uploads_playlist_id:
+    type: string

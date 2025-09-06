@@ -16,7 +16,7 @@ const ChannelStatistics = ({ channel, showPulledVideos = false }: ChannelStatist
   const videoCountLabel =
     showPulledVideos && pulledVideos < totalVideos
       ? `${pulledVideos} / ${channel.statistics.video_count}`
-      : channel.statistics.video_count;
+      : Math.max(pulledVideos, channel.statistics.video_count);
 
   return (
     <Row className={"flex-center"}>

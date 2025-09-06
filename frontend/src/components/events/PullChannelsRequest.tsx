@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { invalidateChannels } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullChannelActive, pullChannelError, pullChannelResponse } from "#/store/slices/pullChannels";
-import type { PullChannelsEvent, PullOperationEvent } from "#/components/events/types";
+import type { Channel } from "#/api";
+import type { PullOperationEvent, PullResultsEvent } from "#/components/events/types";
 import type { PullOperation } from "#/types";
 
 const PullChannelsRequest = () => {
@@ -28,9 +29,9 @@ const PullChannelsRequest = () => {
     }
   };
 
-  const handlePullChannelsEvent = (event: PullChannelsEvent) => {
+  const handlePullResultsEvent = (event: PullResultsEvent<Channel>) => {
     dispatch(invalidateFetchLimits());
-    if (event.channels.length > 0) {
+    if (event.results.count > 0) {
       dispatch(invalidateChannels());
     }
   };
@@ -44,7 +45,7 @@ const PullChannelsRequest = () => {
       <PullEventsSource
         whenSubscribed={requestPullChannel}
         onPullOperationEvent={handlePullOperationEvent}
-        onPullChannelsEvent={handlePullChannelsEvent}
+        onPullResultsEvent={handlePullResultsEvent}
         whenUnsubscribed={handleUnsubscribed}
       />
     )

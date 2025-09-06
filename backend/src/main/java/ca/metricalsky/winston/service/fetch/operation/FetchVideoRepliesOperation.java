@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.api.model.Comment;
+import ca.metricalsky.winston.domain.PullOperationContext;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.repository.CommentRepository;
@@ -21,9 +22,13 @@ public class FetchVideoRepliesOperation implements FetchOperation<Comment> {
     public void fetch(FetchOperationEntity fetchOperation) {
         var videoId = fetchOperation.getObjectId();
         for (var commentId : commentRepository.findIdsMissingRepliesByVideoId(videoId)) {
-            var action = getFirstFetchAction(fetchOperation, commentId);
-            while (action != null) {
-                action = fetchRepliesActionHandler.fetch(action);
+            var operationContext = PullOperationContext.builder()
+                    .operation(fetchOperation)
+                    .nextAction(getFirstFetchAction(fetchOperation, commentId))
+                    .build();
+
+            while (operationContext.hasNextAction()) {
+                fetchRepliesActionHandler.fetch(operationContext);
             }
         }
     }

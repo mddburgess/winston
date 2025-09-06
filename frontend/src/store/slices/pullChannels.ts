@@ -5,14 +5,14 @@ import type { PullOperationStatus } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { Dictionary } from "lodash";
 
-type PullChannelState = {
+type PullChannelsState = {
   active: boolean;
   requested: string[];
   responses: Partial<Dictionary<PullOperationStatus>>;
   errors: Partial<Dictionary<Problem>>;
 };
 
-const initialState: PullChannelState = {
+const initialState: PullChannelsState = {
   active: false,
   requested: [],
   responses: {},

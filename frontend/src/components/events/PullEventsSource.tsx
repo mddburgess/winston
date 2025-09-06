@@ -3,41 +3,32 @@ import { useEffect } from "react";
 import { EventSourceProvider, useEventSource, useEventSourceListener } from "react-sse-hooks";
 import type {
   EventSubscriptionEvent,
-  PullChannelsEvent,
-  PullCommentsEvent,
   PullOperationEvent,
-  PullRepliesEvent,
   PullRequestEvent,
-  PullVideosEvent,
+  PullResultsEvent,
 } from "#/components/events/types";
 
-type PullEventsSourceProps = {
+type PullEventsSourceProps<T> = {
   whenSubscribed?: (subscriptionId: string) => void;
   onPullRequestEvent?: (pullRequestEvent: PullRequestEvent) => void;
   onPullOperationEvent?: (pullOperationEvent: PullOperationEvent) => void;
-  onPullChannelsEvent?: (pullChannelsEvent: PullChannelsEvent) => void;
-  onPullVideosEvent?: (pullVideosEvent: PullVideosEvent) => void;
-  onPullCommentsEvent?: (pullCommentsEvent: PullCommentsEvent) => void;
-  onPullRepliesEvent?: (pullRepliesEvent: PullRepliesEvent) => void;
+  onPullResultsEvent?: (pullResultsEvent: PullResultsEvent<T>) => void;
   whenUnsubscribed?: () => void;
 };
 
-const PullEventsSource = (props: PullEventsSourceProps) => (
+const PullEventsSource = <T,>(props: PullEventsSourceProps<T>) => (
   <EventSourceProvider eventSource={EventSource}>
     <PullEventsSourceInternal {...props} />
   </EventSourceProvider>
 );
 
-const PullEventsSourceInternal = ({
+const PullEventsSourceInternal = <T,>({
   whenSubscribed = () => {},
   onPullRequestEvent = () => {},
   onPullOperationEvent = () => {},
-  onPullChannelsEvent = () => {},
-  onPullVideosEvent = () => {},
-  onPullCommentsEvent = () => {},
-  onPullRepliesEvent = () => {},
+  onPullResultsEvent = () => {},
   whenUnsubscribed = () => {},
-}: PullEventsSourceProps) => {
+}: PullEventsSourceProps<T>) => {
   const eventSource = useEventSource({ source: `/api/v1/notifications` });
 
   useEffect(() => {
@@ -89,21 +80,9 @@ const PullEventsSourceInternal = ({
     eventSource,
     onPullOperationEvent,
   ]);
-  useEventSourceListener<PullChannelsEvent>(handleEvent("pull-channels", onPullChannelsEvent), [
+  useEventSourceListener<PullResultsEvent<T>>(handleEvent("pull-results", onPullResultsEvent), [
     eventSource,
-    onPullChannelsEvent,
-  ]);
-  useEventSourceListener<PullVideosEvent>(handleEvent("pull-videos", onPullVideosEvent), [
-    eventSource,
-    onPullVideosEvent,
-  ]);
-  useEventSourceListener<PullCommentsEvent>(handleEvent("pull-comments", onPullCommentsEvent), [
-    eventSource,
-    onPullCommentsEvent,
-  ]);
-  useEventSourceListener<PullRepliesEvent>(handleEvent("pull-replies", onPullRepliesEvent), [
-    eventSource,
-    onPullRepliesEvent,
+    onPullResultsEvent,
   ]);
 
   return <></>;

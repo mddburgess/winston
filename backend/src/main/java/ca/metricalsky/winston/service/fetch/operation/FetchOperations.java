@@ -18,13 +18,6 @@ class FetchOperations {
     }
 
     @Bean
-    BasicFetchOperation<Video> fetchVideosOperation(
-            FetchActionHandler<Video> fetchVideoActionHandler
-    ) {
-        return new BasicFetchOperation<>(fetchVideoActionHandler);
-    }
-
-    @Bean
     BasicFetchOperation<Comment> fetchCommentRepliesOperation(
             FetchActionHandler<Comment> fetchRepliesActionHandler
     ) {
