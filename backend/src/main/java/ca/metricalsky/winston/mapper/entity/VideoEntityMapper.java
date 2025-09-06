@@ -15,6 +15,7 @@ public interface VideoEntityMapper {
     @Mapping(target = "description", source = "snippet.description")
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
+    @Mapping(target = "details", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "lastFetchedAt", ignore = true)
     VideoEntity toVideoEntity(Activity activity);
@@ -25,6 +26,7 @@ public interface VideoEntityMapper {
     @Mapping(target = "description", source = "snippet.description")
     @Mapping(target = "thumbnailUrl", source = "snippet.thumbnails.high.url")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
+    @Mapping(target = "details", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "lastFetchedAt", ignore = true)
     VideoEntity toVideoEntity(PlaylistItem playlistItem);
