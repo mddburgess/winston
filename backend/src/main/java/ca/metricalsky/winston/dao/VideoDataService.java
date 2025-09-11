@@ -1,14 +1,16 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Video;
+import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.VideoCountView;
 import ca.metricalsky.winston.mapper.entity.VideoEntityMapper;
 import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.repository.VideoRepository;
 import com.google.api.services.youtube.model.ActivityListResponse;
-import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.google.api.services.youtube.model.VideoListResponse;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class VideoDataService {
 
     private final VideoEntityMapper videoEntityMapper = Mappers.getMapper(VideoEntityMapper.class);
 
+    private final ConversionService conversionService;
     private final VideoMapper videoMapper;
     private final VideoRepository videoRepository;
 
@@ -76,13 +79,12 @@ public class VideoDataService {
                 .toList();
     }
 
-    public List<Video> saveVideos(PlaylistItemListResponse playlistItemListResponse) {
-        var videoEntities = Optional.ofNullable(playlistItemListResponse)
-                .map(PlaylistItemListResponse::getItems)
+    public List<Video> saveVideos(VideoListResponse videoListResponse) {
+        var videoEntities = Optional.ofNullable(videoListResponse)
+                .map(VideoListResponse::getItems)
                 .orElse(Collections.emptyList())
                 .stream()
-                .filter(playlistItem -> playlistItem.getContentDetails().getVideoId() != null)
-                .map(videoEntityMapper::toVideoEntity)
+                .map(video -> conversionService.convert(video, VideoEntity.class))
                 .toList();
 
         videoEntities = videoRepository.saveAll(videoEntities);

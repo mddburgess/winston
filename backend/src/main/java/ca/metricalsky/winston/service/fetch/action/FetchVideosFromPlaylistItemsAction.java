@@ -8,9 +8,14 @@ import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
+import com.google.api.services.youtube.model.PlaylistItem;
+import com.google.api.services.youtube.model.PlaylistItemContentDetails;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +34,20 @@ public class FetchVideosFromPlaylistItemsAction implements FetchAction<Video> {
         }
 
         var playlistItemsResponse = youTubeService.getPlaylistItems(fetchAction);
-        var videos = videoDataService.saveVideos(playlistItemsResponse);
         var nextFetchAction = getNextFetchAction(fetchAction, playlistItemsResponse);
+
+        var videoIds = Optional.ofNullable(playlistItemsResponse.getItems())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(PlaylistItem::getContentDetails)
+                .map(PlaylistItemContentDetails::getVideoId)
+                .toList();
+        if (videoIds.isEmpty()) {
+            return new FetchResult<>(fetchAction, Collections.emptyList(), nextFetchAction);
+        }
+
+        var videosResponse = youTubeService.getVideos(fetchAction.getId(), videoIds);
+        var videos = videoDataService.saveVideos(videosResponse);
 
         return new FetchResult<>(fetchAction, videos, nextFetchAction);
     }

@@ -1,0 +1,72 @@
+title: Video Details
+type: object
+properties:
+  visibility:
+    type: string
+    enum:
+      - public
+      - unlisted
+      - private
+  duration:
+    type: string
+    format: duration
+  category:
+    type: string
+  topics:
+    type: array
+    items:
+      type: string
+  tags:
+    type: array
+    items:
+      type: string
+  restrictions:
+    type: array
+    items:
+      type: object
+      properties:
+        restriction:
+          type: string
+          enum:
+            - allowed
+            - blocked
+        country:
+          type: string
+  content_ratings:
+    type: array
+    items:
+      type: object
+      properties:
+        authority:
+          type: string
+        rating:
+          type: string
+  made_for_kids:
+    type: boolean
+  contains_synthetic_media:
+    type: boolean
+  has_paid_product_placement:
+    type: boolean
+  recording_location:
+    type: object
+    properties:
+      description:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      altitude:
+        type: number
+  recorded_at:
+    type: string
+    format: date-time
+  live_streamed_at:
+    type: string
+    format: date-time
+  view_count:
+    type: integer
+  like_count:
+    type: integer
+  comment_count:
+    type: integer

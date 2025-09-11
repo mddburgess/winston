@@ -75,5 +75,6 @@ public class YouTubeRequestEntity {
         COMMENTS,
         PLAYLIST_ITEMS,
         REPLIES,
+        VIDEOS,
     }
 }

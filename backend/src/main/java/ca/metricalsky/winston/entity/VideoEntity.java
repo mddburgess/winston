@@ -50,7 +50,7 @@ public class VideoEntity {
     @Column(name = "last_fetched_at")
     private OffsetDateTime lastFetchedAt;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "id", referencedColumnName = "video_id")
     private VideoDetailsEntity details;
 

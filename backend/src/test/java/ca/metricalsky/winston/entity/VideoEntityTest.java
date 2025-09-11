@@ -52,7 +52,7 @@ class VideoEntityTest {
                 .hasFieldOrPropertyWithValue("title", videoEntity.getTitle())
                 .hasFieldOrPropertyWithValue("description", videoEntity.getDescription())
                 .hasFieldOrPropertyWithValue("thumbnailUrl", videoEntity.getThumbnailUrl())
-                .hasNoNullFieldsOrPropertiesExcept("comments");
+                .hasNoNullFieldsOrPropertiesExcept("comments", "details");
     }
 
     private ChannelEntity persistChannel() {

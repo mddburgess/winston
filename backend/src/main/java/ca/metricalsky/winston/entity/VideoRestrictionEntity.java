@@ -32,7 +32,7 @@ public class VideoRestrictionEntity {
     @Column(name = "country")
     private String country;
 
-    enum Restriction {
+    public enum Restriction {
         ALLOWED,
         BLOCKED,
     }

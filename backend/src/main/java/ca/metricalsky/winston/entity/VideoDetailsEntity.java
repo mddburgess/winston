@@ -62,11 +62,11 @@ public class VideoDetailsEntity {
     @Column(name = "tag")
     private Set<String> tags;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private List<VideoRestrictionEntity> restrictions;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private List<VideoContentRatingEntity> contentRatings;
 
@@ -79,7 +79,7 @@ public class VideoDetailsEntity {
     @Column(name = "has_paid_product_placement")
     private Boolean hasPaidProductPlacement;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private VideoRecordingLocationEntity recordingLocation;
 
@@ -98,7 +98,7 @@ public class VideoDetailsEntity {
     @Column(name = "comment_count")
     private Long commentCount;
 
-    enum Visibility {
+    public enum Visibility {
         PUBLIC,
         UNLISTED,
         PRIVATE
