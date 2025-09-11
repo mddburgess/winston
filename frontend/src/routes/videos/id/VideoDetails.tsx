@@ -1,8 +1,10 @@
 import { Col, Image, Ratio, Row } from "react-bootstrap";
+import { BadgeList } from "#/components/BadgeList";
 import { CommentCounts } from "#/components/comments/CommentCounts";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
 import { VideoChannelTitle } from "#/components/videos/VideoChannelTitle";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
+import { getTopicFromUrl } from "#/utils/getTopicFromUrl";
 import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
 import type { Video } from "#/api";
 
@@ -57,8 +59,18 @@ export const VideoDetails = ({ video, commentCount, replyCount, totalReplyCount 
             </Col>
           )}
         </Row>
-        <Row>
+        <Row className={"pb-2"}>
           <Col className={"small"}>{video.description}</Col>
+        </Row>
+        <Row>
+          <Col xs={12} className={"mb-3 mb-lg-0"}>
+            <h6>Topics</h6>
+            <BadgeList values={video.details?.topics ?? []} transformer={getTopicFromUrl} />
+          </Col>
+          <Col>
+            <h6>Tags</h6>
+            <BadgeList values={video.details?.tags ?? []} />
+          </Col>
         </Row>
       </Col>
     </Row>
