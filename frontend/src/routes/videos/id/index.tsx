@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router";
 import { CommentList } from "#/components/comments/CommentList";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
+import { VideoDetailsJumbotron } from "#/components/videos/VideoDetailsJumbotron";
 import {
   selectAllReplies,
   selectAllTopLevelComments,
@@ -16,7 +17,6 @@ import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
 import { FetchCommentsAlert } from "./FetchCommentsAlert";
 import { NoCommentsJumbotron } from "./NoCommentsJumbotron";
-import { VideoDetails } from "./VideoDetails";
 
 export const VideoDetailsRoute = () => {
   const { videoId = "" } = useParams();
@@ -73,7 +73,7 @@ export const VideoDetailsRoute = () => {
         )}
       </Breadcrumb>
       {video && (
-        <VideoDetails
+        <VideoDetailsJumbotron
           video={video}
           commentCount={commentsList.length}
           replyCount={replyCount}

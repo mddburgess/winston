@@ -1,21 +1,24 @@
-import { Col, Image, Ratio, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import { EyeFill, HeartFill } from "react-bootstrap-icons";
 import { BadgeList } from "#/components/BadgeList";
-import { CommentCounts } from "#/components/comments/CommentCounts";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
+import { IconLabel } from "#/components/IconLabel";
 import { VideoChannelTitle } from "#/components/videos/VideoChannelTitle";
+import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
+import { VideoThumbnail } from "#/components/videos/VideoThumbnail";
+import { FetchVideoRepliesButton } from "#/routes/videos/id/FetchVideoRepliesButton";
+import { formatInteger } from "#/utils/formatInteger";
 import { getTopicFromUrl } from "#/utils/getTopicFromUrl";
-import { FetchVideoRepliesButton } from "./FetchVideoRepliesButton";
-import type { Video } from "#/api";
+import type { VideoProps } from "#/types";
 
-type VideoDetailsProps = {
-  video: Video;
+type VideoDetailsProps = VideoProps & {
   commentCount: number;
   replyCount: number;
   totalReplyCount: number;
 };
 
-export const VideoDetails = ({ video, commentCount, replyCount, totalReplyCount }: VideoDetailsProps) => {
+const VideoDetailsJumbotron = ({ video, commentCount, replyCount, totalReplyCount }: VideoDetailsProps) => {
   const videoComments = video.comments ?? {
     comments_disabled: false,
     comment_count: 0,
@@ -34,9 +37,7 @@ export const VideoDetails = ({ video, commentCount, replyCount, totalReplyCount 
   return (
     <Row className={"bg-body-tertiary border mx-0 my-3 rounded-3"}>
       <Col xs={12} sm={3} className={"p-0"}>
-        <Ratio aspectRatio={"4x3"}>
-          <Image rounded src={video.thumbnail_url} />
-        </Ratio>
+        <VideoThumbnail video={video} />
       </Col>
       <Col xs={12} sm={9} className={"px-3 py-2"}>
         <Row>
@@ -52,7 +53,17 @@ export const VideoDetails = ({ video, commentCount, replyCount, totalReplyCount 
           <Col xs={"auto"}>
             <VideoPublishedAt video={video} />
           </Col>
-          <CommentCounts {...comments} />
+          {video.details && (
+            <>
+              <Col xs={"auto"}>
+                <IconLabel icon={EyeFill} label={formatInteger(video.details.view_count ?? 0)} />
+              </Col>
+              <Col xs={"auto"}>
+                <IconLabel icon={HeartFill} label={formatInteger(video.details.like_count ?? 0)} />
+              </Col>
+            </>
+          )}
+          <VideoCommentCounts video={video} />
           {videoComments.total_reply_count > videoComments.reply_count && (
             <Col xs={"auto"}>
               <FetchVideoRepliesButton video={video} />
@@ -65,14 +76,16 @@ export const VideoDetails = ({ video, commentCount, replyCount, totalReplyCount 
         <Row>
           <Col xs={12} className={"mb-3 mb-lg-0"}>
             <h6>Topics</h6>
-            <BadgeList values={video.details?.topics ?? []} transformer={getTopicFromUrl} />
+            <BadgeList values={video.details?.topics} transformer={getTopicFromUrl} />
           </Col>
           <Col>
             <h6>Tags</h6>
-            <BadgeList values={video.details?.tags ?? []} />
+            <BadgeList values={video.details?.tags} />
           </Col>
         </Row>
       </Col>
     </Row>
   );
 };
+
+export { VideoDetailsJumbotron };
