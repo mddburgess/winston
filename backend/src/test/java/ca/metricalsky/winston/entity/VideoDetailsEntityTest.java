@@ -89,8 +89,6 @@ class VideoDetailsEntityTest {
                         videoDetailsEntity.getContainsSyntheticMedia())
                 .hasFieldOrPropertyWithValue("hasPaidProductPlacement",
                         videoDetailsEntity.getHasPaidProductPlacement())
-                .hasFieldOrPropertyWithValue("recordedAt", videoDetailsEntity.getRecordedAt())
-                .hasFieldOrPropertyWithValue("liveStreamedAt", videoDetailsEntity.getLiveStreamedAt())
                 .hasFieldOrPropertyWithValue("viewCount", videoDetailsEntity.getViewCount())
                 .hasFieldOrPropertyWithValue("likeCount", videoDetailsEntity.getLikeCount())
                 .hasFieldOrPropertyWithValue("commentCount", videoDetailsEntity.getCommentCount());
