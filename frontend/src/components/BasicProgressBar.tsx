@@ -1,4 +1,4 @@
-import { round } from "lodash";
+import { floor, isNaN } from "lodash";
 import { ProgressBar } from "react-bootstrap";
 
 type BasicProgressBarProps = {
@@ -8,11 +8,11 @@ type BasicProgressBarProps = {
 
 const BasicProgressBar = ({ completed, total }: BasicProgressBarProps) => (
   <ProgressBar
-    animated={completed < total}
+    animated={isNaN(total) || completed < total}
     variant={completed === total ? "success" : "primary"}
-    now={completed}
-    max={total}
-    label={`${round((completed * 100) / total)}%`}
+    now={total > 0 ? completed : 1}
+    max={total > 0 ? total : 1}
+    label={total > 0 ? `${floor((completed * 100) / total, 2)}%` : completed}
   />
 );
 

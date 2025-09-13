@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
 import { CommentList } from "#/components/comments/CommentList";
+import { PullCommentsRequest } from "#/components/events/PullCommentsRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
+import { NoCommentsJumbotron } from "#/components/videos/NoCommentsJumbotron";
 import { VideoDetailsJumbotron } from "#/components/videos/VideoDetailsJumbotron";
 import {
   selectAllReplies,
@@ -15,8 +17,6 @@ import { useGetVideoQuery } from "#/store/slices/videos";
 import { sumBy } from "#/utils";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
-import { FetchCommentsAlert } from "./FetchCommentsAlert";
-import { NoCommentsJumbotron } from "./NoCommentsJumbotron";
 
 export const VideoDetailsRoute = () => {
   const { videoId = "" } = useParams();
@@ -81,7 +81,6 @@ export const VideoDetailsRoute = () => {
         />
       )}
       {video && !commentsDisabled && commentsList.length == 0 && <NoCommentsJumbotron video={video} />}
-      {video && <FetchCommentsAlert video={video} />}
       {commentsDisabled && <CommentsDisabledJumbotron />}
       {commentsList.length > 0 && (
         <PaginationContext pageSize={50} items={filteredComments}>
@@ -110,6 +109,7 @@ export const VideoDetailsRoute = () => {
           )}
         </PaginationContext>
       )}
+      <PullCommentsRequest />
     </>
   );
 };

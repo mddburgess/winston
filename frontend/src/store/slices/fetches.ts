@@ -1,19 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Channel } from "#/api";
-import type { AppEvent, FetchCommentsEvent, Maybe } from "#/types";
+import type { AppEvent, Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
-  comments: {
-    [id: string]: Maybe<FetchState>;
-  };
   replies: {
     [id: string]: Maybe<FetchState>;
   };
 };
 
 const initialState: FetchStates = {
-  comments: {},
   replies: {},
 };
 
@@ -34,22 +29,6 @@ export const fetchesSlice = createSlice({
   name: "fetches",
   initialState,
   reducers: {
-    requestedCommentsForVideoId: (state, action: PayloadAction<string>) => {
-      state.comments[action.payload] = {
-        id: action.payload,
-        status: "REQUESTED",
-        count: 0,
-      };
-    },
-    fetchedComments: (state, action: PayloadAction<FetchCommentsEvent>) => {
-      const event = action.payload;
-      const fetchState = state.comments[event.objectId];
-      state.comments[event.objectId] = {
-        id: event.objectId,
-        status: "FETCHING",
-        count: (fetchState?.count ?? 0) + event.items.length,
-      };
-    },
     requestedRepliesForId: (state, action: PayloadAction<string>) => {
       state.replies[action.payload] = {
         id: action.payload,
@@ -78,12 +57,6 @@ export const fetchesSlice = createSlice({
   },
 });
 
-export const {
-  requestedCommentsForVideoId,
-  fetchedComments,
-  requestedRepliesForId,
-  fetchedReplies,
-  updateFetchStatus,
-} = fetchesSlice.actions;
+export const { requestedRepliesForId, fetchedReplies, updateFetchStatus } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;
