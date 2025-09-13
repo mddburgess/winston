@@ -74,14 +74,18 @@ const VideoDetailsJumbotron = ({ video, commentCount, replyCount, totalReplyCoun
           <Col className={"small"}>{video.description}</Col>
         </Row>
         <Row>
-          <Col xs={12} className={"mb-3 mb-lg-0"}>
-            <h6>Topics</h6>
-            <BadgeList values={video.details?.topics} transformer={getTopicFromUrl} />
-          </Col>
-          <Col>
-            <h6>Tags</h6>
-            <BadgeList values={video.details?.tags} />
-          </Col>
+          {video.details?.topics && (
+            <Col xs={12} className={"mb-3 mb-lg-0"}>
+              <h6>Topics</h6>
+              <BadgeList values={video.details.topics} transformer={getTopicFromUrl} />
+            </Col>
+          )}
+          {video.details?.tags && (
+            <Col>
+              <h6>Tags</h6>
+              <BadgeList values={video.details.tags} />
+            </Col>
+          )}
         </Row>
       </Col>
     </Row>
