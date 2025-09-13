@@ -3,21 +3,15 @@ import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
 import { CommentList } from "#/components/comments/CommentList";
 import { PullCommentsRequest } from "#/components/events/PullCommentsRequest";
+import { PullRepliesRequest } from "#/components/events/PullRepliesRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
 import { NoCommentsJumbotron } from "#/components/videos/NoCommentsJumbotron";
 import { VideoDetailsJumbotron } from "#/components/videos/VideoDetailsJumbotron";
-import {
-  selectAllReplies,
-  selectAllTopLevelComments,
-  selectReplyCount,
-  useListCommentsQuery,
-} from "#/store/slices/comments";
+import { selectAllReplies, selectAllTopLevelComments, useListCommentsQuery } from "#/store/slices/comments";
 import { useGetVideoQuery } from "#/store/slices/videos";
-import { sumBy } from "#/utils";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
-import { PullRepliesRequest } from "#/components/events/PullRepliesRequest.tsx";
 
 export const VideoDetailsRoute = () => {
   const { videoId = "" } = useParams();
@@ -48,9 +42,6 @@ export const VideoDetailsRoute = () => {
     [commentsList, search],
   );
 
-  const replyCount = sumBy(commentsList, (comment) => selectReplyCount(comment.replies));
-  const totalReplyCount = sumBy(commentsList, (comment) => comment.total_reply_count);
-
   const commentsDisabled = useMemo(() => video?.comments?.comments_disabled, [video]);
 
   return (
@@ -73,14 +64,7 @@ export const VideoDetailsRoute = () => {
           </>
         )}
       </Breadcrumb>
-      {video && (
-        <VideoDetailsJumbotron
-          video={video}
-          commentCount={commentsList.length}
-          replyCount={replyCount}
-          totalReplyCount={totalReplyCount}
-        />
-      )}
+      {video && <VideoDetailsJumbotron video={video} />}
       {video && !commentsDisabled && commentsList.length == 0 && <NoCommentsJumbotron video={video} />}
       {commentsDisabled && <CommentsDisabledJumbotron />}
       {commentsList.length > 0 && (

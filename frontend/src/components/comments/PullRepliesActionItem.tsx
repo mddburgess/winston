@@ -17,7 +17,7 @@ const PullRepliesActionItem = (props: { commentId: string; totalReplyCount: numb
 
   const handleClick = () => {
     if (!active) {
-      dispatch(pullRepliesRequested(props.commentId));
+      dispatch(pullRepliesRequested({ commentId: props.commentId }));
     }
   };
 
