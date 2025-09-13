@@ -62,11 +62,11 @@ public class VideoDetailsEntity {
     @Column(name = "tag")
     private Set<String> tags;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private List<VideoRestrictionEntity> restrictions;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
     private List<VideoContentRatingEntity> contentRatings;
 

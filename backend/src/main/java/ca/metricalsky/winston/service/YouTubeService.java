@@ -114,15 +114,16 @@ public class YouTubeService {
     }
 
     public VideoListResponse getVideos(Long fetchActionId, List<String> videoIds) {
+        var distinctVideoIds = videoIds.stream().distinct().toList();
         var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
                 .fetchActionId(fetchActionId)
                 .requestType(YouTubeRequestEntity.RequestType.VIDEOS)
-                .objectId(String.join(",", videoIds))
+                .objectId(String.join(",", distinctVideoIds))
                 .requestedAt(OffsetDateTime.now())
                 .build());
 
         try {
-            var response = youTubeClient.getVideos(videoIds);
+            var response = youTubeClient.getVideos(distinctVideoIds);
 
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());
