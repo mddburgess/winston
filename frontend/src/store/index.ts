@@ -3,6 +3,7 @@ import { enhancedBackendApi } from "#/store/slices/backend";
 import fetches from "#/store/slices/fetches";
 import { pullChannelsReducer } from "#/store/slices/pullChannels";
 import { pullCommentsReducer } from "#/store/slices/pullComments";
+import { pullRepliesReducer } from "#/store/slices/pullReplies";
 import { pullVideoCommentsReducer } from "#/store/slices/pullVideoComments";
 import { pullVideosReducer } from "#/store/slices/pullVideos";
 import { selectionsReducer } from "#/store/slices/selections";
@@ -12,6 +13,7 @@ const reducer = combineReducers({
   fetches,
   pullChannels: pullChannelsReducer,
   pullComments: pullCommentsReducer,
+  pullReplies: pullRepliesReducer,
   pullVideos: pullVideosReducer,
   pullVideoComments: pullVideoCommentsReducer,
   selections: selectionsReducer,

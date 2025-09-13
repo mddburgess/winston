@@ -2,6 +2,7 @@ import { map } from "lodash";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { invalidateComments, invalidateVideos } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullCommentsActive, pullCommentsError, pullCommentsResponse } from "#/store/slices/pullComments";
 import type { PullOperationEvent, PullResultsEvent } from "#/components/events/types";
@@ -61,6 +62,8 @@ const PullCommentsRequest = () => {
 
   const handleUnsubscribed = () => {
     dispatch(pullCommentsActive(false));
+    dispatch(invalidateVideos());
+    dispatch(invalidateComments());
   };
 
   return (

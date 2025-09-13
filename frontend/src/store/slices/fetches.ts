@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { AppEvent, Maybe } from "#/types";
+import type { Maybe } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type FetchStates = {
@@ -36,15 +36,6 @@ export const fetchesSlice = createSlice({
         count: 0,
       };
     },
-    fetchedReplies: (state, action: PayloadAction<AppEvent>) => {
-      const event = action.payload;
-      const fetchState = state.replies[event.object_id];
-      state.replies[event.object_id] = {
-        id: event.object_id,
-        status: "FETCHING",
-        count: (fetchState?.count ?? 0) + (event.replies?.length ?? 0),
-      };
-    },
     updateFetchStatus: (state, action: PayloadAction<UpdateFetchStatus>) => {
       const event = action.payload;
       const fetchState = state[event.fetchType][event.objectId];
@@ -57,6 +48,6 @@ export const fetchesSlice = createSlice({
   },
 });
 
-export const { requestedRepliesForId, fetchedReplies, updateFetchStatus } = fetchesSlice.actions;
+export const { requestedRepliesForId, updateFetchStatus } = fetchesSlice.actions;
 
 export default fetchesSlice.reducer;

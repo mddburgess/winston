@@ -17,6 +17,7 @@ import { useGetVideoQuery } from "#/store/slices/videos";
 import { sumBy } from "#/utils";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
+import { PullRepliesRequest } from "#/components/events/PullRepliesRequest.tsx";
 
 export const VideoDetailsRoute = () => {
   const { videoId = "" } = useParams();
@@ -110,6 +111,7 @@ export const VideoDetailsRoute = () => {
         </PaginationContext>
       )}
       <PullCommentsRequest />
+      <PullRepliesRequest />
     </>
   );
 };
