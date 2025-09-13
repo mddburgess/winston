@@ -1,7 +1,6 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import type { Channel, ListChannelsResponse } from "#/api";
-import type { EntityState } from "@reduxjs/toolkit";
 
 const channelsApi = enhancedBackendApi.enhanceEndpoints({
   endpoints: {
@@ -20,10 +19,4 @@ const channelsAdapter = createEntityAdapter<Channel>({
 
 const { selectAll: selectAllChannels } = channelsAdapter.getSelectors();
 
-/** @deprecated */
-const appendChannels = (channels: Channel[]) =>
-  channelsApi.util.updateQueryData("listChannels", undefined, (draft: EntityState<Channel, string>) => {
-    channelsAdapter.setMany(draft, channels);
-  });
-
-export { appendChannels, selectAllChannels, useGetChannelQuery, useListChannelsQuery };
+export { selectAllChannels, useGetChannelQuery, useListChannelsQuery };
