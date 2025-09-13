@@ -1,6 +1,6 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
 import { Link } from "react-router";
-import { CommentCounts } from "#/components/comments/CommentCounts";
+import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
 import { VideoCardSelectionCheckbox } from "#/routes/channels/id/VideoCardSelectionCheckbox";
 import { routes } from "#/utils/links";
@@ -22,14 +22,7 @@ export const VideoCard = ({ video }: VideoProps) => (
       </Card.Body>
       <Card.Footer>
         <Row>
-          <CommentCounts
-            commentsDisabled={video.comments?.comments_disabled}
-            commentCount={video.comments?.comment_count}
-            replyCount={video.comments?.reply_count}
-            totalReplyCount={video.comments?.total_reply_count}
-            lastFetchedAt={video.comments?.last_fetched_at}
-            showTotalReplyCount={false}
-          />
+          <VideoCommentCounts video={video} showTotalReplyCount={false} />
         </Row>
       </Card.Footer>
       <Card.Footer>

@@ -37,15 +37,17 @@ describe(CommentCounts, () => {
   });
 
   describe("the reply count", () => {
-    it("is displayed when the comment count is greater than 0", () => {
-      const replies = render(<CommentCounts commentCount={1} />).getByTestId("replies");
+    it("is displayed when the last fetched at date is set", () => {
+      const replies = render(<CommentCounts commentCount={1} lastFetchedAt={DateTime.now().toISO()} />).getByTestId(
+        "replies",
+      );
 
       expect(replies).toBeInTheDocument();
       expect(replies).toHaveTextContent("0");
     });
 
-    it("is not displayed when the comment count is 0", () => {
-      const replies = render(<CommentCounts />).queryByTestId("replies");
+    it("is not displayed when the last fetched at date is undefined", () => {
+      const replies = render(<CommentCounts commentCount={1} />).queryByTestId("replies");
 
       expect(replies).not.toBeInTheDocument();
     });
@@ -53,9 +55,9 @@ describe(CommentCounts, () => {
 
   describe("the total reply count", () => {
     it("is displayed when it is greater than the reply count", () => {
-      const totalReplies = render(<CommentCounts commentCount={1} replyCount={2} totalReplyCount={3} />).getByTestId(
-        "totalReplies",
-      );
+      const totalReplies = render(
+        <CommentCounts commentCount={1} replyCount={2} totalReplyCount={3} lastFetchedAt={DateTime.now().toISO()} />,
+      ).getByTestId("totalReplies");
 
       expect(totalReplies).toBeInTheDocument();
       expect(totalReplies).toHaveClass("text-body-tertiary");
@@ -63,9 +65,9 @@ describe(CommentCounts, () => {
     });
 
     it("is not displayed when it is equal to the reply count", () => {
-      const totalReplies = render(<CommentCounts commentCount={1} replyCount={2} totalReplyCount={2} />).queryByTestId(
-        "totalReplies",
-      );
+      const totalReplies = render(
+        <CommentCounts commentCount={1} replyCount={2} totalReplyCount={2} lastFetchedAt={DateTime.now().toISO()} />,
+      ).queryByTestId("totalReplies");
 
       expect(totalReplies).not.toBeInTheDocument();
     });
@@ -89,16 +91,18 @@ describe(CommentCounts, () => {
 
   describe("the reply icon", () => {
     it("is unfilled when the reply count is less than the total reply count", () => {
-      const repliesIcon = render(<CommentCounts commentCount={1} replyCount={2} totalReplyCount={3} />).getByTestId(
-        "repliesIcon",
-      );
+      const repliesIcon = render(
+        <CommentCounts commentCount={1} replyCount={2} totalReplyCount={3} lastFetchedAt={DateTime.now().toISO()} />,
+      ).getByTestId("repliesIcon");
 
       expect(repliesIcon).toBeInTheDocument();
       expect(repliesIcon).toHaveClass("bi-chat-quote");
     });
 
     it("is filled when the reply count is equal to the total reply count", () => {
-      const result = render(<CommentCounts commentCount={1} replyCount={2} totalReplyCount={2} />);
+      const result = render(
+        <CommentCounts commentCount={1} replyCount={2} totalReplyCount={2} lastFetchedAt={DateTime.now().toISO()} />,
+      );
       const repliesIcon = result.getByTestId("repliesIcon");
 
       expect(repliesIcon).toBeInTheDocument();

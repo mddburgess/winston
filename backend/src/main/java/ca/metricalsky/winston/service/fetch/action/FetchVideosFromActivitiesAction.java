@@ -10,12 +10,17 @@ import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.Activity;
+import com.google.api.services.youtube.model.ActivityContentDetails;
+import com.google.api.services.youtube.model.ActivityContentDetailsUpload;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +40,22 @@ public class FetchVideosFromActivitiesAction implements FetchAction<Video> {
             fetchAction.setObjectId(channel.getId());
         }
         var activityListResponse = youTubeService.getActivities(fetchAction);
-        var videos = videoDataService.saveVideos(activityListResponse);
         var nextFetchAction = getNextFetchAction(fetchAction, activityListResponse);
+
+        var videoIds = Optional.ofNullable(activityListResponse.getItems())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(Activity::getContentDetails)
+                .map(ActivityContentDetails::getUpload)
+                .filter(Objects::nonNull)
+                .map(ActivityContentDetailsUpload::getVideoId)
+                .toList();
+        if (videoIds.isEmpty()) {
+            return new FetchResult<>(fetchAction, Collections.emptyList(), nextFetchAction);
+        }
+
+        var videosResponse = youTubeService.getVideos(fetchAction.getId(), videoIds);
+        var videos = videoDataService.saveVideos(videosResponse);
 
         return new FetchResult<>(fetchAction, videos, nextFetchAction);
     }

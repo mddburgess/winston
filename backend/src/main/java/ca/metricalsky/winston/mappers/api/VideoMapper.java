@@ -18,6 +18,7 @@ public abstract class VideoMapper {
     @Mapping(target = "description", source = "video.description")
     @Mapping(target = "channel.handle", source = "channel.customUrl")
     @Mapping(target = "thumbnailUrl", source = "video")
+    @Mapping(target = "details", source = "video.details")
     @Mapping(target = "comments", source = "video.comments")
     @Mapping(target = "publishedAt", source = "video.publishedAt")
     @Mapping(target = "lastFetchedAt", source = "video.lastFetchedAt")

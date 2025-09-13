@@ -1,5 +1,6 @@
 import { Col } from "react-bootstrap";
 import { Chat, ChatFill, ChatQuote, ChatQuoteFill } from "react-bootstrap-icons";
+import { formatInteger } from "#/utils/formatInteger";
 
 type CommentCountsProps = {
   commentsDisabled?: boolean;
@@ -28,7 +29,7 @@ const CommentCounts = ({
   return (
     <>
       <CommentsCol commentCount={commentCount} commentsDisabled={commentsDisabled} hasBeenFetched={hasBeenFetched} />
-      {commentCount + replyCount > 0 && (
+      {hasBeenFetched && !commentsDisabled && (
         <RepliesCol
           replyCount={replyCount}
           totalReplyCount={totalReplyCount}
@@ -48,7 +49,7 @@ const CommentsCol = ({ commentCount, commentsDisabled, hasBeenFetched }: Comment
       xs={"auto"}
     >
       <CommentsIcon className={"me-2"} data-testid={"commentsIcon"} />
-      {commentsDisabled ? "comments disabled" : commentCount}
+      {commentsDisabled ? "comments disabled" : formatInteger(commentCount)}
     </Col>
   );
 };
@@ -58,10 +59,10 @@ const RepliesCol = ({ replyCount, totalReplyCount, showTotalReplyCount }: Replie
   return (
     <Col className={"align-items-center d-flex"} data-testid={"replies"} xs={"auto"}>
       <RepliesIcon className={"me-2"} data-testid={"repliesIcon"} />
-      {replyCount}
+      {formatInteger(replyCount)}
       {showTotalReplyCount && replyCount < totalReplyCount && (
         <span className={"text-body-tertiary"} data-testid="totalReplies">
-          &nbsp;/ {totalReplyCount}
+          &nbsp;/ {formatInteger(totalReplyCount)}
         </span>
       )}
     </Col>

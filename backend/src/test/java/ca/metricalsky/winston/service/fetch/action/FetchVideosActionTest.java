@@ -48,10 +48,6 @@ class FetchVideosActionTest {
         when(youTubeService.getActivities(fetchAction))
                 .thenReturn(activityListResponse);
 
-        var video = new Video();
-        when(videoDataService.saveVideos(activityListResponse))
-                .thenReturn(List.of(video));
-
         var nextFetchAction = fetchVideosAction.fetch(fetchAction);
 
         assertThat(nextFetchAction)
