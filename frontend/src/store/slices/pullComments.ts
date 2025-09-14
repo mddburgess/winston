@@ -35,8 +35,14 @@ const pullComments = createSlice({
       state.active = payload;
     },
     pullCommentsRequested: (state, { payload }: PayloadAction<Video | Video[]>) => {
+      const requested = isArray(payload) ? payload : [payload];
+
       state.active = true;
-      state.requested = isArray(payload) ? payload : [payload];
+      state.requested = requested;
+      requested.forEach((video) => {
+        state.responses[video.id] = undefined;
+        state.errors[video.id] = undefined;
+      });
     },
     pullCommentsResponse: (state, { payload }: PayloadAction<{ videoId: string } & Partial<PullCommentsResponse>>) => {
       const currentCommentStatus = state.responses[payload.videoId]?.commentStatus;

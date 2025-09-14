@@ -1,12 +1,21 @@
+import { filter, map } from "lodash";
 import { Button, Col, Container, Offcanvas, Row } from "react-bootstrap";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { PullCommentsList } from "#/components/pull/PullCommentsList";
 import { useAppSelector } from "#/store/hooks";
+import { getPullCommentsStatus } from "#/store/slices/pullComments";
 import { pluralize } from "#/utils";
 
 const BatchPullCommentsSidebar = (props: { show: boolean; onHide: () => void }) => {
-  const { active, requested } = useAppSelector((state) => state.pullComments);
+  const { active, requested, responses } = useAppSelector((state) => state.pullComments);
+
+  const currentVideoIds = map(requested, "id");
+  const completedResponses = filter(responses, (response) => !!response).filter(
+    (response) =>
+      currentVideoIds.includes(response.videoId) &&
+      ["successful", "warning", "failed"].includes(getPullCommentsStatus(response)),
+  ).length;
 
   return (
     <Offcanvas show={props.show} placement={"end"}>
@@ -15,7 +24,7 @@ const BatchPullCommentsSidebar = (props: { show: boolean; onHide: () => void }) 
       </Offcanvas.Header>
       <Offcanvas.Body className={"bg-primary-subtle height-fit text-primary-emphasis"}>
         Pulling comments for <strong>{pluralize(requested.length, "video")}</strong>
-        <BasicProgressBar completed={0} total={requested.length} />
+        <BasicProgressBar completed={completedResponses} total={requested.length} />
       </Offcanvas.Body>
       <Offcanvas.Body className={"border-bottom border-top p-0"}>
         <Container className={"px-0"}>
