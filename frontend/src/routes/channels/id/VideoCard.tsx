@@ -1,42 +1,33 @@
 import { Card, Col, Ratio, Row } from "react-bootstrap";
 import { Link } from "react-router";
-import { CommentCounts } from "#/components/comments/CommentCounts";
+import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
 import { VideoCardSelectionCheckbox } from "#/routes/channels/id/VideoCardSelectionCheckbox";
 import { routes } from "#/utils/links";
 import type { VideoProps } from "#/types";
 
 export const VideoCard = ({ video }: VideoProps) => (
-    <Col className={"g-2"}>
-        <Card className={"h-100"}>
-            <VideoCardSelectionCheckbox video={video} />
-            <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
-                <Link to={routes.videos.details(video.id)}>
-                    <Card.Img variant={"top"} src={video.thumbnail_url} />
-                </Link>
-            </Ratio>
-            <Card.Body>
-                <Card.Subtitle>
-                    <Link to={routes.videos.details(video.id)}>
-                        {video.title}
-                    </Link>
-                </Card.Subtitle>
-            </Card.Body>
-            <Card.Footer>
-                <Row>
-                    <CommentCounts
-                        commentsDisabled={video.comments?.comments_disabled}
-                        commentCount={video.comments?.comment_count}
-                        replyCount={video.comments?.reply_count}
-                        totalReplyCount={video.comments?.total_reply_count}
-                        lastFetchedAt={video.comments?.last_fetched_at}
-                        showTotalReplyCount={false}
-                    />
-                </Row>
-            </Card.Footer>
-            <Card.Footer>
-                <VideoPublishedAt video={video} />
-            </Card.Footer>
-        </Card>
-    </Col>
+  <Col className={"g-2"}>
+    <Card className={"h-100"}>
+      <VideoCardSelectionCheckbox video={video} />
+      <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
+        <Link to={routes.videos.details(video.id)}>
+          <Card.Img variant={"top"} src={video.thumbnail_url} />
+        </Link>
+      </Ratio>
+      <Card.Body>
+        <Card.Subtitle>
+          <Link to={routes.videos.details(video.id)}>{video.title}</Link>
+        </Card.Subtitle>
+      </Card.Body>
+      <Card.Footer>
+        <Row>
+          <VideoCommentCounts video={video} showTotalReplyCount={false} />
+        </Row>
+      </Card.Footer>
+      <Card.Footer>
+        <VideoPublishedAt video={video} />
+      </Card.Footer>
+    </Card>
+  </Col>
 );

@@ -4,11 +4,11 @@ import { Header } from "./Header";
 import { AppRoutes } from "./routes";
 
 export const App = () => (
-    <>
-        <Container>
-            <Header />
-            <AppRoutes />
-        </Container>
-        <Footer />
-    </>
+  <>
+    <Container>
+      <Header />
+      <AppRoutes />
+    </Container>
+    <Footer />
+  </>
 );

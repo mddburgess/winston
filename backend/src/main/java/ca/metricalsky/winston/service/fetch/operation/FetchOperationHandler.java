@@ -1,13 +1,31 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.exception.FetchOperationException;
+import ca.metricalsky.winston.service.fetch.FetchOperationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 
-public interface FetchOperationHandler {
+@RequiredArgsConstructor
+public class FetchOperationHandler<T> {
 
-    void fetch(FetchOperationEntity fetchOperation, SsePublisher ssePublisher);
+    private final FetchOperationService fetchOperationService;
+    private final FetchOperation<T> delegate;
 
-    default void afterFetch(FetchOperationEntity fetchOperation) {
-        
+    public void fetch(
+            @NonNull FetchOperationEntity fetchOperationEntity
+    ) {
+        try {
+            fetchOperationEntity = fetchOperationService.startFetch(fetchOperationEntity);
+            delegate.fetch(fetchOperationEntity);
+            fetchOperationEntity = fetchOperationService.fetchSuccessful(fetchOperationEntity);
+        } catch (FetchOperationException ex) {
+            fetchOperationEntity = fetchOperationService.fetchWarning(fetchOperationEntity, ex.getCause());
+        } catch (RuntimeException ex) {
+            fetchOperationEntity = fetchOperationService.fetchFailed(fetchOperationEntity, ex);
+            throw ex;
+        } finally {
+            delegate.afterFetch(fetchOperationEntity);
+        }
     }
 }

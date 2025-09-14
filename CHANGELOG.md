@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] — 2025-09-14
+
+### Added
+
+- Show the available quota in the pull comments sidebar. (mddburgess/winston#80)
+- Save the comment like counts when pulling comment data. (mddburgess/winston#88)
+- Show the comment like counts in the UI. (mddburgess/winston#88)
+- Show error messages on the pull channel modal. (mddburgess/winston#91)
+- Show channel video, view, and subscriber counts on channel cards. (mddburgess/winston#91)
+- Add button on channel details page to refresh channel data. (mddburgess/winston#92)
+- Show channel statistics on channel details page. (mddburgess/winston#94)
+- Add button on channel list page to refresh all channel data. (mddburgess/winston#93)
+- Pull and store extended video data when pulling videos. (mddburgess/winston#99)
+- Show extended video data on the video details page. (mddburgess/winston#99)
+
+### Changed
+
+- Refresh the available quota in the UI during pull comment requests. (mddburgess/winston#80)
+- Highlight the available quota in yellow or red as it approaches zero. (mddburgess/winston#80)
+- Highlight failed pull comments operations in yellow or red. (mddburgess/winston#79)
+- Prevent pulling a channel that has already been pulled. (mddburgess/winston#91)
+- Prevent attempting to pull a channel that had an error on a previous attempt. (mddburgess/winston#91)
+- Pulling a channel no longer navigates to the channel page automatically on success. (mddburgess/winston#91)
+- Redesigned the pull videos action on the channel details page. (mddburgess/winston#98)
+- Use the playlist items API when pulling all videos for a channel. (mddburgess/winston#98)
+
+### Fixed
+
+- Execute pull operations in the order they appear in the pull request. (mddburgess/winston#83)
+- Starting a pull comments batch now clears any existing video selection. (mddburgess/winston#82)
+- Pull comments execution no longer stops on videos with comments disabled. (mddburgess/winston#79)
+- Pull comments execution no longer stops on private or deleted videos. (mddburgess/winston#79)
+
 ## [1.5.0] — 2025-08-20
 
 ### Added
@@ -130,6 +163,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache channel and video thumbnails.
 
 [Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.6.0]: https://github.com/mddburgess/winston/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/mddburgess/winston/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/mddburgess/winston/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/mddburgess/winston/compare/v1.2.1...v1.3.0

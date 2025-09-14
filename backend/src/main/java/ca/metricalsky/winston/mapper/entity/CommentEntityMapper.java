@@ -40,6 +40,7 @@ public abstract class CommentEntityMapper {
     @Mapping(target = "author", source = "snippet")
     @Mapping(target = "textDisplay", source = "snippet.textDisplay")
     @Mapping(target = "textOriginal", source = "snippet.textOriginal")
+    @Mapping(target = "likeCount", source = "snippet.likeCount")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "updatedAt", source = "snippet.updatedAt")
     @Mapping(target = "lastFetchedAt", ignore = true)

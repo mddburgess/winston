@@ -4,9 +4,9 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -30,9 +30,19 @@ public class ChannelService {
                 .toList();
     }
 
+    public Channel getChannelByHandle(String handle) {
+        var channel = channelDataService.findChannelByHandle(handle)
+                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+
+        var videoCount = videoDataService.countByChannelId(channel.getId());
+        channel.setVideoCount(videoCount);
+
+        return channel;
+    }
+
     public void requireChannelExists(String channelId) {
         if (!channelRepository.existsById(channelId)) {
-            throw new AppException(HttpStatus.NOT_FOUND, "The requested channel was not found.");
+            throw new AppException(ErrorCode.CHANNEL_NOT_FOUND);
         };
     }
 }

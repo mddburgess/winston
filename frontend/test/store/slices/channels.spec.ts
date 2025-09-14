@@ -1,0 +1,61 @@
+import { createEntityAdapter } from "@reduxjs/toolkit";
+import { waitFor } from "@testing-library/react";
+import { http, HttpResponse } from "msw";
+import { useListChannelsQuery } from "#/store/slices/channels";
+import { backend } from "=/mocks/backend";
+import { renderHookWithProviders } from "=/utils/render";
+import type { Channel } from "#/api";
+
+describe("channelsApi", () => {
+  const entityAdapter = createEntityAdapter<Channel>();
+
+  describe("listChannels", () => {
+    it("handles a 200 response with a list of channels", async () => {
+      const { result } = renderHookWithProviders(() => useListChannelsQuery());
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toBeDefined();
+
+      const data = result.current.data!;
+      const channels = entityAdapter.getSelectors().selectAll(data);
+
+      expect(channels).toStrictEqual([
+        {
+          id: "channel.1",
+          title: "channel.1.title",
+          description: "channel.1.description",
+          customUrl: "@channel1url",
+          thumbnailUrl: "/api/v1/channels/1/thumbnail",
+          topics: ["https://en.wikipedia.org/wiki/Topic"],
+          keywords: ["keyword"],
+          videoCount: 1,
+          publishedAt: "2025-01-01T00:00:00Z",
+          lastFetchedAt: "2025-01-02T00:00:00.000000Z",
+        },
+      ]);
+    });
+
+    it("handles a 200 response with an empty list", async () => {
+      backend.use(
+        http.get("/api/v1/channels", () => {
+          return HttpResponse.json({
+            channels: [],
+          });
+        }),
+      );
+      const { result } = renderHookWithProviders(() => useListChannelsQuery());
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toBeDefined();
+
+      const data = result.current.data!;
+      const channels = entityAdapter.getSelectors().selectAll(data);
+
+      expect(channels).toStrictEqual([]);
+    });
+  });
+});

@@ -2,49 +2,32 @@ import { backendApi } from "#/api";
 import type { Channel, Comment, Video } from "#/api";
 import type { TopLevelComment } from "#/types";
 import type { EntityState } from "@reduxjs/toolkit";
-import type {
-    DefinitionsFromApi,
-    OverrideResultType,
-    TagTypesFromApi,
-} from "@reduxjs/toolkit/query";
+import type { DefinitionsFromApi, OverrideResultType, TagTypesFromApi } from "@reduxjs/toolkit/query";
 
 type TagTypes = TagTypesFromApi<typeof backendApi>;
 type Definitions = DefinitionsFromApi<typeof backendApi>;
 
-type ListChannelsDefinition = OverrideResultType<
-    Definitions["listChannels"],
-    EntityState<Channel, string>
->;
+type ListChannelsDefinition = OverrideResultType<Definitions["listChannels"], EntityState<Channel, string>>;
 
-type ListVideosDefinition = OverrideResultType<
-    Definitions["listVideos"],
-    EntityState<Video, string>
->;
+type ListVideosDefinition = OverrideResultType<Definitions["listVideos"], EntityState<Video, string>>;
 
 type CommentState = Omit<TopLevelComment, "replies"> & {
-    replies: EntityState<Comment, string>;
+  replies: EntityState<Comment, string>;
 };
 
-type ListCommentsDefinition = OverrideResultType<
-    Definitions["listComments"],
-    EntityState<CommentState, string>
->;
+type ListCommentsDefinition = OverrideResultType<Definitions["listComments"], EntityState<CommentState, string>>;
 
-type UpdatedDefinitions = Omit<
-    Definitions,
-    "listChannels" | "listVideos" | "listComments"
-> & {
-    listChannels: ListChannelsDefinition;
-    listVideos: ListVideosDefinition;
-    listComments: ListCommentsDefinition;
+type UpdatedDefinitions = Omit<Definitions, "listChannels" | "listVideos" | "listComments"> & {
+  listChannels: ListChannelsDefinition;
+  listVideos: ListVideosDefinition;
+  listComments: ListCommentsDefinition;
 };
 
-const enhancedBackendApi = backendApi.enhanceEndpoints<
-    TagTypes,
-    UpdatedDefinitions
->({});
+const enhancedBackendApi = backendApi.enhanceEndpoints<TagTypes, UpdatedDefinitions>({});
 
+const invalidateChannels = () => backendApi.util.invalidateTags(["Channels"]);
+const invalidateComments = () => backendApi.util.invalidateTags(["Comments"]);
 const invalidateVideos = () => backendApi.util.invalidateTags(["Videos"]);
 
-export { enhancedBackendApi, invalidateVideos };
+export { enhancedBackendApi, invalidateChannels, invalidateComments, invalidateVideos };
 export type { CommentState };

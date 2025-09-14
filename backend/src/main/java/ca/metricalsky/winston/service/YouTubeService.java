@@ -9,6 +9,8 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.google.api.services.youtube.model.VideoListResponse;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -69,6 +71,59 @@ public class YouTubeService {
             var publishedBefore = youTubeRequest.getPublishedBefore();
 
             var response = youTubeClient.getActivities(channelId, publishedAfter, publishedBefore);
+
+            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
+            youTubeRequest.setItemCount(response.getItems().size());
+            return response;
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
+            throw ex;
+        } finally {
+            youTubeRequest.setRespondedAt(OffsetDateTime.now());
+            youTubeRequestRepository.save(youTubeRequest);
+        }
+    }
+
+    public PlaylistItemListResponse getPlaylistItems(FetchActionEntity fetchAction) {
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
+                .fetchActionId(fetchAction.getId())
+                .requestType(YouTubeRequestEntity.RequestType.PLAYLIST_ITEMS)
+                .objectId(fetchAction.getObjectId())
+                .pageToken(fetchAction.getPageToken())
+                .requestedAt(OffsetDateTime.now())
+                .build());
+
+        try {
+            var playlistId =  youTubeRequest.getObjectId();
+            var pageToken = youTubeRequest.getPageToken();
+
+            var response = youTubeClient.getPlaylistItems(playlistId, pageToken);
+
+            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
+            youTubeRequest.setItemCount(response.getItems().size());
+            return response;
+        } catch (YouTubeException ex) {
+            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
+            throw ex;
+        } finally {
+            youTubeRequest.setRespondedAt(OffsetDateTime.now());
+            youTubeRequestRepository.save(youTubeRequest);
+        }
+    }
+
+    public VideoListResponse getVideos(Long fetchActionId, List<String> videoIds) {
+        var distinctVideoIds = videoIds.stream().distinct().toList();
+        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
+                .fetchActionId(fetchActionId)
+                .requestType(YouTubeRequestEntity.RequestType.VIDEOS)
+                .objectId(String.join(",", distinctVideoIds))
+                .requestedAt(OffsetDateTime.now())
+                .build());
+
+        try {
+            var response = youTubeClient.getVideos(distinctVideoIds);
 
             youTubeRequest.setHttpStatus(HttpStatus.OK.value());
             youTubeRequest.setItemCount(response.getItems().size());

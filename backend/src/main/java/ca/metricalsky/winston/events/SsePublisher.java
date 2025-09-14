@@ -1,12 +1,12 @@
 package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.service.fetch.FetchResult;
+import ca.metricalsky.winston.events.model.AppEvent;
+import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
+import ca.metricalsky.winston.mappers.ProblemMapper;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -19,9 +19,6 @@ public class SsePublisher {
     private final UUID id;
     private final SseEmitter sseEmitter;
     private boolean open;
-
-    @Setter
-    private EventBuilder eventBuilder;
 
     public SsePublisher(Long timeout) {
         this(new SseEmitter(timeout));
@@ -38,42 +35,23 @@ public class SsePublisher {
     }
 
     public void complete() {
+        publish(new EventSubscriptionEvent(id, false));
         sseEmitter.complete();
     }
 
     public void completeWithError(Throwable ex) {
+        if (open) {
+            var problem = new ProblemMapper().convert(ex);
+            publish(new EventSubscriptionEvent(id, problem));
+        }
         sseEmitter.completeWithError(ex);
     }
 
-    public void publish(SubscriptionEvent subscriptionEvent) {
+    public void publish(AppEvent appEvent) {
         publish(SseEmitter.event()
-                .id(UUID.randomUUID().toString())
-                .data(subscriptionEvent, MediaType.APPLICATION_JSON));
-    }
-
-    public void publish(FetchResult fetchResult) {
-        publish(eventBuilder.buildEvent(fetchResult));
-    }
-
-    public void publish(Object fetchDataEvent) {
-        publish(SseEmitter.event()
-                .id(UUID.randomUUID().toString())
-                .name("fetch-data")
-                .data(fetchDataEvent, MediaType.APPLICATION_JSON));
-    }
-
-    public void publish(FetchStatusEvent fetchStatusEvent) {
-        publish(SseEmitter.event()
-                .id(UUID.randomUUID().toString())
-                .name("fetch-status")
-                .data(fetchStatusEvent, MediaType.APPLICATION_JSON));
-    }
-
-    public void publish(ProblemDetail error) {
-        publish(SseEmitter.event()
-                .id(UUID.randomUUID().toString())
-                .name("error")
-                .data(error, MediaType.APPLICATION_PROBLEM_JSON));
+                .id(appEvent.getEventId().toString())
+                .name(appEvent.getEventType())
+                .data(appEvent, MediaType.APPLICATION_JSON));
     }
 
     protected void publish(SseEmitter.SseEventBuilder builder) {

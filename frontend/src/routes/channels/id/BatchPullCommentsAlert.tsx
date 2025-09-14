@@ -1,40 +1,28 @@
-import { Alert, Button, Col } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "#/store/hooks";
-import { batchPullComments } from "#/store/slices/pulls";
+import { Alert, Col } from "react-bootstrap";
+import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { IconButton } from "#/components/IconButton";
+import { useAppSelector } from "#/store/hooks";
 import { pluralize } from "#/utils";
-import type { Video } from "#/api";
-import type { ChannelProps } from "#/types";
 
-type Props = ChannelProps & {
-    videosOnPage: Video[];
+type BatchPullCommentsAlertProps = {
+  onClick: () => void;
 };
 
-const BatchPullCommentsAlert = ({ channel, videosOnPage }: Props) => {
-    const videos = useAppSelector((state) => state.selections.videos);
-    const dispatch = useAppDispatch();
+const BatchPullCommentsAlert = ({ onClick }: BatchPullCommentsAlertProps) => {
+  const selectedVideos = useAppSelector((state) => state.selections.videos);
 
-    const handleClick = () => {
-        const videosToPull = videos.length > 0 ? videos : videosOnPage;
-        dispatch(
-            batchPullComments({ channelId: channel.id, videos: videosToPull }),
-        );
-    };
+  const label = selectedVideos.length > 0 ? "Pull comments for selected videos" : "Pull comments for videos on page";
 
-    const label =
-        videos.length > 0
-            ? "Fetch comments for selected videos"
-            : "Fetch comments for videos on page";
-
-    return (
-        <Alert className={"alert-primary align-items-center d-flex"}>
-            <Col>
-                <strong>{pluralize(videos.length, `video`)}</strong> selected.
-            </Col>
-            <Col xs={"auto"}>
-                <Button onClick={handleClick}>{label}</Button>
-            </Col>
-        </Alert>
-    );
+  return (
+    <Alert className={"alert-primary flex-center"}>
+      <Col>
+        <strong>{pluralize(selectedVideos.length, `video`)}</strong> selected.
+      </Col>
+      <Col xs={"auto"}>
+        <IconButton icon={ArrowDownRightCircleFill} label={label} onClick={onClick} />
+      </Col>
+    </Alert>
+  );
 };
 
 export { BatchPullCommentsAlert };

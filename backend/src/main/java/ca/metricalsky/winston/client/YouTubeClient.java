@@ -5,6 +5,8 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.google.api.services.youtube.model.VideoListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,15 @@ public class YouTubeClient {
 
     static final List<String> ACTIVITY_PARTS = List.of(
             "contentDetails", "id", "snippet"
+    );
+
+    static final List<String> PLAYLIST_ITEM_PARTS = List.of(
+            "contentDetails", "id", "snippet", "status"
+    );
+
+    static final List<String> VIDEO_PARTS = List.of(
+            "contentDetails", "id", "liveStreamingDetails", "localizations", "paidProductPlacementDetails",
+            "recordingDetails", "snippet", "statistics", "status", "topicDetails"
     );
 
     static final List<String> COMMENT_THREAD_PARTS = List.of(
@@ -77,6 +88,46 @@ public class YouTubeClient {
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
                     channelId, publishedAfter, publishedBefore, ex);
+            throw YouTubeException.wrap(ex);
+        }
+    }
+
+    public PlaylistItemListResponse getPlaylistItems(String playlistId, String pageToken) {
+        try {
+            log.info("Fetching playlist items for playlistId '{}' pageToken '{}'", playlistId, pageToken);
+
+            var response = youTube.playlistItems()
+                    .list(PLAYLIST_ITEM_PARTS)
+                    .setPlaylistId(playlistId)
+                    .setPageToken(pageToken)
+                    .setMaxResults(50L)
+                    .execute();
+
+            var playlistItemCount = firstNonNull(response.getItems(), List.of()).size();
+            log.info("Fetched {} playlist items for playlistId '{}' pageToken '{}'",
+                    playlistItemCount, playlistId, pageToken);
+            return response;
+        } catch (IOException | RuntimeException ex) {
+            log.error("Failed to fetch playlist items for playlistId '{}' pageToken '{}'", playlistId, pageToken, ex);
+            throw YouTubeException.wrap(ex);
+        }
+    }
+
+    public VideoListResponse getVideos(List<String> videoIds) {
+        try {
+            log.info("Fetching videos for videoIds {}", videoIds);
+
+            var response = youTube.videos()
+                    .list(VIDEO_PARTS)
+                    .setId(videoIds)
+                    .setMaxResults(50L)
+                    .execute();
+
+            var videoItemCount = firstNonNull(response.getItems(), List.of()).size();
+            log.info("Fetched {} videos for videoIds {}", videoItemCount, videoIds);
+            return response;
+        } catch (IOException | RuntimeException ex) {
+            log.error("Failed to fetch videos for videoIds {}", videoIds, ex);
             throw YouTubeException.wrap(ex);
         }
     }

@@ -1,4 +1,3 @@
-$schema: https://json-schema.org/draft/2020-12/schema
 title: Video
 description: A YouTube video.
 type: object
@@ -27,6 +26,8 @@ properties:
     description: A URL to a thumbnail image for the video.
     type: string
     format: uri-reference
+  details:
+    $ref: ./VideoDetails.yaml
   comments:
     $ref: ./VideoComments.yaml
   published_at:

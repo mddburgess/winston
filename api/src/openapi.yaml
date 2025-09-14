@@ -305,13 +305,26 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - event_subscription_id
+                - operations
               properties:
-                event_listener_id:
+                event_subscription_id:
                   type: string
                   format: uuid
                 operations:
                   $ref: "#/components/schemas/PullOperations"
-              additionalProperties: false
+                status:
+                  type: string
+                  readOnly: true
+                  enum:
+                    - accepted
+                    - fetching
+                    - paused
+                    - completed
+                id:
+                  type: string
+                  readOnly: true
             examples:
               Pull channel:
                 $ref: ./examples/pull/pullChannel.yaml
@@ -353,66 +366,7 @@ components:
     PullOperations:
       type: array
       items:
-        $ref: "#/components/schemas/PullOperation"
-    PullOperation:
-      type: object
-      properties:
-        pull:
-          type: string
-          enum:
-            - channel
-            - videos
-            - comments
-            - replies
-      discriminator:
-        propertyName: pull
-        mapping:
-          channel: "#/components/schemas/PullChannelOperation"
-          videos: "#/components/schemas/PullVideosOperation"
-          comments: "#/components/schemas/PullCommentsOperation"
-          replies: "#/components/schemas/PullRepliesOperation"
-    PullChannelOperation:
-      allOf:
-        - $ref: "#/components/schemas/PullOperation"
-        - type: object
-          required:
-            - channel_handle
-          properties:
-            channel_handle:
-              type: string
-    PullVideosOperation:
-      allOf:
-        - $ref: "#/components/schemas/PullOperation"
-        - type: object
-          required:
-            - channel_handle
-            - range
-          properties:
-            channel_handle:
-              type: string
-            range:
-              type: string
-              enum:
-                - all
-                - latest
-    PullCommentsOperation:
-      allOf:
-        - $ref: "#/components/schemas/PullOperation"
-        - type: object
-          required:
-            - video_id
-          properties:
-            video_id:
-              type: string
-    PullRepliesOperation:
-      allOf:
-        - $ref: "#/components/schemas/PullOperation"
-        - type: object
-          properties:
-            video_id:
-              type: string
-            comment_id:
-              type: string
+        $ref: ./schemas/pull/PullOperation.yaml
   parameters:
     authorHandle:
       name: handle

@@ -1,57 +1,73 @@
 .border-dashed {
-    --bs-border-width: 2px;
-    --bs-border-style: dashed;
+  --bs-border-width: 2px;
+  --bs-border-style: dashed;
 }
 
 .border-dashed * {
-    --bs-border-width: 1px;
+  --bs-border-width: 1px;
 }
 
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .flex-center {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .hover-bg-info-subtle:hover {
-    background-color: var(--bs-info-bg-subtle) !important;
+  background-color: var(--bs-info-bg-subtle) !important;
 }
 
 .line-clamp-1 {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .line-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .height-fit {
-    min-height: fit-content;
-    max-height: fit-content;
+  min-height: fit-content;
+  max-height: fit-content;
+}
+
+.spin {
+  animation-name: spin;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 .video-card-checkbox {
-    margin: 0.5rem 0.5rem -1.31rem auto;
-    position: relative;
-    z-index: 1;
-    zoom: 1.5;
+  margin: 0.5rem 0.5rem -1.31rem auto;
+  position: relative;
+  z-index: 1;
+  zoom: 1.5;
 }
 
 @media print {
-    footer {
-        display: none;
-    }
+  footer {
+    display: none;
+  }
 
-    .breadcrumb {
-        display: none;
-    }
+  .breadcrumb {
+    display: none;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

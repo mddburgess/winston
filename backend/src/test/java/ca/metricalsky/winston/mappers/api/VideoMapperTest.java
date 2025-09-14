@@ -33,7 +33,7 @@ class VideoMapperTest {
                         "/api/v1/videos/" + videoEntity.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("publishedAt", video.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", video.getLastFetchedAt())
-                .hasNoNullFieldsOrPropertiesExcept("channel");
+                .hasNoNullFieldsOrPropertiesExcept("channel", "details");
         assertThat(video.getComments())
                 .as("video comments")
                 .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())
@@ -80,7 +80,7 @@ class VideoMapperTest {
                         "/api/v1/videos/" + videoEntity.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("publishedAt", video.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", video.getLastFetchedAt())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("details");
         assertThat(video.getComments())
                 .as("video comments")
                 .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())

@@ -1,12 +1,11 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.config.exception.AppProblemDetail;
-import ca.metricalsky.winston.events.SubscriptionEvent;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
+import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -46,14 +45,13 @@ public class NotificationsService implements SmartLifecycle {
         subscriptions.put(subscriptionId, ssePublisher);
 
         log.info("Notifications subscription {} opened", subscriptionId);
-        ssePublisher.publish(new SubscriptionEvent(true, subscriptionId));
+        ssePublisher.publish(new EventSubscriptionEvent(subscriptionId, true));
         return ssePublisher;
     }
 
     public SsePublisher requireSubscription(UUID subscriptionId) {
         return Optional.ofNullable(subscriptions.get(subscriptionId))
-                .orElseThrow(() -> new AppException(HttpStatus.UNPROCESSABLE_ENTITY,
-                        "The provided subscription stream is not open."));
+                .orElseThrow(() -> new AppException(ErrorCode.SUBSCRIPTION_CLOSED));
     }
 
     @Override
@@ -64,11 +62,9 @@ public class NotificationsService implements SmartLifecycle {
     @Override
     public void stop() {
         if (!subscriptions.isEmpty()) {
-            var ex = new AppException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "The server is shutting down and is no longer available.");
+            var ex = new AppException(ErrorCode.SERVICE_SHUTDOWN);
             Map.copyOf(subscriptions).forEach((subscriptionId, ssePublisher) -> {
                 log.warn("Closing notifications subscription {}", subscriptionId);
-                ssePublisher.publish(AppProblemDetail.forException(ex));
                 ssePublisher.completeWithError(ex);
             });
         }

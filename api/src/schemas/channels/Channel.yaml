@@ -1,4 +1,3 @@
-$schema: https://json-schema.org/draft/2020-12/schema
 title: Channel
 description: A YouTube channel.
 type: object
@@ -6,6 +5,7 @@ required:
   - id
   - title
   - handle
+  - statistics
   - published_at
   - last_fetched_at
 properties:
@@ -25,6 +25,8 @@ properties:
     description: An URL to a thumbnail image for the channel.
     type: string
     format: uri-reference
+  statistics:
+    $ref: ./ChannelStatistics.yaml
   topics:
     description: A list of topics associated with the channel.
     type: array
@@ -48,3 +50,5 @@ properties:
     description: The timestamp of the most recent time that the channel data was fetched.
     type: string
     format: date-time
+  uploads_playlist_id:
+    type: string

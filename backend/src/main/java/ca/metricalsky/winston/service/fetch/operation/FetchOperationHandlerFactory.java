@@ -1,5 +1,9 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
+import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.api.model.Comment;
+import ca.metricalsky.winston.api.model.TopLevelComment;
+import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,11 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FetchOperationHandlerFactory {
 
-    private final FetchChannelsOperationHandler fetchChannelsOperationHandler;
-    private final FetchCommentRepliesOperationHandler fetchCommentRepliesOperationHandler;
-    private final FetchCommentsOperationHandler fetchCommentsOperationHandler;
-    private final FetchVideoRepliesOperationHandler fetchVideoRepliesOperationHandler;
-    private final FetchVideosOperationHandler fetchVideosOperationHandler;
+    private final FetchOperationHandler<Channel> fetchChannelsOperationHandler;
+    private final FetchOperationHandler<Video> fetchVideosOperationHandler;
+    private final FetchOperationHandler<TopLevelComment> fetchCommentsOperationHandler;
+    private final FetchOperationHandler<Comment> fetchCommentRepliesOperationHandler;
+    private final FetchOperationHandler<Comment> fetchVideoRepliesOperationHandler;
 
     public FetchOperationHandler getHandler(FetchOperationEntity fetchOperation) {
         return switch (fetchOperation.getOperationType()) {

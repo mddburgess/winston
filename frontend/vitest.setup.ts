@@ -1,16 +1,16 @@
 import "@testing-library/jest-dom";
-import { backend } from "./src/mocks/backend";
+import { backend } from "=/mocks/backend";
 
 beforeAll(() => {
-    backend.listen({
-        onUnhandledRequest: "error",
-    });
+  backend.listen({
+    onUnhandledRequest: "error",
+  });
 });
 
 afterEach(() => {
-    backend.resetHandlers();
+  backend.resetHandlers();
 });
 
 afterAll(() => {
-    backend.close();
+  backend.close();
 });
