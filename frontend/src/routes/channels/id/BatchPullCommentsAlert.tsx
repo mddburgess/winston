@@ -1,30 +1,25 @@
-import { Alert, Button, Col } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "#/store/hooks";
-import { requestPullComments } from "#/store/slices/pullVideoComments";
-import { clearVideoSelection } from "#/store/slices/selections";
+import { Alert, Col } from "react-bootstrap";
+import { ArrowDownRightCircleFill } from "react-bootstrap-icons";
+import { IconButton } from "#/components/IconButton";
+import { useAppSelector } from "#/store/hooks";
 import { pluralize } from "#/utils";
-import type { VideoListProps } from "#/types";
 
-const BatchPullCommentsAlert = ({ videos }: VideoListProps) => {
-  const dispatch = useAppDispatch();
+type BatchPullCommentsAlertProps = {
+  onClick: () => void;
+};
 
+const BatchPullCommentsAlert = ({ onClick }: BatchPullCommentsAlertProps) => {
   const selectedVideos = useAppSelector((state) => state.selections.videos);
 
-  const handleClick = () => {
-    const videosToPull = selectedVideos.length > 0 ? selectedVideos : videos;
-    dispatch(requestPullComments(videosToPull));
-    dispatch(clearVideoSelection());
-  };
-
-  const label = selectedVideos.length > 0 ? "Fetch comments for selected videos" : "Fetch comments for videos on page";
+  const label = selectedVideos.length > 0 ? "Pull comments for selected videos" : "Pull comments for videos on page";
 
   return (
-    <Alert className={"alert-primary align-items-center d-flex"}>
+    <Alert className={"alert-primary flex-center"}>
       <Col>
         <strong>{pluralize(selectedVideos.length, `video`)}</strong> selected.
       </Col>
       <Col xs={"auto"}>
-        <Button onClick={handleClick}>{label}</Button>
+        <IconButton icon={ArrowDownRightCircleFill} label={label} onClick={onClick} />
       </Col>
     </Alert>
   );

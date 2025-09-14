@@ -1,24 +1,32 @@
 import { useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router";
+import { BatchPullCommentsSidebar } from "#/components/channels/BatchPullCommentsSidebar";
 import { ChannelDetailsJumbotron } from "#/components/channels/ChannelDetailsJumbotron";
+import { PullCommentsRequest } from "#/components/events/PullCommentsRequest";
 import { PullVideosRequest } from "#/components/events/PullVideosRequest";
 import { PaginationContext } from "#/components/PaginationContext";
 import { PaginationRow } from "#/components/PaginationRow";
-import { BatchPullCommentsAlert } from "#/routes/channels/id/BatchPullCommentsAlert";
-import { BatchPullCommentsSidebar } from "#/routes/channels/id/BatchPullCommentsSidebar";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { useGetChannelQuery } from "#/store/slices/channels";
+import { pullCommentsRequested } from "#/store/slices/pullComments";
+import { clearVideoSelection } from "#/store/slices/selections";
 import { selectAllVideos, useListVideosQuery } from "#/store/slices/videos";
 import { parseIntOrDefault } from "#/utils";
 import { routes } from "#/utils/links";
+import { BatchPullCommentsAlert } from "./BatchPullCommentsAlert";
 import { VideoCards } from "./VideoCards";
 
 export const ChannelDetailsRoute = () => {
+  const dispatch = useAppDispatch();
+  const selectedVideos = useAppSelector((state) => state.selections.videos);
+
   const { handle = "" } = useParams();
   const { data: channel } = useGetChannelQuery({ handle: handle });
   const { data: videos, isSuccess } = useListVideosQuery({ handle: handle });
 
   const [search, setSearch] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const videoList = useMemo(() => {
     return isSuccess ? selectAllVideos(videos) : [];
@@ -38,6 +46,17 @@ export const ChannelDetailsRoute = () => {
     return filteredVideoList.slice(firstIndex, lastIndex);
   }, [pageSize, filteredVideoList, pageNumber]);
 
+  const startPullCommentsBatch = () => {
+    const videos = selectedVideos.length > 0 ? selectedVideos : videosOnPage;
+    dispatch(pullCommentsRequested(videos));
+    dispatch(clearVideoSelection());
+    setShowSidebar(true);
+  };
+
+  const handleHideSidebar = () => {
+    setShowSidebar(false);
+  };
+
   return (
     <>
       <Breadcrumb>
@@ -47,7 +66,7 @@ export const ChannelDetailsRoute = () => {
         {channel && <BreadcrumbItem active={true}>{channel.title}</BreadcrumbItem>}
       </Breadcrumb>
       {channel && <ChannelDetailsJumbotron channel={channel} />}
-      <BatchPullCommentsAlert videos={videosOnPage} />
+      <BatchPullCommentsAlert onClick={startPullCommentsBatch} />
       <PaginationContext pageSize={24} items={filteredVideoList}>
         {({ pageNumber, setPageNumber, pageSize, pageCount, pageItems, totalItemCount }) => (
           <>
@@ -73,8 +92,9 @@ export const ChannelDetailsRoute = () => {
           </>
         )}
       </PaginationContext>
-      <BatchPullCommentsSidebar />
+      <BatchPullCommentsSidebar show={showSidebar} onHide={handleHideSidebar} />
       <PullVideosRequest />
+      <PullCommentsRequest />
     </>
   );
 };

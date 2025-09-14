@@ -9,7 +9,7 @@ import { getTopicFromUrl } from "#/utils/getTopicFromUrl";
 import type { ChannelProps } from "#/types";
 
 const ChannelDetailsJumbotron = ({ channel }: ChannelProps) => (
-  <ListGroup className={"bg-body-tertiary my-3 rounded-3"}>
+  <ListGroup className={"my-3"}>
     <ListGroup.Item className={"bg-body-tertiary p-0"}>
       <Row className={"mx-0"}>
         <Col xs={"auto"} className={"py-2"}>

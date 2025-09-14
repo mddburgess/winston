@@ -26,7 +26,8 @@ type UpdatedDefinitions = Omit<Definitions, "listChannels" | "listVideos" | "lis
 const enhancedBackendApi = backendApi.enhanceEndpoints<TagTypes, UpdatedDefinitions>({});
 
 const invalidateChannels = () => backendApi.util.invalidateTags(["Channels"]);
+const invalidateComments = () => backendApi.util.invalidateTags(["Comments"]);
 const invalidateVideos = () => backendApi.util.invalidateTags(["Videos"]);
 
-export { enhancedBackendApi, invalidateChannels, invalidateVideos };
+export { enhancedBackendApi, invalidateChannels, invalidateComments, invalidateVideos };
 export type { CommentState };

@@ -1,17 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
-import fetches from "#/store/slices/fetches";
 import { pullChannelsReducer } from "#/store/slices/pullChannels";
-import { pullVideoCommentsReducer } from "#/store/slices/pullVideoComments";
+import { pullCommentsReducer } from "#/store/slices/pullComments";
+import { pullRepliesReducer } from "#/store/slices/pullReplies";
 import { pullVideosReducer } from "#/store/slices/pullVideos";
 import { selectionsReducer } from "#/store/slices/selections";
 
 const reducer = combineReducers({
   [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
-  fetches,
   pullChannels: pullChannelsReducer,
+  pullComments: pullCommentsReducer,
+  pullReplies: pullRepliesReducer,
   pullVideos: pullVideosReducer,
-  pullVideoComments: pullVideoCommentsReducer,
   selections: selectionsReducer,
 });
 

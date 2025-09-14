@@ -1,7 +1,7 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
-import { appendChannels, useListChannelsQuery } from "#/store/slices/channels";
+import { useListChannelsQuery } from "#/store/slices/channels";
 import { backend } from "=/mocks/backend";
 import { renderHookWithProviders } from "=/utils/render";
 import type { Channel } from "#/api";
@@ -56,47 +56,6 @@ describe("channelsApi", () => {
       const channels = entityAdapter.getSelectors().selectAll(data);
 
       expect(channels).toStrictEqual([]);
-    });
-  });
-
-  describe(appendChannels, () => {
-    it("adds a list of channels to the listChannels cache", async () => {
-      const { store, result } = renderHookWithProviders(() => useListChannelsQuery());
-      await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
-      });
-
-      store.dispatch(
-        appendChannels([
-          {
-            id: "channel.2",
-            title: "channel.2.title",
-            description: "channel.2.description",
-            handle: "@channel2url",
-            thumbnail_url: "/api/v1/channels/2/thumbnail",
-            statistics: {
-              video_count: 1,
-              view_count: 2,
-              subscriber_count: 3,
-            },
-            topics: ["https://en.wikipedia.org/wiki/Topic"],
-            keywords: ["keyword"],
-            video_count: 1,
-            published_at: "2025-02-01T00:00:00Z",
-            last_fetched_at: "2025-02-02T00:00:00.000000Z",
-          },
-        ]),
-      );
-      const { result: updated } = renderHookWithProviders(() => useListChannelsQuery(), { store });
-
-      expect(updated.current.data).toBeDefined();
-
-      const data = updated.current.data!;
-      const channels = entityAdapter.getSelectors().selectAll(data);
-
-      expect(channels).toHaveLength(2);
-      expect(channels[0].id).toBe("channel.1");
-      expect(channels[1].id).toBe("channel.2");
     });
   });
 });

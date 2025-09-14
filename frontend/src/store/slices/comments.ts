@@ -39,26 +39,4 @@ const { selectAll: selectAllTopLevelComments } = topLevelCommentsAdapter.getSele
 
 const { selectAll: selectAllReplies, selectTotal: selectReplyCount } = repliesAdapter.getSelectors();
 
-const appendComments = (videoId: string, comments: TopLevelComment[]) =>
-  commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) =>
-    topLevelCommentsAdapter.addMany(draft, transformComments(comments)),
-  );
-
-const appendReplies = (videoId: string, commentId: string, replies: Comment[]) => {
-  return commentsApi.util.updateQueryData("listComments", { id: videoId }, (draft) => {
-    const topLevelComment = topLevelCommentsAdapter.getSelectors().selectById(draft, commentId);
-    topLevelCommentsAdapter.setOne(draft, {
-      ...topLevelComment,
-      replies: repliesAdapter.addMany(topLevelComment.replies, replies),
-    });
-  });
-};
-
-export {
-  appendComments,
-  appendReplies,
-  selectAllReplies,
-  selectAllTopLevelComments,
-  selectReplyCount,
-  useListCommentsQuery,
-};
+export { selectAllReplies, selectAllTopLevelComments, selectReplyCount, useListCommentsQuery };

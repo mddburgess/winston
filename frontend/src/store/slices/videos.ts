@@ -3,7 +3,6 @@ import { DateTime } from "luxon";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import { descBy } from "#/utils";
 import type { ListVideosResponse, Video } from "#/api";
-import type { EntityState } from "@reduxjs/toolkit";
 
 const videosApi = enhancedBackendApi.enhanceEndpoints({
   endpoints: {
@@ -22,20 +21,4 @@ const videosAdapter = createEntityAdapter<Video>({
 
 const { selectAll: selectAllVideos } = videosAdapter.getSelectors();
 
-const appendVideos = (channelHandle: string, videos: Video[]) =>
-  videosApi.util.updateQueryData("listVideos", { handle: channelHandle }, (draft: EntityState<Video, string>) => {
-    videosAdapter.setMany(draft, videos);
-  });
-
-const markVideoCommentsDisabled = (videoId: string) =>
-  videosApi.util.updateQueryData("getVideo", { id: videoId }, (draft: Video) => {
-    draft.comments = {
-      comments_disabled: true,
-      comment_count: 0,
-      reply_count: 0,
-      total_reply_count: 0,
-      last_fetched_at: DateTime.now().toISO(),
-    };
-  });
-
-export { appendVideos, markVideoCommentsDisabled, selectAllVideos, useGetVideoQuery, useListVideosQuery };
+export { selectAllVideos, useGetVideoQuery, useListVideosQuery };

@@ -12,42 +12,39 @@ CREATE TABLE video_details
     view_count                 BIGINT,
     like_count                 BIGINT,
     comment_count              BIGINT,
-    CONSTRAINT video_details_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_details_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_details_pk PRIMARY KEY (video_id)
 );
 
 CREATE TABLE video_topics
 (
     video_id  VARCHAR NOT NULL,
     topic_url VARCHAR NOT NULL,
-    CONSTRAINT video_topics_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_topics_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_topics_pk PRIMARY KEY (video_id, topic_url)
 );
 
 CREATE TABLE video_tags
 (
     video_id VARCHAR NOT NULL,
     tag      VARCHAR NOT NULL,
-    CONSTRAINT video_tags_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_tags_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_tags_pk PRIMARY KEY (video_id, tag)
 );
 
 CREATE TABLE video_restrictions
 (
-    video_id    VARCHAR NOT NULL,
+    id          BIGSERIAL,
+    video_id    VARCHAR,
     restriction VARCHAR NOT NULL,
     country     VARCHAR NOT NULL,
-    CONSTRAINT video_restrictions_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_restrictions_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_restrictions_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE video_content_ratings
 (
-    video_id  VARCHAR NOT NULL,
+    id        BIGSERIAL,
+    video_id  VARCHAR,
     authority VARCHAR NOT NULL,
     rating    VARCHAR NOT NULL,
-    CONSTRAINT video_content_ratings_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_content_ratings_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_content_ratings_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE video_recording_locations
@@ -57,6 +54,5 @@ CREATE TABLE video_recording_locations
     latitude    DOUBLE PRECISION,
     longitude   DOUBLE PRECISION,
     altitude    DOUBLE PRECISION,
-    CONSTRAINT video_recording_locations_pk PRIMARY KEY (video_id),
-    CONSTRAINT video_recording_locations_fk_video_id FOREIGN KEY (video_id) REFERENCES videos (id)
+    CONSTRAINT video_recording_locations_pk PRIMARY KEY (video_id)
 );

@@ -1,18 +1,6 @@
 import type { Channel, Comment, Problem, PullOperationsRead, Video } from "#/api";
 import type { ProblemDetail, TopLevelComment } from "#/types";
 
-type FetchDataEvent<T> = {
-  objectId: string;
-  items: T[];
-};
-
-type SubscriptionEvent = {
-  connected: boolean;
-  subscriptionId: string;
-};
-
-type FetchCommentsEvent = FetchDataEvent<TopLevelComment>;
-
 type FetchStatusEvent = {
   operation?: {
     operationType: "CHANNELS" | "VIDEOS" | "COMMENTS" | "REPLIES";
@@ -35,4 +23,4 @@ type AppEvent = {
   error?: Problem;
 };
 
-export type { AppEvent, FetchCommentsEvent, FetchStatusEvent, SubscriptionEvent };
+export type { AppEvent, FetchStatusEvent };
