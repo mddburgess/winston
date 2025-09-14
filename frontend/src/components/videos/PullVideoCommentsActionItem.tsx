@@ -2,9 +2,10 @@ import { Col, ListGroupItem, Row, Spinner } from "react-bootstrap";
 import { CheckCircleFill, ExclamationDiamondFill, XOctagonFill } from "react-bootstrap-icons";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { useAppSelector } from "#/store/hooks";
+import { getPullCommentsStatus } from "#/store/slices/pullComments";
 import { pluralize } from "#/utils";
 import type { Problem } from "#/api";
-import type { Maybe, PullOperationStatus, VideoProps } from "#/types";
+import type { PullOperationStatus, VideoProps } from "#/types";
 import type { ReactNode } from "react";
 
 const PullVideoCommentsActionItem = ({ video }: VideoProps) => {
@@ -15,7 +16,7 @@ const PullVideoCommentsActionItem = ({ video }: VideoProps) => {
     return undefined;
   }
 
-  const overallStatus = getOverallStatus(response?.commentStatus, response?.replyStatus);
+  const overallStatus = getPullCommentsStatus(response);
   const pulledCommentCount = response?.commentCount ?? 0;
   const pulledReplyCount = response?.replyIds.length ?? 0;
   const pulledCount = pulledCommentCount + pulledReplyCount;
@@ -35,16 +36,6 @@ const PullVideoCommentsActionItem = ({ video }: VideoProps) => {
       </Row>
     </ListGroupItem>
   );
-};
-
-const getOverallStatus = (
-  commentStatus: Maybe<PullOperationStatus>,
-  replyStatus: Maybe<PullOperationStatus>,
-): PullOperationStatus => {
-  if (commentStatus === "successful") {
-    return replyStatus && ["successful", "warning", "failed"].includes(replyStatus) ? replyStatus : "fetching";
-  }
-  return commentStatus ?? "ready";
 };
 
 const statuses: Record<

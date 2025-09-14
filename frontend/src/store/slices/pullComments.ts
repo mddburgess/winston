@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { isArray, union } from "lodash";
-import type { Problem } from "#/api";
-import type { PullOperationStatus } from "#/types";
+import type { Problem, Video } from "#/api";
+import type { Maybe, PullOperationStatus } from "#/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { Dictionary } from "lodash";
 
@@ -15,7 +15,7 @@ type PullCommentsResponse = {
 
 type PullCommentsState = {
   active: boolean;
-  requested: string[];
+  requested: Video[];
   responses: Partial<Dictionary<PullCommentsResponse>>;
   errors: Partial<Dictionary<Problem>>;
 };
@@ -34,7 +34,7 @@ const pullComments = createSlice({
     pullCommentsActive: (state, { payload }: PayloadAction<boolean>) => {
       state.active = payload;
     },
-    pullCommentsRequested: (state, { payload }: PayloadAction<string | string[]>) => {
+    pullCommentsRequested: (state, { payload }: PayloadAction<Video | Video[]>) => {
       state.active = true;
       state.requested = isArray(payload) ? payload : [payload];
     },
@@ -58,7 +58,21 @@ const pullComments = createSlice({
   },
 });
 
+const getPullCommentsStatus = (response: Maybe<PullCommentsResponse>): PullOperationStatus => {
+  if (response?.commentStatus === "successful") {
+    return ["successful", "warning", "failed"].includes(response.replyStatus) ? response.replyStatus : "fetching";
+  }
+  return response?.commentStatus ?? "ready";
+};
+
 const pullCommentsReducer = pullComments.reducer;
 const { pullCommentsActive, pullCommentsError, pullCommentsRequested, pullCommentsResponse } = pullComments.actions;
 
-export { pullCommentsActive, pullCommentsError, pullCommentsReducer, pullCommentsRequested, pullCommentsResponse };
+export {
+  getPullCommentsStatus,
+  pullCommentsActive,
+  pullCommentsError,
+  pullCommentsReducer,
+  pullCommentsRequested,
+  pullCommentsResponse,
+};

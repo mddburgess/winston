@@ -8,7 +8,7 @@ const PullCommentsButton = ({ video }: VideoProps) => {
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    dispatch(pullCommentsRequested(video.id));
+    dispatch(pullCommentsRequested(video));
   };
 
   return <IconButton icon={ArrowDownRightCircleFill} label={"Pull comments"} onClick={handleClick} />;

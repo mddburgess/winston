@@ -1,73 +1,69 @@
-import { Col, ListGroup, ListGroupItem, ProgressBar, Row } from "react-bootstrap";
-import { pluralize } from "#/utils";
-import type { PullVideoCommentsState, VideoCommentsState } from "#/store/slices/pullVideoComments";
-import type { VideoProps } from "#/types";
+import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
+import { BasicProgressBar } from "#/components/BasicProgressBar";
+import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
+import { useAppSelector } from "#/store/hooks";
+import { getPullCommentsStatus } from "#/store/slices/pullComments";
+import type { PullOperationStatus, VideoProps } from "#/types";
+import type { Record } from "react-bootstrap-icons";
 
-type PullCommentsListProps = {
-  state: PullVideoCommentsState;
-};
+const PullCommentsList = () => {
+  const { requested } = useAppSelector((state) => state.pullComments);
 
-const PullCommentsList = ({ state }: PullCommentsListProps) => (
-  <ListGroup variant={"flush"}>
-    {state.active.map((video, index) => (
-      <PullCommentsItem key={video.id} video={video} state={state.videos[video.id]} index={index} />
-    ))}
-  </ListGroup>
-);
-
-const pullCommentsItemVariants = {
-  ready: "",
-  fetching: "info",
-  successful: "success",
-  warning: "warning",
-  failed: "danger",
-};
-
-const getOverallStatus = (state: VideoCommentsState) => {
-  if (state.comments.status === "successful") {
-    return state.replies.status === "ready" ? "fetching" : state.replies.status;
-  }
-  return state.comments.status;
+  return (
+    <ListGroup variant={"flush"}>
+      {requested.map((video, index) => (
+        <PullCommentsItem key={video.id} video={video} index={index} />
+      ))}
+    </ListGroup>
+  );
 };
 
 type PullCommentsItemProps = VideoProps & {
-  state: VideoCommentsState;
   index: number;
 };
 
-const PullCommentsItem = ({ video, state, index }: PullCommentsItemProps) => {
-  const overallStatus = getOverallStatus(state);
-  const started = overallStatus !== "ready";
-  const active = overallStatus === "fetching";
+const PullCommentsItem = ({ video, index }: PullCommentsItemProps) => {
+  const { responses } = useAppSelector((state) => state.pullComments);
+  const response = responses[video.id];
 
-  const commentsLabel = pluralize(state.comments.items.length, "comment");
-  const repliesLabel = pluralize(state.replies.items.length, "reply", "replies");
-  const progressBarLabel = `${commentsLabel} and ${repliesLabel}`;
+  const overallStatus = getPullCommentsStatus(response);
+  const pulledCommentCount = response?.commentCount ?? 0;
+  const pulledReplyCount = response?.replyIds.length ?? 0;
+  const pulledCount = pulledCommentCount + pulledReplyCount;
+  const totalCount =
+    overallStatus === "ready"
+      ? (video.details?.comment_count ?? 1)
+      : overallStatus === "fetching"
+        ? Math.max(video.details?.comment_count ?? NaN, pulledCount + 1)
+        : pulledCount;
 
   return (
-    <ListGroupItem variant={pullCommentsItemVariants[overallStatus]}>
+    <ListGroupItem variant={statuses[overallStatus].variant}>
       <Row>
         <Col className={"line-clamp-1"}>
           <strong>{index + 1}.</strong> {video.title}
         </Col>
+        <Col xs={"auto"}>
+          <Row className={"g-3 small"}>
+            <VideoCommentCounts video={video} showTotalReplyCount={false} />
+          </Row>
+        </Col>
       </Row>
       <Row>
         <Col>
-          <ProgressBar
-            animated={active}
-            label={progressBarLabel}
-            now={started ? 100 : 0}
-            variant={pullCommentsItemVariants[overallStatus]}
-          />
+          <BasicProgressBar completed={pulledCount} total={totalCount} />
         </Col>
       </Row>
-      {/*<Row>*/}
-      {/*    <Col xs={"auto"} className={"small ms-auto"}>*/}
-      {/*        {pluralize(pullComment.commentIds.length, "comment")}*/}
-      {/*    </Col>*/}
-      {/*</Row>*/}
     </ListGroupItem>
   );
+};
+
+const statuses: Record<PullOperationStatus, { variant: string }> = {
+  ready: { variant: "" },
+  fetching: { variant: "info" },
+  successful: { variant: "success" },
+  warning: { variant: "warning" },
+  failed: { variant: "danger" },
 };
 
 export { PullCommentsList };

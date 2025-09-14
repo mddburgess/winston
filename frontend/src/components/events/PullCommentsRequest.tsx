@@ -15,9 +15,9 @@ const PullCommentsRequest = () => {
   const [pull] = usePullMutation();
 
   const requestPullComments = (eventSubscriptionId: string) => {
-    const operations: PullOperation[] = requested.flatMap((videoId) => [
-      { pull: "comments", video_id: videoId },
-      { pull: "replies", video_id: videoId },
+    const operations: PullOperation[] = requested.flatMap((video) => [
+      { pull: "comments", video_id: video.id },
+      { pull: "replies", video_id: video.id },
     ]);
     void pull({ body: { event_subscription_id: eventSubscriptionId, operations } });
   };
