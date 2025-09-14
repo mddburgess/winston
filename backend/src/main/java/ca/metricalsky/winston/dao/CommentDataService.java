@@ -6,7 +6,7 @@ import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
-import ca.metricalsky.winston.repository.AuthorRepository;
+import ca.metricalsky.winston.repository.AuthorJdbcRepository;
 import ca.metricalsky.winston.repository.CommentPropertiesRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import com.google.api.services.youtube.model.CommentListResponse;
@@ -27,7 +27,7 @@ public class CommentDataService {
 
     private final CommentEntityMapper commentEntityMapper = Mappers.getMapper(CommentEntityMapper.class);
 
-    private final AuthorRepository authorRepository;
+    private final AuthorJdbcRepository authorJdbcRepository;
     private final CommentMapper commentMapper;
     private final CommentPropertiesRepository commentPropertiesRepository;
     private final CommentRepository commentRepository;
@@ -87,7 +87,7 @@ public class CommentDataService {
 
     private List<CommentEntity> saveComments(List<CommentEntity> commentEntities) {
         var authorEntities = getAuthors(commentEntities);
-        authorRepository.saveAll(authorEntities);
+        authorJdbcRepository.saveAll(authorEntities);
         return commentRepository.saveAll(commentEntities);
     }
 
