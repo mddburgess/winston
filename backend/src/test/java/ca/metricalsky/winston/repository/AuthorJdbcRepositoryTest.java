@@ -21,7 +21,7 @@ class AuthorJdbcRepositoryTest {
     private AuthorRepository authorRepository;
 
     @AfterEach
-    void beforeEach() {
+    void afterEach() {
         authorRepository.deleteAll();
     }
 
