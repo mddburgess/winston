@@ -5,7 +5,8 @@ import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
-import ca.metricalsky.winston.repository.AuthorRepository;
+import ca.metricalsky.winston.repository.AuthorJdbcRepository;
+import ca.metricalsky.winston.repository.CommentJdbcRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
@@ -31,7 +32,9 @@ class CommentDataServiceTest {
     private CommentDataService commentDataService;
 
     @Mock
-    private AuthorRepository authorRepository;
+    private AuthorJdbcRepository authorJdbcRepository;
+    @Mock
+    private CommentJdbcRepository commentJdbcRepository;
     @Mock
     private CommentMapper commentMapper;
     @Mock
@@ -101,7 +104,7 @@ class CommentDataServiceTest {
     void saveComments() {
         var commentThreadListResponse = ClientTestObjectFactory.buildCommentThreadListResponse();
 
-        when(commentRepository.saveAll(anyList()))
+        when(commentJdbcRepository.saveAll(anyList()))
                 .thenAnswer(returnsFirstArg());
 
         var topLevelComment = new TopLevelComment();
@@ -123,7 +126,7 @@ class CommentDataServiceTest {
         when(commentRepository.findById(parentCommentId))
                 .thenReturn(Optional.of(commentEntity));
 
-        when(commentRepository.saveAll(anyList()))
+        when(commentJdbcRepository.saveAll(anyList()))
                 .thenAnswer(returnsFirstArg());
 
         var comment = new Comment();
