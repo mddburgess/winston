@@ -25,6 +25,10 @@ public class AuthorJdbcRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public void saveAll(List<AuthorEntity> authors) {
+        if (authors.isEmpty()) {
+            return;
+        }
+
         var lastFetchedAt = OffsetDateTime.now();
         var authorMap = authors.stream()
                 .peek(author -> author.setLastFetchedAt(lastFetchedAt))

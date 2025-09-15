@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +48,13 @@ class AuthorJdbcRepositoryTest {
         authorJdbcRepository.saveAll(authorsToInsertOrUpdate);
 
         assertThat(authorRepository.findAll()).hasSize(10);
+    }
+
+    @Test
+    void saveAllEmptyList() {
+        authorJdbcRepository.saveAll(List.of());
+
+        assertThat(authorRepository.findAll()).isEmpty();
     }
 
     private static AuthorEntity createAuthorEntity() {

@@ -27,6 +27,10 @@ public class CommentJdbcRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<CommentEntity> saveAll(List<CommentEntity> comments) {
+        if (comments.isEmpty()) {
+            return List.of();
+        }
+
         var replies = comments.stream()
                 .map(CommentEntity::getReplies)
                 .filter(Objects::nonNull)

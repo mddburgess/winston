@@ -35,8 +35,9 @@ class CommentJdbcRepositoryTest {
             commentsToInsert.add(createComment());
         }
 
-        commentJdbcRepository.saveAll(commentsToInsert);
+        var result = commentJdbcRepository.saveAll(commentsToInsert);
 
+        assertThat(result).isEqualTo(commentsToInsert);
         assertThat(commentRepository.findAll()).hasSize(10);
 
         var commentsToInsertOrUpdate = new ArrayList<CommentEntity>();
@@ -47,9 +48,18 @@ class CommentJdbcRepositoryTest {
             commentsToInsertOrUpdate.add(createComment());
         }
 
-        commentJdbcRepository.saveAll(commentsToInsertOrUpdate);
+        result = commentJdbcRepository.saveAll(commentsToInsertOrUpdate);
 
+        assertThat(result).isEqualTo(commentsToInsertOrUpdate);
         assertThat(commentRepository.findAll()).hasSize(20);
+    }
+
+    @Test
+    void saveAllEmptyList() {
+        var result = commentJdbcRepository.saveAll(List.of());
+
+        assertThat(result).isEmpty();
+        assertThat(commentRepository.findAll()).isEmpty();
     }
 
     private static CommentEntity createComment() {
