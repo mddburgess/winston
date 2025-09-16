@@ -2,7 +2,7 @@ package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.test.IntegrationTest;
+import ca.metricalsky.winston.test.RepositoryTest;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@IntegrationTest
+@RepositoryTest
 class CommentJdbcRepositoryTest {
 
     @Autowired
