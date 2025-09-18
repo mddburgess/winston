@@ -2,7 +2,7 @@ package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.test.IntegrationTest;
+import ca.metricalsky.winston.test.RepositoryTest;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@IntegrationTest
+@RepositoryTest
 class CommentJdbcRepositoryTest {
 
     @Autowired
@@ -35,8 +34,9 @@ class CommentJdbcRepositoryTest {
             commentsToInsert.add(createComment());
         }
 
-        commentJdbcRepository.saveAll(commentsToInsert);
+        var result = commentJdbcRepository.saveAll(commentsToInsert);
 
+        assertThat(result).isEqualTo(commentsToInsert);
         assertThat(commentRepository.findAll()).hasSize(10);
 
         var commentsToInsertOrUpdate = new ArrayList<CommentEntity>();
@@ -47,9 +47,18 @@ class CommentJdbcRepositoryTest {
             commentsToInsertOrUpdate.add(createComment());
         }
 
-        commentJdbcRepository.saveAll(commentsToInsertOrUpdate);
+        result = commentJdbcRepository.saveAll(commentsToInsertOrUpdate);
 
+        assertThat(result).isEqualTo(commentsToInsertOrUpdate);
         assertThat(commentRepository.findAll()).hasSize(20);
+    }
+
+    @Test
+    void saveAllEmptyList() {
+        var result = commentJdbcRepository.saveAll(List.of());
+
+        assertThat(result).isEmpty();
+        assertThat(commentRepository.findAll()).isEmpty();
     }
 
     private static CommentEntity createComment() {
