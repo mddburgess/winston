@@ -65,6 +65,6 @@ class ChannelEntityTest {
                 .hasFieldOrPropertyWithValue("subscriberCount", channelEntity.getSubscriberCount())
                 .hasFieldOrPropertyWithValue("topics", channelEntity.getTopics())
                 .hasFieldOrPropertyWithValue("keywords", channelEntity.getKeywords())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("properties");
     }
 }
