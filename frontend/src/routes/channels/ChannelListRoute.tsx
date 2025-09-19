@@ -6,13 +6,15 @@ import { ChannelListToolbar } from "#/components/channels/ChannelListToolbar";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
 import { RefreshChannelsSidebar } from "#/components/channels/RefreshChannelsSidebar";
 import { PullChannelsRequest } from "#/components/events/PullChannelsRequest";
-import { useAppDispatch } from "#/store/hooks";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
 import { pullChannelRequested, pullChannelReset } from "#/store/slices/pullChannels";
 
 const ChannelListRoute = () => {
   const dispatch = useAppDispatch();
-  const { isSuccess, data } = useListChannelsQuery({});
+  const includeArchived = useAppSelector((state) => state.preferences.showArchivedChannels);
+
+  const { isSuccess, data } = useListChannelsQuery({ includeArchived });
   const channels = isSuccess ? selectAllChannels(data) : [];
 
   const [showPullChannel, setShowPullChannel] = useState(false);

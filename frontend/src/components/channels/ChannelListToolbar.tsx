@@ -1,6 +1,5 @@
 import { ButtonGroup, ButtonToolbar, Col, Row } from "react-bootstrap";
-import { EyeSlash } from "react-bootstrap-icons";
-import { IconButton } from "#/components/IconButton";
+import { ShowArchivedChannelsButton } from "#/components/channels/ShowArchivedChannelsButton";
 import { pluralize } from "#/utils";
 import { PullChannelActions } from "./PullChannelActions";
 import type { ChannelListProps } from "#/types";
@@ -17,7 +16,7 @@ const ChannelListToolbar = (props: ChannelListToolbarProps) => {
       <Col xs={"auto"}>
         <ButtonToolbar>
           <ButtonGroup className={"me-2"}>
-            <IconButton icon={EyeSlash} variant={"outline-secondary"} />
+            <ShowArchivedChannelsButton />
           </ButtonGroup>
           <ButtonGroup>
             <PullChannelActions {...props} />
