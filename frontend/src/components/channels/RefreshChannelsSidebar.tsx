@@ -12,7 +12,7 @@ const terminalStatuses: PullOperationStatus[] = ["successful", "warning", "faile
 
 const RefreshChannelsSidebar = (props: { show: boolean; onHide: () => void }) => {
   const { responses, errors } = useAppSelector((state) => state.pullChannels);
-  const { isSuccess, data } = useListChannelsQuery();
+  const { isSuccess, data } = useListChannelsQuery({});
 
   const channels = isSuccess ? selectAllChannels(data) : [];
   const completed = filter(responses, (response) => terminalStatuses.includes(response ?? "ready")).length;

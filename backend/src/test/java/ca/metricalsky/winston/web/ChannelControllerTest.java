@@ -39,7 +39,7 @@ class ChannelControllerTest {
 
     @Test
     void list() throws Exception {
-        when(channelService.getAllChannels())
+        when(channelService.getAllChannels(false))
                 .thenReturn(List.of(buildChannel()));
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(
@@ -54,7 +54,7 @@ class ChannelControllerTest {
 
     @Test
     void list_noResults() throws Exception {
-        when(channelService.getAllChannels())
+        when(channelService.getAllChannels(false))
                 .thenReturn(List.of());
 
         mvc.perform(get("/api/v1/channels")).andExpectAll(

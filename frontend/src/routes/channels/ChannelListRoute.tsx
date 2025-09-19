@@ -12,7 +12,7 @@ import { pullChannelRequested, pullChannelReset } from "#/store/slices/pullChann
 
 const ChannelListRoute = () => {
   const dispatch = useAppDispatch();
-  const { isSuccess, data } = useListChannelsQuery();
+  const { isSuccess, data } = useListChannelsQuery({});
   const channels = isSuccess ? selectAllChannels(data) : [];
 
   const [showPullChannel, setShowPullChannel] = useState(false);

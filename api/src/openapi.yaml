@@ -22,6 +22,11 @@ paths:
       tags:
         - Channels
       operationId: listChannels
+      parameters:
+        - name: includeArchived
+          in: query
+          schema:
+            type: boolean
       responses:
         "200":
           description: The request was successful.

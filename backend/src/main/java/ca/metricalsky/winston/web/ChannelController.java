@@ -11,6 +11,7 @@ import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +26,8 @@ public class ChannelController implements ChannelsApi {
     private final JsonPatchUtils jsonPatchUtils;
 
     @Override
-    public ResponseEntity<ListChannelsResponse> listChannels() {
-        var channels = channelService.getAllChannels();
+    public ResponseEntity<ListChannelsResponse> listChannels(Boolean includeArchived) {
+        var channels = channelService.getAllChannels(BooleanUtils.isTrue(includeArchived));
         var response = new ListChannelsResponse()
                 .channels(channels);
 

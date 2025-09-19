@@ -27,9 +27,12 @@ public class ChannelDataService {
     private final ChannelPropertiesRepository channelPropertiesRepository;
     private final ChannelRepository channelRepository;
 
-    public List<Channel> getAllChannels() {
-        return channelRepository.findAll()
-                .stream()
+    public List<Channel> getAllChannels(boolean includeArchived) {
+        var channels = includeArchived
+                ? channelRepository.findAll()
+                : channelRepository.findAllUnarchived();
+
+        return channels.stream()
                 .map(channelMapper::toChannel)
                 .toList();
     }

@@ -36,7 +36,7 @@ class ChannelDataServiceTest {
         when(channelRepository.findAll())
                 .thenReturn(List.of(channelEntity));
 
-        var channels = channelDataService.getAllChannels();
+        var channels = channelDataService.getAllChannels(true);
 
         assertThat(channels).first()
                 .hasFieldOrPropertyWithValue("id", channelEntity.getId())
@@ -48,7 +48,7 @@ class ChannelDataServiceTest {
         when(channelRepository.findAll())
                 .thenReturn(List.of());
 
-        var channels = channelDataService.getAllChannels();
+        var channels = channelDataService.getAllChannels(true);
 
         assertThat(channels)
                 .isEmpty();
