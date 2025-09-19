@@ -5,7 +5,7 @@ import type { Icon } from "react-bootstrap-icons";
 
 type IconButtonProps = ButtonProps & {
   icon: Icon;
-  label: string;
+  label?: string;
 };
 
 const IconButton = ({ icon, label, ...buttonProps }: IconButtonProps) => (

@@ -1,15 +1,17 @@
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { ArrowDownRightCircle, ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { ChannelStatistics } from "#/components/channels/ChannelStatistics";
 import { Date } from "#/components/Date";
 import { IconLabel } from "#/components/IconLabel";
 import { routes } from "#/utils/links";
+import { ChannelStatistics } from "./ChannelStatistics";
 import type { ChannelProps } from "#/types";
 
-export const ChannelCard = ({ channel }: ChannelProps) => (
-  <Col className={"g-2"}>
-    <Card className={"h-100"}>
+const ChannelCard = ({ channel }: ChannelProps) => {
+  const opacity = channel.properties?.archived ? "opacity-25" : "opacity-100";
+
+  return (
+    <Card className={`h-100 ${opacity}`}>
       <Card.Body className={"p-2"}>
         <Row className={"m-0"}>
           <Col className={"col-2 col-md-3 p-0"}>
@@ -41,5 +43,7 @@ export const ChannelCard = ({ channel }: ChannelProps) => (
         </Row>
       </Card.Footer>
     </Card>
-  </Col>
-);
+  );
+};
+
+export { ChannelCard };
