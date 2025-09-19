@@ -57,6 +57,31 @@ paths:
         "404":
           $ref: "#/components/responses/404-channelNotFound"
 
+  /api/v1/channels/{handle}/properties:
+    patch:
+      summary: Patch channel properties
+      description: Patches the non-YouTube properties for a single channel.
+      tags:
+        - Channels
+      operationId: patchChannelProperties
+      parameters:
+        - $ref: "#/components/parameters/channelHandle"
+      requestBody:
+        description: List of patch operations to apply to the channel properties.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+      responses:
+        "200":
+          description: The patch was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/channels/ChannelProperties.yaml
+
   /api/v1/channels/{handle}/videos:
     get:
       summary: List videos
