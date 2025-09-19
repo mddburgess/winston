@@ -1,7 +1,9 @@
 package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.api.model.ChannelProperties;
 import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -26,5 +28,11 @@ public abstract class ChannelMapper {
 
     protected URI toURI(String uriString) {
         return URI.create(uriString);
+    }
+
+    ChannelProperties toChannelProperties(ChannelPropertiesEntity channelPropertiesEntity) {
+        var channelProperties = new ChannelProperties();
+        channelProperties.setArchived(channelPropertiesEntity != null && channelPropertiesEntity.isArchived());
+        return channelProperties;
     }
 }

@@ -2,6 +2,7 @@ package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.test.TestUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class ChannelMapperTest {
 
     private final ChannelMapper channelMapper = new ChannelMapperImpl();

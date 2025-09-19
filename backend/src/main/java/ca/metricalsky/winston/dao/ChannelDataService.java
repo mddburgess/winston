@@ -1,8 +1,10 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
 import ca.metricalsky.winston.mapper.entity.ChannelEntityMapper;
 import ca.metricalsky.winston.mappers.api.ChannelMapper;
+import ca.metricalsky.winston.repository.ChannelPropertiesRepository;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ChannelDataService {
     private final ChannelEntityMapper channelEntityMapper = Mappers.getMapper(ChannelEntityMapper.class);
 
     private final ChannelMapper channelMapper;
+    private final ChannelPropertiesRepository channelPropertiesRepository;
     private final ChannelRepository channelRepository;
 
     public List<Channel> getAllChannels() {
@@ -45,5 +48,13 @@ public class ChannelDataService {
                 .map(channelEntityMapper::toChannelEntity)
                 .map(channelRepository::save)
                 .map(channelMapper::toChannel);
+    }
+
+    public void saveChannelProperties(Channel channel) {
+        var channelProperties = ChannelPropertiesEntity.builder()
+                .channelId(channel.getId())
+                .archived(channel.getProperties().getArchived())
+                .build();
+        channelPropertiesRepository.save(channelProperties);
     }
 }
