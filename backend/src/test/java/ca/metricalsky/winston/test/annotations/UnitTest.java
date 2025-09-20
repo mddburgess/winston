@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.test;
+package ca.metricalsky.winston.test.annotations;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

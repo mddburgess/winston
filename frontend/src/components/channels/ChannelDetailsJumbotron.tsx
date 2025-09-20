@@ -1,5 +1,6 @@
 import { Col, ListGroup, Row } from "react-bootstrap";
 import { BadgeList } from "#/components/BadgeList";
+import { ArchiveChannelButton } from "#/components/channels/ArchiveChannelButton";
 import { ChannelStatistics } from "#/components/channels/ChannelStatistics";
 import { ChannelThumbnail } from "#/components/channels/ChannelThumbnail";
 import { ChannelYoutubeLink } from "#/components/channels/ChannelYoutubeLink";
@@ -16,9 +17,12 @@ const ChannelDetailsJumbotron = ({ channel }: ChannelProps) => (
           <ChannelThumbnail channel={channel} />
         </Col>
         <Col className={"py-2"}>
-          <Row>
+          <Row className={"g-2"}>
             <Col>
               <h1>{channel.title}</h1>
+            </Col>
+            <Col xs={"auto"}>
+              <ArchiveChannelButton channel={channel} />
             </Col>
             <Col xs={"auto"}>
               <RefreshChannelButton channel={channel} />

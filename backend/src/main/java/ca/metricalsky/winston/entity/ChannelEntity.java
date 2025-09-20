@@ -55,6 +55,10 @@ public class ChannelEntity {
     @Column(name = "last_fetched_at")
     private OffsetDateTime lastFetchedAt;
 
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "channel_id")
+    private ChannelPropertiesEntity properties;
+
     @ElementCollection
     @CollectionTable(
             name = "channel_topics",

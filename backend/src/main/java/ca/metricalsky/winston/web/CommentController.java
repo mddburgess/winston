@@ -4,12 +4,11 @@ import ca.metricalsky.winston.api.CommentsApi;
 import ca.metricalsky.winston.api.model.CommentProperties;
 import ca.metricalsky.winston.api.model.ListCommentsResponse;
 import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +34,7 @@ public class CommentController implements CommentsApi {
     @Override
     public ResponseEntity<CommentProperties> patchCommentProperties(String id, List<PatchOperation> patchOperations) {
         var comment = commentDataService.findCommentById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "The requested comment was not found."));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
         var commentProperties = comment.getProperties();
         var patchedCommentProperties = jsonPatchUtils.applyPatch(commentProperties, patchOperations);

@@ -20,8 +20,8 @@ public class ChannelService {
     private final ChannelRepository channelRepository;
     private final VideoDataService videoDataService;
 
-    public List<Channel> getAllChannels() {
-        var channels = channelDataService.getAllChannels();
+    public List<Channel> getAllChannels(boolean includeArchived) {
+        var channels = channelDataService.getAllChannels(includeArchived);
         var videoCounts = videoDataService.countAllVideosByChannelId();
 
         return channels.stream()

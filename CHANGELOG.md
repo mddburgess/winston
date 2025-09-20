@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Toggle to mark a channel as archived. (mddburgess/winston#105)
+- Toggle to show or hide archived channels on the channel list page. (mddburgess/winston#105)
+
+### Changed
+
+- Archived channels are hidden from the channel list page by default. (mddburgess/winston#105)
+- Archived channels are shown faded in the channel list page. (mddburgess/winston#105)
+
 ### Fixed
 
 - Optimized database queries for inserting and updating authors. (mddburgess/winston#86)

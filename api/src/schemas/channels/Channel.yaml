@@ -25,6 +25,8 @@ properties:
     description: An URL to a thumbnail image for the channel.
     type: string
     format: uri-reference
+  properties:
+    $ref: ./ChannelProperties.yaml
   statistics:
     $ref: ./ChannelStatistics.yaml
   topics:

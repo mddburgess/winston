@@ -42,6 +42,7 @@ dependencies {
     developmentOnly(libs.springBootDevtools)
 
     testImplementation(libs.archunitJunit5)
+    testImplementation(libs.datafaker)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
@@ -54,6 +55,10 @@ dependencies {
 
 tasks {
     compileJava {
+        inputs.files(
+            fileTree("src/main/java"),
+            "lombok.config"
+        )
         options.compilerArgs.addAll(listOf(
             "-Amapstruct.unmappedTargetPolicy=ERROR"
         ))

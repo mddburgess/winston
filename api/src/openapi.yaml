@@ -22,6 +22,12 @@ paths:
       tags:
         - Channels
       operationId: listChannels
+      parameters:
+        - name: includeArchived
+          description: Flag indicating if archived channels should also be returned in the response. Default is false.
+          in: query
+          schema:
+            type: boolean
       responses:
         "200":
           description: The request was successful.
@@ -56,6 +62,41 @@ paths:
                   $ref: ./examples/getChannel/200-channel.yaml
         "404":
           $ref: "#/components/responses/404-channelNotFound"
+
+  /api/v1/channels/{handle}/properties:
+    patch:
+      summary: Patch channel properties
+      description: Patches the non-YouTube properties for a single channel.
+      tags:
+        - Channels
+      operationId: patchChannelProperties
+      parameters:
+        - $ref: "#/components/parameters/channelHandle"
+      requestBody:
+        description: List of patch operations to apply to the channel properties.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+            examples:
+              Mark channel as archived:
+                $ref: ./examples/patchChannelProperties/markArchived.yaml
+              Mark channel as not archived:
+                $ref: ./examples/patchChannelProperties/markNotArchived.yaml
+      responses:
+        "200":
+          description: The patch was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/channels/ChannelProperties.yaml
+              examples:
+                Channel is archived:
+                  $ref: ./examples/patchChannelProperties/200-channelArchived.yaml
+                Channel is not archived:
+                  $ref: ./examples/patchChannelProperties/200-channelNotArchived.yaml
 
   /api/v1/channels/{handle}/videos:
     get:
