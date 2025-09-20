@@ -67,7 +67,7 @@ export const ChannelDetailsRoute = () => {
       </Breadcrumb>
       {channel && <ChannelDetailsJumbotron channel={channel} />}
       <BatchPullCommentsAlert onClick={startPullCommentsBatch} />
-      <PaginationContext pageSize={24} items={filteredVideoList}>
+      <PaginationContext pageSize={pageSize} items={filteredVideoList}>
         {({ pageNumber, setPageNumber, pageSize, pageCount, pageItems, totalItemCount }) => (
           <>
             <PaginationRow
