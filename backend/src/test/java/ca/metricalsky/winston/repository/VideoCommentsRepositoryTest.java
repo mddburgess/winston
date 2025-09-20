@@ -3,7 +3,7 @@ package ca.metricalsky.winston.repository;
 import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.entity.VideoCommentsEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.test.RepositoryTest;
+import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

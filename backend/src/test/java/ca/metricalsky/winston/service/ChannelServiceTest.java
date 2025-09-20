@@ -7,7 +7,7 @@ import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
-import ca.metricalsky.winston.test.UnitTest;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

@@ -1,6 +1,6 @@
 package ca.metricalsky.winston;
 
-import ca.metricalsky.winston.test.IntegrationTest;
+import ca.metricalsky.winston.test.annotations.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest

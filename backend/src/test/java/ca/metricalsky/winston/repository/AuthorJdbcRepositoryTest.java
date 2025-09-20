@@ -2,7 +2,7 @@ package ca.metricalsky.winston.repository;
 
 
 import ca.metricalsky.winston.entity.AuthorEntity;
-import ca.metricalsky.winston.test.RepositoryTest;
+import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

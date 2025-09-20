@@ -1,14 +1,15 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
 import ca.metricalsky.winston.mapper.entity.ChannelEntityMapper;
-import ca.metricalsky.winston.mappers.api.ChannelMapper;
 import ca.metricalsky.winston.repository.ChannelPropertiesRepository;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,9 @@ public class ChannelDataService {
 
     private final ChannelEntityMapper channelEntityMapper = Mappers.getMapper(ChannelEntityMapper.class);
 
-    private final ChannelMapper channelMapper;
     private final ChannelPropertiesRepository channelPropertiesRepository;
     private final ChannelRepository channelRepository;
+    private final ConversionService conversionService;
 
     public List<Channel> getAllChannels(boolean includeArchived) {
         var channels = includeArchived
@@ -33,13 +34,13 @@ public class ChannelDataService {
                 : channelRepository.findAllUnarchived();
 
         return channels.stream()
-                .map(channelMapper::toChannel)
+                .map(this::convert)
                 .toList();
     }
 
     public Optional<Channel> findChannelByHandle(String handle) {
         return channelRepository.findByCustomUrl(handle)
-                .map(channelMapper::toChannel);
+                .map(this::convert);
     }
 
     public Optional<Channel> saveChannel(ChannelListResponse channelListResponse) {
@@ -50,14 +51,17 @@ public class ChannelDataService {
                 .findFirst()
                 .map(channelEntityMapper::toChannelEntity)
                 .map(channelRepository::save)
-                .map(channelMapper::toChannel);
+                .map(this::convert);
     }
 
     public void saveChannelProperties(Channel channel) {
-        var channelProperties = ChannelPropertiesEntity.builder()
-                .channelId(channel.getId())
-                .archived(channel.getProperties().getArchived())
-                .build();
+        var channelProperties = new ChannelPropertiesEntity()
+                .setChannelId(channel.getId())
+                .setArchived(channel.getProperties().getArchived());
         channelPropertiesRepository.save(channelProperties);
+    }
+
+    private Channel convert(ChannelEntity channelEntity) {
+        return conversionService.convert(channelEntity, Channel.class);
     }
 }

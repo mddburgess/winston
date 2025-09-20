@@ -7,6 +7,7 @@ springBoot = "3.4.5"
 archunitJunit5 = { module = "com.tngtech.archunit:archunit-junit5", version = "1.4.1" }
 commonsCollections4 = { module = "org.apache.commons:commons-collections4", version = "4.5.0" }
 commonsLang3 = { module = "org.apache.commons:commons-lang3", version = "3.17.0" }
+datafaker = { module = "net.datafaker:datafaker", version = "2.5.0" }
 flywayCore = { module = "org.flywaydb:flyway-core" }
 flywayDatabasePostgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 datasourceProxySpringBootStarter = { module = "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter", version = "1.11.0" }

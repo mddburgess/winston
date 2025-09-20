@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.test;
+package ca.metricalsky.winston.test.annotations;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.wiremock.spring.EnableWireMock;

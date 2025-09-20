@@ -4,7 +4,7 @@ import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Status;
 import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.repository.fetch.FetchOperationRepository;
-import ca.metricalsky.winston.test.UnitTest;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
