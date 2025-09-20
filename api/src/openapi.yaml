@@ -24,6 +24,7 @@ paths:
       operationId: listChannels
       parameters:
         - name: includeArchived
+          description: Flag indicating if archived channels should also be returned in the response. Default is false.
           in: query
           schema:
             type: boolean
@@ -79,6 +80,11 @@ paths:
               type: array
               items:
                 $ref: "#/components/schemas/PatchOperation"
+            examples:
+              Mark channel as archived:
+                $ref: ./examples/patchChannelProperties/markArchived.yaml
+              Mark channel as not archived:
+                $ref: ./examples/patchChannelProperties/markNotArchived.yaml
       responses:
         "200":
           description: The patch was successful.
@@ -86,6 +92,11 @@ paths:
             application/json:
               schema:
                 $ref: ./schemas/channels/ChannelProperties.yaml
+              examples:
+                Channel is archived:
+                  $ref: ./examples/patchChannelProperties/200-channelArchived.yaml
+                Channel is not archived:
+                  $ref: ./examples/patchChannelProperties/200-channelNotArchived.yaml
 
   /api/v1/channels/{handle}/videos:
     get:

@@ -1,0 +1,6 @@
+summary: Mark channel as archived
+description: Request to mark a channel as archived.
+value:
+  - op: add
+    path: /archived
+    value: true

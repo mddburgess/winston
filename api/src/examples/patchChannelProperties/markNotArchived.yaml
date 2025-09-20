@@ -1,0 +1,6 @@
+summary: Mark channel as not archived
+description: Request to mark a channel as not archived.
+value:
+  - op: add
+    path: /archived
+    value: false

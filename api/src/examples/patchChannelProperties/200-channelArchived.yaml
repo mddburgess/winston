@@ -1,0 +1,4 @@
+summary: Channel is archived
+description: The updated channel properties, indicating that the channel is archived.
+value:
+  archived: true
