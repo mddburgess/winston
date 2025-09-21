@@ -10,7 +10,11 @@ const ChannelVideosList = ({ channel }: ChannelProps) => {
   const pageNumber = parseIntOrDefault(searchParams.get("p"), 1) - 1;
   const pageSize = parseIntOrDefault(searchParams.get("ps"), 24);
 
-  const { isSuccess, data } = useListVideosQuery({ handle: channel.handle, page: pageNumber, size: pageSize });
+  const { isFetching, isSuccess, data } = useListVideosQuery({
+    handle: channel.handle,
+    page: pageNumber,
+    size: pageSize,
+  });
 
   return (
     isSuccess && (
@@ -21,7 +25,7 @@ const ChannelVideosList = ({ channel }: ChannelProps) => {
           pageSize={pageSize}
           pageNumber={pageNumber}
         />
-        <VideoCards videos={data.videos} />
+        <VideoCards videos={data.videos} disabled={isFetching} />
       </>
     )
   );
