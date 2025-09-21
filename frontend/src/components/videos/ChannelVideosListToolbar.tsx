@@ -2,6 +2,7 @@ import { Col, Row } from "react-bootstrap";
 import { PageSizeControl } from "#/components/PageSizeControl";
 import { PaginationControl } from "#/components/PaginationControl";
 import { PaginationLabel } from "#/components/PaginationLabel";
+import { PullCommentsBatchButton } from "#/components/videos/PullCommentsBatchButton";
 import { useAppDispatch } from "#/store/hooks";
 import { setVideosPageSize } from "#/store/slices/preferences";
 import type { VideoListProps } from "#/types";
@@ -30,6 +31,7 @@ const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: 
           pageNumber={pageNumber}
         />
       </Col>
+      <PullCommentsBatchButton videos={videos} />
       <Col xs={"auto"}>
         <PageSizeControl pageSize={pageSize} setPageSize={handleSetPageSize} />
       </Col>
