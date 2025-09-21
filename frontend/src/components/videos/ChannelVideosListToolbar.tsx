@@ -1,6 +1,9 @@
 import { Col, Row } from "react-bootstrap";
+import { PageSizeControl } from "#/components/PageSizeControl";
 import { PaginationControl } from "#/components/PaginationControl";
 import { PaginationLabel } from "#/components/PaginationLabel";
+import { useAppDispatch } from "#/store/hooks";
+import { setVideosPageSize } from "#/store/slices/preferences";
 import type { VideoListProps } from "#/types";
 
 type ChannelVideosListToolbarProps = VideoListProps & {
@@ -10,6 +13,12 @@ type ChannelVideosListToolbarProps = VideoListProps & {
 };
 
 const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: ChannelVideosListToolbarProps) => {
+  const dispatch = useAppDispatch();
+
+  const handleSetPageSize = (size: number) => {
+    dispatch(setVideosPageSize(size));
+  };
+
   return (
     <Row className={"mb-2"}>
       <Col className={"flex-center"}>
@@ -20,6 +29,9 @@ const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: 
           pageSize={pageSize}
           pageNumber={pageNumber}
         />
+      </Col>
+      <Col xs={"auto"}>
+        <PageSizeControl pageSize={pageSize} setPageSize={handleSetPageSize} />
       </Col>
       <Col xs={"auto"}>
         <PaginationControl totalCount={totalCount} pageSize={pageSize} pageNumber={pageNumber} />
