@@ -4,6 +4,7 @@ description: The response for the list videos for channel endpoint.
 type: object
 required:
   - channel_handle
+  - results
   - videos
 properties:
   channel_handle:
@@ -11,6 +12,9 @@ properties:
     type: string
   results:
     type: object
+    required:
+      - page_count
+      - total_count
     properties:
       page_count:
         type: integer

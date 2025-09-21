@@ -1,0 +1,30 @@
+import { useSearchParams } from "react-router";
+import { useListVideosQuery } from "#/api";
+import { ChannelVideosListToolbar } from "#/components/videos/ChannelVideosListToolbar";
+import { VideoCards } from "#/components/videos/VideoCards";
+import { parseIntOrDefault } from "#/utils";
+import type { ChannelProps } from "#/types";
+
+const ChannelVideosList = ({ channel }: ChannelProps) => {
+  const [searchParams] = useSearchParams();
+  const pageNumber = parseIntOrDefault(searchParams.get("p"), 1) - 1;
+  const pageSize = parseIntOrDefault(searchParams.get("ps"), 24);
+
+  const { isSuccess, data } = useListVideosQuery({ handle: channel.handle, page: pageNumber, size: pageSize });
+
+  return (
+    isSuccess && (
+      <>
+        <ChannelVideosListToolbar
+          videos={data.videos}
+          totalCount={data.results.total_count}
+          pageSize={pageSize}
+          pageNumber={pageNumber}
+        />
+        <VideoCards videos={data.videos} />
+      </>
+    )
+  );
+};
+
+export { ChannelVideosList };

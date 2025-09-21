@@ -2,6 +2,9 @@ summary: Video list
 description: The list of videos that have been fetched for the requested channel.
 value:
   channel_handle: "@bobloblawslawblog"
+  results:
+    page_count: 1
+    total_count: 1
   videos:
     - id: ZgfiV2g5DPY
       title: Laws and Blogs
