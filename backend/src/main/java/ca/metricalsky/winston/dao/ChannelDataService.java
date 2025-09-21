@@ -38,6 +38,10 @@ public class ChannelDataService {
                 .toList();
     }
 
+    public Optional<String> findChannelIdByHandle(String handle) {
+        return channelRepository.findIdByCustomUrl(handle);
+    }
+
     public Optional<Channel> findChannelByHandle(String handle) {
         return channelRepository.findByCustomUrl(handle)
                 .map(this::convert);

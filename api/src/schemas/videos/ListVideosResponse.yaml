@@ -9,6 +9,17 @@ properties:
   channel_handle:
     description: The unique channel handle used in the channel's URL.
     type: string
+  results:
+    type: object
+    properties:
+      page_count:
+        type: integer
+        format: int32
+        minimum: 0
+      total_count:
+        type: integer
+        format: int32
+        minimum: 0
   videos:
     description: A list of all the videos for the channel.
     type: array

@@ -3,6 +3,7 @@ package ca.metricalsky.winston.repository;
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.ChannelVideoView;
 import ca.metricalsky.winston.entity.view.VideoCountView;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,13 +18,16 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String> {
 
     Integer countByChannelId(String channelId);
 
+    @EntityGraph(attributePaths = "comments")
+    List<VideoEntity> findPageByChannelId(String channelId, Pageable pageable);
+
     @Query("""
             SELECT c.id AS channelId, COUNT(v.id) AS videos
             FROM ChannelEntity c
                 JOIN VideoEntity v ON c.id = v.channelId
             GROUP BY c.id
             """)
-    List<VideoCountView> countAllByChannelId();
+    List<VideoCountView> countAllGroupByChannelId();
 
     @Query("""
             SELECT v FROM VideoEntity v

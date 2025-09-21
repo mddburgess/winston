@@ -14,11 +14,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,27 +38,27 @@ class VideoDataServiceTest {
     private VideoRepository videoRepository;
 
     @Test
-    void getVideosForChannel() {
-        var channelHandle = TestUtils.randomString();
+    void getVideosByChannelId() {
+        var channelId = TestUtils.randomId();
         var videoEntity = buildVideoEntity();
 
-        when(videoRepository.findAllByChannelHandle(channelHandle))
+        when(videoRepository.findPageByChannelId(eq(channelId), any(Pageable.class)))
                 .thenReturn(List.of(videoEntity));
 
-        var videos = videoDataService.getVideosForChannel(channelHandle);
+        var videos = videoDataService.getVideosByChannelId(channelId, 0, 10);
 
         assertThat(videos).first()
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId());
     }
 
     @Test
-    void getVideosForChannel_empty() {
-        var channelHandle = TestUtils.randomString();
+    void getVideosByChannelId_empty() {
+        var channelId = TestUtils.randomId();
 
-        when(videoRepository.findAllByChannelHandle(channelHandle))
+        when(videoRepository.findPageByChannelId(eq(channelId), any(Pageable.class)))
                 .thenReturn(List.of());
 
-        var videos = videoDataService.getVideosForChannel(channelHandle);
+        var videos = videoDataService.getVideosByChannelId(channelId, 0, 10);
 
         assertThat(videos)
                 .isEmpty();
@@ -120,7 +123,7 @@ class VideoDataServiceTest {
     void countAllVideosByChannelId() {
         var videoCountView = mockVideoCountView();
 
-        when(videoRepository.countAllByChannelId())
+        when(videoRepository.countAllGroupByChannelId())
                 .thenReturn(List.of(videoCountView));
 
         var videoCounts = videoDataService.countAllVideosByChannelId();
@@ -133,7 +136,7 @@ class VideoDataServiceTest {
 
     @Test
     void countAllVideosByChannelId_defaultValue() {
-        when(videoRepository.countAllByChannelId())
+        when(videoRepository.countAllGroupByChannelId())
                 .thenReturn(List.of());
 
         var videoCounts = videoDataService.countAllVideosByChannelId();

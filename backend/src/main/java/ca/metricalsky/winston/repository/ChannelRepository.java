@@ -1,6 +1,8 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.ChannelEntity;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +36,7 @@ public interface ChannelRepository extends JpaRepository<ChannelEntity, String> 
             """)
     @EntityGraph(attributePaths = {"keywords", "properties", "topics"})
     List<ChannelEntity> findAllUnarchived();
+
+    @Query("SELECT c.id FROM ChannelEntity c WHERE c.customUrl = :customUrl")
+    Optional<String> findIdByCustomUrl(String customUrl);
 }

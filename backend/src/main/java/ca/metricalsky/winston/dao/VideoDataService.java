@@ -8,6 +8,8 @@ import ca.metricalsky.winston.repository.VideoRepository;
 import com.google.api.services.youtube.model.VideoListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +30,10 @@ public class VideoDataService {
     private final VideoMapper videoMapper;
     private final VideoRepository videoRepository;
 
-    public List<Video> getVideosForChannel(String channelHandle) {
-        return videoRepository.findAllByChannelHandle(channelHandle)
+    public List<Video> getVideosByChannelId(String channelId, int page, int size) {
+        var pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "publishedAt"));
+
+        return videoRepository.findPageByChannelId(channelId, pageRequest)
                 .stream()
                 .map(videoMapper::toVideo)
                 .toList();
@@ -52,7 +56,7 @@ public class VideoDataService {
     }
 
     public Map<String, Integer> countAllVideosByChannelId() {
-        var counts = videoRepository.countAllByChannelId()
+        var counts = videoRepository.countAllGroupByChannelId()
                 .stream()
                 .collect(Collectors.toMap(VideoCountView::getChannelId, VideoCountView::getVideos));
         return defaultedMap(counts, 0);
