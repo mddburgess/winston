@@ -8,9 +8,10 @@ import type { ChannelProps } from "#/types";
 
 const ChannelVideosList = ({ channel }: ChannelProps) => {
   const [searchParams] = useSearchParams();
-  const pageNumber = parseIntOrDefault(searchParams.get("p"), 1) - 1;
 
+  const index = parseIntOrDefault(searchParams.get("i"), 0);
   const pageSize = useAppSelector((state) => state.preferences.videosPageSize);
+  const pageNumber = Math.floor(index / pageSize);
 
   const { isFetching, isSuccess, data } = useListVideosQuery({
     handle: channel.handle,

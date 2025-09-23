@@ -1,5 +1,6 @@
 import { Pagination } from "react-bootstrap";
 import { useSearchParams } from "react-router";
+import { parseIntOrDefault } from "#/utils";
 
 type PaginationControlProps = {
   totalCount: number;
@@ -8,39 +9,45 @@ type PaginationControlProps = {
 };
 
 const PaginationControl = (props: PaginationControlProps) => {
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const index = parseIntOrDefault(searchParams.get("i"), 0);
 
   if (props.totalCount <= props.pageSize) {
     return undefined;
   }
+
+  const pageIndex = Math.floor(index / props.pageSize) * props.pageSize;
+  const prevPageIndex = pageIndex - props.pageSize;
+  const nextPageIndex = pageIndex + props.pageSize;
+  const lastPageIndex = Math.floor(props.totalCount / props.pageSize) * props.pageSize;
 
   const oneIndexedPage = props.pageNumber + 1;
   const lastPage = Math.ceil(props.totalCount / props.pageSize);
 
   const handleClickFirst = () => {
     setSearchParams((searchParams) => {
-      searchParams.set("p", "1");
+      searchParams.set("i", "0");
       return searchParams;
     });
   };
 
   const handleClickPrev = () => {
     setSearchParams((searchParams) => {
-      searchParams.set("p", `${oneIndexedPage - 1}`);
+      searchParams.set("i", `${prevPageIndex}`);
       return searchParams;
     });
   };
 
   const handleClickNext = () => {
     setSearchParams((searchParams) => {
-      searchParams.set("p", `${oneIndexedPage + 1}`);
+      searchParams.set("i", `${nextPageIndex}`);
       return searchParams;
     });
   };
 
   const handleClickLast = () => {
     setSearchParams((searchParams) => {
-      searchParams.set("p", `${lastPage}`);
+      searchParams.set("i", `${lastPageIndex}`);
       return searchParams;
     });
   };
