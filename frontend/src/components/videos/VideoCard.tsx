@@ -1,9 +1,11 @@
 import { Card, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { toggleSelectVideo } from "#/store/slices/selections";
 import { routes } from "#/utils/links";
-import { VideoCardSelectionCheckbox } from "./VideoCardSelectionCheckbox";
 import { VideoCommentCounts } from "./VideoCommentCounts";
 import { VideoPublishedAt } from "./VideoPublishedAt";
+import { VideoSelectedIcon } from "./VideoSelectedIcon";
 import type { VideoProps } from "#/types";
 
 type VideoCardProps = VideoProps & {
@@ -11,19 +13,31 @@ type VideoCardProps = VideoProps & {
 };
 
 const VideoCard = ({ video, disabled = false }: VideoCardProps) => {
+  const dispatch = useAppDispatch();
+  const selected = useAppSelector((state) => state.selections.videos.includes(video));
+  const selectionActive = useAppSelector((state) => state.selections.active);
+
   const navigate = useNavigate();
 
-  const cardClass = disabled ? "opacity-50" : "cursor-pointer hover-bg-info-subtle";
+  const cardClass = disabled
+    ? "opacity-50"
+    : selected
+      ? "bg-primary-subtle border-primary cursor-pointer hover-bg-info-subtle "
+      : "cursor-pointer hover-bg-info-subtle";
 
   const handleClick = () => {
     if (!disabled) {
-      void navigate(routes.videos.details(video.id));
+      if (selectionActive) {
+        dispatch(toggleSelectVideo(video));
+      } else {
+        void navigate(routes.videos.details(video.id));
+      }
     }
   };
 
   return (
     <Card className={`h-100 ${cardClass}`} onClick={handleClick}>
-      <VideoCardSelectionCheckbox video={video} />
+      <VideoSelectedIcon video={video} />
       <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
         <Card.Img variant={"top"} src={video.thumbnail_url} />
       </Ratio>

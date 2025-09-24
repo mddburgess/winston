@@ -46,11 +46,10 @@
   animation-timing-function: linear;
 }
 
-.video-card-checkbox {
-  margin: 0.5rem 0.5rem -1.31rem auto;
+.video-selected {
+  margin: 0.5rem 0.5rem -1.5rem auto;
   position: relative;
   z-index: 1;
-  zoom: 1.5;
 }
 
 @media print {

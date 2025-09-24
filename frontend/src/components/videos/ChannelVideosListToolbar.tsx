@@ -1,8 +1,9 @@
-import { Col, Row } from "react-bootstrap";
+import { ButtonGroup, ButtonToolbar, Col, Row } from "react-bootstrap";
 import { PageSizeControl } from "#/components/PageSizeControl";
 import { PaginationControl } from "#/components/PaginationControl";
 import { PaginationLabel } from "#/components/PaginationLabel";
 import { PullCommentsBatchButton } from "#/components/videos/PullCommentsBatchButton";
+import { SelectVideosButton } from "#/components/videos/SelectVideosButton";
 import { useAppDispatch } from "#/store/hooks";
 import { setVideosPageSize } from "#/store/slices/preferences";
 import type { VideoListProps } from "#/types";
@@ -31,12 +32,19 @@ const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: 
           pageNumber={pageNumber}
         />
       </Col>
-      <PullCommentsBatchButton videos={videos} />
       <Col xs={"auto"}>
-        <PaginationControl totalCount={totalCount} pageSize={pageSize} pageNumber={pageNumber} />
-      </Col>
-      <Col xs={"auto"}>
-        <PageSizeControl pageSize={pageSize} setPageSize={handleSetPageSize} />
+        <ButtonToolbar>
+          <ButtonGroup className={"me-3"}>
+            <SelectVideosButton />
+            <PullCommentsBatchButton videos={videos} />
+          </ButtonGroup>
+          <ButtonGroup className={"me-3"}>
+            <PaginationControl totalCount={totalCount} pageSize={pageSize} pageNumber={pageNumber} />
+          </ButtonGroup>
+          <ButtonGroup>
+            <PageSizeControl pageSize={pageSize} setPageSize={handleSetPageSize} />
+          </ButtonGroup>
+        </ButtonToolbar>
       </Col>
     </Row>
   );
