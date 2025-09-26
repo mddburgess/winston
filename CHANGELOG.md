@@ -11,11 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Toggle to mark a channel as archived. (mddburgess/winston#105)
 - Toggle to show or hide archived channels on the channel list page. (mddburgess/winston#105)
+- Video cards are highlighted when the cursor hovers over them. (mddburgess/winston#108)
+- UI control on the channel details page to choose how many videos to display per page. (mddburgess/winston#108)
 
 ### Changed
 
 - Archived channels are hidden from the channel list page by default. (mddburgess/winston#105)
 - Archived channels are shown faded in the channel list page. (mddburgess/winston#105)
+- Backend videos API now returns paginated results instead of a full list. (mddburgess/winston#108)
+- Updated channel details page to use the paginated videos API. (mddburgess/winston#108)
+- The entire video card is now clickable, instead of just the title and image. (mddburgess/winston#108)
+- Redesigned how to select videos for batch pulling comments. (mddburgess/winston#108)
 
 ### Fixed
 
