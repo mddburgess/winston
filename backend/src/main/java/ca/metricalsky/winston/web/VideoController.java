@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.VideosApi;
 import ca.metricalsky.winston.api.model.ListVideosResponse;
 import ca.metricalsky.winston.api.model.ListVideosResponseResults;
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.config.VideosApiConfig;
+import ca.metricalsky.winston.config.api.VideosApiConfig;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;

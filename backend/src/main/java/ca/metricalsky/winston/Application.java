@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @EnableAsync
-@ConfigurationPropertiesScan(basePackages = "ca.metricalsky.winston.config")
+@ConfigurationPropertiesScan("ca.metricalsky.winston.config")
 public class Application {
 
     public static void main(String[] args) {
