@@ -10,6 +10,7 @@ import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,14 +26,13 @@ public class VideoController implements VideosApi {
 
     @Override
     public ResponseEntity<ListVideosResponse> listVideos(String handle, Integer page, Integer size) {
-        var queryPage = firstNonNull(page, 0);
-        var querySize = firstNonNull(size, config.getDefaultPageSize());
+        var pageRequest = PageRequest.of(firstNonNull(page, 0), firstNonNull(size, config.getDefaultPageSize()));
 
         var channelId = channelDataService.findChannelIdByHandle(handle)
                 .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
 
         var totalCount = videoDataService.countByChannelId(channelId);
-        var videos = videoDataService.getVideosByChannelId(channelId, queryPage, querySize);
+        var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
 
         var response = new ListVideosResponse()
                 .channelHandle(handle)

@@ -30,8 +30,8 @@ public class VideoDataService {
     private final VideoMapper videoMapper;
     private final VideoRepository videoRepository;
 
-    public List<Video> getVideosByChannelId(String channelId, int page, int size) {
-        var pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "publishedAt"));
+    public List<Video> listVideosByChannelId(String channelId, PageRequest page) {
+        var pageRequest = page.withSort(Sort.Direction.DESC, "publishedAt");
 
         return videoRepository.findPageByChannelId(channelId, pageRequest)
                 .stream()

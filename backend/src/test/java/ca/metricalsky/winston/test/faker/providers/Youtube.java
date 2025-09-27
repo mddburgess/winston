@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.test.faker;
+package ca.metricalsky.winston.test.faker.providers;
 
 import net.datafaker.providers.base.AbstractProvider;
 import net.datafaker.providers.base.BaseProviders;

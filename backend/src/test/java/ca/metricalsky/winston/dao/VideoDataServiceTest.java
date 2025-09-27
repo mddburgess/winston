@@ -8,26 +8,28 @@ import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.mappers.api.VideoMapperImpl;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class VideoDataServiceTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
+    private static final Sort publishedAtDesc = Sort.by(Sort.Direction.DESC, "publishedAt");
 
     @InjectMocks
     private VideoDataService videoDataService;
@@ -38,27 +40,29 @@ class VideoDataServiceTest {
     private VideoRepository videoRepository;
 
     @Test
-    void getVideosByChannelId() {
-        var channelId = TestUtils.randomId();
+    void listVideosByChannelId() {
+        var channelId = faker.youtube().channelId();
+        var pageRequest = faker.page().pageRequest();
         var videoEntity = buildVideoEntity();
 
-        when(videoRepository.findPageByChannelId(eq(channelId), any(Pageable.class)))
+        when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))
                 .thenReturn(List.of(videoEntity));
 
-        var videos = videoDataService.getVideosByChannelId(channelId, 0, 10);
+        var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
 
         assertThat(videos).first()
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId());
     }
 
     @Test
-    void getVideosByChannelId_empty() {
-        var channelId = TestUtils.randomId();
+    void listVideosByChannelId_empty() {
+        var channelId = faker.youtube().channelId();
+        var pageRequest = faker.page().pageRequest();
 
-        when(videoRepository.findPageByChannelId(eq(channelId), any(Pageable.class)))
+        when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))
                 .thenReturn(List.of());
 
-        var videos = videoDataService.getVideosByChannelId(channelId, 0, 10);
+        var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
 
         assertThat(videos)
                 .isEmpty();
