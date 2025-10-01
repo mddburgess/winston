@@ -29,14 +29,6 @@ public interface VideoRepository extends JpaRepository<VideoEntity, String> {
             """)
     List<VideoCountView> countAllGroupByChannelId();
 
-    @Query("""
-            SELECT v FROM VideoEntity v
-            WHERE v.channelId = (SELECT id FROM ChannelEntity WHERE customUrl = :channelHandle)
-            ORDER BY v.publishedAt DESC
-            """)
-    @EntityGraph(attributePaths = "comments")
-    List<VideoEntity> findAllByChannelHandle(String channelHandle);
-
     @Query("SELECT MAX(v.publishedAt) FROM VideoEntity v WHERE v.channelId = :channelId")
     Optional<OffsetDateTime> findLastPublishedAtForChannelId(String channelId);
 
