@@ -1,10 +1,10 @@
 package ca.metricalsky.winston.dao;
 
+import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,22 +31,22 @@ class ChannelDataServiceTest {
     private ConversionService conversionService;
 
     @Test
-    @Disabled
     void getAllChannels() {
         var channelEntity = createChannelEntity();
+        var channel = new Channel();
 
         when(channelRepository.findAll())
                 .thenReturn(List.of(channelEntity));
+        when(conversionService.convert(channelEntity, Channel.class))
+                .thenReturn(channel);
 
         var channels = channelDataService.getAllChannels(true);
 
         assertThat(channels).first()
-                .hasFieldOrPropertyWithValue("id", channelEntity.getId())
-                .hasFieldOrPropertyWithValue("handle", channelEntity.getCustomUrl());
+                .isSameAs(channel);
     }
 
     @Test
-    @Disabled
     void getAllChannels_empty() {
         when(channelRepository.findAll())
                 .thenReturn(List.of());
@@ -85,22 +85,22 @@ class ChannelDataServiceTest {
     }
 
     @Test
-    @Disabled
     void findChannelByHandle() {
         var channelEntity = createChannelEntity();
+        var channel = new Channel();
 
         when(channelRepository.findByCustomUrl(channelEntity.getCustomUrl()))
                 .thenReturn(Optional.of(channelEntity));
+        when(conversionService.convert(channelEntity, Channel.class))
+                .thenReturn(channel);
 
-        var channel = channelDataService.findChannelByHandle(channelEntity.getCustomUrl());
+        var result = channelDataService.findChannelByHandle(channelEntity.getCustomUrl());
 
-        assertThat(channel).get()
-                .hasFieldOrPropertyWithValue("id", channelEntity.getId())
-                .hasFieldOrPropertyWithValue("handle", channelEntity.getCustomUrl());
+        assertThat(result)
+                .hasValue(channel);
     }
 
     @Test
-    @Disabled
     void findChannelByHandle_notFound() {
         var channelHandle = TestUtils.randomString();
 
