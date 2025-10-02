@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -99,7 +100,37 @@ class VideoControllerTest {
                 status().isNotFound(),
                 jsonPath("$.title").value(HttpStatus.NOT_FOUND.getReasonPhrase()),
                 jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()),
-                jsonPath("$.detail").value("The requested channel was not found.")
+                jsonPath("$.detail").value(ErrorCode.CHANNEL_NOT_FOUND.getDetail())
+        );
+
+        verifyNoInteractions(videoDataService);
+    }
+
+    @Test
+    void getVideo() throws Exception {
+        var video = faker.video().dto();
+
+        when(videoDataService.findVideoById(video.getId()))
+                .thenReturn(Optional.of(video));
+
+        mvc.perform(get("/api/v1/videos/{id}", video.getId())).andExpectAll(
+                status().isOk(),
+                jsonPath("$.id").value(video.getId())
+        );
+    }
+
+    @Test
+    void getVideo_notFound() throws Exception {
+        var videoId = faker.youtube().videoId();
+
+        when(videoDataService.findVideoById(videoId))
+                .thenThrow(new AppException(ErrorCode.VIDEO_NOT_FOUND));
+
+        mvc.perform(get("/api/v1/videos/{id}", videoId)).andExpectAll(
+                status().isNotFound(),
+                jsonPath("$.title").value(HttpStatus.NOT_FOUND.getReasonPhrase()),
+                jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()),
+                jsonPath("$.detail").value(ErrorCode.VIDEO_NOT_FOUND.getDetail())
         );
     }
 }
