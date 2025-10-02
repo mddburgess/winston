@@ -3,9 +3,9 @@ package ca.metricalsky.winston.test.faker.providers;
 import net.datafaker.providers.base.AbstractProvider;
 import net.datafaker.providers.base.BaseProviders;
 
-public class Youtube extends AbstractProvider<BaseProviders> {
+public class YoutubeProvider extends AbstractProvider<BaseProviders> {
 
-    public Youtube(BaseProviders faker) {
+    public YoutubeProvider(BaseProviders faker) {
         super(faker);
     }
 
@@ -15,5 +15,9 @@ public class Youtube extends AbstractProvider<BaseProviders> {
 
     public String channelId() {
         return faker.regexify("UC[A-Za-z0-9_-]{22}");
+    }
+
+    public String videoId() {
+        return faker.regexify("[A-Za-z0-9_-]{11}");
     }
 }

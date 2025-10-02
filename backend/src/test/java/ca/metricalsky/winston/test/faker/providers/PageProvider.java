@@ -4,9 +4,9 @@ import net.datafaker.providers.base.AbstractProvider;
 import net.datafaker.providers.base.BaseProviders;
 import org.springframework.data.domain.PageRequest;
 
-public class Page extends AbstractProvider<BaseProviders> {
+public class PageProvider extends AbstractProvider<BaseProviders> {
 
-    public Page(BaseProviders faker) {
+    public PageProvider(BaseProviders faker) {
         super(faker);
     }
 
