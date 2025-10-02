@@ -39,7 +39,7 @@ const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: 
             <PullCommentsBatchButton videos={videos} />
           </ButtonGroup>
           <ButtonGroup className={"me-3"}>
-            <PaginationControl totalCount={totalCount} pageSize={pageSize} pageNumber={pageNumber} />
+            <PaginationControl totalCount={totalCount} pageSize={pageSize} />
           </ButtonGroup>
           <ButtonGroup>
             <PageSizeControl pageSize={pageSize} setPageSize={handleSetPageSize} />

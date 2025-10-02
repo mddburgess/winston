@@ -5,60 +5,59 @@ import { parseIntOrDefault } from "#/utils";
 type PaginationControlProps = {
   totalCount: number;
   pageSize: number;
-  pageNumber: number;
 };
 
 const PaginationControl = (props: PaginationControlProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const index = parseIntOrDefault(searchParams.get("i"), 0);
 
   if (props.totalCount <= props.pageSize) {
     return undefined;
   }
 
-  const pageIndex = Math.floor(index / props.pageSize) * props.pageSize;
-  const prevPageIndex = pageIndex - props.pageSize;
-  const nextPageIndex = pageIndex + props.pageSize;
-  const lastPageIndex = Math.floor(props.totalCount / props.pageSize) * props.pageSize;
+  const pageIndex = parseIntOrDefault(searchParams.get("i"), 0);
+  const pageNumber = Math.floor(pageIndex / props.pageSize);
+  const lastPageNumber = Math.floor((props.totalCount - 1) / props.pageSize);
 
-  const oneIndexedPage = props.pageNumber + 1;
-  const lastPage = Math.ceil(props.totalCount / props.pageSize);
-
-  const handleClickFirst = () => {
+  const setPageNumber = (pageNumber: number) => {
     setSearchParams((searchParams) => {
-      searchParams.set("i", "0");
+      searchParams.set("i", `${pageNumber * props.pageSize}`);
       return searchParams;
     });
+  };
+
+  const handleClickFirst = () => {
+    setPageNumber(0);
   };
 
   const handleClickPrev = () => {
-    setSearchParams((searchParams) => {
-      searchParams.set("i", `${prevPageIndex}`);
-      return searchParams;
-    });
+    setPageNumber(pageNumber - 1);
   };
 
   const handleClickNext = () => {
-    setSearchParams((searchParams) => {
-      searchParams.set("i", `${nextPageIndex}`);
-      return searchParams;
-    });
+    setPageNumber(pageNumber + 1);
   };
 
   const handleClickLast = () => {
-    setSearchParams((searchParams) => {
-      searchParams.set("i", `${lastPageIndex}`);
-      return searchParams;
-    });
+    setPageNumber(lastPageNumber);
   };
 
   return (
     <Pagination className={"mb-0"}>
-      <Pagination.First disabled={oneIndexedPage <= 1} onClick={handleClickFirst} />
-      <Pagination.Prev disabled={oneIndexedPage <= 1} onClick={handleClickPrev} />
-      <Pagination.Item active>{oneIndexedPage}</Pagination.Item>
-      <Pagination.Next disabled={oneIndexedPage >= lastPage} onClick={handleClickNext} />
-      <Pagination.Last disabled={oneIndexedPage >= lastPage} onClick={handleClickLast} />
+      <Pagination.First data-testid={"firstPageButton"} disabled={pageNumber <= 0} onClick={handleClickFirst} />
+      <Pagination.Prev data-testid={"prevPageButton"} disabled={pageNumber <= 0} onClick={handleClickPrev} />
+      <Pagination.Item data-testid={"currentPageLabel"} active>
+        {pageNumber + 1}
+      </Pagination.Item>
+      <Pagination.Next
+        data-testid={"nextPageButton"}
+        disabled={pageNumber >= lastPageNumber}
+        onClick={handleClickNext}
+      />
+      <Pagination.Last
+        data-testid={"lastPageButton"}
+        disabled={pageNumber >= lastPageNumber}
+        onClick={handleClickLast}
+      />
     </Pagination>
   );
 };
