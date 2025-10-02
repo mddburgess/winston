@@ -1,5 +1,7 @@
 import { render, renderHook } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router";
 import { setupStore } from "#/store";
 import type { AppState, AppStore } from "#/store";
 import type { RenderHookOptions, RenderOptions } from "@testing-library/react";
@@ -40,4 +42,13 @@ const renderHookWithProviders = <Props, Result>(
   };
 };
 
-export { renderHookWithProviders, renderWithProviders };
+const renderWithRouter = (ui: ReactElement, { route = "/" } = {}) => {
+  window.history.pushState({}, "", route);
+
+  return {
+    user: userEvent.setup(),
+    ...render(ui, { wrapper: BrowserRouter }),
+  };
+};
+
+export { renderHookWithProviders, renderWithProviders, renderWithRouter };
