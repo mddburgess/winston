@@ -34,4 +34,7 @@ public interface ChannelRepository extends JpaRepository<ChannelEntity, String> 
             """)
     @EntityGraph(attributePaths = {"keywords", "properties", "topics"})
     List<ChannelEntity> findAllUnarchived();
+
+    @Query("SELECT c.id FROM ChannelEntity c WHERE c.customUrl = :customUrl")
+    Optional<String> findIdByCustomUrl(String customUrl);
 }

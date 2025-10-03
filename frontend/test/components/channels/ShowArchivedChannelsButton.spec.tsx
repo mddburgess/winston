@@ -30,7 +30,7 @@ describe(ShowArchivedChannelsButton, () => {
 
   it("displays a filled-in button when the show archived channels preference is true", () => {
     const result = renderWithProviders(<ShowArchivedChannelsButton />, {
-      preloadedState: { preferences: { showArchivedChannels: true } },
+      preloadedState: { preferences: { showArchivedChannels: true, videosPageSize: 24 } },
     });
     const button = result.getByRole("button");
     const buttonIcon = result.getByTestId("icon");

@@ -1,19 +1,15 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.model.Channel;
-import ca.metricalsky.winston.config.AppResourceResolver;
-import ca.metricalsky.winston.convert.ConversionServiceAdapter;
+import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.ChannelService;
-import org.junit.jupiter.api.Disabled;
+import ca.metricalsky.winston.test.annotations.ControllerTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -24,9 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled
-@ExtendWith(SpringExtension.class)
-@WebMvcTest({ChannelController.class, AppResourceResolver.class, ConversionServiceAdapter.class})
+@ControllerTest(ChannelController.class)
 class ChannelControllerTest {
 
     private static final String CHANNEL_HANDLE = "@channelHandle";
@@ -34,6 +28,8 @@ class ChannelControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockitoBean
+    private ChannelDataService channelDataService;
     @MockitoBean
     private ChannelService channelService;
 

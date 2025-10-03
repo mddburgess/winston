@@ -2,18 +2,14 @@ package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.config.AppResourceResolver;
-import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.annotations.ControllerTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -25,8 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest({AuthorController.class, AppResourceResolver.class, ConversionServiceAdapter.class})
+@ControllerTest(AuthorController.class)
 class AuthorControllerTest {
 
     @Autowired

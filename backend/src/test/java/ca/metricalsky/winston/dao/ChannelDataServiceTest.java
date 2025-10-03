@@ -1,13 +1,13 @@
 package ca.metricalsky.winston.dao;
 
+import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
-import org.junit.jupiter.api.Disabled;
+import ca.metricalsky.winston.test.annotations.UnitTest;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.convert.ConversionService;
 
 import java.util.List;
@@ -17,9 +17,10 @@ import static ca.metricalsky.winston.test.factory.entity.ChannelEntityFactory.cr
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@Disabled
-@ExtendWith(MockitoExtension.class)
+@UnitTest
 class ChannelDataServiceTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
 
     @InjectMocks
     private ChannelDataService channelDataService;
@@ -32,15 +33,17 @@ class ChannelDataServiceTest {
     @Test
     void getAllChannels() {
         var channelEntity = createChannelEntity();
+        var channel = new Channel();
 
         when(channelRepository.findAll())
                 .thenReturn(List.of(channelEntity));
+        when(conversionService.convert(channelEntity, Channel.class))
+                .thenReturn(channel);
 
         var channels = channelDataService.getAllChannels(true);
 
         assertThat(channels).first()
-                .hasFieldOrPropertyWithValue("id", channelEntity.getId())
-                .hasFieldOrPropertyWithValue("handle", channelEntity.getCustomUrl());
+                .isSameAs(channel);
     }
 
     @Test
@@ -55,17 +58,46 @@ class ChannelDataServiceTest {
     }
 
     @Test
+    void findChannelIdByHandle() {
+        var channelHandle = faker.youtube().channelHandle();
+        var channelId = faker.youtube().channelId();
+
+        when(channelRepository.findIdByCustomUrl(channelHandle))
+                .thenReturn(Optional.of(channelId));
+
+        var result = channelDataService.findChannelIdByHandle(channelHandle);
+
+        assertThat(result)
+                .hasValue(channelId);
+    }
+
+    @Test
+    void findChannelIdByHandle_notFound() {
+        var channelHandle = faker.youtube().channelHandle();
+
+        when(channelRepository.findIdByCustomUrl(channelHandle))
+                .thenReturn(Optional.empty());
+
+        var result = channelDataService.findChannelIdByHandle(channelHandle);
+
+        assertThat(result)
+                .isEmpty();
+    }
+
+    @Test
     void findChannelByHandle() {
         var channelEntity = createChannelEntity();
+        var channel = new Channel();
 
         when(channelRepository.findByCustomUrl(channelEntity.getCustomUrl()))
                 .thenReturn(Optional.of(channelEntity));
+        when(conversionService.convert(channelEntity, Channel.class))
+                .thenReturn(channel);
 
-        var channel = channelDataService.findChannelByHandle(channelEntity.getCustomUrl());
+        var result = channelDataService.findChannelByHandle(channelEntity.getCustomUrl());
 
-        assertThat(channel).get()
-                .hasFieldOrPropertyWithValue("id", channelEntity.getId())
-                .hasFieldOrPropertyWithValue("handle", channelEntity.getCustomUrl());
+        assertThat(result)
+                .hasValue(channel);
     }
 
     @Test
