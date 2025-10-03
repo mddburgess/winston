@@ -25,7 +25,7 @@ const PaginationLabel = ({
       ? pluralize(itemCount, itemLabel, pluralLabel)
       : `${firstIndex} – ${lastIndex} of ${pluralize(totalCount, itemLabel, pluralLabel)}`;
 
-  return <span>{label}</span>;
+  return <span data-testid={"paginationLabel"}>{label}</span>;
 };
 
 export { PaginationLabel };
