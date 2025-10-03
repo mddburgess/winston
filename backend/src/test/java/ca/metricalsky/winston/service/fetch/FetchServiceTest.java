@@ -1,6 +1,5 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
@@ -8,8 +7,6 @@ import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
 import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
-import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandler;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
@@ -27,7 +24,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -45,10 +41,6 @@ class FetchServiceTest {
     @Mock
     private FetchOperationHandlerFactory fetchOperationHandlerFactory;
     @Mock
-    private FetchRequestMapper fetchRequestMapper;
-    @Mock
-    private FetchRequestRepository fetchRequestRepository;
-    @Mock
     private FetchRequestService fetchRequestService;
     @Mock
     private SsePublisher ssePublisher;
@@ -56,22 +48,6 @@ class FetchServiceTest {
     private SsePublisherHolder ssePublisherHolder;
     @Mock
     private YouTubeRequestRepository youTubeRequestRepository;
-
-    @Test
-    void save() {
-        var fetchRequest = new FetchRequest();
-        var fetchRequestEntity = buildFetchRequestEntity();
-
-        when(fetchRequestMapper.toFetchRequestEntity(fetchRequest))
-                .thenReturn(fetchRequestEntity);
-        when(fetchRequestRepository.save(fetchRequestEntity))
-                .thenAnswer(returnsFirstArg());
-
-        var fetchRequestId = fetchService.save(fetchRequest);
-
-        assertThat(fetchRequestId)
-                .isEqualTo(fetchRequestEntity.getId());
-    }
 
     @Test
     void fetchAsync() {

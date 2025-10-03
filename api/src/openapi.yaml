@@ -288,32 +288,6 @@ paths:
         "404":
           $ref: "#/components/responses/404-videoNotFound"
 
-  /api/v1/fetch:
-    post:
-      summary: Fetch
-      description: Submits a request to fetch data from YouTube.
-      tags:
-        - Fetch
-      operationId: fetch
-      parameters:
-        - name: X-Notify-Subscription
-          description: The unique identifier of an event subscription that is listening for fetch events.
-          in: header
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: ./schemas/fetch/FetchRequest.yaml
-
-        required: true
-      responses:
-        "202":
-          description: The fetch request was accepted for processing.
-
   /api/v1/fetch/limits:
     get:
       summary: Get fetch limits

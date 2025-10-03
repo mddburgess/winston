@@ -1,11 +1,8 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.api.model.FetchRequest;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
-import ca.metricalsky.winston.mapper.entity.FetchRequestMapper;
-import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
 import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
 import lombok.Getter;
@@ -23,8 +20,6 @@ import java.util.Comparator;
 public class FetchService {
 
     private final FetchOperationHandlerFactory fetchOperationHandlerFactory;
-    private final FetchRequestMapper fetchRequestMapper;
-    private final FetchRequestRepository fetchRequestRepository;
     private final FetchRequestService fetchRequestService;
     private final SsePublisherHolder ssePublisherHolder;
     private final YouTubeRequestRepository youTubeRequestRepository;
@@ -32,12 +27,6 @@ public class FetchService {
     @Getter
     @Value("${youtube.quota.daily}")
     private int dailyQuota;
-
-    public Long save(FetchRequest fetchRequest) {
-        var fetchRequestEntity = fetchRequestMapper.toFetchRequestEntity(fetchRequest);
-        fetchRequestEntity = fetchRequestRepository.save(fetchRequestEntity);
-        return fetchRequestEntity.getId();
-    }
 
     @Async
     public void fetchAsync(Long fetchRequestId, SsePublisher ssePublisher) {
