@@ -16,7 +16,7 @@ describe(PaginationContext, () => {
     );
     render(paginationContext);
 
-    expect(pageInfoFn).toHaveBeenCalledWith(
+    expect(pageInfoFn).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         pageNumber: 1,
         pageSize: 10,
@@ -38,7 +38,7 @@ describe(PaginationContext, () => {
     );
     render(paginationContext);
 
-    expect(pageInfoFn).toHaveBeenCalledWith(
+    expect(pageInfoFn).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         pageNumber: 1,
         pageSize: 2,

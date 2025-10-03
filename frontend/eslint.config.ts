@@ -105,7 +105,7 @@ export default typescript.config(
     extends: [vitestPlugin.configs.recommended],
     files: ["**/*.{spec,test}.{ts,tsx}"],
     rules: {
-      "vitest/consistent-test-filename": ["warn", { pattern: ".*\\.spec\\.tsx?$" }],
+      "vitest/consistent-test-filename": ["warn", { pattern: /.*\.spec\.tsx?$/ }],
       "vitest/consistent-test-it": "warn",
       "vitest/max-expects": ["warn", { max: 5 }],
       "vitest/max-nested-describe": ["warn", { max: 3 }],
