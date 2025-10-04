@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
+import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Type;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
@@ -18,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -46,6 +46,8 @@ class FetchServiceTest {
     private SsePublisher ssePublisher;
     @Mock
     private SsePublisherHolder ssePublisherHolder;
+    @Mock
+    private YouTubeConfig youTubeConfig;
     @Mock
     private YouTubeRequestRepository youTubeRequestRepository;
 
@@ -113,8 +115,8 @@ class FetchServiceTest {
 
     @Test
     void getAvailableQuota() {
-        ReflectionTestUtils.setField(fetchService, "dailyQuota", 10000);
-
+        when(youTubeConfig.getDailyRequestQuota())
+                .thenReturn(10000);
         when(youTubeRequestRepository.countAllByRequestedAtAfter(any(OffsetDateTime.class)))
                 .thenReturn(1);
 

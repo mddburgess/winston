@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.web;
 
-import ca.metricalsky.winston.config.api.VideosApiConfig;
+import ca.metricalsky.winston.config.properties.api.VideosApiConfig;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
