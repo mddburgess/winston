@@ -385,6 +385,31 @@ paths:
                 Comment not pulled:
                   $ref: ./examples/pull/422-commentNotPulled.yaml
 
+  /api/v1/pull/quote:
+    post:
+      summary: Quote pull
+      description: Estimates the YouTube API quota cost for a pull data request.
+      tags:
+        - Pull
+      operationId: quotePull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - operations
+              properties:
+                operations:
+                  $ref: "#/components/schemas/PullOperations"
+      responses:
+        "200":
+          description: The operations specified in the request, along with an estimated quota cost for each operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuotePullResponse"
+
 components:
   schemas:
     PatchOperation:
@@ -395,6 +420,17 @@ components:
       type: array
       items:
         $ref: ./schemas/pull/PullOperation.yaml
+    QuotePullResponse:
+      type: object
+      required:
+        - total_estimated_cost
+        - operations
+      properties:
+        total_estimated_cost:
+          type: integer
+          format: int32
+        operations:
+          $ref: "#/components/schemas/PullOperations"
   parameters:
     authorHandle:
       name: handle

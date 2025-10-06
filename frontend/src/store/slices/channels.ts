@@ -1,11 +1,11 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
-import type { Channel, ListChannelsResponse } from "#/api";
+import type { Channel, ListChannelsResp } from "#/api";
 
 const channelsApi = enhancedBackendApi.enhanceEndpoints({
   endpoints: {
     listChannels: {
-      transformResponse: (response: ListChannelsResponse) =>
+      transformResponse: (response: ListChannelsResp) =>
         channelsAdapter.addMany(channelsAdapter.getInitialState(), response.channels),
     },
   },
