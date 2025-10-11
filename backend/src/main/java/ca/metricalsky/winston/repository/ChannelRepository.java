@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.entity.view.ChannelVideoStatisticsView;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -37,4 +38,19 @@ public interface ChannelRepository extends JpaRepository<ChannelEntity, String> 
 
     @Query("SELECT c.id FROM ChannelEntity c WHERE c.customUrl = :customUrl")
     Optional<String> findIdByCustomUrl(String customUrl);
+
+    @Query("""
+            SELECT
+                c.customUrl AS channelHandle,
+                c.id AS channelId,
+                c.publishedAt AS channelPublishedAt,
+                c.videoCount AS channelVideoCount,
+                COUNT(v.id) AS videoCount,
+                MAX(v.publishedAt) AS latestVideoPublishedAt
+            FROM ChannelEntity c
+            LEFT JOIN VideoEntity v ON c.id = v.channelId
+            WHERE c.customUrl = :customUrl
+            GROUP BY c.id
+            """)
+    Optional<ChannelVideoStatisticsView> findChannelVideoStatisticsByCustomUrl(String customUrl);
 }
