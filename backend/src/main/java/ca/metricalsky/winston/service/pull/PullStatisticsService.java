@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class PullStatisticsService {
 
     private final VideoCommentsRepository videoCommentsRepository;
-    private final YouTubeRequestRepository youTubeRequestRepository;
 
     public double getTopLevelCommentPercentage() {
         var commentStatistics = videoCommentsRepository.getCommentStatistics();
@@ -27,17 +26,4 @@ public class PullStatisticsService {
 
         return (double) commentCount / videoCount;
     }
-
-    public double getAverageRepliesPerVideo() {
-        var commentStatistics = videoCommentsRepository.getCommentStatistics();
-        var replyCount = commentStatistics.getReplyCount();
-        var videoCount = commentStatistics.getVideoCount();
-
-        return (double) replyCount / videoCount;
-    }
-
-    public double getAverageCommentsPerPullRequest() {
-        return youTubeRequestRepository.getAverageItemCountForCommentRequests();
-    }
-
 }

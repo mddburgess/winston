@@ -2,12 +2,14 @@ package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.view.CommentCountView;
+import ca.metricalsky.winston.entity.view.ReplyStatisticsView;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, String> {
@@ -68,4 +70,19 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
             WHERE c.videoId = :videoId
             """)
     CommentCountView countCommentsForVideoId(String videoId);
+
+    @Query("""
+            SELECT
+                c.id AS commentId,
+                c.publishedAt AS commentPublishedAt,
+                c.totalReplyCount AS commentReplyCount,
+                c.lastFetchedAt AS commentLastFetchedAt,
+                COUNT(r.id) AS fetchedReplyCount,
+                MAX(r.publishedAt) AS mostRecentReplyPublishedAt
+            FROM CommentEntity c
+            LEFT JOIN CommentEntity r ON c.id = r.parentId
+            WHERE c.id = :commentId
+            GROUP BY c.id
+            """)
+    Optional<ReplyStatisticsView> getReplyStatisticsByCommentId(String commentId);
 }

@@ -4,6 +4,7 @@ import ca.metricalsky.winston.api.model.PullVideosOperation;
 import ca.metricalsky.winston.api.model.PullVideosOperation.RangeEnum;
 import ca.metricalsky.winston.entity.view.ChannelVideoStatisticsView;
 import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,24 +52,16 @@ public class VideosQuotaCostEstimator implements QuotaCostEstimator<PullVideosOp
     }
 
     private int getVideoCountScaledToNow(ChannelVideoStatisticsView statistics) {
-        if (statistics.getLatestVideoPublishedAt() != null) {
-            var durationToLatestPublished = Duration.between(statistics.getChannelPublishedAt(),
-                    statistics.getLatestVideoPublishedAt());
-            var durationToNow = Duration.between(statistics.getChannelPublishedAt(), OffsetDateTime.now());
-
-            var scaleFactor = (double) durationToNow.getSeconds() / durationToLatestPublished.getSeconds();
-            return (int) (statistics.getVideoCount() * scaleFactor);
-        }
-
-        return 0;
+        return NumberUtils.scaleToNow(statistics.getVideoCount(),
+                statistics.getChannelPublishedAt(), statistics.getLatestVideoPublishedAt());
     }
 
     private int estimateAverageVideoCount() {
         return 0;
     }
 
-    private int estimateCost(int estimatedVideoCount, double estimatedCountPerRequest) {
-        var estimatedRequestCount = (int) Math.ceil(estimatedVideoCount / estimatedCountPerRequest) * 2;
+    private int estimateCost(int estimatedVideoCount, int estimatedCountPerRequest) {
+        var estimatedRequestCount = Math.ceilDiv(estimatedVideoCount, estimatedCountPerRequest) * 2;
         return Math.max(estimatedRequestCount, 2);
     }
 }

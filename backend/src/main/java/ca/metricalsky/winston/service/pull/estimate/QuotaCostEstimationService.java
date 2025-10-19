@@ -4,7 +4,6 @@ import ca.metricalsky.winston.api.model.PullChannelOperation;
 import ca.metricalsky.winston.api.model.PullCommentsOperation;
 import ca.metricalsky.winston.api.model.PullOperation;
 import ca.metricalsky.winston.api.model.PullRepliesOperation;
-import ca.metricalsky.winston.api.model.PullRequest;
 import ca.metricalsky.winston.api.model.PullVideosOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

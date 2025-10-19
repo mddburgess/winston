@@ -1,24 +1,26 @@
 package ca.metricalsky.winston.config;
 
+import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class YouTubeConfig {
+@RequiredArgsConstructor
+public class YouTubeProvider {
 
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final GsonFactory JSON_FACTORY = new GsonFactory();
     private static final HttpRequestInitializer HTTP_REQUEST_INITIALIZER = _ -> {};
 
-    @Value("${youtube.apiKey}")
-    private String apiKey;
+    private final YouTubeConfig youTubeConfig;
 
     @Value("${youtube.mock.rootUrl:}")
     private String mockRootUrl;
@@ -26,7 +28,7 @@ public class YouTubeConfig {
     @Bean
     public YouTube youTube() {
         var youTubeBuilder = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HTTP_REQUEST_INITIALIZER)
-                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey));
+                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(youTubeConfig.getApiKey()));
 
         if (!mockRootUrl.isBlank()) {
             youTubeBuilder.setRootUrl(mockRootUrl);
