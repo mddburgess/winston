@@ -35,7 +35,7 @@
 }
 
 .height-fit {
-  min-height: fit-content;
+  height: 1000rem; /* arbitrary amount, needed for WebKit to respect fit-content */
   max-height: fit-content;
 }
 
