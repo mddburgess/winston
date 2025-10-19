@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class NotificationsService implements SmartLifecycle {
 
-    private static final long DEFAULT_TIMEOUT_MS = Duration.ofMinutes(15).toMillis();
+    private static final long DEFAULT_TIMEOUT_MS = Duration.ofHours(1).toMillis();
 
     private final Map<UUID, SsePublisher> subscriptions = new ConcurrentHashMap<>();
     private boolean running;

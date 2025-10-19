@@ -22,6 +22,8 @@ public enum ErrorCode {
             "Comments are disabled for the requested video."),
     QUOTA_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS,
             "The YouTube API request quota has been exceeded."),
+    REQUEST_TOO_EXPENSIVE(HttpStatus.UNPROCESSABLE_ENTITY,
+            "The estimated cost for this request exceeds the available YouTube API request quota."),
     SERVICE_SHUTDOWN(HttpStatus.SERVICE_UNAVAILABLE,
             "The service is shutting down and is no longer available."),
     SUBSCRIPTION_CLOSED(HttpStatus.BAD_REQUEST,
@@ -42,7 +44,7 @@ public enum ErrorCode {
 
     public ProblemDetail getProblemDetail() {
         var problemDetail = ProblemDetail.forStatusAndDetail(this.status, this.detail);
-        problemDetail.setType(URI.create(this.type) );
+        problemDetail.setType(URI.create(this.type));
         return problemDetail;
     }
 }
