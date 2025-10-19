@@ -18,6 +18,7 @@ type PullCommentsState = {
   requested: Video[];
   responses: Partial<Dictionary<PullCommentsResponse>>;
   errors: Partial<Dictionary<Problem>>;
+  requestError?: Problem;
   showPullCommentsSidebar: boolean;
 };
 
@@ -26,6 +27,7 @@ const initialState: PullCommentsState = {
   requested: [],
   responses: {},
   errors: {},
+  requestError: undefined,
   showPullCommentsSidebar: false,
 };
 
@@ -45,6 +47,7 @@ const pullComments = createSlice({
         state.responses[video.id] = undefined;
         state.errors[video.id] = undefined;
       });
+      state.requestError = undefined;
     },
     pullCommentsResponse: (state, { payload }: PayloadAction<{ videoId: string } & Partial<PullCommentsResponse>>) => {
       const currentCommentStatus = state.responses[payload.videoId]?.commentStatus;
@@ -60,8 +63,13 @@ const pullComments = createSlice({
         replyIds: union(currentReplyIds, payload.replyIds),
       };
     },
-    pullCommentsError: (state, { payload }: PayloadAction<{ videoId: string; error: Problem }>) => {
-      state.errors[payload.videoId] = payload.error;
+    pullCommentsError: (state, { payload }: PayloadAction<{ videoId?: string; error: Problem }>) => {
+      if (payload.videoId) {
+        state.errors[payload.videoId] = payload.error;
+      } else {
+        state.requestError = payload.error;
+        state.active = false;
+      }
     },
     setShowPullCommentsSidebar: (state, { payload }: PayloadAction<boolean>) => {
       state.showPullCommentsSidebar = payload;

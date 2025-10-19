@@ -19,7 +19,9 @@ const PullCommentsRequest = () => {
       { pull: "comments", video_id: video.id },
       { pull: "replies", video_id: video.id },
     ]);
-    void pull({ body: { event_subscription_id: eventSubscriptionId, operations } });
+    pull({ body: { event_subscription_id: eventSubscriptionId, operations } })
+      .unwrap()
+      .catch((rejected) => dispatch(pullCommentsError({ error: rejected.data })));
   };
 
   const handlePullOperationEvent = (event: PullOperationEvent) => {
