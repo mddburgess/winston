@@ -8,7 +8,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,16 +22,13 @@ public class YouTubeProvider {
 
     private final YouTubeConfig youTubeConfig;
 
-    @Value("${youtube.mock.rootUrl:}")
-    private String mockRootUrl;
-
     @Bean
     public YouTube youTube() {
         var youTubeBuilder = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, HTTP_REQUEST_INITIALIZER)
                 .setYouTubeRequestInitializer(new YouTubeRequestInitializer(youTubeConfig.getApiKey()));
 
-        if (!mockRootUrl.isBlank()) {
-            youTubeBuilder.setRootUrl(mockRootUrl);
+        if (StringUtils.isNotBlank(youTubeConfig.getMockRootUrl())) {
+            youTubeBuilder.setRootUrl(youTubeConfig.getMockRootUrl());
         };
 
         return youTubeBuilder.build();
