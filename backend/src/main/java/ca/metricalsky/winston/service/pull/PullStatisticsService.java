@@ -1,7 +1,6 @@
 package ca.metricalsky.winston.service.pull;
 
 import ca.metricalsky.winston.repository.VideoCommentsRepository;
-import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,12 @@ public class PullStatisticsService {
     public double getTopLevelCommentPercentage() {
         var commentStatistics = videoCommentsRepository.getCommentStatistics();
         var commentCount = commentStatistics.getCommentCount();
-        var replyCount = commentStatistics.getReplyCount();
+        var totalCommentCount = commentCount + commentStatistics.getReplyCount();
 
-        return (double) commentCount / (commentCount + replyCount);
+        if (totalCommentCount == 0) {
+            return 0;
+        }
+        return (double) commentCount / totalCommentCount;
     }
 
     public double getAverageCommentsPerVideo() {
@@ -24,6 +26,9 @@ public class PullStatisticsService {
         var commentCount = commentStatistics.getCommentCount();
         var videoCount = commentStatistics.getVideoCount();
 
+        if (videoCount == 0) {
+            return 0;
+        }
         return (double) commentCount / videoCount;
     }
 }
