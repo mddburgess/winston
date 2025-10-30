@@ -1,9 +1,6 @@
 package ca.metricalsky.winston.utils;
 
-import org.springframework.lang.NonNull;
-
 import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.time.temporal.Temporal;
 
 public final class NumberUtils {
@@ -25,7 +22,7 @@ public final class NumberUtils {
             return value;
         }
 
-        var scaledDuration = Duration.between(fromTime, OffsetDateTime.now());
+        var scaledDuration = Duration.between(fromTime, CurrentTime.asOffsetDateTime());
         var scaleFactor = (double) scaledDuration.getSeconds() / valueDuration.getSeconds();
         return (int) (value * scaleFactor);
     }
