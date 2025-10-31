@@ -2,7 +2,6 @@ package ca.metricalsky.winston.repository.fetch;
 
 import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -11,7 +10,4 @@ import java.time.OffsetDateTime;
 public interface YouTubeRequestRepository extends JpaRepository<YouTubeRequestEntity, Long> {
 
     int countAllByRequestedAtAfter(OffsetDateTime date);
-
-    @Query("SELECT AVG(y.itemCount) FROM YouTubeRequestEntity y WHERE y.requestType = 'COMMENTS'")
-    double getAverageItemCountForCommentRequests();
 }
