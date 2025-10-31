@@ -32,6 +32,7 @@ export default typescript.config(
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-deprecated": "warn",
       "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/restrict-template-expressions": [
         "error",
@@ -44,6 +45,7 @@ export default typescript.config(
           allowRegExp: false,
         },
       ],
+      "@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
     },
   },
   {

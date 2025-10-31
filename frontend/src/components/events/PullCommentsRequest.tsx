@@ -6,7 +6,7 @@ import { invalidateComments, invalidateVideos } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullCommentsActive, pullCommentsError, pullCommentsResponse } from "#/store/slices/pullComments";
 import type { PullOperationEvent, PullResultsEvent } from "#/components/events/types";
-import type { PullOperation, TopLevelComment } from "#/types";
+import type { ProblemDetail, PullOperation, TopLevelComment } from "#/types";
 
 const PullCommentsRequest = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ const PullCommentsRequest = () => {
     ]);
     pull({ body: { event_subscription_id: eventSubscriptionId, operations } })
       .unwrap()
-      .catch((rejected) => dispatch(pullCommentsError({ error: rejected.data })));
+      .catch((rejected) => dispatch(pullCommentsError({ error: rejected.data as ProblemDetail })));
   };
 
   const handlePullOperationEvent = (event: PullOperationEvent) => {
