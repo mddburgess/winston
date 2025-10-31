@@ -45,6 +45,7 @@ export default typescript.config(
           allowRegExp: false,
         },
       ],
+      "@typescript-eslint/unified-signatures": "off",
       "@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
     },
   },
