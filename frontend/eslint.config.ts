@@ -90,11 +90,14 @@ export default typescript.config(
     },
   },
   {
-    extends: [
-      reactPlugin.configs.flat.recommended,
-      reactPlugin.configs.flat["jsx-runtime"],
-      reactHooksPlugin.configs["recommended-latest"],
-    ],
+    extends: [reactPlugin.configs.flat.recommended, reactPlugin.configs.flat["jsx-runtime"]],
+    plugins: {
+      "react-hooks": reactHooksPlugin,
+    },
+    rules: {
+      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/rules-of-hooks": "error",
+    },
     settings: {
       react: {
         version: "detect",
@@ -105,7 +108,7 @@ export default typescript.config(
     extends: [vitestPlugin.configs.recommended],
     files: ["**/*.{spec,test}.{ts,tsx}"],
     rules: {
-      "vitest/consistent-test-filename": ["warn", { pattern: /.*\.spec\.tsx?$/ }],
+      "vitest/consistent-test-filename": ["warn", { pattern: ".*\\.spec\\.tsx?$" }],
       "vitest/consistent-test-it": "warn",
       "vitest/max-expects": ["warn", { max: 5 }],
       "vitest/max-nested-describe": ["warn", { max: 3 }],
