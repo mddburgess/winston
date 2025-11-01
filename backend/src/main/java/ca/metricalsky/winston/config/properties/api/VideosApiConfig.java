@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.config.api;
+package ca.metricalsky.winston.config.properties.api;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

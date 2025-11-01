@@ -6,10 +6,13 @@ import { PullCommentsList } from "#/components/pull/PullCommentsList";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { getPullCommentsStatus, setShowPullCommentsSidebar } from "#/store/slices/pullComments";
 import { pluralize } from "#/utils";
+import { XOctagonFill } from "react-bootstrap-icons";
 
 const BatchPullCommentsSidebar = () => {
   const dispatch = useAppDispatch();
-  const { active, requested, responses, showPullCommentsSidebar } = useAppSelector((state) => state.pullComments);
+  const { active, requested, responses, requestError, showPullCommentsSidebar } = useAppSelector(
+    (state) => state.pullComments,
+  );
 
   const currentVideoIds = map(requested, "id");
   const completedResponses = filter(responses, (response) => !!response).filter(
@@ -36,6 +39,16 @@ const BatchPullCommentsSidebar = () => {
           <PullCommentsList />
         </Container>
       </Offcanvas.Body>
+      {requestError && (
+        <Offcanvas.Body className={"bg-danger-subtle height-fit text-danger-emphasis"}>
+          <Row className={"g-2"}>
+            <Col xs={"auto"}>
+              <XOctagonFill />
+            </Col>
+            <Col>{requestError.detail}</Col>
+          </Row>
+        </Offcanvas.Body>
+      )}
       <Offcanvas.Body className={"bg-body-tertiary height-fit"}>
         <Row className={"flex-center"}>
           <Col>

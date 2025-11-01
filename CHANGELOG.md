@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Toggle to show or hide archived channels on the channel list page. (mddburgess/winston#105)
 - Video cards are highlighted when the cursor hovers over them. (mddburgess/winston#108)
 - UI control on the channel details page to choose how many videos to display per page. (mddburgess/winston#108)
+- Endpoint to estimate the quota cost of a pull request. (mddburgess/winston#110)
 
 ### Changed
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated channel details page to use the paginated videos API. (mddburgess/winston#108)
 - The entire video card is now clickable, instead of just the title and image. (mddburgess/winston#108)
 - Redesigned how to select videos for batch pulling comments. (mddburgess/winston#108)
+- Pull requests first estimate the quota cost, and rejects if it exceeds the available quota. (mddburgess/winston#110)
 
 ### Fixed
 

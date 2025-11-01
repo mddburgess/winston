@@ -11,6 +11,10 @@ properties:
     const: channel
   channel_handle:
     type: string
+  estimated_cost:
+    type: integer
+    readOnly: true
+    format: int32
   status:
     type: string
     readOnly: true

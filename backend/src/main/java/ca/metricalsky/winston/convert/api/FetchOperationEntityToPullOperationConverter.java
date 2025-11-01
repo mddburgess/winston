@@ -28,20 +28,24 @@ public abstract class FetchOperationEntityToPullOperationConverter
 
     @Mapping(target = "pull", constant = "CHANNEL")
     @Mapping(target = "channelHandle", source = "objectId")
+    @Mapping(target = "estimatedCost", ignore = true)
     protected abstract PullChannelOperation convertChannel(FetchOperationEntity source);
 
     @Mapping(target = "pull", constant = "VIDEOS")
     @Mapping(target = "channelHandle", source = "objectId")
     @Mapping(target = "range", source = "mode")
+    @Mapping(target = "estimatedCost", ignore = true)
     protected abstract PullVideosOperation convertVideos(FetchOperationEntity source);
 
     @Mapping(target = "pull", constant = "COMMENTS")
     @Mapping(target = "videoId", source = "objectId")
+    @Mapping(target = "estimatedCost", ignore = true)
     protected abstract PullCommentsOperation convertComments(FetchOperationEntity source);
 
     @Mapping(target = "pull", constant = "REPLIES")
     @Mapping(target = "videoId", source = ".", qualifiedByName = "getPullRepliesVideoId")
     @Mapping(target = "commentId", source = ".", qualifiedByName = "getPullRepliesCommentId")
+    @Mapping(target = "estimatedCost", ignore = true)
     protected abstract PullRepliesOperation convertReplies(FetchOperationEntity source);
 
     @Named("getPullRepliesVideoId")

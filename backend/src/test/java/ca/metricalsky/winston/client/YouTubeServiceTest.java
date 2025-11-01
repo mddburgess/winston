@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.client;
 
-import ca.metricalsky.winston.config.YouTubeConfig;
+import ca.metricalsky.winston.config.YouTubeProvider;
+import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -41,9 +42,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest(includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
         YouTubeClient.class,
         YouTubeService.class,
-        YouTubeConfig.class,
+        YouTubeProvider.class,
         YouTubeRequestRepository.class,
 }))
+@EnableConfigurationProperties(YouTubeConfig.class)
 @EnableWireMock
 class YouTubeServiceTest {
 
@@ -54,11 +56,10 @@ class YouTubeServiceTest {
 
     private static final TestResources TEST_RESOURCES = TestResources.dir("client");
 
-    @Value("${youtube.apiKey}")
-    private String youtubeApiKey;
-
     @Autowired
     private TestEntityManager entityManager;
+    @Autowired
+    private YouTubeConfig youTubeConfig;
     @Autowired
     private YouTubeService clientAdapter;
     @Autowired
@@ -68,7 +69,7 @@ class YouTubeServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        wireMock = new YouTubeWireMock(youtubeApiKey);
+        wireMock = new YouTubeWireMock(youTubeConfig.getApiKey());
     }
 
     @Test

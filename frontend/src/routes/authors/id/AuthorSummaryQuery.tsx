@@ -1,12 +1,12 @@
 import { useGetAuthorQuery } from "#/api";
-import type { GetAuthorResponse } from "#/api";
+import type { GetAuthorResp } from "#/api";
 import type { ReactNode } from "react";
 
 type Props = {
   authorHandle: string;
   children: {
     isLoading?: () => ReactNode;
-    isSuccess: (summary: GetAuthorResponse) => ReactNode;
+    isSuccess: (summary: GetAuthorResp) => ReactNode;
   };
 };
 

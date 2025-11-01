@@ -12,6 +12,10 @@ properties:
     type: string
   comment_id:
     type: string
+  estimated_cost:
+    type: integer
+    readOnly: true
+    format: int32
   status:
     type: string
     readOnly: true
