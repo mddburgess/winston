@@ -7,7 +7,9 @@ import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class FetchActionHandler<T> {
 
@@ -37,6 +39,7 @@ public class FetchActionHandler<T> {
             fetchActionService.actionSuccessful(fetchAction, fetchResult.items().size());
             return fetchResult;
         } catch (RuntimeException ex) {
+            log.error("An error occurred while fetching action {}", fetchAction, ex);
             fetchActionService.actionFailed(fetchAction, ex);
             throw ex;
         }
