@@ -3,12 +3,16 @@ import { Button, Col, Container, Offcanvas, Row } from "react-bootstrap";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { PullCommentsList } from "#/components/pull/PullCommentsList";
-import { useAppSelector } from "#/store/hooks";
-import { getPullCommentsStatus } from "#/store/slices/pullComments";
+import { useAppDispatch, useAppSelector } from "#/store/hooks";
+import { getPullCommentsStatus, setShowPullCommentsSidebar } from "#/store/slices/pullComments";
 import { pluralize } from "#/utils";
+import { XOctagonFill } from "react-bootstrap-icons";
 
-const BatchPullCommentsSidebar = (props: { show: boolean; onHide: () => void }) => {
-  const { active, requested, responses } = useAppSelector((state) => state.pullComments);
+const BatchPullCommentsSidebar = () => {
+  const dispatch = useAppDispatch();
+  const { active, requested, responses, requestError, showPullCommentsSidebar } = useAppSelector(
+    (state) => state.pullComments,
+  );
 
   const currentVideoIds = map(requested, "id");
   const completedResponses = filter(responses, (response) => !!response).filter(
@@ -17,8 +21,12 @@ const BatchPullCommentsSidebar = (props: { show: boolean; onHide: () => void }) 
       ["successful", "warning", "failed"].includes(getPullCommentsStatus(response)),
   ).length;
 
+  const handleHide = () => {
+    dispatch(setShowPullCommentsSidebar(false));
+  };
+
   return (
-    <Offcanvas show={props.show} placement={"end"}>
+    <Offcanvas show={showPullCommentsSidebar} placement={"end"}>
       <Offcanvas.Header>
         <Offcanvas.Title>Pull comments</Offcanvas.Title>
       </Offcanvas.Header>
@@ -31,13 +39,23 @@ const BatchPullCommentsSidebar = (props: { show: boolean; onHide: () => void }) 
           <PullCommentsList />
         </Container>
       </Offcanvas.Body>
+      {requestError && (
+        <Offcanvas.Body className={"bg-danger-subtle height-fit text-danger-emphasis"}>
+          <Row className={"g-2"}>
+            <Col xs={"auto"}>
+              <XOctagonFill />
+            </Col>
+            <Col>{requestError.detail}</Col>
+          </Row>
+        </Offcanvas.Body>
+      )}
       <Offcanvas.Body className={"bg-body-tertiary height-fit"}>
         <Row className={"flex-center"}>
           <Col>
             <AvailableQuota />
           </Col>
           <Col xs={"auto"}>
-            <Button onClick={props.onHide} disabled={active}>
+            <Button onClick={handleHide} disabled={active}>
               Close
             </Button>
           </Col>

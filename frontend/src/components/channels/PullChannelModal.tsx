@@ -17,7 +17,7 @@ const PullChannelModal = (props: { show: boolean; onHide: () => void }) => {
   const dispatch = useAppDispatch();
   const { active, errors } = useAppSelector((state) => state.pullChannels);
 
-  const { isSuccess, data } = useListChannelsQuery();
+  const { isSuccess, data } = useListChannelsQuery({});
   const channels = isSuccess ? map(selectAllChannels(data), "handle") : [];
 
   const navigate = useNavigate();

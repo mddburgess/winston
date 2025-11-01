@@ -2,7 +2,7 @@ package ca.metricalsky.winston.events;
 
 import ca.metricalsky.winston.api.model.Problem;
 import ca.metricalsky.winston.events.model.AppEvent;
-import ca.metricalsky.winston.test.UnitTest;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

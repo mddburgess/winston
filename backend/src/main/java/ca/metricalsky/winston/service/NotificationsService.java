@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class NotificationsService implements SmartLifecycle {
 
-    private static final Long DEFAULT_TIMEOUT_MS = 120_000L;
+    private static final long DEFAULT_TIMEOUT_MS = Duration.ofHours(1).toMillis();
 
     private final Map<UUID, SsePublisher> subscriptions = new ConcurrentHashMap<>();
     private boolean running;

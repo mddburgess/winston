@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.client;
 
-import ca.metricalsky.winston.config.YouTubeConfig;
+import ca.metricalsky.winston.config.YouTubeProvider;
+import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import ca.metricalsky.winston.test.TestResources;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -8,7 +9,7 @@ import com.google.api.client.util.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(classes = {
         YouTubeClient.class,
-        YouTubeConfig.class,
+        YouTubeProvider.class,
 })
+@EnableConfigurationProperties(YouTubeConfig.class)
 @EnableWireMock
 class YouTubeClientTest {
 
@@ -38,17 +40,16 @@ class YouTubeClientTest {
 
     private static final TestResources TEST_RESOURCES = TestResources.dir("client");
 
-    @Value("${youtube.apiKey}")
-    private String youtubeApiKey;
-
     @Autowired
     private YouTubeClient youTubeClient;
+    @Autowired
+    private YouTubeConfig youTubeConfig;
 
     private YouTubeWireMock wireMock;
 
     @BeforeEach
     void beforeEach() {
-        wireMock = new YouTubeWireMock(youtubeApiKey);
+        wireMock = new YouTubeWireMock(youTubeConfig.getApiKey());
     }
 
     @Test

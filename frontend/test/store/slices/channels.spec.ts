@@ -11,7 +11,7 @@ describe("channelsApi", () => {
 
   describe("listChannels", () => {
     it("handles a 200 response with a list of channels", async () => {
-      const { result } = renderHookWithProviders(() => useListChannelsQuery());
+      const { result } = renderHookWithProviders(() => useListChannelsQuery({}));
       await waitFor(() => {
         expect(result.current.isSuccess).toBe(true);
       });
@@ -45,7 +45,7 @@ describe("channelsApi", () => {
           });
         }),
       );
-      const { result } = renderHookWithProviders(() => useListChannelsQuery());
+      const { result } = renderHookWithProviders(() => useListChannelsQuery({}));
       await waitFor(() => {
         expect(result.current.isSuccess).toBe(true);
       });

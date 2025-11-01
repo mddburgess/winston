@@ -7,7 +7,7 @@ import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
-import ca.metricalsky.winston.test.UnitTest;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,12 +42,12 @@ class ChannelServiceTest {
     void getAllChannels() {
         var channel = buildChannel();
 
-        when(channelDataService.getAllChannels())
+        when(channelDataService.getAllChannels(false))
                 .thenReturn(List.of(channel));
         when(videoDataService.countAllVideosByChannelId())
                 .thenReturn(Map.of(channel.getId(), 1));
 
-        var channels = channelService.getAllChannels();
+        var channels = channelService.getAllChannels(false);
 
         assertThat(channels).first()
                 .isSameAs(channel);
@@ -57,12 +57,12 @@ class ChannelServiceTest {
 
     @Test
     void getAllChannels_empty() {
-        when(channelDataService.getAllChannels())
+        when(channelDataService.getAllChannels(false))
                 .thenReturn(List.of());
         when(videoDataService.countAllVideosByChannelId())
                 .thenReturn(Map.of());
 
-        var channels = channelService.getAllChannels();
+        var channels = channelService.getAllChannels(false);
 
         assertThat(channels)
                 .isEmpty();

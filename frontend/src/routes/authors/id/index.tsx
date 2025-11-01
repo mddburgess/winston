@@ -5,7 +5,7 @@ import { AuthorInfoJumbotron } from "#/components/authors/AuthorInfoJumbotron";
 import { AuthorDetailsView } from "#/routes/authors/id/AuthorDetailsView";
 import { routes } from "#/utils/links";
 import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
-import type { GetAuthorResponse } from "#/api";
+import type { GetAuthorResp } from "#/api";
 
 const AuthorDetailsRoute = () => {
   const { authorHandle = "" } = useParams();
@@ -21,7 +21,7 @@ const AuthorDetailsRoute = () => {
 };
 
 type AuthorDetailsContentProps = {
-  summary: GetAuthorResponse;
+  summary: GetAuthorResp;
 };
 
 const AuthorDetailsContent = ({ summary }: AuthorDetailsContentProps) => {

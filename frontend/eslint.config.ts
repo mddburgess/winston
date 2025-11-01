@@ -32,6 +32,7 @@ export default typescript.config(
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-deprecated": "warn",
       "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/restrict-template-expressions": [
         "error",
@@ -44,6 +45,8 @@ export default typescript.config(
           allowRegExp: false,
         },
       ],
+      "@typescript-eslint/unified-signatures": "off",
+      "@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
     },
   },
   {
@@ -90,11 +93,14 @@ export default typescript.config(
     },
   },
   {
-    extends: [
-      reactPlugin.configs.flat.recommended,
-      reactPlugin.configs.flat["jsx-runtime"],
-      reactHooksPlugin.configs["recommended-latest"],
-    ],
+    extends: [reactPlugin.configs.flat.recommended, reactPlugin.configs.flat["jsx-runtime"]],
+    plugins: {
+      "react-hooks": reactHooksPlugin,
+    },
+    rules: {
+      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/rules-of-hooks": "error",
+    },
     settings: {
       react: {
         version: "detect",

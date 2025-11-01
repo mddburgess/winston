@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { enhancedBackendApi } from "#/store/slices/backend";
+import { preferencesReducer } from "#/store/slices/preferences";
 import { pullChannelsReducer } from "#/store/slices/pullChannels";
 import { pullCommentsReducer } from "#/store/slices/pullComments";
 import { pullRepliesReducer } from "#/store/slices/pullReplies";
@@ -8,6 +9,7 @@ import { selectionsReducer } from "#/store/slices/selections";
 
 const reducer = combineReducers({
   [enhancedBackendApi.reducerPath]: enhancedBackendApi.reducer,
+  preferences: preferencesReducer,
   pullChannels: pullChannelsReducer,
   pullComments: pullCommentsReducer,
   pullReplies: pullRepliesReducer,

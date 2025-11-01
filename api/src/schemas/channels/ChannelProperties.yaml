@@ -1,0 +1,9 @@
+title: Channel Properties
+description: Additional non-YouTube properties for a channel.
+type: object
+required:
+  - archived
+properties:
+  archived:
+    description: Flag indicating if the channel is archived.
+    type: boolean

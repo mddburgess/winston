@@ -8,12 +8,14 @@ import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.mappers.api.VideoMapperImpl;
 import ca.metricalsky.winston.repository.VideoRepository;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class VideoDataServiceTest {
 
+    private static final WinstonFaker faker = new WinstonFaker();
+    private static final Sort publishedAtDesc = Sort.by(Sort.Direction.DESC, "publishedAt");
+
     @InjectMocks
     private VideoDataService videoDataService;
 
@@ -35,27 +40,29 @@ class VideoDataServiceTest {
     private VideoRepository videoRepository;
 
     @Test
-    void getVideosForChannel() {
-        var channelHandle = TestUtils.randomString();
+    void listVideosByChannelId() {
+        var channelId = faker.youtube().channelId();
+        var pageRequest = faker.page().pageRequest();
         var videoEntity = buildVideoEntity();
 
-        when(videoRepository.findAllByChannelHandle(channelHandle))
+        when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))
                 .thenReturn(List.of(videoEntity));
 
-        var videos = videoDataService.getVideosForChannel(channelHandle);
+        var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
 
         assertThat(videos).first()
                 .hasFieldOrPropertyWithValue("id", videoEntity.getId());
     }
 
     @Test
-    void getVideosForChannel_empty() {
-        var channelHandle = TestUtils.randomString();
+    void listVideosByChannelId_empty() {
+        var channelId = faker.youtube().channelId();
+        var pageRequest = faker.page().pageRequest();
 
-        when(videoRepository.findAllByChannelHandle(channelHandle))
+        when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))
                 .thenReturn(List.of());
 
-        var videos = videoDataService.getVideosForChannel(channelHandle);
+        var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
 
         assertThat(videos)
                 .isEmpty();
@@ -120,7 +127,7 @@ class VideoDataServiceTest {
     void countAllVideosByChannelId() {
         var videoCountView = mockVideoCountView();
 
-        when(videoRepository.countAllByChannelId())
+        when(videoRepository.countAllGroupByChannelId())
                 .thenReturn(List.of(videoCountView));
 
         var videoCounts = videoDataService.countAllVideosByChannelId();
@@ -133,7 +140,7 @@ class VideoDataServiceTest {
 
     @Test
     void countAllVideosByChannelId_defaultValue() {
-        when(videoRepository.countAllByChannelId())
+        when(videoRepository.countAllGroupByChannelId())
                 .thenReturn(List.of());
 
         var videoCounts = videoDataService.countAllVideosByChannelId();

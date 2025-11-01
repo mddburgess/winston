@@ -2,7 +2,7 @@ package ca.metricalsky.winston.convert.entity;
 
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.entity.VideoRestrictionEntity.Restriction;
-import ca.metricalsky.winston.test.UnitTest;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.ContentRating;
 import com.google.api.services.youtube.model.Video;

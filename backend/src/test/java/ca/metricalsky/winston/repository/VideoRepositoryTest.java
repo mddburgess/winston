@@ -1,60 +1,45 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
-import org.apache.commons.lang3.RandomStringUtils;
+import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = VideoRepository.class
-))
+@RepositoryTest
+@Sql({
+        "classpath:sql/channels.sql",
+        "classpath:sql/videos.sql"
+})
 class VideoRepositoryTest {
 
-    @Autowired
-    private TestEntityManager entityManager;
+    private static final String CHANNEL_ID = "channelId";
+    private static final String CHANNEL_ID_NOT_FOUND = "notFound";
+
     @Autowired
     private VideoRepository repository;
 
     @Test
-    void findAllByChannelHandle() {
-        var channel = entityManager.persist(buildChannel());
-        var video = entityManager.persist(buildVideo(channel));
+    void findPageByChannelId() {
+        var page = PageRequest.of(0, 1);
 
-        var videos = repository.findAllByChannelHandle(channel.getCustomUrl());
+        var result = repository.findPageByChannelId(CHANNEL_ID, page);
 
-        assertThat(videos)
-                .containsExactly(video);
+        assertThat(result)
+                .extracting(VideoEntity::getId)
+                .containsExactly("videoId1");
     }
 
     @Test
-    void findAllByChannelHandle_empty() {
-        var channelHandle = RandomStringUtils.secure().nextAlphanumeric(10);
+    void findPageByChannelId_notFound() {
+        var page = PageRequest.of(0, 1);
 
-        var videos = repository.findAllByChannelHandle(channelHandle);
+        var result = repository.findPageByChannelId(CHANNEL_ID_NOT_FOUND, page);
 
-        assertThat(videos)
+        assertThat(result)
                 .isEmpty();
-    }
-
-    private static ChannelEntity buildChannel() {
-        var channel = new ChannelEntity();
-        channel.setId(RandomStringUtils.secure().nextAlphanumeric(10));
-        channel.setCustomUrl("@" + RandomStringUtils.secure().nextAlphanumeric(10));
-        return channel;
-    }
-
-    private static VideoEntity buildVideo(ChannelEntity channel) {
-        var video = new VideoEntity();
-        video.setId(RandomStringUtils.secure().nextAlphanumeric(10));
-        video.setChannelId(channel.getId());
-        return video;
     }
 }

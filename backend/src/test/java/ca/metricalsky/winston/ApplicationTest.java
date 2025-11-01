@@ -1,11 +1,9 @@
 package ca.metricalsky.winston;
 
+import ca.metricalsky.winston.test.annotations.IntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.wiremock.spring.EnableWireMock;
 
-@SpringBootTest
-@EnableWireMock
+@IntegrationTest
 class ApplicationTest {
 
     @Test

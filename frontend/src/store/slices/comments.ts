@@ -2,14 +2,14 @@ import { createEntityAdapter } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
 import { enhancedBackendApi } from "#/store/slices/backend";
 import { ascBy } from "#/utils";
-import type { Comment, ListCommentsResponse } from "#/api";
+import type { Comment, ListCommentsResp } from "#/api";
 import type { CommentState } from "#/store/slices/backend";
 import type { TopLevelComment } from "#/types";
 
 const commentsApi = enhancedBackendApi.enhanceEndpoints({
   endpoints: {
     listComments: {
-      transformResponse: (response: ListCommentsResponse) =>
+      transformResponse: (response: ListCommentsResp) =>
         topLevelCommentsAdapter.addMany(
           topLevelCommentsAdapter.getInitialState(),
           transformComments(response.comments),

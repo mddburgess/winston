@@ -27,6 +27,7 @@ public abstract class ChannelEntityMapper {
     @Mapping(target = "topics", source = "topicDetails.topicCategories")
     @Mapping(target = "keywords", source = "brandingSettings.channel.keywords")
     @Mapping(target = "lastFetchedAt", ignore = true)
+    @Mapping(target = "properties", ignore = true)
     public abstract ChannelEntity toChannelEntity(Channel channel);
 
     Set<String> mapKeywords(String keywords) {

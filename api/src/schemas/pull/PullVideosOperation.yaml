@@ -16,6 +16,10 @@ properties:
     enum:
       - all
       - latest
+  estimated_cost:
+    type: integer
+    readOnly: true
+    format: int32
   status:
     type: string
     readOnly: true

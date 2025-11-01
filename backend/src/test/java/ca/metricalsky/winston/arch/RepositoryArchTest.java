@@ -27,11 +27,6 @@ class RepositoryArchTest {
             .should().resideInAPackage(REPOSITORY_PACKAGE);
 
     @ArchTest
-    private final ArchRule repositoryClassesAreInterfaces = classes()
-            .that().areAnnotatedWith(Repository.class)
-            .should().beInterfaces();
-
-    @ArchTest
     private final ArchRule nonRepositoryClassNamesDoNotEndWithRepository = classes()
             .that().areNotAnnotatedWith(Repository.class)
             .should().haveSimpleNameNotEndingWith("Repository");

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
+import { useGetVideoQuery } from "#/api";
 import { CommentList } from "#/components/comments/CommentList";
 import { PullCommentsRequest } from "#/components/events/PullCommentsRequest";
 import { PullRepliesRequest } from "#/components/events/PullRepliesRequest";
@@ -9,7 +10,6 @@ import { PaginationRow } from "#/components/PaginationRow";
 import { NoCommentsJumbotron } from "#/components/videos/NoCommentsJumbotron";
 import { VideoDetailsJumbotron } from "#/components/videos/VideoDetailsJumbotron";
 import { selectAllReplies, selectAllTopLevelComments, useListCommentsQuery } from "#/store/slices/comments";
-import { useGetVideoQuery } from "#/store/slices/videos";
 import { routes } from "#/utils/links";
 import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
 

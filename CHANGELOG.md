@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] — 2025-11-01
+
+### Added
+
+- Toggle to mark a channel as archived. (mddburgess/winston#105)
+- Toggle to show or hide archived channels on the channel list page. (mddburgess/winston#105)
+- Video cards are highlighted when the cursor hovers over them. (mddburgess/winston#108)
+- UI control on the channel details page to choose how many videos to display per page. (mddburgess/winston#108)
+- Endpoint to estimate the quota cost of a pull request. (mddburgess/winston#110)
+
+### Changed
+
+- Archived channels are hidden from the channel list page by default. (mddburgess/winston#105)
+- Archived channels are shown faded in the channel list page. (mddburgess/winston#105)
+- Backend videos API now returns paginated results instead of a full list. (mddburgess/winston#108)
+- Updated channel details page to use the paginated videos API. (mddburgess/winston#108)
+- The entire video card is now clickable, instead of just the title and image. (mddburgess/winston#108)
+- Redesigned how to select videos for batch pulling comments. (mddburgess/winston#108)
+- Pull requests first estimate the quota cost, and rejects if it exceeds the available quota. (mddburgess/winston#110)
+
+### Fixed
+
+- Optimized database queries for inserting and updating authors. (mddburgess/winston#86)
+- Optimized database queries for inserting and updating comments. (mddburgess/winston#86)
+- Added indexes on comments table to fix slow queries. (mddburgess/winston#110)
+
 ## [1.6.0] — 2025-09-14
 
 ### Added
@@ -163,6 +189,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache channel and video thumbnails.
 
 [Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.7.0]: https://github.com/mddburgess/winston/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/mddburgess/winston/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/mddburgess/winston/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/mddburgess/winston/compare/v1.3.0...v1.4.0
