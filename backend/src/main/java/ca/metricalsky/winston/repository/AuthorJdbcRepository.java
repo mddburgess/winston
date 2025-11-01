@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.repository;
 
+import ca.metricalsky.winston.aspects.Slo;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,6 +25,7 @@ public class AuthorJdbcRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Slo(ms = 50)
     public void saveAll(List<AuthorEntity> authors) {
         if (authors.isEmpty()) {
             return;
