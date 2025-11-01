@@ -371,19 +371,19 @@ paths:
       responses:
         "202":
           description: The request was accepted for processing.
-        "422":
-          description: The request cannot be processed.
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-              examples:
-                Channel not pulled:
-                  $ref: ./examples/pull/422-channelNotPulled.yaml
-                Video not pulled:
-                  $ref: ./examples/pull/422-videoNotPulled.yaml
-                Comment not pulled:
-                  $ref: ./examples/pull/422-commentNotPulled.yaml
+  #        "422":
+  #          description: The request cannot be processed.
+  #          content:
+  #            application/problem+json:
+  #              schema:
+  #                $ref: "#/components/schemas/Problem"
+  #              examples:
+  #                Channel not pulled:
+  #                  $ref: ./examples/pull/422-channelNotPulled.yaml
+  #                Video not pulled:
+  #                  $ref: ./examples/pull/422-videoNotPulled.yaml
+  #                Comment not pulled:
+  #                  $ref: ./examples/pull/422-commentNotPulled.yaml
 
   /api/v1/pull/quote:
     post:

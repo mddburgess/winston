@@ -3,8 +3,10 @@ package ca.metricalsky.winston.mapper.entity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentThread;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 @Mapper(uses = {
         AuthorEntityMapper.class,
@@ -39,7 +41,7 @@ public abstract class CommentEntityMapper {
     @Mapping(target = "parentId", source = "snippet.parentId")
     @Mapping(target = "author", source = "snippet")
     @Mapping(target = "textDisplay", source = "snippet.textDisplay")
-    @Mapping(target = "textOriginal", source = "snippet.textOriginal")
+    @Mapping(target = "textOriginal", source = "snippet.textOriginal", qualifiedByName = "sanitizeString")
     @Mapping(target = "likeCount", source = "snippet.likeCount")
     @Mapping(target = "publishedAt", source = "snippet.publishedAt")
     @Mapping(target = "updatedAt", source = "snippet.updatedAt")
@@ -48,4 +50,9 @@ public abstract class CommentEntityMapper {
     @Mapping(target = "properties", ignore = true)
     @Mapping(target = "replies", ignore = true)
     public abstract CommentEntity toCommentEntity(Comment ytComment);
+
+    @Named("sanitizeString")
+    protected String sanitizeString(String string) {
+        return StringUtils.remove(string, "\u0000");
+    }
 }
