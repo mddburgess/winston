@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
+
+## [1.7.0] — 2025-11-01
+
 ### Added
 
 - Toggle to mark a channel as archived. (mddburgess/winston#105)
@@ -30,7 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimized database queries for inserting and updating authors. (mddburgess/winston#86)
 - Optimized database queries for inserting and updating comments. (mddburgess/winston#86)
 - Added indexes on comments table to fix slow queries. (mddburgess/winston#110)
-- Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
 
 ## [1.6.0] — 2025-09-14
 
@@ -190,6 +195,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache channel and video thumbnails.
 
 [Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.7.0]: https://github.com/mddburgess/winston/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/mddburgess/winston/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/mddburgess/winston/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/mddburgess/winston/compare/v1.3.0...v1.4.0
