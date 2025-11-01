@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimized database queries for inserting and updating authors. (mddburgess/winston#86)
 - Optimized database queries for inserting and updating comments. (mddburgess/winston#86)
 - Added indexes on comments table to fix slow queries. (mddburgess/winston#110)
+- Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
 
 ## [1.6.0] — 2025-09-14
 
