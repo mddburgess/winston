@@ -38,10 +38,9 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
                 COUNT(c.id) - COUNT(c.parentId) AS commentCount,
                 COUNT(c.parentId) AS replyCount,
                 MAX(c.publishedAt) AS lastCommentedAt
-            FROM AuthorEntity a
-                LEFT JOIN CommentEntity c ON a.id = c.author.id
+            FROM CommentEntity c
                 LEFT JOIN VideoEntity v ON c.videoId = v.id
-            WHERE a.id = :id
+            WHERE c.author.id = :id
             GROUP BY v.id
             """)
     List<VideoStatisticsView> findVideoStatisticsByAuthorId(String id);
