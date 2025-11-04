@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117) 
+
 ### Fixed
 
 - Sanitize comment strings before persisting to the database. (mddburgess/winston#113)

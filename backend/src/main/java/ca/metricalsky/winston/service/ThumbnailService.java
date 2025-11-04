@@ -57,7 +57,7 @@ public class ThumbnailService {
                     .orElse(cachedThumbnail.getImage());
         }
 
-        log.info("Found cached thumbnail for ID '{}'", id);
+        log.debug("Found cached thumbnail for ID '{}'", id);
         return cachedThumbnail.getImage();
     }
 
@@ -68,7 +68,7 @@ public class ThumbnailService {
     }
 
     private Optional<byte[]> fetchThumbnailFromUrl(String id, String thumbnailUrl) {
-        log.info("Fetching thumbnail for ID '{}' from {}", id, thumbnailUrl);
+        log.debug("Fetching thumbnail for ID '{}' from {}", id, thumbnailUrl);
 
         URL url;
         try {
