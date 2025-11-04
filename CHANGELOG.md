@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
+- Added indexes on authors and comments tables to fix slow queries on authors. (mddburgess/winston#119)
 
 ## [1.7.0] — 2025-11-01
 
