@@ -9,6 +9,7 @@ import ca.metricalsky.winston.test.annotations.ControllerTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ControllerTest(VideoController.class)
+@EnableConfigurationProperties(VideosApiConfig.class)
 class VideoControllerTest {
 
     private static final WinstonFaker faker = new WinstonFaker();
@@ -36,8 +38,6 @@ class VideoControllerTest {
     private ChannelDataService channelDataService;
     @MockitoBean
     private VideoDataService videoDataService;
-    @MockitoBean
-    private VideosApiConfig videosApiConfig;
 
     @Test
     void listVideos() throws Exception {
@@ -45,8 +45,6 @@ class VideoControllerTest {
         var channelId = faker.youtube().channelId();
         var video = faker.video().dto(channelHandle);
 
-        when(videosApiConfig.getDefaultPageSize())
-                .thenReturn(10);
         when(channelDataService.findChannelIdByHandle(channelHandle))
                 .thenReturn(Optional.of(channelId));
         when(videoDataService.countByChannelId(channelId))
@@ -69,8 +67,6 @@ class VideoControllerTest {
         var channelHandle = faker.youtube().channelHandle();
         var channelId = faker.youtube().channelId();
 
-        when(videosApiConfig.getDefaultPageSize())
-                .thenReturn(10);
         when(channelDataService.findChannelIdByHandle(channelHandle))
                 .thenReturn(Optional.of(channelId));
         when(videoDataService.countByChannelId(channelId))
@@ -91,8 +87,6 @@ class VideoControllerTest {
     void listVideos_channelNotFound() throws Exception {
         var channelHandle = faker.youtube().channelHandle();
 
-        when(videosApiConfig.getDefaultPageSize())
-                .thenReturn(10);
         when(channelDataService.findChannelIdByHandle(channelHandle))
                 .thenThrow(new AppException(ErrorCode.CHANNEL_NOT_FOUND));
 
