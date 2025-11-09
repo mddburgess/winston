@@ -53,6 +53,13 @@ class EntityArchTest {
             .should().haveSimpleNameNotEndingWith("Entity");
 
     @ArchTest
+    private final ArchRule nonEntityClassesAreNotInEntityPackage = classes()
+            .that().areTopLevelClasses()
+            .and().areNotInterfaces()
+            .and().areNotAnnotatedWith(Entity.class)
+            .should().resideOutsideOfPackage(ENTITY_PACKAGE);
+
+    @ArchTest
     private final ArchRule entityFieldsAreAnnotatedWithColumn = fields()
             .that().areDeclaredInClassesThat().areAnnotatedWith(Entity.class)
             .should().beAnnotatedWith(Column.class)
