@@ -4,9 +4,9 @@ import { AuthorListRoute } from "./authors/AuthorListRoute";
 import { AuthorDetailsRoute } from "./authors/id";
 import { ChannelDetailsRoute } from "./channels/ChannelDetailsRoute";
 import { ChannelListRoute } from "./channels/ChannelListRoute";
-import { VideoDetailsRoute } from "./videos/id";
+import { VideoDetailsRoute } from "./videos/id/VideoDetailsRoute";
 
-export const AppRoutes = () => (
+const AppRoutes = () => (
   <Routes>
     <Route path={routes.home} element={<ChannelListRoute />} />
     <Route path={routes.authors.list} element={<AuthorListRoute />} />
@@ -15,3 +15,5 @@ export const AppRoutes = () => (
     <Route path={routes.videos.details()} element={<VideoDetailsRoute />} />
   </Routes>
 );
+
+export { AppRoutes };

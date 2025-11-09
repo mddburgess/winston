@@ -7,11 +7,12 @@ import { AuthorsListToolbar } from "./AuthorsListToolbar";
 const AllAuthorsList = () => {
   const [searchParams] = useSearchParams();
 
+  const search = searchParams.get("s") ?? undefined;
   const index = parseIntOrDefault(searchParams.get("i"), 0);
   const pageSize = 50;
   const pageNumber = Math.floor(index / pageSize);
 
-  const { isFetching, isSuccess, data } = useListAuthorsQuery({ page: pageNumber, size: pageSize });
+  const { isFetching, isSuccess, data } = useListAuthorsQuery({ search, page: pageNumber, size: pageSize });
 
   return (
     isSuccess && (

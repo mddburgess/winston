@@ -7,6 +7,7 @@ import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,15 +30,19 @@ public class AuthorDataService {
     private final AuthorRepository authorRepository;
     private final ConversionService conversionService;
 
-    public long countAuthors() {
-        return authorRepository.count();
+    public long countAuthors(String search) {
+        return StringUtils.isNotBlank(search)
+                ? authorRepository.countByDisplayNameLike("%" + search + "%")
+                : authorRepository.count();
     }
 
-    public List<Author> listAuthors(PageRequest page) {
+    public List<Author> searchAuthors(String search, PageRequest page) {
         var pageRequest = page.withSort(Sort.Direction.ASC, "displayName");
 
-        var authors = authorRepository.findAll(pageRequest)
-                .stream()
+        var authorEntities = StringUtils.isNotBlank(search)
+                ? authorRepository.findAllByDisplayNameLike("%" + search + "%", pageRequest)
+                : authorRepository.findAll(pageRequest);
+        var authors = authorEntities.stream()
                 .map(authorMapper::toAuthor)
                 .toList();
         var authorIds = authors.stream()

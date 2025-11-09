@@ -1,6 +1,7 @@
 import { ButtonGroup, ButtonToolbar, Col, Row } from "react-bootstrap";
 import { PaginationControl } from "#/components/PaginationControl";
 import { PaginationLabel } from "#/components/PaginationLabel";
+import { SearchControl } from "#/components/SearchControl";
 import type { AuthorListProps } from "#/types";
 
 type AuthorsListToolbarProps = AuthorListProps & {
@@ -24,6 +25,9 @@ const AuthorsListToolbar = (props: AuthorsListToolbarProps) => {
       <Col xs={"auto"}>
         <ButtonToolbar>
           <ButtonGroup>
+            <SearchControl />
+          </ButtonGroup>
+          <ButtonGroup className={"ms-3"}>
             <PaginationControl totalCount={props.totalCount} pageSize={props.pageSize} />
           </ButtonGroup>
         </ButtonToolbar>

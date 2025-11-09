@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,9 +43,9 @@ class AuthorControllerTest {
     void listAuthors() throws Exception {
         var author = buildAuthor();
 
-        when(authorDataService.countAuthors())
+        when(authorDataService.countAuthors(null))
                 .thenReturn(1L);
-        when(authorDataService.listAuthors(any()))
+        when(authorDataService.searchAuthors(eq(null), any()))
                 .thenReturn(List.of(author));
 
         mvc.perform(get("/api/v1/authors")).andExpectAll(
@@ -59,9 +60,9 @@ class AuthorControllerTest {
 
     @Test
     void listAuthors_noResults() throws Exception {
-        when(authorDataService.countAuthors())
+        when(authorDataService.countAuthors(null))
                 .thenReturn(0L);
-        when(authorDataService.listAuthors(any()))
+        when(authorDataService.searchAuthors(eq(null), any()))
                 .thenReturn(List.of());
 
         mvc.perform(get("/api/v1/authors")).andExpectAll(

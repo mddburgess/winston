@@ -1,6 +1,5 @@
 import { Col, Pagination, Row } from "react-bootstrap";
 import { pluralize } from "#/utils";
-import { SearchControl } from "./SearchControl";
 import type { ReactElement } from "react";
 
 type PaginationRowProps = {
@@ -9,8 +8,6 @@ type PaginationRowProps = {
   pageSize: number;
   page: number;
   setPage: (page: number) => void;
-  search?: string;
-  setSearch?: (search: string) => void;
 };
 
 type MultiPagePaginationRowProps = PaginationRowProps & {
@@ -23,11 +20,6 @@ const PaginationRow = (props: PaginationRowProps) => {
     <Row className={"mb-2"}>
       {totalPages < 2 && <SinglePagePaginationRow {...props} />}
       {totalPages >= 2 && <MultiPagePaginationRow {...props} totalPages={totalPages} />}
-      {props.setSearch && (
-        <Col xs={"auto"}>
-          <SearchControl value={props.search} setValue={props.setSearch} />
-        </Col>
-      )}
     </Row>
   );
 };

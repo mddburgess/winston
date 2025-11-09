@@ -25,11 +25,11 @@ public class AuthorController implements AuthorsApi {
     private final AuthorsApiConfig config;
 
     @Override
-    public ResponseEntity<ListAuthorsResponse> listAuthors(Integer page, Integer size) {
+    public ResponseEntity<ListAuthorsResponse> listAuthors(String search, Integer page, Integer size) {
         var pageRequest = PageRequest.of(defaultIfNull(page, 0), defaultIfNull(size, config.getDefaultPageSize()));
 
-        var totalCount = (int) authorDataService.countAuthors();
-        var authors = authorDataService.listAuthors(pageRequest);
+        var totalCount = (int) authorDataService.countAuthors(search);
+        var authors = authorDataService.searchAuthors(search, pageRequest);
 
         var response = new ListAuthorsResponse()
                 .results(new ListVideosResponseResults()

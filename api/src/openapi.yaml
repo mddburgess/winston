@@ -217,6 +217,11 @@ paths:
         - Authors
       operationId: listAuthors
       parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+            minLength: 1
         - name: page
           in: query
           schema:

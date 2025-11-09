@@ -18,8 +18,12 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
     @Override
     long count();
 
+    long countByDisplayNameLike(String displayName);
+
     @Override
     Page<AuthorEntity> findAll(Pageable pageable);
+
+    Page<AuthorEntity> findAllByDisplayNameLike(String displayName, Pageable pageable);
 
     Optional<AuthorEntity> findByChannelUrl(String channelUrl);
 
