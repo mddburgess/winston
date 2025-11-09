@@ -1,7 +1,10 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.entity.view.VideoStatisticsView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,9 +15,28 @@ import java.util.Optional;
 @Repository
 public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
 
+    @Override
+    long count();
+
+    @Override
+    Page<AuthorEntity> findAll(Pageable pageable);
+
     Optional<AuthorEntity> findByChannelUrl(String channelUrl);
 
     Optional<AuthorEntity> findByDisplayName(String displayName);
+
+    @Query("""
+            SELECT c.author.id AS authorId,
+                COUNT(DISTINCT v.channelId) AS channelCount,
+                COUNT(DISTINCT c.videoId) AS videoCount,
+                COUNT(c.id) AS totalCommentCount,
+                COUNT(c.parentId) AS replyCount
+            FROM CommentEntity c
+                LEFT JOIN VideoEntity v ON c.videoId = v.id
+            WHERE c.author.id IN :ids
+            GROUP BY c.author.id
+            """)
+    List<AuthorDetailsView> findAuthorDetailsByIds(Iterable<String> ids);
 
     @Query("""
             SELECT

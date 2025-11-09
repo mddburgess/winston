@@ -28,13 +28,6 @@ public abstract class AuthorMapper {
     @Mapping(target = "lastFetchedAt", ignore = true)
     public abstract AuthorEntity toAuthorEntity(Author author);
 
-    @Mapping(target = ".", source = "author")
-    @Mapping(target = "handle", source = "author", qualifiedByName = "mapHandle")
-    @Mapping(target = "profileImageUrl", source = "author", qualifiedByName = "mapProfileImageUrl")
-    @Mapping(target = "authorStatistics", source = ".")
-    @Mapping(target = "videoStatistics", ignore = true)
-    public abstract Author toAuthor(AuthorDetailsView authorDetailsView);
-
     @Named("mapHandle")
     protected String mapHandle(AuthorEntity author) {
         if (isNotBlank(author.getDisplayName())) {

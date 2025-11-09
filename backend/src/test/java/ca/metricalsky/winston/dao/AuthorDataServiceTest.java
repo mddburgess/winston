@@ -107,17 +107,4 @@ class AuthorDataServiceTest {
                 .profileImageUrl("profileImageUrl")
                 .build();
     }
-
-    private static AuthorDetailsView mockAuthorDetailsView(String displayName) {
-        var authorDetailsView = mock(AuthorDetailsView.class);
-        lenient().when(authorDetailsView.getAuthor())
-                .thenReturn(buildAuthorEntity(displayName));
-        lenient().when(authorDetailsView.getVideoCount())
-                .thenReturn(1L);
-        lenient().when(authorDetailsView.getCommentCount())
-                .thenReturn(2L);
-        lenient().when(authorDetailsView.getReplyCount())
-                .thenReturn(3L);
-        return authorDetailsView;
-    }
 }

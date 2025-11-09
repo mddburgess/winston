@@ -3,8 +3,8 @@ package ca.metricalsky.winston.dao;
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.api.model.VideoStatistics;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
-import ca.metricalsky.winston.repository.AuthorDetailsRepository;
 import ca.metricalsky.winston.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
@@ -17,6 +17,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,6 @@ public class AuthorDataService {
 
     private static final String CHANNEL_URL_PREFIX = "http://www.youtube.com/c/";
 
-    private final AuthorDetailsRepository audioDetailsRepository;
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
     private final ConversionService conversionService;
@@ -36,9 +36,20 @@ public class AuthorDataService {
     public List<Author> listAuthors(PageRequest page) {
         var pageRequest = page.withSort(Sort.Direction.ASC, "displayName");
 
-        return audioDetailsRepository.findAuthorDetailsPage(pageRequest)
+        var authors = authorRepository.findAll(pageRequest)
                 .stream()
                 .map(authorMapper::toAuthor)
+                .toList();
+        var authorIds = authors.stream()
+                .map(Author::getId)
+                .toList();
+        var authorStatistics = authorRepository.findAuthorDetailsByIds(authorIds)
+                .stream()
+                .collect(Collectors.toMap(AuthorDetailsView::getAuthorId,
+                        details -> conversionService.convert(details, AuthorStatistics.class)));
+
+        return authors.stream()
+                .map(author -> author.authorStatistics(authorStatistics.get(author.getId())))
                 .toList();
     }
 
