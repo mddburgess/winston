@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117) 
+- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117)
+- List authors endpoint returns a page of authors instead of the entire list. (mddburgess/winston#49)
 
 ### Fixed
 
