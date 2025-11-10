@@ -1,41 +1,58 @@
-import { Button, FormControl, InputGroup } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
 import { Search, XCircleFill } from "react-bootstrap-icons";
-import type { ChangeEvent } from "react";
+import { useSearchParams } from "react-router";
+import type { ChangeEvent, FormEvent } from "react";
 
-type SearchControlProps = {
-  value?: string;
-  setValue?: (value: string) => void;
-};
+const SearchControl = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-export const SearchControl = ({ value, setValue }: SearchControlProps) => {
-  if (!setValue) {
-    return <></>;
-  }
+  const initialValue = searchParams.get("s") ?? "";
+  const [value, setValue] = useState(initialValue);
+
+  const showSubmitButton = value === "" || value !== initialValue;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     setValue(event.target.value);
   };
 
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    setSearchParams((searchParams) => {
+      searchParams.delete("i");
+      if (value.trim() !== "") {
+        searchParams.set("s", value);
+      } else {
+        searchParams.delete("s");
+      }
+      return searchParams;
+    });
+  };
+
   return (
-    <InputGroup>
-      <FormControl placeholder="Search..." value={value} onChange={handleChange} />
-      {!value && (
-        <Button className={"align-items-center d-flex"}>
-          <Search />
-        </Button>
-      )}
-      {value && (
-        <Button
-          variant={"danger"}
-          className={"align-items-center d-flex"}
-          onClick={() => {
-            setValue("");
-          }}
-        >
-          <XCircleFill />
-        </Button>
-      )}
-    </InputGroup>
+    <Form onSubmit={handleSubmit}>
+      <InputGroup>
+        <FormControl placeholder="Search..." value={value} onChange={handleChange} />
+        {showSubmitButton && (
+          <Button type={"submit"} className={"align-items-center d-flex"} onClick={handleSubmit}>
+            <Search />
+          </Button>
+        )}
+        {!showSubmitButton && (
+          <Button
+            variant={"danger"}
+            className={"align-items-center d-flex"}
+            onClick={() => {
+              setValue("");
+            }}
+          >
+            <XCircleFill />
+          </Button>
+        )}
+      </InputGroup>
+    </Form>
   );
 };
+
+export { SearchControl };

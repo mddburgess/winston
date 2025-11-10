@@ -1,11 +1,8 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.AuthorEntity;
-import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,46 +62,5 @@ class AuthorRepositoryTest {
 
         assertThat(author)
                 .isEmpty();
-    }
-
-    @Test
-    void findAllAuthorDetails() {
-        var channel = entityManager.persist(ChannelEntity.builder()
-                .id(TestUtils.randomId())
-                .build());
-        var video = entityManager.persist(VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .channelId(channel.getId())
-                .build());
-        var comment = entityManager.persist(CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(video.getId())
-                .author(savedAuthor)
-                .build());
-        entityManager.persist(CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(video.getId())
-                .parentId(comment.getId())
-                .author(savedAuthor)
-                .build());
-
-        var authorDetailsList = repository.findAllAuthorDetails();
-
-        assertThat(authorDetailsList).first()
-                .hasFieldOrPropertyWithValue("author", savedAuthor)
-                .hasFieldOrPropertyWithValue("videoCount", 1L)
-                .hasFieldOrPropertyWithValue("commentCount", 1L)
-                .hasFieldOrPropertyWithValue("videoCount", 1L);
-    }
-
-    @Test
-    void findAllAuthorDetails_noComments() {
-        var authorDetailsList = repository.findAllAuthorDetails();
-
-        assertThat(authorDetailsList).first()
-                .hasFieldOrPropertyWithValue("author", savedAuthor)
-                .hasFieldOrPropertyWithValue("videoCount", 0L)
-                .hasFieldOrPropertyWithValue("commentCount", 0L)
-                .hasFieldOrPropertyWithValue("videoCount", 0L);
     }
 }

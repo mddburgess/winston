@@ -9,6 +9,10 @@ public class YoutubeProvider extends AbstractProvider<BaseProviders> {
         super(faker);
     }
 
+    public String authorId() {
+        return channelId();
+    }
+
     public String channelHandle() {
         return "@" + faker.word().noun();
     }

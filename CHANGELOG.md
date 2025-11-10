@@ -7,9 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Author search navigates to the author page when it finds one exact match. (mddburgess/winston#49)
+
 ### Changed
 
-- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117) 
+- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117)
+- List authors endpoint returns a page of authors instead of the entire list. (mddburgess/winston#49)
+- List authors endpoint supports searching for authors by display name. (mddburgess/winston#49)
+- Authors page now searches for authors using the backend endpoint instead of in memory. (mddburgess/winston#49)
+
+### Removed
+
+- Removed the ability to search comments on the video page. (mddburgess/winston#49)
 
 ### Fixed
 

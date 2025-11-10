@@ -14,7 +14,7 @@
     "test": "vitest --dom --coverage --no-watch"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.9.2",
+    "@reduxjs/toolkit": "^2.10.1",
     "bootstrap": "^5.3.8",
     "dompurify": "^3.3.0",
     "lodash": "^4.17.21",
@@ -42,8 +42,8 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",
-    "@vitest/coverage-v8": "^4.0.6",
-    "@vitest/eslint-plugin": "^1.4.0",
+    "@vitest/coverage-v8": "^4.0.8",
+    "@vitest/eslint-plugin": "^1.4.2",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-vite": "^2.1.0",
@@ -55,13 +55,13 @@
     "happy-dom": "^20.0.10",
     "jest-junit": "^16.0.0",
     "jiti": "^2.6.1",
-    "msw": "^2.11.6",
+    "msw": "^2.12.1",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
-    "vite": "^7.1.12",
-    "vitest": "^4.0.6"
+    "vite": "^7.2.2",
+    "vitest": "^4.0.8"
   },
   "browserslist": [
     ">0.5%",

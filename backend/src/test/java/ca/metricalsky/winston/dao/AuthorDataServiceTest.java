@@ -40,46 +40,6 @@ class AuthorDataServiceTest {
     private AuthorRepository authorRepository;
 
     @Test
-    void getAllAuthors() {
-        var authorDetailsView = mockAuthorDetailsView(AUTHOR_DISPLAY_NAME);
-        when(authorRepository.findAllAuthorDetails())
-                .thenReturn(List.of(authorDetailsView));
-
-        var authors = authorDataService.getAllAuthors();
-
-        assertThat(authors).first()
-                .hasFieldOrPropertyWithValue("id", AUTHOR_ID)
-                .hasFieldOrPropertyWithValue("authorStatistics.videoCount", authorDetailsView.getVideoCount())
-                .hasFieldOrPropertyWithValue("authorStatistics.commentCount", authorDetailsView.getCommentCount())
-                .hasFieldOrPropertyWithValue("authorStatistics.replyCount", authorDetailsView.getReplyCount());
-    }
-
-    @Test
-    void getAllAuthors_sortedByHandle() {
-        var bob = mockAuthorDetailsView("@bob");
-        var alice = mockAuthorDetailsView("@alice");
-        when(authorRepository.findAllAuthorDetails())
-                .thenReturn(List.of(bob, alice));
-
-        var authors = authorDataService.getAllAuthors();
-
-        assertThat(authors)
-                .hasSize(2)
-                .as("list should be sorted by handle")
-                .isSortedAccordingTo(Comparator.comparing(Author::getHandle));
-    }
-
-    @Test
-    void getAllAuthors_empty() {
-        when(authorRepository.findAllAuthorDetails())
-                .thenReturn(List.of());
-
-        var authors = authorDataService.getAllAuthors();
-
-        assertThat(authors).isEmpty();
-    }
-
-    @Test
     @Disabled
     void findAuthorByHandle_foundByDisplayName() {
         when(authorRepository.findByDisplayName(AUTHOR_DISPLAY_NAME))
@@ -146,18 +106,5 @@ class AuthorDataServiceTest {
                 .displayName(displayName)
                 .profileImageUrl("profileImageUrl")
                 .build();
-    }
-
-    private static AuthorDetailsView mockAuthorDetailsView(String displayName) {
-        var authorDetailsView = mock(AuthorDetailsView.class);
-        lenient().when(authorDetailsView.getAuthor())
-                .thenReturn(buildAuthorEntity(displayName));
-        lenient().when(authorDetailsView.getVideoCount())
-                .thenReturn(1L);
-        lenient().when(authorDetailsView.getCommentCount())
-                .thenReturn(2L);
-        lenient().when(authorDetailsView.getReplyCount())
-                .thenReturn(3L);
-        return authorDetailsView;
     }
 }
