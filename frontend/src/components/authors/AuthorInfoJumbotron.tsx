@@ -1,6 +1,8 @@
 import { Col, Image, Ratio, Row } from "react-bootstrap";
+import { PersonBoundingBox } from "react-bootstrap-icons";
 import { AuthorProfileImage } from "#/components/authors/AuthorProfileImage";
 import { AuthorStatistics } from "#/components/authors/AuthorStatistics";
+import { IconButton } from "#/components/IconButton";
 import { VideoChannelTitle } from "#/components/videos/VideoChannelTitle";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
 import type { AuthorProps, VideoProps } from "#/types";
@@ -25,6 +27,9 @@ const AuthorRow = ({ author }: AuthorProps) => (
     </Col>
     <Col>
       <h1 className={"mb-0"}>{author.handle}</h1>
+    </Col>
+    <Col xs={"auto"} className={"flex-center"}>
+      <IconButton variant={"outline-secondary"} icon={PersonBoundingBox} />
     </Col>
     <AuthorStatistics author={author} />
   </Row>
