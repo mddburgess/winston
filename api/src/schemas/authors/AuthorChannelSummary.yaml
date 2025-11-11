@@ -1,0 +1,9 @@
+title: Author Channel Summary
+type: object
+required:
+  - channels
+properties:
+  channels:
+    type: array
+    items:
+      $ref: ./AuthorChannel.yaml

@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
+import ca.metricalsky.winston.api.model.AuthorChannel;
 import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.api.model.VideoStatistics;
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
@@ -76,6 +77,13 @@ public class AuthorDataService {
         });
 
         return maybeAuthor;
+    }
+
+    public List<AuthorChannel> findAuthorChannelsByHandle(String handle) {
+        return authorRepository.findAuthorChannelsByDisplayName(handle)
+                .stream()
+                .map(author -> conversionService.convert(author, AuthorChannel.class))
+                .toList();
     }
 
     private static String getChannelUrl(String authorHandle) {

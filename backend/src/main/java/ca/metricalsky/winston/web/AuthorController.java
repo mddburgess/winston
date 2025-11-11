@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.AuthorsApi;
+import ca.metricalsky.winston.api.model.AuthorChannelSummary;
 import ca.metricalsky.winston.api.model.GetAuthorResponse;
 import ca.metricalsky.winston.api.model.ListAuthorsResponse;
 import ca.metricalsky.winston.api.model.ListVideosResponseResults;
@@ -48,6 +49,15 @@ public class AuthorController implements AuthorsApi {
         var response = new GetAuthorResponse()
                 .author(author)
                 .videos(videos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<AuthorChannelSummary> getAuthorChannelSummary(String handle) {
+        var authorChannels = authorDataService.findAuthorChannelsByHandle(handle);
+        var response = new AuthorChannelSummary()
+                .channels(authorChannels);
 
         return ResponseEntity.ok(response);
     }

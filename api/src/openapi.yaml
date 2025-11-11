@@ -262,6 +262,25 @@ paths:
         "404":
           $ref: "#/components/responses/404-authorNotFound"
 
+  /api/v1/authors/{handle}/channels:
+    get:
+      summary: Get channel summary for author
+      description: Gets the channel summary for a single author.
+      tags:
+        - Authors
+      operationId: getAuthorChannelSummary
+      parameters:
+        - $ref: "#/components/parameters/authorHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/AuthorChannelSummary.yaml
+        "404":
+          $ref: "#/components/responses/404-authorNotFound"
+
   /api/v1/channels/{id}/thumbnail:
     get:
       summary: Get channel thumbnail
