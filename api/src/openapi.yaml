@@ -429,6 +429,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/QuotePullResponse"
 
+  /api/v1/settings:
+    get:
+      summary: Get settings
+      tags:
+        - Settings
+      operationId: getSettings
+      responses:
+        "200":
+          description: Settings.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/settings/Settings.yaml
+    patch:
+      summary: Patch settings
+      tags:
+        - Settings
+      operationId: patchSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+      responses:
+        "200":
+          description: Settings.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/settings/Settings.yaml
+
 components:
   schemas:
     PatchOperation:
@@ -547,3 +580,5 @@ tags:
     description: Endpoints related to getting fetch events.
   - name: Pull
     description: Endpoints related to pulling data from YouTube.
+  - name: Settings
+    description: Endpoints to get and set application settings.
