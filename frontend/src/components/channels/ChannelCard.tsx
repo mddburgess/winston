@@ -1,6 +1,7 @@
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { ArrowDownRightCircle, ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
+import { ChannelAuthorFocus } from "#/components/channels/ChannelAuthorFocus";
 import { Date } from "#/components/Date";
 import { IconLabel } from "#/components/IconLabel";
 import { routes } from "#/utils/links";
@@ -18,13 +19,14 @@ const ChannelCard = ({ channel }: ChannelProps) => {
             <Image roundedCircle className={"border w-100"} src={channel.thumbnail_url} />
           </Col>
           <Col className={"col-10 col-md-9"}>
-            <p className={"fs-5 mb-1"}>
+            <p className={"fs-5 mb-1 line-clamp-1"}>
               <Link to={routes.channels.details(channel.handle)}>{channel.title}</Link>
             </p>
-            <p className={"mb-1 small line-clamp"}>{channel.description}</p>
+            <p className={"mb-1 small line-clamp-2"}>{channel.description}</p>
           </Col>
         </Row>
       </Card.Body>
+      <ChannelAuthorFocus channel={channel} />
       <Card.Footer>
         <ChannelStatistics channel={channel} />
       </Card.Footer>
