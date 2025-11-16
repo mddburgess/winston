@@ -1,4 +1,6 @@
 import { Col, ListGroup, Row } from "react-bootstrap";
+import { AuthorChannelDetails } from "#/components/authors/focus/AuthorChannelDetails";
+import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
 import { BadgeList } from "#/components/BadgeList";
 import { ArchiveChannelButton } from "#/components/channels/ArchiveChannelButton";
 import { ChannelStatistics } from "#/components/channels/ChannelStatistics";
@@ -36,6 +38,9 @@ const ChannelDetailsJumbotron = ({ channel }: ChannelProps) => (
               <ChannelStatistics channel={channel} showPulledVideos={true} />
             </Col>
           </Row>
+          <IfAuthorFocus>
+            {(authorHandle) => <AuthorChannelDetails channelHandle={channel.handle} authorHandle={authorHandle} />}
+          </IfAuthorFocus>
 
           <p className={"small"}>{channel.description}</p>
           <Row xs={1} lg={2}>

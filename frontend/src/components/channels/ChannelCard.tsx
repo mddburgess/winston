@@ -1,7 +1,8 @@
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { ArrowDownRightCircle, ArrowUpLeftCircleFill } from "react-bootstrap-icons";
 import { Link } from "react-router";
-import { ChannelAuthorFocus } from "#/components/channels/ChannelAuthorFocus";
+import { AuthorChannelSummary } from "#/components/authors/focus/AuthorChannelSummary";
+import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
 import { Date } from "#/components/Date";
 import { IconLabel } from "#/components/IconLabel";
 import { routes } from "#/utils/links";
@@ -26,7 +27,9 @@ const ChannelCard = ({ channel }: ChannelProps) => {
           </Col>
         </Row>
       </Card.Body>
-      <ChannelAuthorFocus channel={channel} />
+      <IfAuthorFocus>
+        {(authorHandle) => <AuthorChannelSummary channelHandle={channel.handle} authorHandle={authorHandle} />}
+      </IfAuthorFocus>
       <Card.Footer>
         <ChannelStatistics channel={channel} />
       </Card.Footer>
