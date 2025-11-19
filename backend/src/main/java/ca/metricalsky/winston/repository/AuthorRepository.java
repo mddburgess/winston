@@ -3,6 +3,7 @@ package ca.metricalsky.winston.repository;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.view.AuthorChannelView;
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import ca.metricalsky.winston.entity.view.AuthorVideoView;
 import ca.metricalsky.winston.entity.view.VideoStatisticsView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,4 +74,20 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity, String> {
             GROUP BY ch.id
             """)
     List<AuthorChannelView> findAuthorChannelsByDisplayName(String displayName);
+
+    @Query("""
+            SELECT
+                v.id AS videoId,
+                v.title AS videoTitle,
+                v.thumbnailUrl AS videoThumbnailUrl,
+                COUNT(co.id) AS totalCommentCount,
+                COUNT(co.parentId) AS replyCount,
+                MIN(co.publishedAt) AS firstCommentedAt,
+                MAX(co.publishedAt) AS lastCommentedAt
+            FROM VideoEntity v
+                JOIN CommentEntity co ON v.id = co.videoId
+            WHERE co.author.displayName = :displayName
+            GROUP BY v.id
+            """)
+    List<AuthorVideoView> findAuthorVideosByDisplayName(String displayName);
 }
