@@ -41,7 +41,6 @@ const ChannelDetailsJumbotron = ({ channel }: ChannelProps) => (
           <IfAuthorFocus>
             {(authorHandle) => <AuthorChannelDetails channelHandle={channel.handle} authorHandle={authorHandle} />}
           </IfAuthorFocus>
-
           <p className={"small"}>{channel.description}</p>
           <Row xs={1} lg={2}>
             <Col className={"mb-3 mb-lg-0"}>
