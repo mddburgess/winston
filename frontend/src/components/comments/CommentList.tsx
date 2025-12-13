@@ -4,13 +4,13 @@ import type { CommentState } from "#/store/slices/backend";
 
 type Props = {
   comments?: CommentState[];
-  highlightAuthorId?: string;
+  focusAuthor?: string;
 };
 
-export const CommentList = ({ comments = [], highlightAuthorId = "" }: Props) => (
+export const CommentList = ({ comments = [], focusAuthor }: Props) => (
   <ListGroup className={"pb-3 pt-2"}>
     {comments.map((comment) => (
-      <CommentListItem key={comment.id} comment={comment} highlightAuthorId={highlightAuthorId} />
+      <CommentListItem key={comment.id} comment={comment} focusAuthor={focusAuthor} />
     ))}
   </ListGroup>
 );

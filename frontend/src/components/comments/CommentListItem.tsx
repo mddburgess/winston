@@ -6,18 +6,18 @@ import type { CommentState } from "#/store/slices/backend";
 
 type CommentListItemProps = {
   comment: CommentState;
-  highlightAuthorId?: string;
+  focusAuthor?: string;
 };
 
-export const CommentListItem = ({ comment, highlightAuthorId }: CommentListItemProps) => (
+export const CommentListItem = ({ comment, focusAuthor }: CommentListItemProps) => (
   <ListGroupItem key={comment.id}>
-    <CommentDisplayRow comment={comment} highlightAuthorId={highlightAuthorId} />
+    <CommentDisplayRow comment={comment} focusAuthor={focusAuthor} />
     <Row>
       <ReplyList
         commentId={comment.id}
         totalReplyCount={comment.total_reply_count}
         replies={selectAllReplies(comment.replies)}
-        highlightAuthorId={highlightAuthorId}
+        focusAuthor={focusAuthor}
       />
     </Row>
   </ListGroupItem>
