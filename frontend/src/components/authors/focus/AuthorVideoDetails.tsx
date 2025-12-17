@@ -1,8 +1,9 @@
 import { Col, Row } from "react-bootstrap";
 import { ArrowRight, ChatFill, ChatQuoteFill, ClockHistory, PersonBoundingBox } from "react-bootstrap-icons";
-import { useGetAuthorVideoSummaryQuery, type Video } from "#/api";
+import { useGetAuthorVideoSummaryQuery } from "#/api";
 import { Date } from "#/components/Date";
 import { IconLabel } from "#/components/IconLabel";
+import type { Video } from "#/api";
 
 const AuthorVideoDetails = (props: { video: Video; authorHandle: string }) => {
   const { isSuccess, data } = useGetAuthorVideoSummaryQuery({ handle: props.authorHandle });
