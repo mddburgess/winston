@@ -4,11 +4,11 @@ import type { Comment } from "#/api";
 
 type ReplyListItemProps = {
   reply: Comment;
-  highlightAuthorId?: string;
+  focusAuthor?: string;
 };
 
-export const ReplyListItem = ({ reply, highlightAuthorId }: ReplyListItemProps) => (
+export const ReplyListItem = ({ reply, focusAuthor }: ReplyListItemProps) => (
   <ListGroupItem key={reply.id}>
-    <CommentDisplayRow comment={reply} highlightAuthorId={highlightAuthorId} isReply={true} />
+    <CommentDisplayRow comment={reply} focusAuthor={focusAuthor} isReply={true} />
   </ListGroupItem>
 );

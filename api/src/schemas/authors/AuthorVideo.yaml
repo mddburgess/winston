@@ -1,0 +1,28 @@
+title: Author Video
+type: object
+required:
+  - id
+  - title
+  - thumbnail_url
+  - comment_count
+  - reply_count
+  - first_commented_at
+  - last_commented_at
+properties:
+  id:
+    type: string
+  title:
+    type: string
+  thumbnail_url:
+    type: string
+    format: uri-reference
+  comment_count:
+    type: integer
+  reply_count:
+    type: integer
+  first_commented_at:
+    type: string
+    format: date-time
+  last_commented_at:
+    type: string
+    format: date-time

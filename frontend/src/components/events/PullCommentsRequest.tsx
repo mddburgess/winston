@@ -2,11 +2,13 @@ import { map } from "lodash";
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
-import { invalidateComments, invalidateVideos } from "#/store/slices/backend";
+import { invalidateAuthors, invalidateComments, invalidateVideos } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullCommentsActive, pullCommentsError, pullCommentsResponse } from "#/store/slices/pullComments";
+import type { Problem } from "#/api";
 import type { PullOperationEvent, PullResultsEvent } from "#/components/events/types";
-import type { ProblemDetail, PullOperation, TopLevelComment } from "#/types";
+import type { PullOperation, TopLevelComment } from "#/types";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const PullCommentsRequest = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +23,7 @@ const PullCommentsRequest = () => {
     ]);
     pull({ body: { event_subscription_id: eventSubscriptionId, operations } })
       .unwrap()
-      .catch((rejected) => dispatch(pullCommentsError({ error: rejected.data as ProblemDetail })));
+      .catch((rejected: FetchBaseQueryError) => dispatch(pullCommentsError({ error: rejected.data as Problem })));
   };
 
   const handlePullOperationEvent = (event: PullOperationEvent) => {
@@ -66,6 +68,7 @@ const PullCommentsRequest = () => {
     dispatch(pullCommentsActive(false));
     dispatch(invalidateVideos());
     dispatch(invalidateComments());
+    dispatch(invalidateAuthors());
   };
 
   return (

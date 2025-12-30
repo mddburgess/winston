@@ -1,0 +1,27 @@
+title: Author Channel
+type: object
+required:
+  - title
+  - handle
+  - video_count
+  - comment_count
+  - reply_count
+  - first_commented_at
+  - last_commented_at
+properties:
+  title:
+    type: string
+  handle:
+    type: string
+  video_count:
+    type: integer
+  comment_count:
+    type: integer
+  reply_count:
+    type: integer
+  first_commented_at:
+    type: string
+    format: date-time
+  last_commented_at:
+    type: string
+    format: date-time

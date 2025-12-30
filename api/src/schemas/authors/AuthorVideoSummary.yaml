@@ -1,0 +1,9 @@
+title: Author Video Summary
+type: object
+required:
+  - videos
+properties:
+  videos:
+    type: array
+    items:
+      $ref: ./AuthorVideo.yaml

@@ -7,13 +7,13 @@ type ReplyListProps = {
   commentId: string;
   totalReplyCount: number;
   replies: Comment[];
-  highlightAuthorId?: string;
+  focusAuthor?: string;
 };
 
-const ReplyList = ({ highlightAuthorId = "", ...props }: ReplyListProps) => (
+const ReplyList = ({ focusAuthor, ...props }: ReplyListProps) => (
   <ListGroup variant={"flush"} className={"ps-4"}>
     {props.replies.map((reply) => (
-      <ReplyListItem key={reply.id} reply={reply} highlightAuthorId={highlightAuthorId} />
+      <ReplyListItem key={reply.id} reply={reply} focusAuthor={focusAuthor} />
     ))}
     <PullRepliesActionItem {...props} />
   </ListGroup>

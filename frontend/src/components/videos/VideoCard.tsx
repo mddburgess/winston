@@ -1,5 +1,7 @@
 import { Card, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { AuthorVideoSummary } from "#/components/authors/focus/AuthorVideoSummary";
+import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { toggleSelectVideo } from "#/store/slices/selections";
 import { routes } from "#/utils/links";
@@ -44,6 +46,9 @@ const VideoCard = ({ video, disabled = false }: VideoCardProps) => {
       <Card.Body>
         <Card.Subtitle>{video.title}</Card.Subtitle>
       </Card.Body>
+      <IfAuthorFocus>
+        {(authorHandle) => <AuthorVideoSummary videoId={video.id} authorHandle={authorHandle} />}
+      </IfAuthorFocus>
       <Card.Footer>
         <Row>
           <VideoCommentCounts video={video} showTotalReplyCount={false} />

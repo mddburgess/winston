@@ -14,12 +14,12 @@ type CommentProps = {
 };
 
 type CommentDisplayRowProps = CommentProps & {
-  highlightAuthorId?: string;
+  focusAuthor?: string;
   isReply?: boolean;
 };
 
-const CommentDisplayRow = ({ comment, highlightAuthorId = "", isReply }: CommentDisplayRowProps) => {
-  const highlight = highlightAuthorId === comment.author.id;
+const CommentDisplayRow = ({ comment, focusAuthor = "", isReply }: CommentDisplayRowProps) => {
+  const highlight = focusAuthor === comment.author.handle;
   const rowClass = comment.properties.important
     ? "bg-warning-subtle text-warning-emphasis"
     : comment.properties.hidden

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams } from "react-router";
-import { useGetVideoQuery } from "#/api";
+import { useGetSettingsQuery, useGetVideoQuery } from "#/api";
 import { CommentList } from "#/components/comments/CommentList";
 import { PullCommentsRequest } from "#/components/events/PullCommentsRequest";
 import { PullRepliesRequest } from "#/components/events/PullRepliesRequest";
@@ -26,6 +26,8 @@ const VideoDetailsRoute = () => {
   }, [isSuccess, comments]);
 
   const commentsDisabled = useMemo(() => video?.comments?.comments_disabled, [video]);
+
+  const authorFocus = useGetSettingsQuery().data?.author_focus;
 
   return (
     <>
@@ -61,7 +63,7 @@ const VideoDetailsRoute = () => {
                 page={pageNumber}
                 setPage={setPageNumber}
               />
-              <CommentList comments={pageItems} />
+              <CommentList comments={pageItems} focusAuthor={authorFocus} />
               {pageCount > 1 && (
                 <PaginationRow
                   name={"comment"}

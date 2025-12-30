@@ -23,7 +23,7 @@ const AuthorComments = ({ author, video }: AuthorCommentsProps) => (
   <AuthorCommentsQuery author={author} video={video}>
     {{
       isLoading: () => <small>Loading...</small>,
-      isSuccess: (comments) => <CommentList comments={comments} highlightAuthorId={author.id} />,
+      isSuccess: (comments) => <CommentList comments={comments} focusAuthor={author.handle} />,
     }}
   </AuthorCommentsQuery>
 );

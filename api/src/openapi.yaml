@@ -262,6 +262,44 @@ paths:
         "404":
           $ref: "#/components/responses/404-authorNotFound"
 
+  /api/v1/authors/{handle}/channels:
+    get:
+      summary: Get channel summary for author
+      description: Gets the channel summary for a single author.
+      tags:
+        - Authors
+      operationId: getAuthorChannelSummary
+      parameters:
+        - $ref: "#/components/parameters/authorHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/AuthorChannelSummary.yaml
+        "404":
+          $ref: "#/components/responses/404-authorNotFound"
+
+  /api/v1/authors/{handle}/videos:
+    get:
+      summary: Get video summary for author
+      description: Gets the video summary for a single author and channel.
+      tags:
+        - Authors
+      operationId: getAuthorVideoSummary
+      parameters:
+        - $ref: "#/components/parameters/authorHandle"
+      responses:
+        "200":
+          description: The request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/AuthorVideoSummary.yaml
+        "404":
+          $ref: "#/components/responses/404-authorNotFound"
+
   /api/v1/channels/{id}/thumbnail:
     get:
       summary: Get channel thumbnail
@@ -429,6 +467,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/QuotePullResponse"
 
+  /api/v1/settings:
+    get:
+      summary: Get settings
+      tags:
+        - Settings
+      operationId: getSettings
+      responses:
+        "200":
+          description: Settings.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/settings/Settings.yaml
+    patch:
+      summary: Patch settings
+      tags:
+        - Settings
+      operationId: patchSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+      responses:
+        "200":
+          description: Settings.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/settings/Settings.yaml
+
 components:
   schemas:
     PatchOperation:
@@ -547,3 +618,5 @@ tags:
     description: Endpoints related to getting fetch events.
   - name: Pull
     description: Endpoints related to pulling data from YouTube.
+  - name: Settings
+    description: Endpoints to get and set application settings.

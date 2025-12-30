@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Author search navigates to the author page when it finds one exact match. (mddburgess/winston#49)
+- Button on the author details page to toggle "focus mode" for that author. (mddburgess/winston#123)
+- Show focused author's statistics on the channel list cards and channel details page. (mddburgess/winston#123)
+- Show focused author's statistics on the video list cards and video details page. (mddburgess/winston#123)
+- Highlight focused author's comments on the video details page. (mddburgess/winston#123)
 
 ### Changed
 
