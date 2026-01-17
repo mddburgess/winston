@@ -22,7 +22,7 @@ class AuthorEntityMapperTest {
                 .hasFieldOrPropertyWithValue("displayName", commentSnippet.getAuthorDisplayName())
                 .hasFieldOrPropertyWithValue("channelUrl", commentSnippet.getAuthorChannelUrl())
                 .hasFieldOrPropertyWithValue("profileImageUrl", commentSnippet.getAuthorProfileImageUrl())
-                .hasNoNullFieldsOrPropertiesExcept("lastFetchedAt");
+                .hasNoNullFieldsOrPropertiesExcept("aliases", "lastFetchedAt");
     }
 
     @Test

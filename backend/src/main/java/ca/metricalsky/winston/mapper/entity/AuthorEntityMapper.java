@@ -13,5 +13,6 @@ public interface AuthorEntityMapper {
     @Mapping(target = "channelUrl", source = "authorChannelUrl")
     @Mapping(target = "profileImageUrl", source = "authorProfileImageUrl")
     @Mapping(target = "lastFetchedAt", ignore = true)
+    @Mapping(target = "aliases", ignore = true)
     AuthorEntity toAuthorEntity(CommentSnippet commentSnippet);
 }
