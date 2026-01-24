@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,7 +39,7 @@ class AuthorEntityTest {
                 .displayName(TestUtils.randomString())
                 .channelUrl(TestUtils.randomString())
                 .profileImageUrl(TestUtils.randomString())
-                .aliases(Set.of(authorAlias))
+                .aliases(new TreeSet<>(Set.of(authorAlias)))
                 .build();
 
         var persistedEntity = entityManager.persistFlushFind(authorEntity);

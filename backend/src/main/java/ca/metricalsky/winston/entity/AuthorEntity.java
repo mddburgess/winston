@@ -15,7 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.SortedSet;
 
 @Entity
 @Table(name = "authors")
@@ -49,5 +49,5 @@ public class AuthorEntity {
             joinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id")
     )
     @Column(name = "author_alias")
-    private Set<String> aliases;
+    private SortedSet<String> aliases;
 }

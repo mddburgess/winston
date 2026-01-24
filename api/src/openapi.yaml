@@ -261,6 +261,31 @@ paths:
                 $ref: ./schemas/authors/GetAuthorResponse.yaml
         "404":
           $ref: "#/components/responses/404-authorNotFound"
+    patch:
+      summary: Patch author
+      description: Patches the data for a single author.
+      tags:
+        - Authors
+      operationId: patchAuthor
+      parameters:
+        - $ref: "#/components/parameters/authorHandle"
+      requestBody:
+        description: List of patch operations to apply to the author.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PatchOperation"
+      responses:
+        "200":
+          description: The patch was successful.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/authors/GetAuthorResponse.yaml
+        "404":
+          $ref: "#/components/responses/404-authorNotFound"
 
   /api/v1/authors/{handle}/channels:
     get:

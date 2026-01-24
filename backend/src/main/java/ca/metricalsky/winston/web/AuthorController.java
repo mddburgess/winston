@@ -6,6 +6,7 @@ import ca.metricalsky.winston.api.model.AuthorVideoSummary;
 import ca.metricalsky.winston.api.model.GetAuthorResponse;
 import ca.metricalsky.winston.api.model.ListAuthorsResponse;
 import ca.metricalsky.winston.api.model.ListVideosResponseResults;
+import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.config.properties.api.AuthorsApiConfig;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
@@ -70,5 +73,17 @@ public class AuthorController implements AuthorsApi {
                 .videos(authorVideos);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<GetAuthorResponse> patchAuthor(
+            String handle,
+            List<PatchOperation> patchOperations
+    ) {
+        var patchedAuthor = authorDataService.patchAuthor(handle, patchOperations);
+
+        var getAuthorResponse = new GetAuthorResponse()
+                .author(patchedAuthor);
+        return ResponseEntity.ok(getAuthorResponse);
     }
 }
