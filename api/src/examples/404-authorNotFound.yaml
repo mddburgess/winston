@@ -1,7 +1,7 @@
 summary: Author not found
 description: The requested author was not found.
 value:
-  type: about:blank
+  type: /api/problem/author-not-found
   title: Not Found
   status: 404
   detail: The requested author was not found.

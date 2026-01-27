@@ -4,10 +4,14 @@ import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.AuthorChannel;
 import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.api.model.AuthorVideo;
+import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.api.model.VideoStatistics;
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
+import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.ConversionService;
@@ -31,6 +35,7 @@ public class AuthorDataService {
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
     private final ConversionService conversionService;
+    private final JsonPatchUtils jsonPatchUtils;
 
     public long countAuthors(String search) {
         return StringUtils.isNotBlank(search)
@@ -92,6 +97,16 @@ public class AuthorDataService {
                 .stream()
                 .map(authorVideo -> conversionService.convert(authorVideo, AuthorVideo.class))
                 .toList();
+    }
+
+    public Author patchAuthor(String handle, List<PatchOperation> patchOperations) {
+        var author = authorRepository.findByDisplayName(handle)
+                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
+
+        var patchedAuthor = jsonPatchUtils.applyPatch(author, patchOperations);
+        patchedAuthor = authorRepository.save(patchedAuthor);
+
+        return authorMapper.toAuthor(patchedAuthor);
     }
 
     private static String getChannelUrl(String authorHandle) {

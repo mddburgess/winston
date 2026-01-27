@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import { routes } from "#/utils/links";
+import { AuthorDetailsRoute } from "./authors/AuthorDetailsRoute";
 import { AuthorListRoute } from "./authors/AuthorListRoute";
-import { AuthorDetailsRoute } from "./authors/id";
 import { ChannelDetailsRoute } from "./channels/ChannelDetailsRoute";
 import { ChannelListRoute } from "./channels/ChannelListRoute";
 import { VideoDetailsRoute } from "./videos/id/VideoDetailsRoute";
