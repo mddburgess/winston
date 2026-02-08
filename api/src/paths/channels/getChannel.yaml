@@ -16,4 +16,4 @@ responses:
           Channel:
             $ref: ../../examples/getChannel/200-channel.yaml
   "404":
-    $ref: "../../responses/index.yaml#/404-channelNotFound"
+    $ref: ../../responses/channels/404-channelNotFound.yaml

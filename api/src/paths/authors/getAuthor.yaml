@@ -13,4 +13,4 @@ responses:
         schema:
           $ref: ../../schemas/authors/GetAuthorResponse.yaml
   "404":
-    $ref: "../../responses/index.yaml#/404-authorNotFound"
+    $ref: ../../responses/authors/404-authorNotFound.yaml

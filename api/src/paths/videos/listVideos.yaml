@@ -31,4 +31,4 @@ responses:
           Empty video list:
             $ref: ../../examples/listVideos/200-emptyVideoList.yaml
   "404":
-    $ref: "../../responses/index.yaml#/404-channelNotFound"
+    $ref: ../../responses/channels/404-channelNotFound.yaml

@@ -16,4 +16,4 @@ responses:
           Video:
             $ref: ../../examples/getVideo/200-video.yaml
   "404":
-    $ref: "../../responses/index.yaml#/404-videoNotFound"
+    $ref: ../../responses/videos/404-videoNotFound.yaml

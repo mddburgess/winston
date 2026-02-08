@@ -7,6 +7,6 @@ parameters:
   - $ref: ../../parameters/authorId.yaml
 responses:
   "200":
-    $ref: "../../responses/index.yaml#/200-thumbnail"
+    $ref: ../../responses/thumbnails/200-thumbnail.yaml
   "404":
-    $ref: "../../responses/index.yaml#/404-videoNotFound"
+    $ref: ../../responses/authors/404-authorNotFound.yaml

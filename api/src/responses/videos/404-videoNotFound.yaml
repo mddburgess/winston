@@ -1,0 +1,8 @@
+description: The requested video was not found.
+content:
+  application/problem+json:
+    schema:
+      $ref: ../../schemas/Problem.yaml
+    examples:
+      Video not found:
+        $ref: ../../examples/404-videoNotFound.yaml

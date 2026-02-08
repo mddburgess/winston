@@ -1,0 +1,7 @@
+description: The request was successful.
+content:
+  image/jpeg:
+    schema:
+      description: The requested thumbnail image.
+      type: string
+      format: byte
