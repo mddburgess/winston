@@ -1,0 +1,23 @@
+summary: List channels
+description: Lists the channel data for all the fetched channels.
+tags:
+  - Channels
+operationId: listChannels
+parameters:
+  - name: includeArchived
+    description: Flag indicating if archived channels should also be returned in the response. Default is false.
+    in: query
+    schema:
+      type: boolean
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/channels/ListChannelsResponse.yaml
+        examples:
+          Channel list:
+            $ref: ../../examples/listChannels/200-channelList.yaml
+          Empty channel list:
+            $ref: ../../examples/listChannels/200-emptyChannelList.yaml

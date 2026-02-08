@@ -1,0 +1,34 @@
+summary: List videos
+description: Lists the video data for all the fetched videos for a single channel.
+tags:
+  - Videos
+operationId: listVideos
+parameters:
+  - $ref: ../../parameters/channelHandle.yaml
+  - name: page
+    in: query
+    schema:
+      type: integer
+      format: int32
+      minimum: 0
+  - name: size
+    in: query
+    schema:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 500
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/videos/ListVideosResponse.yaml
+        examples:
+          Video list:
+            $ref: ../../examples/listVideos/200-videoList.yaml
+          Empty video list:
+            $ref: ../../examples/listVideos/200-emptyVideoList.yaml
+  "404":
+    $ref: "../../responses/index.yaml#/404-channelNotFound"

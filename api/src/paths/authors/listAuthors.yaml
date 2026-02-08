@@ -1,0 +1,31 @@
+summary: List authors
+description: Lists the authors for all the fetched comments.
+tags:
+  - Authors
+operationId: listAuthors
+parameters:
+  - name: search
+    in: query
+    schema:
+      type: string
+      minLength: 1
+  - name: page
+    in: query
+    schema:
+      type: integer
+      format: int32
+      minimum: 0
+  - name: size
+    in: query
+    schema:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 500
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/authors/ListAuthorsResponse.yaml

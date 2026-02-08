@@ -1,0 +1,4 @@
+title: Pull Operations
+type: array
+items:
+  $ref: ./PullOperation.yaml

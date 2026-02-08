@@ -1,0 +1,48 @@
+summary: Pull data
+description: Submits a request to pull data from YouTube.
+tags:
+  - Pull
+operationId: pull
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - event_subscription_id
+          - operations
+        properties:
+          event_subscription_id:
+            type: string
+            format: uuid
+          operations:
+            $ref: ../../schemas/pull/PullOperations.yaml
+          status:
+            type: string
+            readOnly: true
+            enum:
+              - accepted
+              - fetching
+              - paused
+              - completed
+          id:
+            type: string
+            readOnly: true
+      examples:
+        Pull channel:
+          $ref: ../../examples/pull/pullChannel.yaml
+        Pull channel and videos:
+          $ref: ../../examples/pull/pullChannelAndVideos.yaml
+        Pull latest videos:
+          $ref: ../../examples/pull/pullLatestVideos.yaml
+        Pull comments:
+          $ref: ../../examples/pull/pullComments.yaml
+        Pull comments and replies:
+          $ref: ../../examples/pull/pullCommentsAndReplies.yaml
+        Pull replies for comment:
+          $ref: ../../examples/pull/pullRepliesForComment.yaml
+        Pull replies for video:
+          $ref: ../../examples/pull/pullRepliesForVideo.yaml
+responses:
+  "202":
+    description: The request was accepted for processing.

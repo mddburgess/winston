@@ -1,0 +1,12 @@
+summary: Get video thumbnail
+description: Gets the thumbnail image for a video.
+tags:
+  - Thumbnails
+operationId: getVideoThumbnail
+parameters:
+  - $ref: ../../parameters/videoId.yaml
+responses:
+  "200":
+    $ref: "../../responses/index.yaml#/200-thumbnail"
+  "404":
+    $ref: "../../responses/index.yaml#/404-videoNotFound"

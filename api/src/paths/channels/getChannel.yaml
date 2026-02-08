@@ -1,0 +1,19 @@
+summary: Get channel
+description: Gets the channel data for a single fetched channel.
+tags:
+  - Channels
+operationId: getChannel
+parameters:
+  - $ref: ../../parameters/channelHandle.yaml
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/channels/Channel.yaml
+        examples:
+          Channel:
+            $ref: ../../examples/getChannel/200-channel.yaml
+  "404":
+    $ref: "../../responses/index.yaml#/404-channelNotFound"

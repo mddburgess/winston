@@ -11,6 +11,7 @@ rules:
   hosts-https-only-oas3: off
   no-security-schemes-defined: off
   no-x-headers: off
+  oas3-schema: warn
   openapi-tags-alphabetical: off
 
   example-description:
