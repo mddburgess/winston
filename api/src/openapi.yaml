@@ -49,7 +49,7 @@ paths:
         - Channels
       operationId: getChannel
       parameters:
-        - $ref: "#/components/parameters/channelHandle"
+        - $ref: ./parameters/channelHandle.yaml
       responses:
         "200":
           description: The request was successful.
@@ -61,7 +61,7 @@ paths:
                 Channel:
                   $ref: ./examples/getChannel/200-channel.yaml
         "404":
-          $ref: "#/components/responses/404-channelNotFound"
+          $ref: "./responses/index.yaml#/404-channelNotFound"
 
   /api/v1/channels/{handle}/properties:
     patch:
@@ -71,7 +71,7 @@ paths:
         - Channels
       operationId: patchChannelProperties
       parameters:
-        - $ref: "#/components/parameters/channelHandle"
+        - $ref: ./parameters/channelHandle.yaml
       requestBody:
         description: List of patch operations to apply to the channel properties.
         content:
@@ -79,7 +79,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/PatchOperation"
+                $ref: ./schemas/PatchOperation.yaml
             examples:
               Mark channel as archived:
                 $ref: ./examples/patchChannelProperties/markArchived.yaml
@@ -106,7 +106,7 @@ paths:
         - Videos
       operationId: listVideos
       parameters:
-        - $ref: "#/components/parameters/channelHandle"
+        - $ref: ./parameters/channelHandle.yaml
         - name: page
           in: query
           schema:
@@ -133,7 +133,7 @@ paths:
                 Empty video list:
                   $ref: ./examples/listVideos/200-emptyVideoList.yaml
         "404":
-          $ref: "#/components/responses/404-channelNotFound"
+          $ref: "./responses/index.yaml#/404-channelNotFound"
 
   /api/v1/videos/{id}:
     get:
@@ -143,7 +143,7 @@ paths:
         - Videos
       operationId: getVideo
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: ./parameters/videoId.yaml
       responses:
         "200":
           description: The request was successful.
@@ -155,7 +155,7 @@ paths:
                 Video:
                   $ref: ./examples/getVideo/200-video.yaml
         "404":
-          $ref: "#/components/responses/404-videoNotFound"
+          $ref: "./responses/index.yaml#/404-videoNotFound"
 
   /api/v1/videos/{id}/comments:
     get:
@@ -165,7 +165,7 @@ paths:
         - Comments
       operationId: listComments
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: ./parameters/videoId.yaml
         - name: author
           description:
             The unique channel handle used in the author's channel URL.
@@ -182,7 +182,7 @@ paths:
               schema:
                 $ref: ./schemas/comments/ListCommentsResponse.yaml
         "404":
-          $ref: "#/components/responses/404-videoNotFound"
+          $ref: "./responses/index.yaml#/404-videoNotFound"
 
   /api/v1/comments/{id}/properties:
     patch:
@@ -192,7 +192,7 @@ paths:
         - Comments
       operationId: patchCommentProperties
       parameters:
-        - $ref: "#/components/parameters/commentId"
+        - $ref: ./parameters/commentId.yaml
       requestBody:
         description: List of patch operations to apply to the comment properties.
         content:
@@ -200,7 +200,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/PatchOperation"
+                $ref: ./schemas/PatchOperation.yaml
       responses:
         "200":
           description: The patch was successful.
@@ -251,7 +251,7 @@ paths:
         - Authors
       operationId: getAuthor
       parameters:
-        - $ref: "#/components/parameters/authorHandle"
+        - $ref: ./parameters/authorHandle.yaml
       responses:
         "200":
           description: The request was successful.
@@ -260,7 +260,7 @@ paths:
               schema:
                 $ref: ./schemas/authors/GetAuthorResponse.yaml
         "404":
-          $ref: "#/components/responses/404-authorNotFound"
+          $ref: "./responses/index.yaml#/404-authorNotFound"
     patch:
       summary: Patch author
       description: Patches the data for a single author.
@@ -268,7 +268,7 @@ paths:
         - Authors
       operationId: patchAuthor
       parameters:
-        - $ref: "#/components/parameters/authorHandle"
+        - $ref: ./parameters/authorHandle.yaml
       requestBody:
         description: List of patch operations to apply to the author.
         content:
@@ -276,7 +276,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/PatchOperation"
+                $ref: ./schemas/PatchOperation.yaml
       responses:
         "200":
           description: The patch was successful.
@@ -285,7 +285,7 @@ paths:
               schema:
                 $ref: ./schemas/authors/GetAuthorResponse.yaml
         "404":
-          $ref: "#/components/responses/404-authorNotFound"
+          $ref: "./responses/index.yaml#/404-authorNotFound"
 
   /api/v1/authors/{handle}/channels:
     get:
@@ -295,7 +295,7 @@ paths:
         - Authors
       operationId: getAuthorChannelSummary
       parameters:
-        - $ref: "#/components/parameters/authorHandle"
+        - $ref: ./parameters/authorHandle.yaml
       responses:
         "200":
           description: The request was successful.
@@ -304,7 +304,7 @@ paths:
               schema:
                 $ref: ./schemas/authors/AuthorChannelSummary.yaml
         "404":
-          $ref: "#/components/responses/404-authorNotFound"
+          $ref: "./responses/index.yaml#/404-authorNotFound"
 
   /api/v1/authors/{handle}/videos:
     get:
@@ -314,7 +314,7 @@ paths:
         - Authors
       operationId: getAuthorVideoSummary
       parameters:
-        - $ref: "#/components/parameters/authorHandle"
+        - $ref: ./parameters/authorHandle.yaml
       responses:
         "200":
           description: The request was successful.
@@ -323,7 +323,7 @@ paths:
               schema:
                 $ref: ./schemas/authors/AuthorVideoSummary.yaml
         "404":
-          $ref: "#/components/responses/404-authorNotFound"
+          $ref: "./responses/index.yaml#/404-authorNotFound"
 
   /api/v1/channels/{id}/thumbnail:
     get:
@@ -333,12 +333,12 @@ paths:
         - Thumbnails
       operationId: getChannelThumbnail
       parameters:
-        - $ref: "#/components/parameters/channelId"
+        - $ref: ./parameters/channelId.yaml
       responses:
         "200":
-          $ref: "#/components/responses/200-thumbnail"
+          $ref: "./responses/index.yaml#/200-thumbnail"
         "404":
-          $ref: "#/components/responses/404-channelNotFound"
+          $ref: "./responses/index.yaml#/404-channelNotFound"
 
   /api/v1/videos/{id}/thumbnail:
     get:
@@ -348,12 +348,12 @@ paths:
         - Thumbnails
       operationId: getVideoThumbnail
       parameters:
-        - $ref: "#/components/parameters/videoId"
+        - $ref: ./parameters/videoId.yaml
       responses:
         "200":
-          $ref: "#/components/responses/200-thumbnail"
+          $ref: "./responses/index.yaml#/200-thumbnail"
         "404":
-          $ref: "#/components/responses/404-videoNotFound"
+          $ref: "./responses/index.yaml#/404-videoNotFound"
 
   /api/v1/authors/{id}/thumbnail:
     get:
@@ -363,12 +363,12 @@ paths:
         - Thumbnails
       operationId: getAuthorThumbnail
       parameters:
-        - $ref: "#/components/parameters/authorId"
+        - $ref: ./parameters/authorId.yaml
       responses:
         "200":
-          $ref: "#/components/responses/200-thumbnail"
+          $ref: "./responses/index.yaml#/200-thumbnail"
         "404":
-          $ref: "#/components/responses/404-videoNotFound"
+          $ref: "./responses/index.yaml#/404-videoNotFound"
 
   /api/v1/fetch/limits:
     get:
@@ -516,7 +516,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: "#/components/schemas/PatchOperation"
+                $ref: ./schemas/PatchOperation.yaml
       responses:
         "200":
           description: Settings.
@@ -527,10 +527,6 @@ paths:
 
 components:
   schemas:
-    PatchOperation:
-      $ref: ./schemas/PatchOperation.yaml
-    Problem:
-      $ref: ./schemas/Problem.yaml
     PullOperations:
       type: array
       items:
@@ -546,85 +542,6 @@ components:
           format: int32
         operations:
           $ref: "#/components/schemas/PullOperations"
-  parameters:
-    authorHandle:
-      name: handle
-      description: The unique channel handle used in the author's channel URL.
-      in: path
-      required: true
-      schema:
-        type: string
-    authorId:
-      name: id
-      description: The unique identifier for the author.
-      in: path
-      required: true
-      schema:
-        type: string
-    channelHandle:
-      name: handle
-      description: The unique channel handle used in the channel's URL.
-      in: path
-      required: true
-      schema:
-        type: string
-    channelId:
-      name: id
-      description: The unique identifier for the channel.
-      in: path
-      required: true
-      schema:
-        type: string
-    videoId:
-      name: id
-      description: The unique identifier for the video.
-      in: path
-      required: true
-      schema:
-        type: string
-    commentId:
-      name: id
-      description: The unique identifier for the comment.
-      in: path
-      required: true
-      schema:
-        type: string
-  responses:
-    200-thumbnail:
-      description: The request was successful.
-      content:
-        image/jpeg:
-          schema:
-            description: The requested thumbnail image.
-            type: string
-            format: byte
-    404-authorNotFound:
-      description: The requested author was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Author not found:
-              $ref: ./examples/404-authorNotFound.yaml
-    404-channelNotFound:
-      description: The requested channel was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Channel not found:
-              $ref: ./examples/404-channelNotFound.yaml
-    404-videoNotFound:
-      description: The requested video was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Video not found:
-              $ref: ./examples/404-videoNotFound.yaml
 
 tags:
   - name: Channels
