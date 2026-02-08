@@ -48,7 +48,7 @@ openApiGenerate {
 tasks {
     register<NpxTask>("npmCheckUpdates") {
         command.set("npm-check-updates")
-        args.add("-u")
+        args.addAll("-u", "-t", "semver")
     }
 
     npmInstall {
