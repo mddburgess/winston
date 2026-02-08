@@ -1,6 +1,6 @@
 export default {
   apiFile: "./src/store/slices/api.ts",
-  schemaFile: "../api/src/openapi.yaml",
+  schemaFile: "../api/build/generated/openapi.yaml",
   apiImport: "apiSlice",
   exportName: "backendApi",
   argSuffix: "Req",
