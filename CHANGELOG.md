@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
 - Added indexes on authors and comments tables to fix slow queries on authors. (mddburgess/winston#119)
+- Fixed slow query to get IDs of comments with missing replies. (mddburgess/winston#128)
 
 ## [1.7.0] — 2025-11-01
 
