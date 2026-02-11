@@ -42,6 +42,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, String> 
             FROM CommentEntity c
                 LEFT JOIN CommentEntity r ON c.id = r.parentId
             WHERE c.videoId = :videoId
+                AND c.parentId IS NULL
             GROUP BY c.id
             HAVING c.totalReplyCount > COUNT(r.id)
             """)
