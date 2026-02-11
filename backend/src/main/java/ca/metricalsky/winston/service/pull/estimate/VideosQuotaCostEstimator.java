@@ -30,9 +30,8 @@ public class VideosQuotaCostEstimator implements QuotaCostEstimator<PullVideosOp
                 : estimateAverageVideoCount();
 
         var estimatedCountPerRequest = operation.getRange() == RangeEnum.ALL ? 50 : 25;
-        operation.setEstimatedCost(estimateCost(estimatedVideoCount, estimatedCountPerRequest));
 
-        return operation.getEstimatedCost();
+        return estimateCost(estimatedVideoCount, estimatedCountPerRequest);
     }
 
     private boolean isChannelDataAvailable(ChannelVideoStatisticsView statistics) {
