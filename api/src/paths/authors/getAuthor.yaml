@@ -1,0 +1,16 @@
+summary: Get author
+description: Gets the author summary data for a single author.
+tags:
+  - Authors
+operationId: getAuthor
+parameters:
+  - $ref: ../../parameters/authorHandle.yaml
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/authors/GetAuthorResponse.yaml
+  "404":
+    $ref: ../../responses/authors/404-authorNotFound.yaml

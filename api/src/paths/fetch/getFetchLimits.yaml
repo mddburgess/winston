@@ -1,0 +1,12 @@
+summary: Get fetch limits
+description: Gets the limits on calling the fetch API.
+tags:
+  - Fetch
+operationId: getFetchLimits
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/fetch/FetchLimitsResponse.yaml

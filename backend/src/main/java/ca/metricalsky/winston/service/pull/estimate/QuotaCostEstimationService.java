@@ -26,12 +26,15 @@ public class QuotaCostEstimationService {
     }
 
     private int estimateQuotaCost(PullOperation operation) {
-        return switch (operation) {
+        var estimatedCost = switch (operation) {
             case PullChannelOperation channel -> channelQuotaCostEstimator.estimateQuotaCost(channel);
             case PullVideosOperation videos -> videosQuotaCostEstimator.estimateQuotaCost(videos);
             case PullCommentsOperation comments -> commentsQuotaCostEstimator.estimateQuotaCost(comments);
             case PullRepliesOperation replies -> repliesQuotaCostEstimator.estimateQuotaCost(replies);
             case null, default -> throw new IllegalArgumentException();
         };
+
+        operation.setEstimatedCost(estimatedCost);
+        return estimatedCost;
     }
 }

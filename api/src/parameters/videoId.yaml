@@ -1,0 +1,6 @@
+name: id
+description: The unique identifier for the video.
+in: path
+required: true
+schema:
+  type: string

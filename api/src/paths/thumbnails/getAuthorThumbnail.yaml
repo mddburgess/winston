@@ -1,0 +1,12 @@
+summary: Get author thumbnail
+description: Gets the thumbnail image for an author.
+tags:
+  - Thumbnails
+operationId: getAuthorThumbnail
+parameters:
+  - $ref: ../../parameters/authorId.yaml
+responses:
+  "200":
+    $ref: ../../responses/thumbnails/200-thumbnail.yaml
+  "404":
+    $ref: ../../responses/authors/404-authorNotFound.yaml

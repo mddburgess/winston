@@ -20,23 +20,19 @@ public class RepliesQuotaCostEstimator implements QuotaCostEstimator<PullReplies
 
     @Override
     public int estimateQuotaCost(PullRepliesOperation operation) {
-        if (operation.getCommentId() != null) {
-            estimateQuotaCostForComment(operation);
-        } else {
-            estimateQuotaCostForVideo(operation);
-        }
-        return operation.getEstimatedCost();
+        return operation.getCommentId() != null
+                ? estimateQuotaCostForComment(operation)
+                : estimateQuotaCostForVideo(operation);
     }
 
-    private void estimateQuotaCostForVideo(PullRepliesOperation operation) {
+    private int estimateQuotaCostForVideo(PullRepliesOperation operation) {
         var commentCount = videoDataService.findVideoById(operation.getVideoId())
                 .map(Video::getDetails)
                 .map(VideoDetails::getCommentCount)
                 .map(this::estimateTopLevelCommentCount)
                 .orElseGet(pullStatisticsService::getAverageCommentsPerVideo);
 
-        var estimatedCost = Math.max((int) Math.ceil(commentCount / 100), 1);
-        operation.setEstimatedCost(estimatedCost);
+        return Math.max((int) Math.ceil(commentCount / 100), 1);
     }
 
     private double estimateTopLevelCommentCount(int totalCommentCount) {
@@ -44,7 +40,7 @@ public class RepliesQuotaCostEstimator implements QuotaCostEstimator<PullReplies
         return totalCommentCount * topLevelCommentPercentage;
     }
 
-    private void estimateQuotaCostForComment(PullRepliesOperation operation) {
+    private int estimateQuotaCostForComment(PullRepliesOperation operation) {
         var estimatedCost = 1;
 
         var maybeStatistics = commentRepository.getReplyStatisticsByCommentId(operation.getCommentId());
@@ -62,7 +58,6 @@ public class RepliesQuotaCostEstimator implements QuotaCostEstimator<PullReplies
             estimatedCost = Math.max(NumberUtils.scaleToNow(value, statistics.getCommentPublishedAt(), asOfDate), 1);
         }
 
-
-        operation.setEstimatedCost(estimatedCost);
+        return estimatedCost;
     }
 }

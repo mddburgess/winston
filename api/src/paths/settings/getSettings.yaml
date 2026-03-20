@@ -1,0 +1,11 @@
+summary: Get settings
+tags:
+  - Settings
+operationId: getSettings
+responses:
+  "200":
+    description: Settings.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/settings/Settings.yaml

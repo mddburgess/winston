@@ -1,0 +1,8 @@
+description: The requested channel was not found.
+content:
+  application/problem+json:
+    schema:
+      $ref: ../../schemas/Problem.yaml
+    examples:
+      Channel not found:
+        $ref: ../../examples/404-channelNotFound.yaml

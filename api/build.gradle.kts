@@ -4,6 +4,9 @@ import com.github.gradle.node.npm.task.NpxTask
 group = rootProject.group
 version = rootProject.version
 
+var generatedDir = layout.buildDirectory.dir("generated").get()
+var openapiBundle = generatedDir.file("openapi.yaml")
+
 plugins {
     java
     alias(libs.plugins.node)
@@ -39,8 +42,8 @@ node {
 
 openApiGenerate {
     generatorName.set("spring")
-    inputSpec.set("$projectDir/src/openapi.yaml")
-    outputDir.set(layout.buildDirectory.dir("generated").get().asFile.path)
+    inputSpec.set(openapiBundle.asFile.path)
+    outputDir.set(generatedDir.asFile.path)
     configFile.set("$projectDir/openapi-config.json")
     globalProperties.set(mapOf("apis" to "", "models" to ""))
 }
@@ -72,8 +75,16 @@ tasks {
         npmCommand.set(listOf("run", "validate"))
     }
 
-    named("openApiGenerate") {
+    register<NpxTask>("bundle") {
         dependsOn("validate")
+        inputs.dir("$projectDir/src")
+        outputs.file(openapiBundle.asFile.path)
+        command.set("@redocly/cli")
+        args.addAll("bundle", "$projectDir/src/openapi.yaml", "-o", openapiBundle.asFile.path)
+    }
+
+    named("openApiGenerate") {
+        dependsOn("bundle")
     }
 
     compileJava {
@@ -81,8 +92,10 @@ tasks {
     }
 
     register<Copy>("copyResources") {
-        dependsOn("format")
-        from("$projectDir/src")
+        dependsOn(openApiGenerate)
+        from(generatedDir.asFile.path) {
+            include("openapi.yaml")
+        }
         into(layout.buildDirectory.dir("resources/main/static/spec"))
     }
 

@@ -1,0 +1,15 @@
+summary: Get notifications
+description: Opens an event subscription to receive fetch events.
+tags:
+  - Notifications
+operationId: subscribe
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      text/event-stream:
+        schema:
+          type: array
+          format: event-stream
+          items:
+            type: string

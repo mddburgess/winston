@@ -1,6 +1,31 @@
 title: Pull Operation
-oneOf:
-  - $ref: ./PullChannelOperation.yaml
-  - $ref: ./PullVideosOperation.yaml
-  - $ref: ./PullCommentsOperation.yaml
-  - $ref: ./PullRepliesOperation.yaml
+type: object
+required:
+  - pull
+  - status
+properties:
+  pull:
+    type: string
+  id:
+    type: string
+    readOnly: true
+  estimated_cost:
+    type: integer
+    readOnly: true
+    format: int32
+  status:
+    type: string
+    readOnly: true
+    enum:
+      - ready
+      - fetching
+      - successful
+      - warning
+      - failed
+discriminator:
+  propertyName: pull
+  mapping:
+    channel: ./PullChannelOperation.yaml
+    videos: ./PullVideosOperation.yaml
+    comments: ./PullCommentsOperation.yaml
+    replies: ./PullRepliesOperation.yaml

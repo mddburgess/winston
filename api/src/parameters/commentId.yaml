@@ -1,0 +1,6 @@
+name: id
+description: The unique identifier for the comment.
+in: path
+required: true
+schema:
+  type: string

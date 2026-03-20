@@ -1,0 +1,19 @@
+summary: Get video
+description: Gets the video data for a single fetched video.
+tags:
+  - Videos
+operationId: getVideo
+parameters:
+  - $ref: ../../parameters/videoId.yaml
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/videos/Video.yaml
+        examples:
+          Video:
+            $ref: ../../examples/getVideo/200-video.yaml
+  "404":
+    $ref: ../../responses/videos/404-videoNotFound.yaml
