@@ -7,9 +7,19 @@ required:
   - authors
 properties:
   results:
-    description: The number of authors in the list.
-    type: integer
-    format: int32
+    type: object
+    required:
+      - page_count
+      - total_count
+    properties:
+      page_count:
+        type: integer
+        format: int32
+        minimum: 0
+      total_count:
+        type: integer
+        format: int32
+        minimum: 0
   authors:
     description: A list of all the authors.
     type: array

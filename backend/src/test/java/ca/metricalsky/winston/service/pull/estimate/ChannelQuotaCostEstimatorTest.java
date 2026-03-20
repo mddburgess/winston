@@ -18,7 +18,5 @@ class ChannelQuotaCostEstimatorTest {
 
         assertThat(estimate)
                 .isEqualTo(1);
-        assertThat(operation.getEstimatedCost())
-                .isEqualTo(estimate);
     }
 }

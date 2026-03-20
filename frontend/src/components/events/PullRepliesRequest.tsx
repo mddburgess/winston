@@ -1,7 +1,7 @@
 import { usePullMutation } from "#/api";
 import { PullEventsSource } from "#/components/events/PullEventsSource";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
-import { invalidateComments, invalidateVideos } from "#/store/slices/backend";
+import { invalidateAuthors, invalidateComments, invalidateVideos } from "#/store/slices/backend";
 import { invalidateFetchLimits } from "#/store/slices/limits";
 import { pullRepliesActive, pullRepliesError, pullRepliesResponse } from "#/store/slices/pullReplies";
 import type { Comment } from "#/api";
@@ -49,6 +49,7 @@ const PullRepliesRequest = () => {
     dispatch(pullRepliesActive(false));
     dispatch(invalidateVideos());
     dispatch(invalidateComments());
+    dispatch(invalidateAuthors());
   };
 
   return (

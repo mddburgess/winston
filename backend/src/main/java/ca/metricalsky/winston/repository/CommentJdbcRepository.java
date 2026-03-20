@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.repository;
 
+import ca.metricalsky.winston.aspects.Slo;
 import ca.metricalsky.winston.entity.CommentEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
@@ -26,6 +27,7 @@ public class CommentJdbcRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Slo(ms = 50)
     public List<CommentEntity> saveAll(List<CommentEntity> comments) {
         if (comments.isEmpty()) {
             return List.of();

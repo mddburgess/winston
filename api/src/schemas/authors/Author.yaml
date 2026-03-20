@@ -27,3 +27,8 @@ properties:
     type: array
     items:
       $ref: ./VideoStatistics.yaml
+  aliases:
+    description: The list of channel handles of other authors that are linked to the same real person.
+    type: array
+    items:
+      type: string

@@ -1,0 +1,12 @@
+summary: Get channel thumbnail
+description: Gets the thumbnail image for a channel.
+tags:
+  - Thumbnails
+operationId: getChannelThumbnail
+parameters:
+  - $ref: ../../parameters/channelId.yaml
+responses:
+  "200":
+    $ref: ../../responses/thumbnails/200-thumbnail.yaml
+  "404":
+    $ref: ../../responses/channels/404-channelNotFound.yaml

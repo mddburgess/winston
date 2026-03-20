@@ -1,0 +1,22 @@
+summary: Patch comment properties
+description: Patches the non-YouTube properties for a single comment.
+tags:
+  - Comments
+operationId: patchCommentProperties
+parameters:
+  - $ref: ../../parameters/commentId.yaml
+requestBody:
+  description: List of patch operations to apply to the comment properties.
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: ../../schemas/PatchOperation.yaml
+responses:
+  "200":
+    description: The patch was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/comments/CommentProperties.yaml

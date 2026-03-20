@@ -1,0 +1,32 @@
+summary: Patch channel properties
+description: Patches the non-YouTube properties for a single channel.
+tags:
+  - Channels
+operationId: patchChannelProperties
+parameters:
+  - $ref: ../../parameters/channelHandle.yaml
+requestBody:
+  description: List of patch operations to apply to the channel properties.
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: ../../schemas/PatchOperation.yaml
+      examples:
+        Mark channel as archived:
+          $ref: ../../examples/patchChannelProperties/markArchived.yaml
+        Mark channel as not archived:
+          $ref: ../../examples/patchChannelProperties/markNotArchived.yaml
+responses:
+  "200":
+    description: The patch was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/channels/ChannelProperties.yaml
+        examples:
+          Channel is archived:
+            $ref: ../../examples/patchChannelProperties/200-channelArchived.yaml
+          Channel is not archived:
+            $ref: ../../examples/patchChannelProperties/200-channelNotArchived.yaml

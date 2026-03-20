@@ -1,12 +1,12 @@
 import { filter, map } from "lodash";
 import { Button, Col, Container, Offcanvas, Row } from "react-bootstrap";
+import { XOctagonFill } from "react-bootstrap-icons";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { AvailableQuota } from "#/components/limits/AvailableQuota";
 import { PullCommentsList } from "#/components/pull/PullCommentsList";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { getPullCommentsStatus, setShowPullCommentsSidebar } from "#/store/slices/pullComments";
 import { pluralize } from "#/utils";
-import { XOctagonFill } from "react-bootstrap-icons";
 
 const BatchPullCommentsSidebar = () => {
   const dispatch = useAppDispatch();

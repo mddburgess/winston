@@ -1,5 +1,7 @@
 import { Col, ListGroup, Row } from "react-bootstrap";
 import { EyeFill, HeartFill } from "react-bootstrap-icons";
+import { AuthorVideoDetails } from "#/components/authors/focus/AuthorVideoDetails";
+import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
 import { BadgeList } from "#/components/BadgeList";
 import { CopyToClipboard } from "#/components/CopyToClipboard";
 import { IconLabel } from "#/components/IconLabel";
@@ -46,6 +48,9 @@ const VideoDetailsJumbotron = ({ video }: VideoProps) => (
             )}
             <VideoCommentCounts video={video} />
           </Row>
+          <IfAuthorFocus>
+            {(authorHandle) => <AuthorVideoDetails video={video} authorHandle={authorHandle} />}
+          </IfAuthorFocus>
           <Row className={"pb-2"}>
             <Col className={"small"}>{video.description}</Col>
           </Row>

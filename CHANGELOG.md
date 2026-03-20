@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] — 2026-03-19
+
+### Added
+
+- Author search navigates to the author page when it finds one exact match. (mddburgess/winston#49)
+- Button on the author details page to toggle "focus mode" for that author. (mddburgess/winston#123)
+- Show focused author's statistics on the channel list cards and channel details page. (mddburgess/winston#123)
+- Show focused author's statistics on the video list cards and video details page. (mddburgess/winston#123)
+- Highlight focused author's comments on the video details page. (mddburgess/winston#123)
+- Support for setting and removing aliases for an author. (mddburgess/winston#125)
+
+### Changed
+
+- Log method execution times only if they exceed a defined service level objective time. (mddburgess/winston#117)
+- List authors endpoint returns a page of authors instead of the entire list. (mddburgess/winston#49)
+- List authors endpoint supports searching for authors by display name. (mddburgess/winston#49)
+- Authors page now searches for authors using the backend endpoint instead of in memory. (mddburgess/winston#49)
+- Refactored API specification files. (mddburgess/winston#130)
+
+### Removed
+
+- Removed the ability to search comments on the video page. (mddburgess/winston#49)
+
+### Fixed
+
+- Sanitize comment strings before persisting to the database. (mddburgess/winston#113)
+- Added indexes on authors and comments tables to fix slow queries on authors. (mddburgess/winston#119)
+- Fixed slow query to get IDs of comments with missing replies. (mddburgess/winston#128)
+
 ## [1.7.0] — 2025-11-01
 
 ### Added
@@ -189,6 +218,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache channel and video thumbnails.
 
 [Unreleased]: https://github.com/mddburgess/winston/compare/main...HEAD
+[1.8.0]: htttps://github.com/mddburgess/winston/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/mddburgess/winston/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/mddburgess/winston/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/mddburgess/winston/compare/v1.4.0...v1.5.0

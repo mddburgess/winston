@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router";
 import { routes } from "#/utils/links";
-import { AuthorListRoute } from "./authors";
-import { AuthorDetailsRoute } from "./authors/id";
+import { AuthorDetailsRoute } from "./authors/AuthorDetailsRoute";
+import { AuthorListRoute } from "./authors/AuthorListRoute";
 import { ChannelDetailsRoute } from "./channels/ChannelDetailsRoute";
 import { ChannelListRoute } from "./channels/ChannelListRoute";
-import { VideoDetailsRoute } from "./videos/id";
+import { VideoDetailsRoute } from "./videos/id/VideoDetailsRoute";
 
-export const AppRoutes = () => (
+const AppRoutes = () => (
   <Routes>
     <Route path={routes.home} element={<ChannelListRoute />} />
     <Route path={routes.authors.list} element={<AuthorListRoute />} />
@@ -15,3 +15,5 @@ export const AppRoutes = () => (
     <Route path={routes.videos.details()} element={<VideoDetailsRoute />} />
   </Routes>
 );
+
+export { AppRoutes };

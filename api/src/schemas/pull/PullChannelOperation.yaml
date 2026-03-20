@@ -1,29 +1,11 @@
 title: Pull Channel Operation
-type: object
-required:
-  - pull
-  - channel_handle
-  - status
-  - id
-properties:
-  pull:
-    type: string
-    const: channel
-  channel_handle:
-    type: string
-  estimated_cost:
-    type: integer
-    readOnly: true
-    format: int32
-  status:
-    type: string
-    readOnly: true
-    enum:
-      - ready
-      - fetching
-      - successful
-      - warning
-      - failed
-  id:
-    type: string
-    readOnly: true
+allOf:
+  - $ref: ./PullOperation.yaml
+  - type: object
+    required:
+      - channel_handle
+      - status
+      - id
+    properties:
+      channel_handle:
+        type: string

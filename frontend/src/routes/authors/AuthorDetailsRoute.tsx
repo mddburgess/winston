@@ -2,9 +2,9 @@ import { find } from "lodash";
 import { Breadcrumb, BreadcrumbItem } from "react-bootstrap";
 import { Link, useParams, useSearchParams } from "react-router";
 import { AuthorInfoJumbotron } from "#/components/authors/AuthorInfoJumbotron";
-import { AuthorDetailsView } from "#/routes/authors/id/AuthorDetailsView";
+import { AuthorDetailsTabs } from "#/routes/authors/id/AuthorDetailsTabs";
 import { routes } from "#/utils/links";
-import { AuthorSummaryQuery } from "./AuthorSummaryQuery";
+import { AuthorSummaryQuery } from "./id/AuthorSummaryQuery";
 import type { GetAuthorResp } from "#/api";
 
 const AuthorDetailsRoute = () => {
@@ -46,7 +46,7 @@ const AuthorDetailsContent = ({ summary }: AuthorDetailsContentProps) => {
         {video && <BreadcrumbItem active>{video.title}</BreadcrumbItem>}
       </Breadcrumb>
       <AuthorInfoJumbotron author={summary.author} video={video} />
-      <AuthorDetailsView {...summary} />
+      <AuthorDetailsTabs summary={summary} />
     </>
   );
 };

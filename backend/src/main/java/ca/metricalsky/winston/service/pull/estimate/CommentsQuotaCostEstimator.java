@@ -23,10 +23,7 @@ public class CommentsQuotaCostEstimator implements QuotaCostEstimator<PullCommen
                 .map(this::estimateTopLevelCommentCount)
                 .orElseGet(pullStatisticsService::getAverageCommentsPerVideo);
 
-        var estimatedCost = Math.max((int) Math.ceil(commentCount / 100), 1);
-        operation.setEstimatedCost(estimatedCost);
-
-        return operation.getEstimatedCost();
+        return Math.max((int) Math.ceil(commentCount / 100), 1);
     }
 
     private double estimateTopLevelCommentCount(int totalCommentCount) {

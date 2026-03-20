@@ -1,6 +1,7 @@
 import { Col, Image, Ratio, Row } from "react-bootstrap";
 import { AuthorProfileImage } from "#/components/authors/AuthorProfileImage";
 import { AuthorStatistics } from "#/components/authors/AuthorStatistics";
+import { AuthorFocusToggle } from "#/components/authors/focus/AuthorFocusToggle";
 import { VideoChannelTitle } from "#/components/videos/VideoChannelTitle";
 import { VideoPublishedAt } from "#/components/videos/VideoPublishedAt";
 import type { AuthorProps, VideoProps } from "#/types";
@@ -25,6 +26,9 @@ const AuthorRow = ({ author }: AuthorProps) => (
     </Col>
     <Col>
       <h1 className={"mb-0"}>{author.handle}</h1>
+    </Col>
+    <Col xs={"auto"} className={"flex-center"}>
+      <AuthorFocusToggle author={author} />
     </Col>
     <AuthorStatistics author={author} />
   </Row>

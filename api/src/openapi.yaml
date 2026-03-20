@@ -17,499 +17,65 @@ servers:
 paths:
   /api/v1/channels:
     get:
-      summary: List channels
-      description: Lists the channel data for all the fetched channels.
-      tags:
-        - Channels
-      operationId: listChannels
-      parameters:
-        - name: includeArchived
-          description: Flag indicating if archived channels should also be returned in the response. Default is false.
-          in: query
-          schema:
-            type: boolean
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/channels/ListChannelsResponse.yaml
-              examples:
-                Channel list:
-                  $ref: ./examples/listChannels/200-channelList.yaml
-                Empty channel list:
-                  $ref: ./examples/listChannels/200-emptyChannelList.yaml
-
+      $ref: ./paths/channels/listChannels.yaml
   /api/v1/channels/{handle}:
     get:
-      summary: Get channel
-      description: Gets the channel data for a single fetched channel.
-      tags:
-        - Channels
-      operationId: getChannel
-      parameters:
-        - $ref: "#/components/parameters/channelHandle"
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/channels/Channel.yaml
-              examples:
-                Channel:
-                  $ref: ./examples/getChannel/200-channel.yaml
-        "404":
-          $ref: "#/components/responses/404-channelNotFound"
-
+      $ref: ./paths/channels/getChannel.yaml
   /api/v1/channels/{handle}/properties:
     patch:
-      summary: Patch channel properties
-      description: Patches the non-YouTube properties for a single channel.
-      tags:
-        - Channels
-      operationId: patchChannelProperties
-      parameters:
-        - $ref: "#/components/parameters/channelHandle"
-      requestBody:
-        description: List of patch operations to apply to the channel properties.
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/PatchOperation"
-            examples:
-              Mark channel as archived:
-                $ref: ./examples/patchChannelProperties/markArchived.yaml
-              Mark channel as not archived:
-                $ref: ./examples/patchChannelProperties/markNotArchived.yaml
-      responses:
-        "200":
-          description: The patch was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/channels/ChannelProperties.yaml
-              examples:
-                Channel is archived:
-                  $ref: ./examples/patchChannelProperties/200-channelArchived.yaml
-                Channel is not archived:
-                  $ref: ./examples/patchChannelProperties/200-channelNotArchived.yaml
-
+      $ref: ./paths/channels/patchChannelProperties.yaml
   /api/v1/channels/{handle}/videos:
     get:
-      summary: List videos
-      description: Lists the video data for all the fetched videos for a single channel.
-      tags:
-        - Videos
-      operationId: listVideos
-      parameters:
-        - $ref: "#/components/parameters/channelHandle"
-        - name: page
-          in: query
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-        - name: size
-          in: query
-          schema:
-            type: integer
-            format: int32
-            minimum: 1
-            maximum: 500
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/videos/ListVideosResponse.yaml
-              examples:
-                Video list:
-                  $ref: ./examples/listVideos/200-videoList.yaml
-                Empty video list:
-                  $ref: ./examples/listVideos/200-emptyVideoList.yaml
-        "404":
-          $ref: "#/components/responses/404-channelNotFound"
-
+      $ref: ./paths/videos/listVideos.yaml
   /api/v1/videos/{id}:
     get:
-      summary: Get video
-      description: Gets the video data for a single fetched video.
-      tags:
-        - Videos
-      operationId: getVideo
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/videos/Video.yaml
-              examples:
-                Video:
-                  $ref: ./examples/getVideo/200-video.yaml
-        "404":
-          $ref: "#/components/responses/404-videoNotFound"
-
+      $ref: ./paths/videos/getVideo.yaml
   /api/v1/videos/{id}/comments:
     get:
-      summary: List comments
-      description: Lists all the fetched comments for a single video.
-      tags:
-        - Comments
-      operationId: listComments
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-        - name: author
-          description:
-            The unique channel handle used in the author's channel URL.
-            Set this parameter to filter the response so that only comments published by this author are returned.
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/comments/ListCommentsResponse.yaml
-        "404":
-          $ref: "#/components/responses/404-videoNotFound"
-
+      $ref: ./paths/comments/listComments.yaml
   /api/v1/comments/{id}/properties:
     patch:
-      summary: Patch comment properties
-      description: Patches the non-YouTube properties for a single comment.
-      tags:
-        - Comments
-      operationId: patchCommentProperties
-      parameters:
-        - $ref: "#/components/parameters/commentId"
-      requestBody:
-        description: List of patch operations to apply to the comment properties.
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/PatchOperation"
-      responses:
-        "200":
-          description: The patch was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/comments/CommentProperties.yaml
-
+      $ref: ./paths/comments/patchCommentProperties.yaml
   /api/v1/authors:
     get:
-      summary: List authors
-      description: Lists the authors for all the fetched comments.
-      tags:
-        - Authors
-      operationId: listAuthors
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/authors/ListAuthorsResponse.yaml
-
+      $ref: ./paths/authors/listAuthors.yaml
   /api/v1/authors/{handle}:
     get:
-      summary: Get author
-      description: Gets the author summary data for a single author.
-      tags:
-        - Authors
-      operationId: getAuthor
-      parameters:
-        - $ref: "#/components/parameters/authorHandle"
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/authors/GetAuthorResponse.yaml
-        "404":
-          $ref: "#/components/responses/404-authorNotFound"
-
+      $ref: ./paths/authors/getAuthor.yaml
+    patch:
+      $ref: ./paths/authors/patchAuthor.yaml
+  /api/v1/authors/{handle}/channels:
+    get:
+      $ref: ./paths/authors/getAuthorChannelSummary.yaml
+  /api/v1/authors/{handle}/videos:
+    get:
+      $ref: ./paths/authors/getAuthorVideoSummary.yaml
   /api/v1/channels/{id}/thumbnail:
     get:
-      summary: Get channel thumbnail
-      description: Gets the thumbnail image for a channel.
-      tags:
-        - Thumbnails
-      operationId: getChannelThumbnail
-      parameters:
-        - $ref: "#/components/parameters/channelId"
-      responses:
-        "200":
-          $ref: "#/components/responses/200-thumbnail"
-        "404":
-          $ref: "#/components/responses/404-channelNotFound"
-
+      $ref: ./paths/thumbnails/getChannelThumbnail.yaml
   /api/v1/videos/{id}/thumbnail:
     get:
-      summary: Get video thumbnail
-      description: Gets the thumbnail image for a video.
-      tags:
-        - Thumbnails
-      operationId: getVideoThumbnail
-      parameters:
-        - $ref: "#/components/parameters/videoId"
-      responses:
-        "200":
-          $ref: "#/components/responses/200-thumbnail"
-        "404":
-          $ref: "#/components/responses/404-videoNotFound"
-
+      $ref: ./paths/thumbnails/getVideoThumbnail.yaml
   /api/v1/authors/{id}/thumbnail:
     get:
-      summary: Get author thumbnail
-      description: Gets the thumbnail image for an author.
-      tags:
-        - Thumbnails
-      operationId: getAuthorThumbnail
-      parameters:
-        - $ref: "#/components/parameters/authorId"
-      responses:
-        "200":
-          $ref: "#/components/responses/200-thumbnail"
-        "404":
-          $ref: "#/components/responses/404-videoNotFound"
-
+      $ref: ./paths/thumbnails/getAuthorThumbnail.yaml
   /api/v1/fetch/limits:
     get:
-      summary: Get fetch limits
-      description: Gets the limits on calling the fetch API.
-      tags:
-        - Fetch
-      operationId: getFetchLimits
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            application/json:
-              schema:
-                $ref: ./schemas/fetch/FetchLimitsResponse.yaml
-
+      $ref: ./paths/fetch/getFetchLimits.yaml
   /api/v1/notifications:
     get:
-      summary: Get notifications
-      description: Opens an event subscription to receive fetch events.
-      tags:
-        - Notifications
-      operationId: subscribe
-      responses:
-        "200":
-          description: The request was successful.
-          content:
-            text/event-stream:
-              schema:
-                type: array
-                format: event-stream
-                items:
-                  type: string
-
+      $ref: ./paths/notifications/subscribe.yaml
   /api/v1/pull:
     post:
-      summary: Pull data
-      description: Submits a request to pull data from YouTube.
-      tags:
-        - Pull
-      operationId: pull
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - event_subscription_id
-                - operations
-              properties:
-                event_subscription_id:
-                  type: string
-                  format: uuid
-                operations:
-                  $ref: "#/components/schemas/PullOperations"
-                status:
-                  type: string
-                  readOnly: true
-                  enum:
-                    - accepted
-                    - fetching
-                    - paused
-                    - completed
-                id:
-                  type: string
-                  readOnly: true
-            examples:
-              Pull channel:
-                $ref: ./examples/pull/pullChannel.yaml
-              Pull channel and videos:
-                $ref: ./examples/pull/pullChannelAndVideos.yaml
-              Pull latest videos:
-                $ref: ./examples/pull/pullLatestVideos.yaml
-              Pull comments:
-                $ref: ./examples/pull/pullComments.yaml
-              Pull comments and replies:
-                $ref: ./examples/pull/pullCommentsAndReplies.yaml
-              Pull replies for comment:
-                $ref: ./examples/pull/pullRepliesForComment.yaml
-              Pull replies for video:
-                $ref: ./examples/pull/pullRepliesForVideo.yaml
-      responses:
-        "202":
-          description: The request was accepted for processing.
-        "422":
-          description: The request cannot be processed.
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-              examples:
-                Channel not pulled:
-                  $ref: ./examples/pull/422-channelNotPulled.yaml
-                Video not pulled:
-                  $ref: ./examples/pull/422-videoNotPulled.yaml
-                Comment not pulled:
-                  $ref: ./examples/pull/422-commentNotPulled.yaml
-
+      $ref: ./paths/pull/pull.yaml
   /api/v1/pull/quote:
     post:
-      summary: Quote pull
-      description: Estimates the YouTube API quota cost for a pull data request.
-      tags:
-        - Pull
-      operationId: quotePull
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - operations
-              properties:
-                operations:
-                  $ref: "#/components/schemas/PullOperations"
-      responses:
-        "200":
-          description: The operations specified in the request, along with an estimated quota cost for each operation.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/QuotePullResponse"
-
-components:
-  schemas:
-    PatchOperation:
-      $ref: ./schemas/PatchOperation.yaml
-    Problem:
-      $ref: ./schemas/Problem.yaml
-    PullOperations:
-      type: array
-      items:
-        $ref: ./schemas/pull/PullOperation.yaml
-    QuotePullResponse:
-      type: object
-      required:
-        - total_estimated_cost
-        - operations
-      properties:
-        total_estimated_cost:
-          type: integer
-          format: int32
-        operations:
-          $ref: "#/components/schemas/PullOperations"
-  parameters:
-    authorHandle:
-      name: handle
-      description: The unique channel handle used in the author's channel URL.
-      in: path
-      required: true
-      schema:
-        type: string
-    authorId:
-      name: id
-      description: The unique identifier for the author.
-      in: path
-      required: true
-      schema:
-        type: string
-    channelHandle:
-      name: handle
-      description: The unique channel handle used in the channel's URL.
-      in: path
-      required: true
-      schema:
-        type: string
-    channelId:
-      name: id
-      description: The unique identifier for the channel.
-      in: path
-      required: true
-      schema:
-        type: string
-    videoId:
-      name: id
-      description: The unique identifier for the video.
-      in: path
-      required: true
-      schema:
-        type: string
-    commentId:
-      name: id
-      description: The unique identifier for the comment.
-      in: path
-      required: true
-      schema:
-        type: string
-  responses:
-    200-thumbnail:
-      description: The request was successful.
-      content:
-        image/jpeg:
-          schema:
-            description: The requested thumbnail image.
-            type: string
-            format: byte
-    404-authorNotFound:
-      description: The requested author was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Author not found:
-              $ref: ./examples/404-authorNotFound.yaml
-    404-channelNotFound:
-      description: The requested channel was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Channel not found:
-              $ref: ./examples/404-channelNotFound.yaml
-    404-videoNotFound:
-      description: The requested video was not found.
-      content:
-        application/problem+json:
-          schema:
-            $ref: "#/components/schemas/Problem"
-          examples:
-            Video not found:
-              $ref: ./examples/404-videoNotFound.yaml
+      $ref: ./paths/pull/quotePull.yaml
+  /api/v1/settings:
+    get:
+      $ref: ./paths/settings/getSettings.yaml
+    patch:
+      $ref: ./paths/settings/patchSettings.yaml
 
 tags:
   - name: Channels
@@ -528,3 +94,5 @@ tags:
     description: Endpoints related to getting fetch events.
   - name: Pull
     description: Endpoints related to pulling data from YouTube.
+  - name: Settings
+    description: Endpoints to get and set application settings.

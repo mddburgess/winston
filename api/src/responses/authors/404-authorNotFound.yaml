@@ -1,0 +1,8 @@
+description: The requested author was not found.
+content:
+  application/problem+json:
+    schema:
+      $ref: ../../schemas/Problem.yaml
+    examples:
+      Author not found:
+        $ref: ../../examples/404-authorNotFound.yaml

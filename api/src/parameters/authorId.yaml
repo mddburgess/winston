@@ -1,0 +1,6 @@
+name: id
+description: The unique identifier for the author.
+in: path
+required: true
+schema:
+  type: string

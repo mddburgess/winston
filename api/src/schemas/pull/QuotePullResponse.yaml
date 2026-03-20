@@ -1,0 +1,10 @@
+type: object
+required:
+  - total_estimated_cost
+  - operations
+properties:
+  total_estimated_cost:
+    type: integer
+    format: int32
+  operations:
+    $ref: ./PullOperations.yaml

@@ -1,29 +1,11 @@
 title: Pull Comments Operation
-type: object
-required:
-  - pull
-  - video_id
-  - status
-  - id
-properties:
-  pull:
-    type: string
-    const: comments
-  video_id:
-    type: string
-  estimated_cost:
-    type: integer
-    readOnly: true
-    format: int32
-  status:
-    type: string
-    readOnly: true
-    enum:
-      - ready
-      - fetching
-      - successful
-      - warning
-      - failed
-  id:
-    type: string
-    readOnly: true
+allOf:
+  - $ref: ./PullOperation.yaml
+  - type: object
+    required:
+      - video_id
+      - status
+      - id
+    properties:
+      video_id:
+        type: string

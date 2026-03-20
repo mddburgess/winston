@@ -1,0 +1,18 @@
+summary: Patch settings
+tags:
+  - Settings
+operationId: patchSettings
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: ../../schemas/PatchOperation.yaml
+responses:
+  "200":
+    description: Settings.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/settings/Settings.yaml

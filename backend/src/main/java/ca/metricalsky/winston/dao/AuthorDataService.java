@@ -1,20 +1,30 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Author;
+import ca.metricalsky.winston.api.model.AuthorChannel;
 import ca.metricalsky.winston.api.model.AuthorStatistics;
+import ca.metricalsky.winston.api.model.AuthorVideo;
+import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.api.model.VideoStatistics;
+import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.repository.AuthorRepository;
+import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +35,33 @@ public class AuthorDataService {
     private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
     private final ConversionService conversionService;
+    private final JsonPatchUtils jsonPatchUtils;
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAllAuthorDetails()
-                .stream()
+    public long countAuthors(String search) {
+        return StringUtils.isNotBlank(search)
+                ? authorRepository.countByDisplayNameLike("%" + search + "%")
+                : authorRepository.count();
+    }
+
+    public List<Author> searchAuthors(String search, PageRequest page) {
+        var pageRequest = page.withSort(Sort.Direction.ASC, "displayName");
+
+        var authorEntities = StringUtils.isNotBlank(search)
+                ? authorRepository.findAllByDisplayNameLike("%" + search + "%", pageRequest)
+                : authorRepository.findAll(pageRequest);
+        var authors = authorEntities.stream()
                 .map(authorMapper::toAuthor)
-                .sorted(Comparator.comparing(Author::getHandle))
+                .toList();
+        var authorIds = authors.stream()
+                .map(Author::getId)
+                .toList();
+        var authorStatistics = authorRepository.findAuthorDetailsByIds(authorIds)
+                .stream()
+                .collect(Collectors.toMap(AuthorDetailsView::getAuthorId,
+                        details -> conversionService.convert(details, AuthorStatistics.class)));
+
+        return authors.stream()
+                .map(author -> author.authorStatistics(authorStatistics.get(author.getId())))
                 .toList();
     }
 
@@ -52,6 +83,30 @@ public class AuthorDataService {
         });
 
         return maybeAuthor;
+    }
+
+    public List<AuthorChannel> findAuthorChannelsByHandle(String handle) {
+        return authorRepository.findAuthorChannelsByDisplayName(handle)
+                .stream()
+                .map(authorChannel -> conversionService.convert(authorChannel, AuthorChannel.class))
+                .toList();
+    }
+
+    public List<AuthorVideo> findAuthorVideosByHandle(String handle) {
+        return authorRepository.findAuthorVideosByDisplayName(handle)
+                .stream()
+                .map(authorVideo -> conversionService.convert(authorVideo, AuthorVideo.class))
+                .toList();
+    }
+
+    public Author patchAuthor(String handle, List<PatchOperation> patchOperations) {
+        var author = authorRepository.findByDisplayName(handle)
+                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
+
+        var patchedAuthor = jsonPatchUtils.applyPatch(author, patchOperations);
+        patchedAuthor = authorRepository.save(patchedAuthor);
+
+        return authorMapper.toAuthor(patchedAuthor);
     }
 
     private static String getChannelUrl(String authorHandle) {

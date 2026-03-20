@@ -1,0 +1,23 @@
+summary: List comments
+description: Lists all the fetched comments for a single video.
+tags:
+  - Comments
+operationId: listComments
+parameters:
+  - $ref: ../../parameters/videoId.yaml
+  - name: author
+    description: The unique channel handle used in the author's channel URL.
+      Set this parameter to filter the response so that only comments published by this author are returned.
+    in: query
+    required: false
+    schema:
+      type: string
+responses:
+  "200":
+    description: The request was successful.
+    content:
+      application/json:
+        schema:
+          $ref: ../../schemas/comments/ListCommentsResponse.yaml
+  "404":
+    $ref: ../../responses/videos/404-videoNotFound.yaml

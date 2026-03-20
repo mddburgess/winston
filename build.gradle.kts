@@ -1,2 +1,2 @@
 group = "ca.metricalsky.winston"
-version = "1.7.0"
+version = "1.8.0"

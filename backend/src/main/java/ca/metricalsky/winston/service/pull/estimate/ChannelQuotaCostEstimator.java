@@ -8,7 +8,6 @@ public class ChannelQuotaCostEstimator implements QuotaCostEstimator<PullChannel
 
     @Override
     public int estimateQuotaCost(PullChannelOperation operation) {
-        operation.setEstimatedCost(1);
-        return operation.getEstimatedCost();
+        return 1;
     }
 }

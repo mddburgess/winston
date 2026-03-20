@@ -1,0 +1,6 @@
+name: handle
+description: The unique channel handle used in the author's channel URL.
+in: path
+required: true
+schema:
+  type: string
