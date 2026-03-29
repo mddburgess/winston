@@ -20,6 +20,8 @@ public enum ErrorCode {
             "The requested comment was not found."),
     COMMENTS_DISABLED(HttpStatus.UNPROCESSABLE_ENTITY,
             "Comments are disabled for the requested video."),
+    MALFORMED_REQUEST_BODY(HttpStatus.BAD_REQUEST,
+            "The request body is malformed and cannot be read."),
     QUOTA_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS,
             "The YouTube API request quota has been exceeded."),
     REQUEST_TOO_EXPENSIVE(HttpStatus.UNPROCESSABLE_ENTITY,
