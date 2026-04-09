@@ -37,12 +37,20 @@ public class FetchCommentsAction implements FetchAction<TopLevelComment> {
         }
     }
 
-    private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentThreadListResponse youTubeResponse) {
-        return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+    private static FetchActionEntity getNextFetchAction(
+            FetchActionEntity fetchAction,
+            CommentThreadListResponse youTubeResponse
+    ) {
+        var nextPageToken = youTubeResponse.getNextPageToken();
+        if (nextPageToken == null || nextPageToken.equals(fetchAction.getPageToken())) {
+            return null;
+        }
+
+        return FetchActionEntity.builder()
                 .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
-                .pageToken(youTubeResponse.getNextPageToken())
+                .pageToken(nextPageToken)
                 .build();
     }
 }

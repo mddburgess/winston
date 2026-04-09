@@ -64,7 +64,8 @@ public class FetchVideosFromActivitiesAction implements FetchAction<Video> {
             FetchActionEntity fetchAction,
             ActivityListResponse activityListResponse
     ) {
-        if (activityListResponse.getNextPageToken() == null) {
+        var nextPageToken = activityListResponse.getNextPageToken();
+        if (nextPageToken == null || nextPageToken.equals(fetchAction.getPageToken())) {
             return null;
         }
 
