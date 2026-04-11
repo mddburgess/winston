@@ -1,59 +1,64 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.service.YouTubeService;
-import ca.metricalsky.winston.service.fetch.FetchActionService;
-import ca.metricalsky.winston.test.ClientTestObjectFactory;
-import ca.metricalsky.winston.test.TestUtils;
-import org.junit.jupiter.api.Disabled;
+import ca.metricalsky.winston.service.fetch.FetchResult;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class FetchVideosActionTest {
 
+    private static final WinstonFaker faker = new WinstonFaker();
+
     @InjectMocks
-    private FetchVideosFromActivitiesAction fetchVideosAction;
+    private FetchVideosAction fetchVideosAction;
 
     @Mock
-    private FetchActionService fetchActionService;
+    private FetchVideosFromActivitiesAction fetchVideosFromActivitiesAction;
     @Mock
-    private VideoDataService videoDataService;
+    private FetchVideosFromPlaylistItemsAction fetchVideosFromPlaylistItemsAction;
+
     @Mock
-    private YouTubeService youTubeService;
+    private FetchResult<Video> fetchResult;
 
     @Test
-    @Disabled
-    void fetch() {
+    void fetch_recentVideos() {
         var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.VIDEOS)
-                .objectId(TestUtils.randomId())
+                .publishedAfter(faker.timeAndDate().past().atOffset(ZoneOffset.UTC))
                 .build();
-        when(fetchActionService.actionFetching(fetchAction))
-                .thenReturn(fetchAction);
 
-        var activityListResponse = ClientTestObjectFactory.buildActivityListResponse();
-        when(youTubeService.getActivities(fetchAction))
-                .thenReturn(activityListResponse);
+        when(fetchVideosFromActivitiesAction.fetch(fetchAction))
+                .thenReturn(fetchResult);
 
-        var nextFetchAction = fetchVideosAction.fetch(fetchAction);
+        var result = fetchVideosAction.fetch(fetchAction);
 
-        assertThat(nextFetchAction)
-                .as("nextFetchAction")
-                .isNull();
+        assertThat(result)
+                .isEqualTo(fetchResult);
+    }
 
-        verify(fetchActionService).actionSuccessful(fetchAction, 1);
+    @Test
+    void fetch_allVideos() {
+        var fetchAction = FetchActionEntity.builder()
+                .publishedAfter(null)
+                .build();
+
+        when(fetchVideosFromPlaylistItemsAction.fetch(fetchAction))
+                .thenReturn(fetchResult);
+
+        var result = fetchVideosAction.fetch(fetchAction);
+
+        assertThat(result)
+                .isEqualTo(fetchResult);
     }
 }
