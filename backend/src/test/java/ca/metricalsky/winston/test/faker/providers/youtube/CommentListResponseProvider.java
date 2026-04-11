@@ -5,6 +5,7 @@ import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentListResponse;
 import net.datafaker.providers.base.AbstractProvider;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
@@ -29,11 +30,11 @@ public class CommentListResponseProvider
 
     public String nextPageToken() {
         var nextPageToken = faker.regexify("get_comment_with_replies_stream--[A-Za-z0-9_-]{43}");
-        return Base64.getUrlEncoder().encodeToString(nextPageToken.getBytes());
+        return Base64.getUrlEncoder().encodeToString(nextPageToken.getBytes(StandardCharsets.UTF_8));
     }
 
     public CommentListResponse page(int minLength, int maxLength, String nextPageToken) {
-        List<Comment> comments = faker.collection(() -> faker.youtube().comment())
+        List<Comment> comments = faker.collection(() -> faker.youtube().reply())
                 .minLen(minLength)
                 .maxLen(maxLength)
                 .generate();

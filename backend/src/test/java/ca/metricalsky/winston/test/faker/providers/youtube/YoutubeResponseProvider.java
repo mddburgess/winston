@@ -13,4 +13,8 @@ public class YoutubeResponseProvider
     public CommentListResponseProvider commentList() {
         return faker.getProvider(CommentListResponseProvider.class, CommentListResponseProvider::new);
     }
+
+    public CommentThreadListResponseProvider commentThreadList() {
+        return faker.getProvider(CommentThreadListResponseProvider.class, CommentThreadListResponseProvider::new);
+    }
 }
