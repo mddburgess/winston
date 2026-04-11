@@ -1,10 +1,15 @@
 package ca.metricalsky.winston.test;
 
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.Base64;
 
+/**
+ * @deprecated Use {@link WinstonFaker} instead.
+ */
+@Deprecated(since = "1.9.0", forRemoval = true)
 public final class TestUtils {
 
     private TestUtils() {
