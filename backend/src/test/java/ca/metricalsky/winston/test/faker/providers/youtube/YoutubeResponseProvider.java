@@ -10,6 +10,10 @@ public class YoutubeResponseProvider
         super(faker);
     }
 
+    public ActivityListResponseProvider activityList() {
+        return faker.getProvider(ActivityListResponseProvider.class, ActivityListResponseProvider::new);
+    }
+
     public CommentListResponseProvider commentList() {
         return faker.getProvider(CommentListResponseProvider.class, CommentListResponseProvider::new);
     }

@@ -14,6 +14,10 @@ public class YoutubeProvider
         super(faker);
     }
 
+    public ActivityProvider activity() {
+        return faker.getProvider(ActivityProvider.class, ActivityProvider::new);
+    }
+
     public String authorId() {
         return channelId();
     }
