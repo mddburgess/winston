@@ -58,4 +58,29 @@ class FetchVideosFromActivitiesActionTest {
         verify(youTubeService, never()).getVideos(any(), any());
         verifyNoInteractions(channelDataService, videoDataService);
     }
+
+    @Test
+    void fetch_firstPage() {
+        var fetchAction = FetchActionEntity.builder()
+                .actionType(FetchActionEntity.Type.VIDEOS)
+                .objectId(faker.youtube().channelId())
+                .build();
+
+        var activityListResponse = faker.youtube().response().activityList().firstPage();
+        when(youTubeService.getActivities(fetchAction))
+                .thenReturn(activityListResponse);
+
+        var fetchResult = fetchVideosFromActivitiesAction.fetch(fetchAction);
+
+        assertThat(fetchResult)
+                .as("fetchResult")
+                .hasFieldOrPropertyWithValue("actionType", fetchAction.getActionType())
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId())
+                .hasFieldOrPropertyWithValue("items", Collections.emptyList());
+        assertThat(fetchResult.nextFetchAction())
+                .as("fetchResult.nextFetchAction")
+                .hasFieldOrPropertyWithValue("fetchOperationId", fetchAction.getFetchOperationId())
+                .hasFieldOrPropertyWithValue("actionType", fetchAction.getActionType())
+                .hasFieldOrPropertyWithValue("objectId", fetchAction.getObjectId());
+    }
 }
