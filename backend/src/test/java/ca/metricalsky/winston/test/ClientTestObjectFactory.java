@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.test;
 
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityContentDetails;
@@ -18,6 +19,10 @@ import com.google.api.services.youtube.model.CommentThreadSnippet;
 
 import java.util.List;
 
+/**
+ * @deprecated Use {@link WinstonFaker} instead.
+ */
+@Deprecated(since = "1.9.0", forRemoval = true)
 public final class ClientTestObjectFactory {
 
     private ClientTestObjectFactory() {

@@ -1,12 +1,13 @@
 package ca.metricalsky.winston.test.faker.providers;
 
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import net.datafaker.providers.base.AbstractProvider;
-import net.datafaker.providers.base.BaseProviders;
 import org.springframework.data.domain.PageRequest;
 
-public class PageProvider extends AbstractProvider<BaseProviders> {
+public class PageProvider
+        extends AbstractProvider<WinstonFaker> {
 
-    public PageProvider(BaseProviders faker) {
+    public PageProvider(WinstonFaker faker) {
         super(faker);
     }
 

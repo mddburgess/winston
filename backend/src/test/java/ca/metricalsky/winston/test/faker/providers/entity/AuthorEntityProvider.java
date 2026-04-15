@@ -1,26 +1,23 @@
 package ca.metricalsky.winston.test.faker.providers.entity;
 
 import ca.metricalsky.winston.entity.view.AuthorDetailsView;
-import ca.metricalsky.winston.test.faker.providers.YoutubeProvider;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import lombok.Builder;
 import lombok.Value;
 import net.datafaker.providers.base.AbstractProvider;
-import net.datafaker.providers.base.BaseProviders;
 
-public class AuthorEntityProvider extends AbstractProvider<BaseProviders> {
+public class AuthorEntityProvider
+        extends AbstractProvider<WinstonFaker> {
 
-    private final YoutubeProvider youtube;
-
-    public AuthorEntityProvider(BaseProviders faker) {
+    public AuthorEntityProvider(WinstonFaker faker) {
         super(faker);
-        youtube = new YoutubeProvider(faker);
     }
 
     public AuthorDetailsView authorDetails() {
         var totalCommentCount = faker.number().numberBetween(1L, 1000);
 
         return MockAuthorDetailsView.builder()
-                .authorId(youtube.authorId())
+                .authorId(faker.youtube().authorId())
                 .channelCount(faker.number().numberBetween(1L, 20))
                 .videoCount(faker.number().numberBetween(1L, 100))
                 .totalCommentCount(totalCommentCount)

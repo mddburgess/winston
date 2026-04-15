@@ -25,12 +25,20 @@ public class FetchRepliesAction implements FetchAction<Comment> {
         return new FetchResult<>(fetchAction, replies, nextFetchAction);
     }
 
-    private static FetchActionEntity getNextFetchAction(FetchActionEntity fetchAction, CommentListResponse youTubeResponse) {
-        return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+    private static FetchActionEntity getNextFetchAction(
+            FetchActionEntity fetchAction,
+            CommentListResponse youTubeResponse
+    ) {
+        var nextPageToken = youTubeResponse.getNextPageToken();
+        if (nextPageToken == null || nextPageToken.equals(fetchAction.getPageToken())) {
+            return null;
+        }
+
+        return FetchActionEntity.builder()
                 .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
-                .pageToken(youTubeResponse.getNextPageToken())
+                .pageToken(nextPageToken)
                 .build();
     }
 }

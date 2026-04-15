@@ -2,20 +2,18 @@ package ca.metricalsky.winston.test.faker.providers;
 
 import ca.metricalsky.winston.api.model.ChannelSummary;
 import ca.metricalsky.winston.api.model.Video;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import net.datafaker.providers.base.AbstractProvider;
-import net.datafaker.providers.base.BaseProviders;
 
-public class VideoProvider extends AbstractProvider<BaseProviders> {
+public class VideoProvider
+        extends AbstractProvider<WinstonFaker> {
 
-    private final YoutubeProvider youtube;
-
-    public VideoProvider(BaseProviders faker) {
+    public VideoProvider(WinstonFaker faker) {
         super(faker);
-        youtube = new YoutubeProvider(faker);
     }
 
     public Video dto() {
-        return dto(youtube.channelHandle());
+        return dto(faker.youtube().channelHandle());
     }
 
     public Video dto(String channelHandle) {
@@ -23,7 +21,7 @@ public class VideoProvider extends AbstractProvider<BaseProviders> {
                 .handle(channelHandle);
 
         return new Video()
-                .id(youtube.videoId())
+                .id(faker.youtube().videoId())
                 .channel(channel);
     }
 }

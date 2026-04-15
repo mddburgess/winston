@@ -56,11 +56,16 @@ public class FetchVideosFromPlaylistItemsAction implements FetchAction<Video> {
             FetchActionEntity fetchAction,
             PlaylistItemListResponse youTubeResponse
     ) {
-        return youTubeResponse.getNextPageToken() == null ? null : FetchActionEntity.builder()
+        var nextPageToken = youTubeResponse.getNextPageToken();
+        if (nextPageToken == null || nextPageToken.equals(fetchAction.getPageToken())) {
+            return null;
+        }
+
+        return FetchActionEntity.builder()
                 .fetchOperationId(fetchAction.getFetchOperationId())
                 .actionType(fetchAction.getActionType())
                 .objectId(fetchAction.getObjectId())
-                .pageToken(youTubeResponse.getNextPageToken())
+                .pageToken(nextPageToken)
                 .build();
     }
 }
