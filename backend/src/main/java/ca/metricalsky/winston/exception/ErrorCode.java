@@ -20,6 +20,8 @@ public enum ErrorCode {
             "The requested comment was not found."),
     COMMENTS_DISABLED(HttpStatus.UNPROCESSABLE_ENTITY,
             "Comments are disabled for the requested video."),
+    INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST,
+            "The request body is invalid and cannot be processed."),
     MALFORMED_REQUEST_BODY(HttpStatus.BAD_REQUEST,
             "The request body is malformed and cannot be read."),
     QUOTA_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS,
@@ -39,7 +41,7 @@ public enum ErrorCode {
     private final String detail;
 
     ErrorCode(HttpStatus status, String detail) {
-        this.type = "/api/problem/" + name().toLowerCase(Locale.ENGLISH).replace("_", "-");
+        this.type = "problem:" + name().toLowerCase(Locale.ENGLISH).replace("_", "-");
         this.status = status;
         this.detail = detail;
     }
