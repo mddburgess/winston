@@ -41,7 +41,7 @@ public enum ErrorCode {
     private final String detail;
 
     ErrorCode(HttpStatus status, String detail) {
-        this.type = "problem:" + name().toLowerCase(Locale.ENGLISH).replace("_", "-");
+        this.type = "/api/problem/" + name().toLowerCase(Locale.ENGLISH).replace("_", "-");
         this.status = status;
         this.detail = detail;
     }

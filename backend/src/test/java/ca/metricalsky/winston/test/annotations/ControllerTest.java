@@ -2,6 +2,7 @@ package ca.metricalsky.winston.test.annotations;
 
 import ca.metricalsky.winston.config.AppResourceResolver;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
+import ca.metricalsky.winston.exception.handlers.ExceptionHandler;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +18,13 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@WebMvcTest(includeFilters = {@ComponentScan.Filter(
+@WebMvcTest(includeFilters = {
+        @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
         classes = {
                 AppResourceResolver.class,
                 ConversionServiceAdapter.class,
+                ExceptionHandler.class,
                 JsonPatchUtils.class
         }
 )})
