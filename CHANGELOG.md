@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved API error responses for some common error cases. (mddburgess#winston#135)
+
 ### Fixed
 
 - Fetch requests no longer loop infinitely when the next page token doesn't change. (mddburgess/winston#133)
