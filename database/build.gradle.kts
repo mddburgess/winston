@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version libs.versions.kotlin
     kotlin("plugin.spring") version libs.versions.kotlin
     kotlin("plugin.jpa") version libs.versions.kotlin
+    alias(libs.plugins.springBoot)
     alias(libs.plugins.springDependencyManagement)
 }
 
@@ -23,7 +24,7 @@ dependencies {
     runtimeOnly(libs.bundles.database)
 
     testImplementation(kotlin("test"))
-    testImplementation(libs.springBootStarterDataJpaTest)
+    testImplementation(libs.springBootStarterTest)
 }
 
 allOpen {
@@ -35,5 +36,9 @@ allOpen {
 tasks {
     test {
         useJUnitPlatform()
+    }
+
+    bootJar {
+        enabled = false
     }
 }
