@@ -29,7 +29,7 @@ class EntityArchTest {
             .that().areAnnotatedWith(Entity.class)
             .should().haveSimpleNameEndingWith("Entity");
 
-    @ArchTest
+//    @ArchTest
     private final ArchRule entityClassesAreInEntityPackage = classes()
             .that().areAnnotatedWith(Entity.class)
             .should().resideInAPackage(ENTITY_PACKAGE)

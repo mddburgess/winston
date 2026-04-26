@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.api.model.Settings;
-import ca.metricalsky.winston.entity.SettingsEntity;
-import ca.metricalsky.winston.repository.SettingsRepository;
+import ca.metricalsky.winston.database.entity.SettingsEntity;
+import ca.metricalsky.winston.database.repository.SettingsRepository;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;

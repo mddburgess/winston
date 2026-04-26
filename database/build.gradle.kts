@@ -1,5 +1,8 @@
 plugins {
     kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.spring") version libs.versions.kotlin
+    kotlin("plugin.jpa") version libs.versions.kotlin
+    alias(libs.plugins.springDependencyManagement)
 }
 
 group = rootProject.group
@@ -14,11 +17,23 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.springBootStarterDataJpa)
+    implementation(libs.kotlinReflect)
+
     runtimeOnly(libs.bundles.database)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.springBootStarterDataJpaTest)
 }
 
-tasks.test {
-    useJUnitPlatform()
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
 }

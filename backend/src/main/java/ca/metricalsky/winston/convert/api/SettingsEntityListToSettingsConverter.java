@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.convert.api;
 
 import ca.metricalsky.winston.api.model.Settings;
-import ca.metricalsky.winston.entity.SettingsEntity;
+import ca.metricalsky.winston.database.entity.SettingsEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
