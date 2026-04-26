@@ -32,13 +32,13 @@ dependencies {
     implementation(libs.datasourceProxySpringBootStarter)
     implementation(libs.jsonPatch)
     implementation(project(":api"))
+    implementation(project(":database"))
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     annotationProcessor(libs.bundles.mapstructProcessor)
     annotationProcessor(libs.springBootConfigurationProcessor)
 
-    runtimeOnly(libs.bundles.database)
     developmentOnly(libs.springBootDevtools)
 
     testImplementation(libs.archunitJunit5)
