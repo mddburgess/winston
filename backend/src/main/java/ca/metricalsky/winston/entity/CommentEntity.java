@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

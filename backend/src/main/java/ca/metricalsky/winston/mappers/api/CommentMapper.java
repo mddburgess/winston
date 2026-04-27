@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.CommentProperties;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.entity.CommentPropertiesEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,8 +28,8 @@ public abstract class CommentMapper {
 
     CommentProperties toCommentProperties(CommentPropertiesEntity commentPropertiesEntity) {
         var commentProperties = new CommentProperties();
-        commentProperties.setImportant(commentPropertiesEntity != null && commentPropertiesEntity.isImportant());
-        commentProperties.setHidden(commentPropertiesEntity != null && commentPropertiesEntity.isHidden());
+        commentProperties.setImportant(commentPropertiesEntity != null && commentPropertiesEntity.getImportant());
+        commentProperties.setHidden(commentPropertiesEntity != null && commentPropertiesEntity.getHidden());
         return commentProperties;
     }
 

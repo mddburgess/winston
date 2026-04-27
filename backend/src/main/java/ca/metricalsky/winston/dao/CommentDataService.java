@@ -2,13 +2,13 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
+import ca.metricalsky.winston.database.repository.comment.CommentPropertiesRepository;
 import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
 import ca.metricalsky.winston.repository.AuthorJdbcRepository;
 import ca.metricalsky.winston.repository.CommentJdbcRepository;
-import ca.metricalsky.winston.repository.CommentPropertiesRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
