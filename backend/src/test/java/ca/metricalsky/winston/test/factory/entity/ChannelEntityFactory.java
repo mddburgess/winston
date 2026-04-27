@@ -1,26 +1,26 @@
 package ca.metricalsky.winston.test.factory.entity;
 
 import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
-import net.datafaker.Faker;
+import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 
 import java.time.ZoneOffset;
 import java.util.Set;
 
 public final class ChannelEntityFactory {
 
-    private static final Faker faker = new Faker();
+    private static final WinstonFaker faker = new WinstonFaker();
 
     private ChannelEntityFactory() {
 
     }
 
     public static ChannelEntity createChannelEntity() {
-        var channelProperties = new ChannelPropertiesEntity()
-                .setArchived(faker.bool().bool());
+        var channelId = faker.youtube().channelId();
+        var channelProperties = new ChannelPropertiesEntity(channelId, faker.bool().bool());
 
         return new ChannelEntity()
-                .setId(faker.internet().uuid())
+                .setId(channelId)
                 .setTitle(faker.massEffect().character())
                 .setDescription(faker.massEffect().quote())
                 .setCustomUrl("@" + faker.name().firstName().toLowerCase())

@@ -1,10 +1,10 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
+import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
+import ca.metricalsky.winston.database.repository.channel.ChannelPropertiesRepository;
 import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
 import ca.metricalsky.winston.mapper.entity.ChannelEntityMapper;
-import ca.metricalsky.winston.repository.ChannelPropertiesRepository;
 import ca.metricalsky.winston.repository.ChannelRepository;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import lombok.RequiredArgsConstructor;
@@ -59,9 +59,7 @@ public class ChannelDataService {
     }
 
     public void saveChannelProperties(Channel channel) {
-        var channelProperties = new ChannelPropertiesEntity()
-                .setChannelId(channel.getId())
-                .setArchived(channel.getProperties().getArchived());
+        var channelProperties = new ChannelPropertiesEntity(channel.getId(), channel.getProperties().getArchived());
         channelPropertiesRepository.save(channelProperties);
     }
 

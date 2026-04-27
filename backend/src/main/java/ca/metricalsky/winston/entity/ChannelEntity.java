@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

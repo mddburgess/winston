@@ -3,8 +3,8 @@ package ca.metricalsky.winston.convert.api;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.api.model.ChannelProperties;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
+import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
 import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.ChannelPropertiesEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
@@ -30,6 +30,6 @@ public abstract class ChannelEntityToChannelConverter
 
     ChannelProperties getProperties(ChannelPropertiesEntity channelPropertiesEntity) {
         return new ChannelProperties()
-                .archived(channelPropertiesEntity != null && channelPropertiesEntity.isArchived());
+                .archived(channelPropertiesEntity != null && channelPropertiesEntity.getArchived());
     }
 }

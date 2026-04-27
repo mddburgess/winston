@@ -33,7 +33,7 @@ class ChannelEntityToChannelConverterTest {
                         "/api/v1/channels/" + channelEntity.getId() + "/thumbnail")
                 .hasFieldOrPropertyWithValue("publishedAt", channelEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", channelEntity.getLastFetchedAt())
-                .hasFieldOrPropertyWithValue("properties.archived", channelEntity.getProperties().isArchived())
+                .hasFieldOrPropertyWithValue("properties.archived", channelEntity.getProperties().getArchived())
                 .hasFieldOrPropertyWithValue("statistics.videoCount", channelEntity.getVideoCount())
                 .hasFieldOrPropertyWithValue("statistics.viewCount", channelEntity.getViewCount())
                 .hasFieldOrPropertyWithValue("statistics.subscriberCount", channelEntity.getSubscriberCount());
