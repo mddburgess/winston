@@ -5,14 +5,9 @@ import ca.metricalsky.winston.test.faker.providers.PageProvider;
 import ca.metricalsky.winston.test.faker.providers.TopLevelCommentProvider;
 import ca.metricalsky.winston.test.faker.providers.VideoProvider;
 import ca.metricalsky.winston.test.faker.providers.youtube.YoutubeProvider;
-import ca.metricalsky.winston.test.faker.providers.entity.AuthorEntityProvider;
 import net.datafaker.Faker;
 
 public class WinstonFaker extends Faker {
-
-    public AuthorEntityProvider authorEntity() {
-        return getProvider(AuthorEntityProvider.class, AuthorEntityProvider::new);
-    }
 
     public CommentProvider comment() {
         return getProvider(CommentProvider.class, CommentProvider::new);

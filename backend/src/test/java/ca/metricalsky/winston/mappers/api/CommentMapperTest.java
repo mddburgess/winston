@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mappers.api;
 
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
-import ca.metricalsky.winston.entity.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -127,12 +128,14 @@ class CommentMapperTest {
 
     private static CommentEntity buildCommentEntity() {
         var commentId = faker.youtube().commentId();
-        var authorEntity = AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .displayName(TestUtils.randomString())
-                .channelUrl(TestUtils.randomString())
-                .profileImageUrl(TestUtils.randomString())
-                .build();
+        var authorEntity = new AuthorEntity(
+                TestUtils.randomId(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                OffsetDateTime.now(),
+                Set.of()
+        );
         var commentPropertiesEntity = new CommentPropertiesEntity(commentId, true, false);
         return CommentEntity.builder()
                 .id(commentId)

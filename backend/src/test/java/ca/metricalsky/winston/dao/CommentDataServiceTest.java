@@ -2,10 +2,10 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
-import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
+import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
-import ca.metricalsky.winston.repository.AuthorJdbcRepository;
 import ca.metricalsky.winston.repository.CommentJdbcRepository;
 import ca.metricalsky.winston.repository.CommentRepository;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
@@ -16,8 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -140,10 +142,14 @@ class CommentDataServiceTest {
     }
 
     private static CommentEntity buildCommentEntity() {
-        var authorEntity = AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .displayName(TestUtils.randomString())
-                .build();
+        var authorEntity = new AuthorEntity(
+                TestUtils.randomId(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                OffsetDateTime.now(),
+                Set.of()
+        );
         return CommentEntity.builder()
                 .id(TestUtils.randomId())
                 .videoId(TestUtils.randomId())

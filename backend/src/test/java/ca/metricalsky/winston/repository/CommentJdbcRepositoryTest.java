@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import ca.metricalsky.winston.test.TestUtils;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,9 +64,13 @@ class CommentJdbcRepositoryTest {
 
     private static CommentEntity createComment() {
         var id = TestUtils.randomId();
-        var author = AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .build();
+        var author = new AuthorEntity(
+                id,
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                OffsetDateTime.now(),
+                Set.of());
         return CommentEntity.builder()
                 .id(id)
                 .videoId(TestUtils.randomId())
@@ -81,9 +86,13 @@ class CommentJdbcRepositoryTest {
     }
 
     private static CommentEntity createReply(String parentId) {
-        var author = AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .build();
+        var author = new AuthorEntity(
+                TestUtils.randomId(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                OffsetDateTime.now(),
+                Set.of());
         return CommentEntity.builder()
                 .id(TestUtils.randomId())
                 .videoId(TestUtils.randomId())

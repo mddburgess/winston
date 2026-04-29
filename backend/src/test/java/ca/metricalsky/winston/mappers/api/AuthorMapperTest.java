@@ -1,10 +1,13 @@
 package ca.metricalsky.winston.mappers.api;
 
-import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import java.time.OffsetDateTime;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,11 +58,7 @@ public class AuthorMapperTest {
             " , , , "
     })
     void toAuthor_mapHandle(String displayName, String channelUrl, String id, String expectedHandle) {
-        var authorEntity = AuthorEntity.builder()
-                .id(id)
-                .displayName(displayName)
-                .channelUrl(channelUrl)
-                .build();
+        var authorEntity = new AuthorEntity(id, displayName, channelUrl, null, null, null);
 
         var author = authorMapper.toAuthor(authorEntity);
 
@@ -68,11 +67,12 @@ public class AuthorMapperTest {
     }
 
     private static AuthorEntity buildAuthorEntity() {
-        return AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .displayName(TestUtils.randomString())
-                .channelUrl(TestUtils.randomString())
-                .profileImageUrl(TestUtils.randomString())
-                .build();
+        return new AuthorEntity(
+                TestUtils.randomId(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                OffsetDateTime.now(),
+                Set.of());
     }
 }

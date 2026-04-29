@@ -6,18 +6,18 @@ import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.api.model.AuthorVideo;
 import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.api.model.VideoStatistics;
-import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import ca.metricalsky.winston.database.repository.author.AuthorRepository;
+import ca.metricalsky.winston.database.view.AuthorDetailsView;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
-import ca.metricalsky.winston.repository.AuthorRepository;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
@@ -66,11 +66,11 @@ public class AuthorDataService {
     }
 
     public Optional<Author> findAuthorByHandle(String handle) {
-        var maybeAuthor = Optionals.firstNonEmpty(
+        var maybeAuthor = Optional.ofNullable(ObjectUtils.getFirstNonNull(
                 () -> authorRepository.findByDisplayName(handle),
                 () -> authorRepository.findByChannelUrl(getChannelUrl(handle)),
-                () -> authorRepository.findById(handle)
-        ).map(authorMapper::toAuthor);
+                () -> authorRepository.getReferenceById(handle)
+        )).map(authorMapper::toAuthor);
 
         maybeAuthor.ifPresent(author -> {
             var videoStatistics = authorRepository.findVideoStatisticsByAuthorId(author.getId())
@@ -100,8 +100,10 @@ public class AuthorDataService {
     }
 
     public Author patchAuthor(String handle, List<PatchOperation> patchOperations) {
-        var author = authorRepository.findByDisplayName(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
+        var author = authorRepository.findByDisplayName(handle);
+        if (author == null) {
+            throw new AppException(ErrorCode.AUTHOR_NOT_FOUND);
+        }
 
         var patchedAuthor = jsonPatchUtils.applyPatch(author, patchOperations);
         patchedAuthor = authorRepository.save(patchedAuthor);

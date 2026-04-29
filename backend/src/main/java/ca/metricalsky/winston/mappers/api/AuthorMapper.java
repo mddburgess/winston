@@ -1,8 +1,7 @@
 package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.api.model.Author;
-import ca.metricalsky.winston.entity.AuthorEntity;
-import ca.metricalsky.winston.entity.view.AuthorDetailsView;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
