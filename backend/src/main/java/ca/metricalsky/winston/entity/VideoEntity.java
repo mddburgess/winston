@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.database.entity.video.VideoDetailsEntity;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.pull;
 
-import ca.metricalsky.winston.entity.view.CommentStatisticsView;
-import ca.metricalsky.winston.repository.VideoCommentsRepository;
+import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
+import ca.metricalsky.winston.database.view.CommentStatisticsView;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

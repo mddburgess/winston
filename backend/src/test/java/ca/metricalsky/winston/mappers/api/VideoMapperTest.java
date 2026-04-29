@@ -1,10 +1,11 @@
 package ca.metricalsky.winston.mappers.api;
 
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.VideoCommentsEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.ChannelVideoView;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -14,6 +15,8 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
 class VideoMapperTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
 
     private final VideoMapper videoMapper = new VideoMapperImpl();
 
@@ -36,7 +39,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("channel", "details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
@@ -83,7 +86,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
@@ -116,15 +119,10 @@ class VideoMapperTest {
     }
 
     private static VideoEntity buildVideoEntity() {
-        var videoCommentsEntity = VideoCommentsEntity.builder()
-                .commentsDisabled(false)
-                .commentCount(1)
-                .replyCount(2)
-                .totalReplyCount(3)
-                .lastFetchedAt(OffsetDateTime.now())
-                .build();
+        var videoId = faker.youtube().videoId();
+        var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3, OffsetDateTime.now());
         return VideoEntity.builder()
-                .id(TestUtils.randomId())
+                .id(videoId)
                 .channelId(TestUtils.randomId())
                 .title(TestUtils.randomString())
                 .description(TestUtils.randomString())

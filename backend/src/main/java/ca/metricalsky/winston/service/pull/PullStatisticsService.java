@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.pull;
 
-import ca.metricalsky.winston.repository.VideoCommentsRepository;
+import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
