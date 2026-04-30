@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,8 @@ class ChannelEntityTest {
 
     @Test
     void persistsWithOnlyRequiredFields() {
-        var channelEntity = ChannelEntity.builder()
-                .id(TestUtils.randomId())
-                .build();
+        var channelEntity = new ChannelEntity();
+        channelEntity.setId(TestUtils.randomId());
 
         var persistedEntity = entityManager.persistFlushFind(channelEntity);
 
@@ -36,20 +36,19 @@ class ChannelEntityTest {
 
     @Test
     void persistsWithAllOptionalFields() {
-        var channelEntity = ChannelEntity.builder()
-                .id(TestUtils.randomId())
-                .title(TestUtils.randomString())
-                .description(TestUtils.randomString())
-                .customUrl(TestUtils.randomString())
-                .thumbnailUrl(TestUtils.randomString())
-                .uploadsPlaylistId(TestUtils.randomId())
-                .videoCount(TestUtils.randomLong())
-                .viewCount(TestUtils.randomLong())
-                .subscriberCount(TestUtils.randomLong())
-                .publishedAt(OffsetDateTime.now())
-                .topics(Set.of(TestUtils.randomString()))
-                .keywords(Set.of(TestUtils.randomString()))
-                .build();
+        var channelEntity = new ChannelEntity();
+        channelEntity.setId(TestUtils.randomId());
+        channelEntity.setTitle(TestUtils.randomString());
+        channelEntity.setDescription(TestUtils.randomString());
+        channelEntity.setCustomUrl(TestUtils.randomString());
+        channelEntity.setThumbnailUrl(TestUtils.randomString());
+        channelEntity.setUploadsPlaylistId(TestUtils.randomId());
+        channelEntity.setVideoCount(TestUtils.randomLong());
+        channelEntity.setViewCount(TestUtils.randomLong());
+        channelEntity.setSubscriberCount(TestUtils.randomLong());
+        channelEntity.setPublishedAt(OffsetDateTime.now());
+        channelEntity.setTopics(Set.of(TestUtils.randomString()));
+        channelEntity.setKeywords(Set.of(TestUtils.randomString()));
 
         var persistedEntity = entityManager.persistFlushFind(channelEntity);
 

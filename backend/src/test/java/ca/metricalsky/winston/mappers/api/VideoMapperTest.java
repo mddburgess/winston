@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.ChannelVideoView;
 import ca.metricalsky.winston.test.TestUtils;
@@ -112,10 +112,10 @@ class VideoMapperTest {
     }
 
     private static ChannelEntity buildChannelEntity() {
-        return ChannelEntity.builder()
-                .title(TestUtils.randomString())
-                .customUrl(TestUtils.randomString())
-                .build();
+        var channelEntity = new ChannelEntity();
+        channelEntity.setTitle(TestUtils.randomString());
+        channelEntity.setCustomUrl(TestUtils.randomString());
+        return channelEntity;
     }
 
     private static VideoEntity buildVideoEntity() {

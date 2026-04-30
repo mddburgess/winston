@@ -5,7 +5,7 @@ import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.Test;

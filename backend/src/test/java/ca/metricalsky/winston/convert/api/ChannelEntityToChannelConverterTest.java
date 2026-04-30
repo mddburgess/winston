@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.convert.api;
 
 import ca.metricalsky.winston.api.model.Channel;
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.test.annotations.ConverterTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

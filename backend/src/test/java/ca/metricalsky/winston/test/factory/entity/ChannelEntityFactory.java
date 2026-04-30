@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.test.factory.entity;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 
@@ -19,20 +19,21 @@ public final class ChannelEntityFactory {
         var channelId = faker.youtube().channelId();
         var channelProperties = new ChannelPropertiesEntity(channelId, faker.bool().bool());
 
-        return new ChannelEntity()
-                .setId(channelId)
-                .setTitle(faker.massEffect().character())
-                .setDescription(faker.massEffect().quote())
-                .setCustomUrl("@" + faker.name().firstName().toLowerCase())
-                .setThumbnailUrl(faker.internet().url())
-                .setUploadsPlaylistId(faker.internet().uuid())
-                .setVideoCount((long) faker.number().positive())
-                .setViewCount((long) faker.number().positive())
-                .setSubscriberCount((long) faker.number().positive())
-                .setTopics(Set.of(faker.internet().url()))
-                .setKeywords(Set.of(faker.massEffect().planet()))
-                .setPublishedAt(faker.timeAndDate().past().atOffset(ZoneOffset.UTC))
-                .setLastFetchedAt(faker.timeAndDate().past().atOffset(ZoneOffset.UTC))
-                .setProperties(channelProperties);
+        var channelEntity = new ChannelEntity();
+        channelEntity.setId(channelId);
+        channelEntity.setTitle(faker.massEffect().character());
+        channelEntity.setDescription(faker.massEffect().quote());
+        channelEntity.setCustomUrl("@" + faker.name().firstName().toLowerCase());
+        channelEntity.setThumbnailUrl(faker.internet().url());
+        channelEntity.setUploadsPlaylistId(faker.internet().uuid());
+        channelEntity.setVideoCount((long) faker.number().positive());
+        channelEntity.setViewCount((long) faker.number().positive());
+        channelEntity.setSubscriberCount((long) faker.number().positive());
+        channelEntity.setTopics(Set.of(faker.internet().url()));
+        channelEntity.setKeywords(Set.of(faker.massEffect().planet()));
+        channelEntity.setPublishedAt(faker.timeAndDate().past().atOffset(ZoneOffset.UTC));
+        channelEntity.setLastFetchedAt(faker.timeAndDate().past().atOffset(ZoneOffset.UTC));
+        channelEntity.setProperties(channelProperties);
+        return channelEntity;
     }
 }

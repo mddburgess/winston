@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.entity.CommentEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.test.annotations.RepositoryTest;

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
-import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;

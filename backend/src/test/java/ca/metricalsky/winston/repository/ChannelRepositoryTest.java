@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.repository;
 
+import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

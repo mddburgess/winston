@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.dao;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.ChannelVideoView;
 import ca.metricalsky.winston.database.view.VideoCountView;

@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import com.google.api.services.youtube.model.Channel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

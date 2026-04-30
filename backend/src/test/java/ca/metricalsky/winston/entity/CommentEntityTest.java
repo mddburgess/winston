@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.entity;
 
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,9 +99,8 @@ class CommentEntityTest {
     }
 
     private ChannelEntity persistChannel() {
-        var channelEntity = ChannelEntity.builder()
-                .id(TestUtils.randomId())
-                .build();
+        var channelEntity = new ChannelEntity();
+        channelEntity.setId(TestUtils.randomId());
         return entityManager.persist(channelEntity);
     }
 

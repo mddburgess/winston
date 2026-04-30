@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.api.model.ChannelProperties;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
-import ca.metricalsky.winston.entity.ChannelEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
