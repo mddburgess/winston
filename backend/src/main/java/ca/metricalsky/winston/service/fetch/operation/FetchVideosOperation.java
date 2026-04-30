@@ -6,7 +6,7 @@ import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.database.repository.video.VideoRepository;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

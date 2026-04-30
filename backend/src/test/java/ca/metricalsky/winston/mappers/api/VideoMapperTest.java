@@ -2,8 +2,8 @@ package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.entity.view.ChannelVideoView;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.view.ChannelVideoView;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
@@ -121,15 +121,15 @@ class VideoMapperTest {
     private static VideoEntity buildVideoEntity() {
         var videoId = faker.youtube().videoId();
         var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3, OffsetDateTime.now());
-        return VideoEntity.builder()
-                .id(videoId)
-                .channelId(TestUtils.randomId())
-                .title(TestUtils.randomString())
-                .description(TestUtils.randomString())
-                .thumbnailUrl(TestUtils.randomString())
-                .publishedAt(OffsetDateTime.now())
-                .lastFetchedAt(OffsetDateTime.now())
-                .comments(videoCommentsEntity)
-                .build();
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(videoId);
+        videoEntity.setChannelId(TestUtils.randomId());
+        videoEntity.setTitle(TestUtils.randomString());
+        videoEntity.setDescription(TestUtils.randomString());
+        videoEntity.setThumbnailUrl(TestUtils.randomString());
+        videoEntity.setPublishedAt(OffsetDateTime.now());
+        videoEntity.setLastFetchedAt(OffsetDateTime.now());
+        videoEntity.setComments(videoCommentsEntity);
+        return videoEntity;
     }
 }

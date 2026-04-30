@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.convert.entity;
 
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.entity.VideoEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
 import com.google.api.services.youtube.model.Video;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

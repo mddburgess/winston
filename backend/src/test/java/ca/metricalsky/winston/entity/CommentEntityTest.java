@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.entity;
 
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -105,10 +106,9 @@ class CommentEntityTest {
     }
 
     private VideoEntity persistVideo(ChannelEntity channelEntity) {
-        var videoEntity = VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .channelId(channelEntity.getId())
-                .build();
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(TestUtils.randomId());
+        videoEntity.setChannelId(channelEntity.getId());
         return entityManager.persist(videoEntity);
     }
 }

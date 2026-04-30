@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.entity;
 
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,9 @@ class VideoEntityTest {
     @Test
     void persistsWithOnlyRequiredFields() {
         var channelEntity = persistChannel();
-        var videoEntity = VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .channelId(channelEntity.getId())
-                .build();
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(TestUtils.randomId());
+        videoEntity.setChannelId(channelEntity.getId());
 
         var persistedEntity = entityManager.persistFlushFind(videoEntity);
 
@@ -36,14 +36,13 @@ class VideoEntityTest {
     @Test
     void persistsWithAllOptionalFields() {
         var channelEntity = persistChannel();
-        var videoEntity = VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .channelId(channelEntity.getId())
-                .title(TestUtils.randomString())
-                .description(TestUtils.randomString())
-                .thumbnailUrl(TestUtils.randomString())
-                .publishedAt(OffsetDateTime.now())
-                .build();
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(TestUtils.randomId());
+        videoEntity.setChannelId(channelEntity.getId());
+        videoEntity.setTitle(TestUtils.randomString());
+        videoEntity.setDescription(TestUtils.randomString());
+        videoEntity.setThumbnailUrl(TestUtils.randomString());
+        videoEntity.setPublishedAt(OffsetDateTime.now());
 
         var persistedEntity = entityManager.persistFlushFind(videoEntity);
 

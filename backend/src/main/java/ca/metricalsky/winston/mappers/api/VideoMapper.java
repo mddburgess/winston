@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.entity.view.ChannelVideoView;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.view.ChannelVideoView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

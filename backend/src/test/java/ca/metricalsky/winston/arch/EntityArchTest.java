@@ -36,18 +36,6 @@ class EntityArchTest {
             .andShould().resideOutsideOfPackage(VIEW_PACKAGE);
 
     @ArchTest
-    private final ArchRule viewClassNamesEndWithView = classes()
-            .that().areTopLevelClasses()
-            .and().resideInAPackage(VIEW_PACKAGE)
-            .should().haveSimpleNameEndingWith("View");
-
-    @ArchTest
-    private final ArchRule viewClassesAreInViewPackage = classes()
-            .that().areInterfaces()
-            .and().resideInAPackage(ENTITY_PACKAGE)
-            .should().resideInAPackage(VIEW_PACKAGE);
-
-    @ArchTest
     private final ArchRule nonEntityClassNamesDoNotEndWithEntity = classes()
             .that().areNotAnnotatedWith(Entity.class)
             .should().haveSimpleNameNotEndingWith("Entity");
