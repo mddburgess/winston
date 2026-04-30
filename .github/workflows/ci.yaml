@@ -54,6 +54,13 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./backend/build/test-results/test/
           flags: backend
+      - name: Upload database test reports
+        uses: codecov/test-results-action@v1
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./database/build/test-results/test/
+          flags: database
       - name: Upload frontend test reports
         uses: codecov/test-results-action@v1
         if: ${{ always() }}
@@ -69,6 +76,13 @@ jobs:
           directory: ./backend/build/reports/jacoco/test/
           files: ./jacocoTestReport.xml
           flags: backend
+      - name: Upload database coverage reports
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./database/build/reports/kover/
+          files: ./report.xml
+          flags: database
       - name: Upload frontend coverage reports
         uses: codecov/codecov-action@v5
         with:

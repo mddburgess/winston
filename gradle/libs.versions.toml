@@ -1,4 +1,5 @@
 [versions]
+kotest = "6.1.11"
 kotlin = "2.3.20"
 mapstruct = "1.6.3"
 mapstructSpringExtensions = "1.1.3"
@@ -18,6 +19,8 @@ googleHttpClientGson = { module = "com.google.http-client:google-http-client-gso
 jacksonDatabindNullable = { module = "org.openapitools:jackson-databind-nullable", version = "0.2.6" }
 jsonPatch = { module = "com.github.java-json-tools:json-patch", version = "1.13" }
 junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
+kotestExtensionsSpring = { module = "io.kotest:kotest-extensions-spring", version.ref = "kotest" }
+kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 lombok = { module = "org.projectlombok:lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
@@ -45,6 +48,10 @@ database = [
     "flywayDatabasePostgresql",
     "postgresql"
 ]
+kotest = [
+    "kotestExtensionsSpring",
+    "kotestRunnerJunit5"
+]
 mapstruct = [
     "mapstruct",
     "mapstructSpringAnnotations"
@@ -66,6 +73,7 @@ youtube = [
 ]
 
 [plugins]
+kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.8" }
 node = { id = "com.github.node-gradle.node", version = "7.1.0" }
 openapiGenerator = { id = "org.openapi.generator", version = "7.14.0" }
 springBoot = { id = "org.springframework.boot", version = "3.4.5" }

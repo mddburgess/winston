@@ -1,47 +1,44 @@
 package ca.metricalsky.winston.database.entity
 
+import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
-@DataJpaTest
-class AuthorEntityTest {
+@DatabaseTest
+class AuthorEntityTest(
+    entityManager: TestEntityManager,
+): StringSpec({
 
     val faker = DatabaseFaker()
 
-    @Autowired
-    lateinit var entityManager: TestEntityManager
-
-    @Test
-    fun `persists with only required fields`() {
+    "entity persists with only required fields" {
         val author = faker.author().minimal()
 
-        val persisted = entityManager.persistFlushFind(author);
-
-        assertEquals(author.id, persisted.id)
-        assertNull(persisted.displayName)
-        assertNull(persisted.channelUrl)
-        assertNull(persisted.profileImageUrl)
-        assertNotNull(persisted.lastFetchedAt)
-        assertEquals(setOf(), persisted.aliases)
+        entityManager.persistFlushFind(author) shouldNotBeNull {
+            id shouldBe author.id
+            displayName shouldBe null
+            channelUrl shouldBe null
+            profileImageUrl shouldBe null
+            lastFetchedAt shouldNotBe null
+            aliases shouldBe emptySet()
+        }
     }
 
-    @Test
-    fun `persists with all optional fields`() {
+    "entity persists with all optional fields" {
         val author = faker.author().complete()
 
-        val persisted = entityManager.persistFlushFind(author);
-
-        assertEquals(author.id, persisted.id)
-        assertEquals(author.displayName, persisted.displayName)
-        assertEquals(author.channelUrl, persisted.channelUrl)
-        assertEquals(author.profileImageUrl, persisted.profileImageUrl)
-        assertNotNull(persisted.lastFetchedAt)
-        assertEquals(author.aliases, persisted.aliases)
+        entityManager.persistFlushFind(author) shouldNotBeNull {
+            id shouldBe author.id
+            displayName shouldBe author.displayName
+            channelUrl shouldBe author.channelUrl
+            profileImageUrl shouldBe author.profileImageUrl
+            lastFetchedAt shouldNotBe null
+            aliases shouldContainExactly author.aliases
+        }
     }
-}
+})
