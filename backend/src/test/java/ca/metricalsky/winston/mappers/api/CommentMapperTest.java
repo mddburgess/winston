@@ -2,7 +2,7 @@ package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
-import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
@@ -137,18 +137,18 @@ class CommentMapperTest {
                 Set.of()
         );
         var commentPropertiesEntity = new CommentPropertiesEntity(commentId, true, false);
-        return CommentEntity.builder()
-                .id(commentId)
-                .videoId(TestUtils.randomId())
-                .author(authorEntity)
-                .textDisplay(TestUtils.randomString())
-                .textOriginal(TestUtils.randomString())
-                .likeCount(TestUtils.randomLong())
-                .publishedAt(OffsetDateTime.now())
-                .updatedAt(OffsetDateTime.now())
-                .lastFetchedAt(OffsetDateTime.now())
-                .properties(commentPropertiesEntity)
-                .totalReplyCount(1L)
-                .build();
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(commentId);
+        commentEntity.setVideoId(TestUtils.randomId());
+        commentEntity.setAuthor(authorEntity);
+        commentEntity.setTextDisplay(TestUtils.randomString());
+        commentEntity.setTextOriginal(TestUtils.randomString());
+        commentEntity.setLikeCount(TestUtils.randomLong());
+        commentEntity.setPublishedAt(OffsetDateTime.now());
+        commentEntity.setUpdatedAt(OffsetDateTime.now());
+        commentEntity.setLastFetchedAt(OffsetDateTime.now());
+        commentEntity.setProperties(commentPropertiesEntity);
+        commentEntity.setTotalReplyCount(1L);
+        return commentEntity;
     }
 }

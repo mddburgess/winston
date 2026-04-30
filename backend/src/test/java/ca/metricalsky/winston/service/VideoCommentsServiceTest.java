@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service;
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
 import ca.metricalsky.winston.database.view.CommentCountView;
-import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
-import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

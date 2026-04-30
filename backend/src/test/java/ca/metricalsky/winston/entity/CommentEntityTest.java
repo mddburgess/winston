@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.entity;
 
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import ca.metricalsky.winston.database.entity.video.VideoEntity;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,10 +32,9 @@ class CommentEntityTest {
 
     @Test
     void persistsWithOnlyRequiredFields() {
-        var commentEntity = CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(videoEntity.getId())
-                .build();
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(TestUtils.randomId());
+        commentEntity.setVideoId(videoEntity.getId());
 
         var persistedEntity = entityManager.persistFlushFind(commentEntity);
 
@@ -48,16 +48,15 @@ class CommentEntityTest {
 
     @Test
     void persistsWithAllOptionalFields() {
-        var commentEntity = CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(videoEntity.getId())
-                .textDisplay(TestUtils.randomString())
-                .textOriginal(TestUtils.randomString())
-                .likeCount(TestUtils.randomLong())
-                .totalReplyCount(TestUtils.randomLong())
-                .publishedAt(OffsetDateTime.now())
-                .updatedAt(OffsetDateTime.now())
-                .build();
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(TestUtils.randomId());
+        commentEntity.setVideoId(videoEntity.getId());
+        commentEntity.setTextDisplay(TestUtils.randomString());
+        commentEntity.setTextOriginal(TestUtils.randomString());
+        commentEntity.setLikeCount(TestUtils.randomLong());
+        commentEntity.setTotalReplyCount(TestUtils.randomLong());
+        commentEntity.setPublishedAt(OffsetDateTime.now());
+        commentEntity.setUpdatedAt(OffsetDateTime.now());
 
         var persistedEntity = entityManager.persistFlushFind(commentEntity);
 
@@ -75,14 +74,12 @@ class CommentEntityTest {
 
     @Test
     void persistsReplies() {
-        var commentEntity = CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(videoEntity.getId())
-                .build();
-        var replyEntity = CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(videoEntity.getId())
-                .build();
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(TestUtils.randomId());
+        commentEntity.setVideoId(videoEntity.getId());
+        var replyEntity = new CommentEntity();
+        replyEntity.setId(TestUtils.randomId());
+        replyEntity.setVideoId(videoEntity.getId());
         commentEntity.setReplies(List.of(replyEntity));
 
         var persistedEntity = entityManager.persistFlushFind(commentEntity);

@@ -21,7 +21,7 @@ class AuthorJdbcRepository(
         val lastFetchedAt = OffsetDateTime.now()
         authors.forEach { it.lastFetchedAt = lastFetchedAt }
 
-        val authorIds = authors.map { it.id }.filterNotNull()
+        val authorIds = authors.mapNotNull { it.id }
         val idsToUpdate = selectAuthorIds(authorIds)
 
         val partition = authors.partition { it.id in idsToUpdate }

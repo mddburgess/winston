@@ -3,7 +3,7 @@ package ca.metricalsky.winston.mappers.api;
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.CommentProperties;
 import ca.metricalsky.winston.api.model.TopLevelComment;
-import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

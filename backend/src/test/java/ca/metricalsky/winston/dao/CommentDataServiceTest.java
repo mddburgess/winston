@@ -4,10 +4,10 @@ import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository;
-import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import ca.metricalsky.winston.mappers.api.CommentMapper;
-import ca.metricalsky.winston.repository.CommentJdbcRepository;
-import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentJdbcRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -150,10 +150,10 @@ class CommentDataServiceTest {
                 OffsetDateTime.now(),
                 Set.of()
         );
-        return CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(TestUtils.randomId())
-                .author(authorEntity)
-                .build();
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(TestUtils.randomId());
+        commentEntity.setVideoId(TestUtils.randomId());
+        commentEntity.setAuthor(authorEntity);
+        return commentEntity;
     }
 }

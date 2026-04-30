@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.CommentEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentSnippet;
