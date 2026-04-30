@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.view.ChannelVideoStatisticsView;
+import ca.metricalsky.winston.database.view.ChannelVideoStatisticsView;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

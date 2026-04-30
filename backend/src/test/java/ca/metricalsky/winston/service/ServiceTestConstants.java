@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.view.CommentCountView;
+import ca.metricalsky.winston.database.view.CommentCountView;
 
 import java.util.List;
 

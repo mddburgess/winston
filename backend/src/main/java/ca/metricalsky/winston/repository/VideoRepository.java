@@ -2,7 +2,7 @@ package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.VideoEntity;
 import ca.metricalsky.winston.entity.view.ChannelVideoView;
-import ca.metricalsky.winston.entity.view.VideoCountView;
+import ca.metricalsky.winston.database.view.VideoCountView;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

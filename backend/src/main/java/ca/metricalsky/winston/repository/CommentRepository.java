@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.repository;
 
 import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.entity.view.CommentCountView;
-import ca.metricalsky.winston.entity.view.ReplyStatisticsView;
+import ca.metricalsky.winston.database.view.CommentCountView;
+import ca.metricalsky.winston.database.view.ReplyStatisticsView;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
