@@ -5,7 +5,7 @@ import ca.metricalsky.winston.api.model.PullCommentsOperation;
 import ca.metricalsky.winston.api.model.PullOperation;
 import ca.metricalsky.winston.api.model.PullRepliesOperation;
 import ca.metricalsky.winston.api.model.PullVideosOperation;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

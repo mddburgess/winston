@@ -2,7 +2,7 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.PullRequest;
 import ca.metricalsky.winston.mapper.entity.FetchRequestEntityMapper;
-import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
+import ca.metricalsky.winston.database.repository.fetch.FetchRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.events.EventPublisher;
-import ca.metricalsky.winston.repository.fetch.FetchRequestRepository;
+import ca.metricalsky.winston.database.repository.fetch.FetchRequestRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

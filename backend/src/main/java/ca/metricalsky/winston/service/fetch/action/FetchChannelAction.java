@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.YouTubeService;

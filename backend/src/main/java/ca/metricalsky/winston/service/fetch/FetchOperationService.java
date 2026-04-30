@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity.Status;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity.Status;
 import ca.metricalsky.winston.events.EventPublisher;
-import ca.metricalsky.winston.repository.fetch.FetchOperationRepository;
+import ca.metricalsky.winston.database.repository.fetch.FetchOperationRepository;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;

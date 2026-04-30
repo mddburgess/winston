@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -61,11 +61,11 @@ public class FetchVideosFromPlaylistItemsAction implements FetchAction<Video> {
             return null;
         }
 
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchAction.getFetchOperationId())
-                .actionType(fetchAction.getActionType())
-                .objectId(fetchAction.getObjectId())
-                .pageToken(nextPageToken)
-                .build();
+        var nextFetchAction = new FetchActionEntity();
+        nextFetchAction.setFetchOperationId(fetchAction.getFetchOperationId());
+        nextFetchAction.setActionType(fetchAction.getActionType());
+        nextFetchAction.setObjectId(fetchAction.getObjectId());
+        nextFetchAction.setPageToken(nextPageToken);
+        return nextFetchAction;
     }
 }

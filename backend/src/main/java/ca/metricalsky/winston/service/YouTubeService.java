@@ -2,9 +2,9 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.client.YouTubeClient;
 import ca.metricalsky.winston.client.YouTubeException;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.YouTubeRequestEntity;
-import ca.metricalsky.winston.repository.fetch.YouTubeRequestRepository;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity;
+import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.CommentListResponse;
@@ -30,12 +30,12 @@ public class YouTubeService {
     private final YouTubeRequestRepository youTubeRequestRepository;
 
     public ChannelListResponse getChannels(FetchActionEntity fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequestEntity.RequestType.CHANNELS)
-                .objectId(fetchAction.getObjectId())
-                .requestedAt(OffsetDateTime.now())
-                .build());
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchAction.getId());
+        entity.setRequestType(YouTubeRequestEntity.RequestType.CHANNELS);
+        entity.setObjectId(fetchAction.getObjectId());
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var handle = youTubeRequest.getObjectId();
@@ -56,14 +56,14 @@ public class YouTubeService {
     }
 
     public ActivityListResponse getActivities(FetchActionEntity fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequestEntity.RequestType.ACTIVITIES)
-                .objectId(fetchAction.getObjectId())
-                .publishedAfter(formatDate(fetchAction.getPublishedAfter()))
-                .publishedBefore(formatDate(fetchAction.getPublishedBefore()))
-                .requestedAt(OffsetDateTime.now())
-                .build());
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchAction.getId());
+        entity.setRequestType(YouTubeRequestEntity.RequestType.ACTIVITIES);
+        entity.setObjectId(fetchAction.getObjectId());
+        entity.setPublishedAfter(formatDate(fetchAction.getPublishedAfter()));
+        entity.setPublishedBefore(formatDate(fetchAction.getPublishedBefore()));
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var channelId = youTubeRequest.getObjectId();
@@ -86,13 +86,13 @@ public class YouTubeService {
     }
 
     public PlaylistItemListResponse getPlaylistItems(FetchActionEntity fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequestEntity.RequestType.PLAYLIST_ITEMS)
-                .objectId(fetchAction.getObjectId())
-                .pageToken(fetchAction.getPageToken())
-                .requestedAt(OffsetDateTime.now())
-                .build());
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchAction.getId());
+        entity.setRequestType(YouTubeRequestEntity.RequestType.PLAYLIST_ITEMS);
+        entity.setObjectId(fetchAction.getObjectId());
+        entity.setPageToken(fetchAction.getPageToken());
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var playlistId =  youTubeRequest.getObjectId();
@@ -115,12 +115,13 @@ public class YouTubeService {
 
     public VideoListResponse getVideos(Long fetchActionId, List<String> videoIds) {
         var distinctVideoIds = videoIds.stream().distinct().toList();
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchActionId)
-                .requestType(YouTubeRequestEntity.RequestType.VIDEOS)
-                .objectId(String.join(",", distinctVideoIds))
-                .requestedAt(OffsetDateTime.now())
-                .build());
+
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchActionId);
+        entity.setRequestType(YouTubeRequestEntity.RequestType.VIDEOS);
+        entity.setObjectId(String.join(",", distinctVideoIds));
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var response = youTubeClient.getVideos(distinctVideoIds);
@@ -139,13 +140,13 @@ public class YouTubeService {
     }
 
     public CommentThreadListResponse getComments(FetchActionEntity fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequestEntity.RequestType.COMMENTS)
-                .objectId(fetchAction.getObjectId())
-                .pageToken(fetchAction.getPageToken())
-                .requestedAt(OffsetDateTime.now())
-                .build());
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchAction.getId());
+        entity.setRequestType(YouTubeRequestEntity.RequestType.COMMENTS);
+        entity.setObjectId(fetchAction.getObjectId());
+        entity.setPageToken(fetchAction.getPageToken());
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var videoId = youTubeRequest.getObjectId();
@@ -167,13 +168,13 @@ public class YouTubeService {
     }
 
     public CommentListResponse getReplies(FetchActionEntity fetchAction) {
-        var youTubeRequest = youTubeRequestRepository.save(YouTubeRequestEntity.builder()
-                .fetchActionId(fetchAction.getId())
-                .requestType(YouTubeRequestEntity.RequestType.REPLIES)
-                .objectId(fetchAction.getObjectId())
-                .pageToken(fetchAction.getPageToken())
-                .requestedAt(OffsetDateTime.now())
-                .build());
+        var entity = new YouTubeRequestEntity();
+        entity.setFetchActionId(fetchAction.getId());
+        entity.setRequestType(YouTubeRequestEntity.RequestType.REPLIES);
+        entity.setObjectId(fetchAction.getObjectId());
+        entity.setPageToken(fetchAction.getPageToken());
+        entity.setRequestedAt(OffsetDateTime.now());
+        var youTubeRequest = youTubeRequestRepository.save(entity);
 
         try {
             var commentId = youTubeRequest.getObjectId();

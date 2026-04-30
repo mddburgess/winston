@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.fetch.FetchOperationService;
 import ca.metricalsky.winston.test.annotations.UnitTest;
