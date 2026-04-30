@@ -133,7 +133,6 @@ class CommentMapperTest {
                 TestUtils.randomString(),
                 TestUtils.randomString(),
                 TestUtils.randomString(),
-                OffsetDateTime.now(),
                 Set.of()
         );
         var commentPropertiesEntity = new CommentPropertiesEntity(commentId, true, false);

@@ -147,7 +147,6 @@ class CommentDataServiceTest {
                 TestUtils.randomString(),
                 TestUtils.randomString(),
                 TestUtils.randomString(),
-                OffsetDateTime.now(),
                 Set.of()
         );
         var commentEntity = new CommentEntity();

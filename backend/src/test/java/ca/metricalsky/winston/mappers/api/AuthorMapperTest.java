@@ -58,7 +58,7 @@ public class AuthorMapperTest {
             " , , , "
     })
     void toAuthor_mapHandle(String displayName, String channelUrl, String id, String expectedHandle) {
-        var authorEntity = new AuthorEntity(id, displayName, channelUrl, null, null, null);
+        var authorEntity = new AuthorEntity(id, displayName, channelUrl, null, Set.of());
 
         var author = authorMapper.toAuthor(authorEntity);
 
@@ -72,7 +72,6 @@ public class AuthorMapperTest {
                 TestUtils.randomString(),
                 TestUtils.randomString(),
                 TestUtils.randomString(),
-                OffsetDateTime.now(),
                 Set.of());
     }
 }

@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.jpa") version libs.versions.kotlin
     alias(libs.plugins.springBoot)
     alias(libs.plugins.springDependencyManagement)
+    `java-test-fixtures`
 }
 
 group = rootProject.group
@@ -22,6 +23,8 @@ dependencies {
     implementation(libs.kotlinReflect)
 
     runtimeOnly(libs.bundles.database)
+
+    testFixturesApi(libs.datafaker)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.springBootStarterTest)

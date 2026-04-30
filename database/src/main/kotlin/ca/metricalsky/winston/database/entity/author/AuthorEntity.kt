@@ -19,17 +19,13 @@ class AuthorEntity(
     var id: String?,
 
     @Column(name = "display_name")
-    var displayName: String?,
+    var displayName: String? = null,
 
     @Column(name = "channel_url")
-    var channelUrl: String?,
+    var channelUrl: String? = null,
 
     @Column(name = "profile_image_url")
-    var profileImageUrl: String?,
-
-    @UpdateTimestamp
-    @Column(name = "last_fetched_at")
-    var lastFetchedAt: OffsetDateTime?,
+    var profileImageUrl: String? = null,
 
     @ElementCollection
     @CollectionTable(
@@ -37,5 +33,9 @@ class AuthorEntity(
         joinColumns = [JoinColumn(name = "author_id", referencedColumnName = "id")]
     )
     @Column(name = "author_alias")
-    var aliases: Set<String>?
-)
+    var aliases: Set<String> = setOf()
+) {
+    @UpdateTimestamp
+    @Column(name = "last_fetched_at")
+    var lastFetchedAt: OffsetDateTime? = null
+}

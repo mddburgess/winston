@@ -101,7 +101,6 @@ class AuthorDataServiceTest {
                 displayName,
                 AUTHOR_CHANNEL_URL,
                 "profileImageUrl",
-                OffsetDateTime.now(),
                 Set.of()
         );
     }
