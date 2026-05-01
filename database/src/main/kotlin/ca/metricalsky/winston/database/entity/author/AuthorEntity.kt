@@ -37,5 +37,5 @@ class AuthorEntity(
 ) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
-    var lastFetchedAt: OffsetDateTime? = null
+    var lastFetchedAt: OffsetDateTime = OffsetDateTime.now()
 }

@@ -6,20 +6,16 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils
 import org.springframework.stereotype.Repository
-import java.time.OffsetDateTime
 
 @Repository
 @Transactional
 class AuthorJdbcRepository(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) {
-    fun saveAll(authors: List<AuthorEntity>) {
+    fun saveAll(authors: Collection<AuthorEntity>) {
         if (authors.isEmpty()) {
             return
         }
-
-        val lastFetchedAt = OffsetDateTime.now()
-        authors.forEach { it.lastFetchedAt = lastFetchedAt }
 
         val authorIds = authors.mapNotNull { it.id }
         val idsToUpdate = selectAuthorIds(authorIds)
@@ -42,9 +38,7 @@ class AuthorJdbcRepository(
         )
     }
 
-    private fun insertAuthors(
-        authors: Collection<AuthorEntity>
-    ) {
+    private fun insertAuthors(authors: Collection<AuthorEntity>) {
         jdbcTemplate.batchUpdate("""
             INSERT INTO authors (id, display_name, channel_url, profile_image_url, last_fetched_at)
             VALUES (:id, :displayName, :channelUrl, :profileImageUrl, :lastFetchedAt)
@@ -53,9 +47,7 @@ class AuthorJdbcRepository(
         )
     }
 
-    private fun updateAuthors(
-        authors: Collection<AuthorEntity>
-    ) {
+    private fun updateAuthors(authors: Collection<AuthorEntity>) {
         jdbcTemplate.batchUpdate("""
             UPDATE authors
             SET display_name = :displayName,
