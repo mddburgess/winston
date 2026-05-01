@@ -18,7 +18,7 @@ class AuthorEntityTest(
     val faker = DatabaseFaker()
 
     "entity persists with only required fields" {
-        val author = faker.author().minimal()
+        val author = faker.author().minimalEntity()
 
         entityManager.persistFlushFind(author) shouldNotBeNull {
             id shouldBe author.id
@@ -31,7 +31,7 @@ class AuthorEntityTest(
     }
 
     "entity persists with all optional fields" {
-        val author = faker.author().complete()
+        val author = faker.author().completeEntity()
 
         entityManager.persistFlushFind(author) shouldNotBeNull {
             id shouldBe author.id

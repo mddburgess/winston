@@ -6,12 +6,14 @@ import net.datafaker.providers.base.AbstractProvider
 
 class AuthorEntityProvider(faker: DatabaseFaker) : AbstractProvider<DatabaseFaker>(faker) {
 
-    fun minimal() = AuthorEntity(
-        id = faker.internet().uuidv4()
+    fun id(): String = faker.regexify("UC[A-Za-z0-9_-]{22}")
+
+    fun minimalEntity() = AuthorEntity(
+        id = id(),
     )
 
-    fun complete() = AuthorEntity(
-        id = faker.internet().uuidv4(),
+    fun completeEntity() = AuthorEntity(
+        id = id(),
         displayName = "@" + faker.name().firstName(),
         channelUrl = faker.internet().url(),
         profileImageUrl = faker.internet().url(),

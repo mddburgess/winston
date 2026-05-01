@@ -9,12 +9,14 @@ import java.util.concurrent.TimeUnit
 
 class ChannelEntityProvider(faker: DatabaseFaker) : AbstractProvider<DatabaseFaker>(faker) {
 
-    fun minimal() = ChannelEntity(
-        id = faker.internet().uuidv4()
+    fun id(): String = faker.regexify("UC[A-Za-z0-9_-]{22}")
+
+    fun minimalEntity() = ChannelEntity(
+        id = id(),
     )
 
-    fun complete() = ChannelEntity(
-        id = faker.internet().uuidv4(),
+    fun completeEntity() = ChannelEntity(
+        id = id(),
         title = faker.massEffect().character(),
         description = faker.massEffect().quote(),
         customUrl = faker.internet().url(),

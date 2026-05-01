@@ -18,7 +18,7 @@ class ChannelEntityTest(
     val faker = DatabaseFaker()
 
     "entity persists with only required fields" {
-        val channel = faker.channel().minimal()
+        val channel = faker.channel().minimalEntity()
 
         entityManager.persistFlushFind(channel) shouldNotBeNull {
             id shouldBe channel.id
@@ -39,7 +39,7 @@ class ChannelEntityTest(
     }
 
     "entity persists with all optional fields" {
-        val channel = faker.channel().complete()
+        val channel = faker.channel().completeEntity()
 
         entityManager.persistFlushFind(channel) shouldNotBeNull {
             id shouldBe channel.id

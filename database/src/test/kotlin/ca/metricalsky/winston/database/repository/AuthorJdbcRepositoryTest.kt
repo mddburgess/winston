@@ -18,7 +18,7 @@ class AuthorJdbcRepositoryTest(
     val faker = DatabaseFaker()
 
     "saveAll() saves a list of authors" {
-        val authorsSequence = faker.collection({ faker.author().complete() }).len(5)
+        val authorsSequence = faker.collection({ faker.author().completeEntity() }).len(5)
         val authorsToInsert = authorsSequence.generateList()
 
         authorJdbcRepository.saveAll(authorsToInsert)
