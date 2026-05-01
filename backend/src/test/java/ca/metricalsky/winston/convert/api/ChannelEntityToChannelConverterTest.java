@@ -65,6 +65,6 @@ class ChannelEntityToChannelConverterTest {
         var channel = conversionService.convert(new ChannelEntity(), Channel.class);
 
         assertThat(channel)
-                .hasAllNullFieldsOrPropertiesExcept("properties", "statistics");
+                .hasAllNullFieldsOrPropertiesExcept("topics", "keywords", "lastFetchedAt", "properties", "statistics");
     }
 }

@@ -1,10 +1,10 @@
 package ca.metricalsky.winston.database.repository
 
-import ca.metricalsky.winston.database.ext.generateList
 import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository
 import ca.metricalsky.winston.database.repository.author.AuthorRepository
 import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
+import ca.metricalsky.winston.database.test.faker.ext.generateList
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe

@@ -1,9 +1,10 @@
-package ca.metricalsky.winston.database.entity
+package ca.metricalsky.winston.database.entity.author
 
 import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.date.shouldHaveSameInstantAs
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -37,7 +38,7 @@ class AuthorEntityTest(
             displayName shouldBe author.displayName
             channelUrl shouldBe author.channelUrl
             profileImageUrl shouldBe author.profileImageUrl
-            lastFetchedAt shouldNotBe null
+            lastFetchedAt shouldHaveSameInstantAs author.lastFetchedAt
             aliases shouldContainExactly author.aliases
         }
     }

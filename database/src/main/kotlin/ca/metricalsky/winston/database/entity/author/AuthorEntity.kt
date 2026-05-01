@@ -33,7 +33,7 @@ class AuthorEntity(
         joinColumns = [JoinColumn(name = "author_id", referencedColumnName = "id")]
     )
     @Column(name = "author_alias")
-    var aliases: Set<String> = setOf()
+    var aliases: Set<String> = emptySet()
 ) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
