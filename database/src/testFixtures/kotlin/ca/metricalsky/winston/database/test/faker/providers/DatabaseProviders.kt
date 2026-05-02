@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.database.test.faker.providers
 
+import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchRequestEntityProvider
 import net.datafaker.providers.base.ProviderRegistration
 
 interface DatabaseProviders : ProviderRegistration {
@@ -10,5 +11,9 @@ interface DatabaseProviders : ProviderRegistration {
 
     fun channel() = getProvider(ChannelEntityProvider::class.java) {
         ChannelEntityProvider(it)
+    }
+
+    fun fetchRequest() = getProvider(FetchRequestEntityProvider::class.java) {
+        FetchRequestEntityProvider(it)
     }
 }

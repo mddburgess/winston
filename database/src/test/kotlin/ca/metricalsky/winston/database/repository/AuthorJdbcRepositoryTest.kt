@@ -5,7 +5,7 @@ import ca.metricalsky.winston.database.repository.author.AuthorRepository
 import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
 import ca.metricalsky.winston.database.test.faker.ext.generateList
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 
@@ -13,26 +13,29 @@ import io.kotest.matchers.shouldBe
 class AuthorJdbcRepositoryTest(
     authorJdbcRepository: AuthorJdbcRepository,
     authorRepository: AuthorRepository,
-): StringSpec({
+): WordSpec({
 
     val faker = DatabaseFaker()
 
-    "saveAll() saves a list of authors" {
-        val authorsSequence = faker.collection({ faker.author().completeEntity() }).len(5)
-        val authorsToInsert = authorsSequence.generateList()
+    "saveAll()" should {
 
-        authorJdbcRepository.saveAll(authorsToInsert)
-        authorRepository.findAll() shouldHaveSize 5
+        "save a list of authors" {
+            val authorsSequence = faker.collection({ faker.author().completeEntity() }).len(5)
+            val authorsToInsert = authorsSequence.generateList()
 
-        val newAuthorsToInsert = authorsSequence.generateList()
-        val authorsToInsertOrUpdate = authorsToInsert + newAuthorsToInsert
+            authorJdbcRepository.saveAll(authorsToInsert)
+            authorRepository.findAll() shouldHaveSize 5
 
-        authorJdbcRepository.saveAll(authorsToInsertOrUpdate)
-        authorRepository.findAll() shouldHaveSize 10
-    }
+            val newAuthorsToInsert = authorsSequence.generateList()
+            val authorsToInsertOrUpdate = authorsToInsert + newAuthorsToInsert
 
-    "saveAll() handles an empty list of authors" {
-        authorJdbcRepository.saveAll(emptyList())
-        authorRepository.findAll() shouldBe emptyList()
+            authorJdbcRepository.saveAll(authorsToInsertOrUpdate)
+            authorRepository.findAll() shouldHaveSize 10
+        }
+
+        "handle an empty list of authors" {
+            authorJdbcRepository.saveAll(emptyList())
+            authorRepository.findAll() shouldBe emptyList()
+        }
     }
 })

@@ -2,6 +2,7 @@ package ca.metricalsky.winston.database.entity.fetch
 
 import jakarta.persistence.Basic
 import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -17,28 +18,28 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "fetch_requests")
-class FetchRequestEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @jakarta.persistence.Column(name = "id")
-    var id: kotlin.Long? = null
+class FetchRequestEntity(
 
     @OneToMany(cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "fetch_request_id", referencedColumnName = "id")
-    val operations: MutableList<FetchOperationEntity?>? = null
+    var operations: MutableList<FetchOperationEntity> = mutableListOf(),
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
-    @jakarta.persistence.Column(name = "status")
-    var status = Status.ACCEPTED
+    @Column(name = "status")
+    var status: Status = Status.ACCEPTED,
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    var id: Long? = null
 
     @CreationTimestamp
-    @jakarta.persistence.Column(name = "created_at")
+    @Column(name = "created_at")
     var createdAt: OffsetDateTime? = null
 
     @UpdateTimestamp
-    @jakarta.persistence.Column(name = "last_updated_at")
+    @Column(name = "last_updated_at")
     var lastUpdatedAt: OffsetDateTime? = null
 
     enum class Status {

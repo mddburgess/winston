@@ -51,7 +51,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eventsource": "^4.1.0",
-    "globals": "^17.5.0",
+    "globals": "^17.6.0",
     "happy-dom": "^20.9.0",
     "jest-junit": "^16.0.0",
     "jiti": "^2.6.1",
