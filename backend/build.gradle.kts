@@ -46,6 +46,7 @@ dependencies {
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
+    testImplementation(testFixtures(project(":database")))
 
     testCompileOnly(libs.lombok)
     testAnnotationProcessor(libs.lombok)

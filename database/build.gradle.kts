@@ -25,11 +25,12 @@ dependencies {
 
     runtimeOnly(libs.bundles.database)
 
-    testFixturesApi(libs.bundles.kotest)
     testFixturesApi(libs.datafaker)
     testFixturesApi(libs.springBootStarterTest)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.bundles.kotest)
+
 }
 
 allOpen {

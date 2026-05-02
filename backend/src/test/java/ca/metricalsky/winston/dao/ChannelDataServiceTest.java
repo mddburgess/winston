@@ -13,7 +13,6 @@ import org.springframework.core.convert.ConversionService;
 import java.util.List;
 import java.util.Optional;
 
-import static ca.metricalsky.winston.test.factory.entity.ChannelEntityFactory.createChannelEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +31,7 @@ class ChannelDataServiceTest {
 
     @Test
     void getAllChannels() {
-        var channelEntity = createChannelEntity();
+        var channelEntity = faker.database().channel().completeEntity();
         var channel = new Channel();
 
         when(channelRepository.findAll())
@@ -86,7 +85,7 @@ class ChannelDataServiceTest {
 
     @Test
     void findChannelByHandle() {
-        var channelEntity = createChannelEntity();
+        var channelEntity = faker.database().channel().completeEntity();
         var channel = new Channel();
 
         when(channelRepository.findByCustomUrl(channelEntity.getCustomUrl()))
