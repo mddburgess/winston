@@ -33,10 +33,7 @@ class FetchRequestEntityTest(
         }
 
         "persist operations" {
-            val operation = FetchOperationEntity()
-            operation.operationType = FetchOperationEntity.Type.CHANNELS
-            operation.objectId = faker.channel().id()
-
+            val operation = faker.fetchOperation().minimalEntity()
             val fetchRequest = FetchRequestEntity(
                 operations = mutableListOf(operation)
             )

@@ -30,7 +30,6 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.kotest)
-
 }
 
 allOpen {

@@ -15,33 +15,33 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "fetch_operations")
-class FetchOperationEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    var id: Long? = null
+class FetchOperationEntity(
 
     @Column(name = "fetch_request_id")
-    var fetchRequestId: Long? = null
+    var fetchRequestId: Long? = null,
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type")
-    var operationType: Type? = null
+    var operationType: Type,
 
     @Basic(optional = false)
     @Column(name = "object_id")
-    var objectId: String? = null
+    var objectId: String,
 
     @Column(name = "mode")
-    var mode: String? = null
+    var mode: String? = null,
 
     @Column(name = "published_after")
-    var publishedAfter: OffsetDateTime? = null
+    var publishedAfter: OffsetDateTime? = null,
 
     @Column(name = "published_before")
-    var publishedBefore: OffsetDateTime? = null
+    var publishedBefore: OffsetDateTime? = null,
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    var id: Long? = null
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
