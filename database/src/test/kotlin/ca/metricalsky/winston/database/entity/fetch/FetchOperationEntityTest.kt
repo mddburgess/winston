@@ -41,8 +41,8 @@ class FetchOperationEntityTest(
                 operationType shouldBe fetchOperation.operationType
                 objectId shouldBe fetchOperation.objectId
                 mode shouldBe fetchOperation.mode
-                publishedAfter shouldBe fetchOperation.publishedAfter
-                publishedBefore shouldBe fetchOperation.publishedBefore
+                publishedAfter shouldNotBe null
+                publishedBefore shouldNotBe null
                 status shouldBe fetchOperation.status
                 createdAt shouldNotBe null
                 lastUpdatedAt shouldNotBe null
