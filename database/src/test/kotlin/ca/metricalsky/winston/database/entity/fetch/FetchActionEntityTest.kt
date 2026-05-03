@@ -29,7 +29,7 @@ class FetchActionEntityTest(
 
             entityManager.persistFlushFind(fetchAction) shouldNotBeNull {
                 id shouldNotBe null
-                fetchOperationId shouldBe fetchOperation?.id
+                fetchOperationId shouldBe fetchAction.fetchOperationId
                 actionType shouldBe fetchAction.actionType
                 objectId shouldBe fetchAction.objectId
                 status shouldBe READY
@@ -43,7 +43,7 @@ class FetchActionEntityTest(
 
             entityManager.persistFlushFind(fetchAction) shouldNotBeNull {
                 id shouldNotBe null
-                fetchOperationId shouldBe fetchOperation?.id
+                fetchOperationId shouldBe fetchAction.fetchOperationId
                 actionType shouldBe fetchAction.actionType
                 objectId shouldBe fetchAction.objectId
                 publishedAfter shouldNotBe null

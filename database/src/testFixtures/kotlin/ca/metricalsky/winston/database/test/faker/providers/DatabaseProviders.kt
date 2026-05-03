@@ -3,6 +3,7 @@ package ca.metricalsky.winston.database.test.faker.providers
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchActionEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchOperationEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchRequestEntityProvider
+import ca.metricalsky.winston.database.test.faker.providers.fetch.YouTubeRequestEntityProvider
 import net.datafaker.providers.base.ProviderRegistration
 
 interface DatabaseProviders : ProviderRegistration {
@@ -25,5 +26,9 @@ interface DatabaseProviders : ProviderRegistration {
 
     fun fetchRequest() = getProvider(FetchRequestEntityProvider::class.java) {
         FetchRequestEntityProvider(it)
+    }
+
+    fun youtubeRequest() = getProvider(YouTubeRequestEntityProvider::class.java) {
+        YouTubeRequestEntityProvider(it)
     }
 }

@@ -5,25 +5,29 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "youtube_requests")
-class YouTubeRequestEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    var id: Long? = null
+class YouTubeRequestEntity(
 
     @Basic(optional = false)
     @Column(name = "fetch_action_id")
-    var fetchActionId: Long? = null
+    var fetchActionId: Long? = null,
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "request_type")
-    var requestType: RequestType? = null
+    var requestType: RequestType,
 
     @Basic(optional = false)
     @Column(name = "object_id")
-    var objectId: String? = null
+    var objectId: String,
+
+    @Basic(optional = false)
+    @Column(name = "requested_at")
+    var requestedAt: OffsetDateTime = OffsetDateTime.now(),
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    var id: Long? = null
 
     @Column(name = "published_after")
     var publishedAfter: String? = null
@@ -33,10 +37,6 @@ class YouTubeRequestEntity {
 
     @Column(name = "page_token")
     var pageToken: String? = null
-
-    @Basic(optional = false)
-    @Column(name = "requested_at")
-    var requestedAt: OffsetDateTime? = null
 
     @Column(name = "http_status")
     var httpStatus: Int? = null
