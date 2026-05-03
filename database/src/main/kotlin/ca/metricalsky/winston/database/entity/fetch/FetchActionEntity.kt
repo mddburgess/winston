@@ -16,31 +16,31 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "fetch_actions")
-class FetchActionEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    var id: Long? = null
+class FetchActionEntity(
 
     @Basic(optional = false)
     @Column(name = "fetch_operation_id")
-    var fetchOperationId: Long? = null
+    var fetchOperationId: Long? = null,
 
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "action_type")
-    var actionType: Type? = null
+    var actionType: Type,
 
     @Basic(optional = false)
     @Column(name = "object_id")
-    var objectId: String? = null
+    var objectId: String,
 
     @Column(name = "published_after")
-    var publishedAfter: OffsetDateTime? = null
+    var publishedAfter: OffsetDateTime? = null,
 
     @Column(name = "published_before")
-    var publishedBefore: OffsetDateTime? = null
+    var publishedBefore: OffsetDateTime? = null,
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    var id: Long? = null
 
     @Column(name = "page_token")
     var pageToken: String? = null
@@ -58,11 +58,11 @@ class FetchActionEntity {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private var createdAt: OffsetDateTime? = null
+    var createdAt: OffsetDateTime? = null
 
     @UpdateTimestamp
     @Column(name = "last_updated_at")
-    private var lastUpdatedAt: OffsetDateTime? = null
+    var lastUpdatedAt: OffsetDateTime? = null
 
     enum class Type {
         CHANNELS,

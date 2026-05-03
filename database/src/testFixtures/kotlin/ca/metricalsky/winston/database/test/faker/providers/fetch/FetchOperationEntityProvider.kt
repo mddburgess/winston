@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit
 
 class FetchOperationEntityProvider(faker: DatabaseFaker): AbstractProvider<DatabaseFaker>(faker) {
 
-    fun minimalEntity() = FetchOperationEntity(
+    fun minimalEntity(fetchRequest: FetchRequestEntity? = null) = FetchOperationEntity(
+        fetchRequestId = fetchRequest?.id,
         operationType = Type.CHANNELS,
         objectId = faker.internet().uuidv4(),
     )
