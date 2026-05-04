@@ -2,6 +2,7 @@ package ca.metricalsky.winston.database.test.faker.providers
 
 import ca.metricalsky.winston.database.test.faker.providers.author.AuthorEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.channel.ChannelEntityProvider
+import ca.metricalsky.winston.database.test.faker.providers.comment.CommentEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchActionEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchOperationEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchRequestEntityProvider
@@ -17,6 +18,10 @@ interface DatabaseProviders : ProviderRegistration {
 
     fun channel() = getProvider(ChannelEntityProvider::class.java) {
         ChannelEntityProvider(it)
+    }
+
+    fun comment() = getProvider(CommentEntityProvider::class.java) {
+        CommentEntityProvider(it)
     }
 
     fun fetchAction() = getProvider(FetchActionEntityProvider::class.java) {

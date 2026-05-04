@@ -97,12 +97,14 @@ class CommentMapperTest {
         var topLevelComment = commentMapper.toTopLevelComment(new CommentEntity());
 
         assertThat(topLevelComment)
-                .hasAllNullFieldsOrPropertiesExcept("text", "properties");
+                .hasAllNullFieldsOrPropertiesExcept("text", "properties", "replies");
         assertThat(topLevelComment.getText())
                 .hasAllNullFieldsOrProperties();
         assertThat(topLevelComment.getProperties())
                 .hasFieldOrPropertyWithValue("important", false)
                 .hasFieldOrPropertyWithValue("hidden", false);
+        assertThat(topLevelComment.getReplies())
+                .isEmpty();
     }
 
     @Test

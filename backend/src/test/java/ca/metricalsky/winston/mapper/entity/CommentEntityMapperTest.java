@@ -75,7 +75,9 @@ public class CommentEntityMapperTest {
         var comment = commentEntityMapper.toCommentEntity(new Comment());
 
         assertThat(comment)
-                .hasAllNullFieldsOrProperties();
+                .hasAllNullFieldsOrPropertiesExcept("replies");
+        assertThat(comment.getReplies())
+                .isEmpty();
     }
 
     private static void assertCommentProperties(CommentEntity actual, Comment expected) {
