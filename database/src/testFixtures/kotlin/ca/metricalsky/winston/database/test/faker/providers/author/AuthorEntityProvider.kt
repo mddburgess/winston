@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.database.test.faker.providers
+package ca.metricalsky.winston.database.test.faker.providers.author
 
 import ca.metricalsky.winston.database.entity.author.AuthorEntity
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker

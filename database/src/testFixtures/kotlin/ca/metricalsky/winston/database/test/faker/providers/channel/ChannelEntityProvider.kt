@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.database.test.faker.providers
+package ca.metricalsky.winston.database.test.faker.providers.channel
 
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker

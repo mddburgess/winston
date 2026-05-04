@@ -6,28 +6,28 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "videos")
-class VideoEntity {
+class VideoEntity(
 
     @Id
     @Column(name = "id")
-    var id: String? = null
+    var id: String? = null,
 
     @Basic(optional = false)
     @Column(name = "channel_id")
-    var channelId: String? = null
+    var channelId: String? = null,
 
     @Column(name = "title")
-    var title: String? = null
+    var title: String? = null,
 
     @Column(name = "description")
-    var description: String? = null
+    var description: String? = null,
 
     @Column(name = "thumbnail_url")
-    var thumbnailUrl: String? = null
+    var thumbnailUrl: String? = null,
 
     @Column(name = "published_at")
-    var publishedAt: OffsetDateTime? = null
-
+    var publishedAt: OffsetDateTime? = null,
+) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
     var lastFetchedAt: OffsetDateTime? = null
