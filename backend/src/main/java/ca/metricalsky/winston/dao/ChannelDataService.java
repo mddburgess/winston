@@ -39,7 +39,7 @@ public class ChannelDataService {
     }
 
     public Optional<String> findChannelIdByHandle(String handle) {
-        return channelRepository.findIdByCustomUrl(handle);
+        return Optional.ofNullable(channelRepository.findIdByCustomUrl(handle));
     }
 
     public Optional<Channel> findChannelByHandle(String handle) {

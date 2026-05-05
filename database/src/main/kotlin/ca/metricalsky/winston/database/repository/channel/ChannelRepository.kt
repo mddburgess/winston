@@ -30,7 +30,7 @@ interface ChannelRepository : JpaRepository<ChannelEntity, String> {
     fun findAllUnarchived(): List<ChannelEntity>
 
     @Query("SELECT c.id FROM ChannelEntity c WHERE c.customUrl = :customUrl")
-    fun findIdByCustomUrl(customUrl: String): Optional<String>
+    fun findIdByCustomUrl(customUrl: String): String?
 
     @Query("""
         SELECT

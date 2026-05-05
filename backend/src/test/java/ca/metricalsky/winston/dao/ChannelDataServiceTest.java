@@ -62,7 +62,7 @@ class ChannelDataServiceTest {
         var channelId = faker.youtube().channelId();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
-                .thenReturn(Optional.of(channelId));
+                .thenReturn(channelId);
 
         var result = channelDataService.findChannelIdByHandle(channelHandle);
 
@@ -75,7 +75,7 @@ class ChannelDataServiceTest {
         var channelHandle = faker.youtube().channelHandle();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
-                .thenReturn(Optional.empty());
+                .thenReturn(null);
 
         var result = channelDataService.findChannelIdByHandle(channelHandle);
 
