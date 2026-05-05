@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved API error responses for some common error cases. (mddburgess#winston#135)
+- Improved API error responses for some common error cases. (mddburgess/winston#135)
+- Migrated database entities and repositories to Kotlin. (mddburgess/winston#137)
 
 ### Fixed
 
