@@ -1,7 +1,5 @@
-package ca.metricalsky.winston.database.repository
+package ca.metricalsky.winston.database.repository.author
 
-import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository
-import ca.metricalsky.winston.database.repository.author.AuthorRepository
 import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
 import ca.metricalsky.winston.database.test.faker.ext.generateList
