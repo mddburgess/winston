@@ -36,6 +36,10 @@ interface DatabaseProviders : ProviderRegistration {
         FetchRequestEntityProvider(it)
     }
 
+    fun thumbnail() = getProvider(ThumbnailEntityProvider::class.java) {
+        ThumbnailEntityProvider(it)
+    }
+
     fun video() = getProvider(VideoEntityProvider::class.java) {
         VideoEntityProvider(it)
     }

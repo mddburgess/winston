@@ -20,5 +20,5 @@ class ThumbnailEntity(
 
     @Basic(optional = false)
     @Column(name = "image")
-    var image: ByteArray
+    var image: ByteArray,
 )
