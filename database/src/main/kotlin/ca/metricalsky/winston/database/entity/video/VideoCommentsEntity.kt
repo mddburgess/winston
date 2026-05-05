@@ -27,8 +27,8 @@ class VideoCommentsEntity(
     @Basic(optional = false)
     @Column(name = "total_reply_count")
     var totalReplyCount: Long,
-
+) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
-    var lastFetchedAt: OffsetDateTime
-)
+    var lastFetchedAt: OffsetDateTime? = null
+}

@@ -43,8 +43,7 @@ class VideoMapperTest {
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
-                .hasFieldOrPropertyWithValue("lastFetchedAt", videoEntity.getComments().getLastFetchedAt())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("lastFetchedAt");
     }
 
     @Test
@@ -90,8 +89,7 @@ class VideoMapperTest {
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
-                .hasFieldOrPropertyWithValue("lastFetchedAt", videoEntity.getComments().getLastFetchedAt())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("lastFetchedAt");
     }
 
     @Test
@@ -120,7 +118,7 @@ class VideoMapperTest {
 
     private static VideoEntity buildVideoEntity() {
         var videoId = faker.youtube().videoId();
-        var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3, OffsetDateTime.now());
+        var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3);
         var videoEntity = new VideoEntity();
         videoEntity.setId(videoId);
         videoEntity.setChannelId(TestUtils.randomId());

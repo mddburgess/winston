@@ -7,6 +7,7 @@ import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchActionEnt
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchOperationEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.FetchRequestEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.fetch.YouTubeRequestEntityProvider
+import ca.metricalsky.winston.database.test.faker.providers.video.VideoCommentsEntityProvider
 import ca.metricalsky.winston.database.test.faker.providers.video.VideoEntityProvider
 import net.datafaker.providers.base.ProviderRegistration
 
@@ -42,6 +43,10 @@ interface DatabaseProviders : ProviderRegistration {
 
     fun video() = getProvider(VideoEntityProvider::class.java) {
         VideoEntityProvider(it)
+    }
+
+    fun videoComments() = getProvider(VideoCommentsEntityProvider::class.java) {
+        VideoCommentsEntityProvider(it)
     }
 
     fun youtubeRequest() = getProvider(YouTubeRequestEntityProvider::class.java) {
