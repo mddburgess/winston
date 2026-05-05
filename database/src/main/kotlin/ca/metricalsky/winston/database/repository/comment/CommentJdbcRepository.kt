@@ -28,8 +28,8 @@ class CommentJdbcRepository(
         val idsToUpdate = selectCommentIds(commentIds)
 
         val partition = commentsAndReplies.partition { it.id in idsToUpdate }
-        val commentsToInsert = partition.first
-        val commentsToUpdate = partition.second
+        val commentsToUpdate = partition.first
+        val commentsToInsert = partition.second
 
         insertComments(commentsToInsert)
         updateComments(commentsToUpdate)
