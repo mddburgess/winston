@@ -24,4 +24,28 @@ class FetchActionEntityProvider(faker: DatabaseFaker): AbstractProvider<Database
         publishedAfter = faker.timeAndDate().past(7, TimeUnit.DAYS).atOffset(ZoneOffset.UTC),
         publishedBefore = OffsetDateTime.now(ZoneOffset.UTC),
     )
+
+    fun channels(fetchOperation: FetchOperationEntity) = FetchActionEntity(
+        fetchOperationId = fetchOperation.id,
+        actionType = Type.CHANNELS,
+        objectId = fetchOperation.objectId,
+    )
+
+    fun comments(fetchOperation: FetchOperationEntity) = FetchActionEntity(
+        fetchOperationId = fetchOperation.id,
+        actionType = Type.COMMENTS,
+        objectId = fetchOperation.objectId,
+    )
+
+    fun replies(fetchOperation: FetchOperationEntity) = FetchActionEntity(
+        fetchOperationId = fetchOperation.id,
+        actionType = Type.REPLIES,
+        objectId = fetchOperation.objectId,
+    )
+
+    fun videos(fetchOperation: FetchOperationEntity) = FetchActionEntity(
+        fetchOperationId = fetchOperation.id,
+        actionType = Type.VIDEOS,
+        objectId = fetchOperation.objectId,
+    )
 }

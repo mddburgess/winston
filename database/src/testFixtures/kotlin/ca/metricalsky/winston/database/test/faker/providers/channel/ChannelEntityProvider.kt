@@ -11,6 +11,8 @@ class ChannelEntityProvider(faker: DatabaseFaker) : AbstractProvider<DatabaseFak
 
     fun id(): String = faker.regexify("UC[A-Za-z0-9_-]{22}")
 
+    fun handle(): String = "@" + faker.word().noun()
+
     fun minimalEntity() = ChannelEntity(
         id = id(),
     )
@@ -19,7 +21,7 @@ class ChannelEntityProvider(faker: DatabaseFaker) : AbstractProvider<DatabaseFak
         id = id(),
         title = faker.massEffect().character(),
         description = faker.massEffect().quote(),
-        customUrl = faker.internet().url(),
+        customUrl = handle(),
         thumbnailUrl = faker.internet().url(),
         uploadsPlaylistId = faker.internet().uuidv4(),
         videoCount = faker.number().numberBetween(0L, 10_000L),
