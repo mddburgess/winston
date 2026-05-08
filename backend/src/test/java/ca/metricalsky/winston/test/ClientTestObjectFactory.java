@@ -29,18 +29,6 @@ public final class ClientTestObjectFactory {
 
     }
 
-    public static ChannelListResponse buildChannelListResponse() {
-        var channelListResponse = new ChannelListResponse();
-        channelListResponse.setItems(List.of(buildChannel()));
-        return channelListResponse;
-    }
-
-    private static Channel buildChannel() {
-        var channel = new Channel();
-        channel.setId(TestUtils.randomId());
-        return channel;
-    }
-
     public static ActivityListResponse buildActivityListResponse() {
         var activityListResponse = new ActivityListResponse();
         activityListResponse.setItems(List.of(buildUploadActivity(), buildPlaylistItemActivity()));

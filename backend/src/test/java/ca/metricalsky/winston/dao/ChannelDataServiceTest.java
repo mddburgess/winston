@@ -59,7 +59,7 @@ class ChannelDataServiceTest {
     @Test
     void findChannelIdByHandle() {
         var channelHandle = faker.youtube().channelHandle();
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
                 .thenReturn(channelId);

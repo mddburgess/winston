@@ -41,7 +41,7 @@ class VideoDataServiceTest {
 
     @Test
     void listVideosByChannelId() {
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
         var pageRequest = faker.page().pageRequest();
         var videoEntity = buildVideoEntity();
 
@@ -56,7 +56,7 @@ class VideoDataServiceTest {
 
     @Test
     void listVideosByChannelId_empty() {
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
         var pageRequest = faker.page().pageRequest();
 
         when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))

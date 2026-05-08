@@ -19,15 +19,15 @@ public class YoutubeProvider
     }
 
     public String authorId() {
-        return channelId();
+        return channel().id();
+    }
+
+    public ChannelProvider channel() {
+        return faker.getProvider(ChannelProvider.class, ChannelProvider::new);
     }
 
     public String channelHandle() {
         return "@" + faker.word().noun();
-    }
-
-    public String channelId() {
-        return faker.regexify("UC[A-Za-z0-9_-]{22}");
     }
 
     public Comment comment() {

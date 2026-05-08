@@ -1,6 +1,7 @@
 plugins {
     java
     jacoco
+    `java-test-fixtures`
     alias(libs.plugins.springBoot)
     alias(libs.plugins.springDependencyManagement)
 }
@@ -41,12 +42,16 @@ dependencies {
 
     developmentOnly(libs.springBootDevtools)
 
+    testFixturesApi(testFixtures(project(":database")))
+
+    testFixturesImplementation(libs.bundles.springBoot)
+    testFixturesImplementation(libs.bundles.youtube)
+    testFixturesImplementation(project(":api"))
+
     testImplementation(libs.archunitJunit5)
-    testImplementation(libs.datafaker)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
-    testImplementation(testFixtures(project(":database")))
 
     testCompileOnly(libs.lombok)
     testAnnotationProcessor(libs.lombok)
