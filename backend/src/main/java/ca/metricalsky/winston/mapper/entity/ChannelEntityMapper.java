@@ -5,6 +5,7 @@ import com.google.api.services.youtube.model.Channel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -31,7 +32,7 @@ public abstract class ChannelEntityMapper {
     public abstract ChannelEntity toChannelEntity(Channel channel);
 
     Set<String> mapKeywords(String keywords) {
-        return keywords == null ? null : KEYWORD_PATTERN.matcher(keywords).results()
+        return keywords == null ? Collections.emptySet() : KEYWORD_PATTERN.matcher(keywords).results()
                 .map(MatchResult::group)
                 .map(ChannelEntityMapper::trimQuotes)
                 .collect(Collectors.toSet());
