@@ -28,7 +28,7 @@ class VideoDetailsEntity(
     var visibility: Visibility?,
 
     @Column(name = "duration")
-    var duration: Duration,
+    var duration: Duration?,
 
     @Column(name = "category")
     var category: String?,
@@ -58,13 +58,13 @@ class VideoDetailsEntity(
     var contentRatings: MutableList<VideoContentRatingEntity>,
 
     @Column(name = "made_for_kids")
-    var madeForKids: Boolean,
+    var madeForKids: Boolean?,
 
     @Column(name = "contains_synthetic_media")
-    var containsSyntheticMedia: Boolean,
+    var containsSyntheticMedia: Boolean?,
 
     @Column(name = "has_paid_product_placement")
-    var hasPaidProductPlacement: Boolean,
+    var hasPaidProductPlacement: Boolean?,
 
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "video_id", referencedColumnName = "video_id")
@@ -77,13 +77,13 @@ class VideoDetailsEntity(
     var liveStreamedAt: OffsetDateTime?,
 
     @Column(name = "view_count")
-    var viewCount: Long,
+    var viewCount: Long?,
 
     @Column(name = "like_count")
-    var likeCount: Long,
+    var likeCount: Long?,
 
     @Column(name = "comment_count")
-    var commentCount: Long
+    var commentCount: Long?,
 ) {
     enum class Visibility {
         PUBLIC,

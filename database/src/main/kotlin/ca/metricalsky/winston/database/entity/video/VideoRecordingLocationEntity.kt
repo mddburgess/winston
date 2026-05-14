@@ -14,14 +14,14 @@ class VideoRecordingLocationEntity(
     var videoId: String,
 
     @Column(name = "description")
-    var description: String,
+    var description: String?,
 
     @Column(name = "latitude")
-    var latitude: Double,
+    var latitude: Double?,
 
     @Column(name = "longitude")
-    var longitude: Double,
+    var longitude: Double?,
 
     @Column(name = "altitude")
-    var altitude: Double
+    var altitude: Double?,
 )

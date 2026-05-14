@@ -17,11 +17,11 @@ class VideoContentRatingEntity(
     var id: Long,
 
     @Column(name = "video_id")
-    var videoId: String,
+    var videoId: String?,
 
     @Column(name = "authority")
     var authority: String,
 
     @Column(name = "rating")
-    var rating: String
+    var rating: String,
 )

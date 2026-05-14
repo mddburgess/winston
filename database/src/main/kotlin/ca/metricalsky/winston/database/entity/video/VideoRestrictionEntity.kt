@@ -20,14 +20,14 @@ class VideoRestrictionEntity(
     var id: Long,
 
     @Column(name = "video_id")
-    var videoId: String,
+    var videoId: String?,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "restriction")
     var restriction: Restriction,
 
     @Column(name = "country")
-    var country: String
+    var country: String,
 ) {
     enum class Restriction {
         ALLOWED,
