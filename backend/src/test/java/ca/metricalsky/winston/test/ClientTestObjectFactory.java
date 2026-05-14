@@ -1,15 +1,6 @@
 package ca.metricalsky.winston.test;
 
 import ca.metricalsky.winston.test.faker.WinstonFaker;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.youtube.model.Activity;
-import com.google.api.services.youtube.model.ActivityContentDetails;
-import com.google.api.services.youtube.model.ActivityContentDetailsPlaylistItem;
-import com.google.api.services.youtube.model.ActivityContentDetailsUpload;
-import com.google.api.services.youtube.model.ActivityListResponse;
-import com.google.api.services.youtube.model.ActivitySnippet;
-import com.google.api.services.youtube.model.Channel;
-import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentSnippet;
@@ -22,47 +13,11 @@ import java.util.List;
 /**
  * @deprecated Use {@link WinstonFaker} instead.
  */
-@Deprecated(since = "1.9.0", forRemoval = true)
+@Deprecated(since = "2.0.0", forRemoval = true)
 public final class ClientTestObjectFactory {
 
     private ClientTestObjectFactory() {
 
-    }
-
-    public static ActivityListResponse buildActivityListResponse() {
-        var activityListResponse = new ActivityListResponse();
-        activityListResponse.setItems(List.of(buildUploadActivity(), buildPlaylistItemActivity()));
-        return activityListResponse;
-    }
-
-    private static Activity buildUploadActivity() {
-        var upload = new ActivityContentDetailsUpload();
-        upload.setVideoId(TestUtils.randomId());
-
-        var contentDetails = new ActivityContentDetails();
-        contentDetails.setUpload(upload);
-
-        return buildActivity(contentDetails);
-    }
-
-    private static Activity buildPlaylistItemActivity() {
-        var playlistItem = new ActivityContentDetailsPlaylistItem();
-        playlistItem.setPlaylistId(TestUtils.randomId());
-
-        var contentDetails = new ActivityContentDetails();
-        contentDetails.setPlaylistItem(playlistItem);
-
-        return buildActivity(contentDetails);
-    }
-
-    private static Activity buildActivity(ActivityContentDetails contentDetails) {
-        var snippet = new ActivitySnippet();
-        snippet.setPublishedAt(new DateTime("2025-01-01T00:00:00Z"));
-
-        var activity = new Activity();
-        activity.setContentDetails(contentDetails);
-        activity.setSnippet(snippet);
-        return activity;
     }
 
     public static CommentThreadListResponse buildCommentThreadListResponse() {

@@ -9,15 +9,11 @@ import java.util.Base64;
 /**
  * @deprecated Use {@link WinstonFaker} instead.
  */
-@Deprecated(since = "1.9.0", forRemoval = true)
+@Deprecated(since = "2.0.0", forRemoval = true)
 public final class TestUtils {
 
     private TestUtils() {
 
-    }
-
-    public static boolean randomBoolean() {
-        return RandomUtils.secure().randomBoolean();
     }
 
     public static byte[] randomBytes(int length) {
@@ -26,10 +22,6 @@ public final class TestUtils {
 
     public static String randomId() {
         return Base64.getUrlEncoder().encodeToString(randomBytes(18));
-    }
-
-    public static int randomInt() {
-        return RandomUtils.secure().randomInt();
     }
 
     public static long randomLong() {
