@@ -2,9 +2,9 @@ package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.domain.PullOperationContext;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +34,11 @@ public class FetchVideoRepliesOperation implements FetchOperation<Comment> {
     }
 
     private static FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation, String commentId) {
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchOperation.getId())
-                .actionType(FetchActionEntity.Type.REPLIES)
-                .objectId(commentId)
-                .build();
+        var fetchAction = new FetchActionEntity();
+        fetchAction.setFetchOperationId(fetchOperation.getId());
+        fetchAction.setActionType(FetchActionEntity.Type.REPLIES);
+        fetchAction.setObjectId(commentId);
+        return fetchAction;
     }
 
     @Override

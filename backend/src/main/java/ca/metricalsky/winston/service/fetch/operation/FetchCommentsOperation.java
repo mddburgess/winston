@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.api.model.TopLevelComment;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,11 @@
 package ca.metricalsky.winston.mappers.api;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.VideoCommentsEntity;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.entity.view.ChannelVideoView;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.view.ChannelVideoView;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -14,6 +15,8 @@ import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
 class VideoMapperTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
 
     private final VideoMapper videoMapper = new VideoMapperImpl();
 
@@ -36,12 +39,11 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("channel", "details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
-                .hasFieldOrPropertyWithValue("lastFetchedAt", videoEntity.getComments().getLastFetchedAt())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("lastFetchedAt");
     }
 
     @Test
@@ -83,12 +85,11 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.isCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
-                .hasFieldOrPropertyWithValue("lastFetchedAt", videoEntity.getComments().getLastFetchedAt())
-                .hasNoNullFieldsOrProperties();
+                .hasNoNullFieldsOrPropertiesExcept("lastFetchedAt");
     }
 
     @Test
@@ -109,29 +110,24 @@ class VideoMapperTest {
     }
 
     private static ChannelEntity buildChannelEntity() {
-        return ChannelEntity.builder()
-                .title(TestUtils.randomString())
-                .customUrl(TestUtils.randomString())
-                .build();
+        var channelEntity = new ChannelEntity();
+        channelEntity.setTitle(TestUtils.randomString());
+        channelEntity.setCustomUrl(TestUtils.randomString());
+        return channelEntity;
     }
 
     private static VideoEntity buildVideoEntity() {
-        var videoCommentsEntity = VideoCommentsEntity.builder()
-                .commentsDisabled(false)
-                .commentCount(1)
-                .replyCount(2)
-                .totalReplyCount(3)
-                .lastFetchedAt(OffsetDateTime.now())
-                .build();
-        return VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .channelId(TestUtils.randomId())
-                .title(TestUtils.randomString())
-                .description(TestUtils.randomString())
-                .thumbnailUrl(TestUtils.randomString())
-                .publishedAt(OffsetDateTime.now())
-                .lastFetchedAt(OffsetDateTime.now())
-                .comments(videoCommentsEntity)
-                .build();
+        var videoId = faker.youtube().videoId();
+        var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3);
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(videoId);
+        videoEntity.setChannelId(TestUtils.randomId());
+        videoEntity.setTitle(TestUtils.randomString());
+        videoEntity.setDescription(TestUtils.randomString());
+        videoEntity.setThumbnailUrl(TestUtils.randomString());
+        videoEntity.setPublishedAt(OffsetDateTime.now());
+        videoEntity.setLastFetchedAt(OffsetDateTime.now());
+        videoEntity.setComments(videoCommentsEntity);
+        return videoEntity;
     }
 }

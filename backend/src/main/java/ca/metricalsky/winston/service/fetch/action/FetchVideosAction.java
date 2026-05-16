@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

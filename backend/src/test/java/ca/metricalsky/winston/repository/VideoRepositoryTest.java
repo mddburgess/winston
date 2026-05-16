@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.repository;
 
-import ca.metricalsky.winston.entity.VideoEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.repository.video.VideoRepository;
 import ca.metricalsky.winston.test.annotations.RepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

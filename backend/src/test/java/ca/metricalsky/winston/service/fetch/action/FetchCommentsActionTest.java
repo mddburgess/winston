@@ -3,12 +3,13 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.client.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,14 +41,18 @@ class FetchCommentsActionTest {
     @Mock
     private YouTubeService youTubeService;
 
+    private FetchActionEntity fetchAction;
+
+    @BeforeEach
+    void beforeEach() {
+        var fetchRequest = faker.database().fetchRequest().minimalEntity();
+        var fetchOperation = faker.database().fetchOperation().videos(fetchRequest);
+        fetchAction = faker.database().fetchAction().videos(fetchOperation);
+    }
+
     @ParameterizedTest
     @MethodSource
     void fetch(CommentThreadListResponse commentThreadListResponse) {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.COMMENTS)
-                .objectId(faker.youtube().videoId())
-                .build();
-
         when(youTubeService.getComments(fetchAction))
                 .thenReturn(commentThreadListResponse);
 
@@ -74,11 +79,6 @@ class FetchCommentsActionTest {
 
     @Test
     void fetch_withNextPageToken() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.COMMENTS)
-                .objectId(faker.youtube().videoId())
-                .build();
-
         var commentThreadListResponse = faker.youtube().response().commentThreadList().firstPage();
         when(youTubeService.getComments(fetchAction))
                 .thenReturn(commentThreadListResponse);
@@ -105,12 +105,7 @@ class FetchCommentsActionTest {
     @Test
     void fetch_pageTokenDidNotChange() {
         var pageToken = faker.youtube().response().commentList().nextPageToken();
-
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.REPLIES)
-                .objectId(faker.youtube().commentId())
-                .pageToken(pageToken)
-                .build();
+        fetchAction.setPageToken(pageToken);
 
         var commentThreadListResponse = faker.youtube().response().commentThreadList().firstPage();
         commentThreadListResponse.setNextPageToken(pageToken);
@@ -133,11 +128,6 @@ class FetchCommentsActionTest {
 
     @Test
     void fetch_videoNotFound() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.COMMENTS)
-                .objectId(faker.youtube().videoId())
-                .build();
-
         when(youTubeService.getComments(fetchAction))
                 .thenThrow(new VideoNotFoundException(null));
 
@@ -151,11 +141,6 @@ class FetchCommentsActionTest {
 
     @Test
     void fetch_commentsDisabled() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.COMMENTS)
-                .objectId(faker.youtube().videoId())
-                .build();
-
         when(youTubeService.getComments(fetchAction))
                 .thenThrow(new CommentsDisabledException(null));
 

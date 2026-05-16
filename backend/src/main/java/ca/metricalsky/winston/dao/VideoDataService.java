@@ -1,10 +1,10 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.entity.view.VideoCountView;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.view.VideoCountView;
 import ca.metricalsky.winston.mappers.api.VideoMapper;
-import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.database.repository.video.VideoRepository;
 import com.google.api.services.youtube.model.VideoListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;

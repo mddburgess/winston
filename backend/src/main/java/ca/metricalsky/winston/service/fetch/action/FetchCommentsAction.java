@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.CommentsDisabledException;
 import ca.metricalsky.winston.client.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -46,11 +46,11 @@ public class FetchCommentsAction implements FetchAction<TopLevelComment> {
             return null;
         }
 
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchAction.getFetchOperationId())
-                .actionType(fetchAction.getActionType())
-                .objectId(fetchAction.getObjectId())
-                .pageToken(nextPageToken)
-                .build();
+        var nextFetchAction = new FetchActionEntity();
+        nextFetchAction.setFetchOperationId(fetchAction.getFetchOperationId());
+        nextFetchAction.setActionType(fetchAction.getActionType());
+        nextFetchAction.setObjectId(fetchAction.getObjectId());
+        nextFetchAction.setPageToken(nextPageToken);
+        return nextFetchAction;
     }
 }

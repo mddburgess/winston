@@ -1,9 +1,10 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,11 +33,18 @@ class FetchVideosActionTest {
     @Mock
     private FetchResult<Video> fetchResult;
 
+    private FetchActionEntity fetchAction;
+
+    @BeforeEach
+    void beforeEach() {
+        var fetchRequest = faker.database().fetchRequest().minimalEntity();
+        var fetchOperation = faker.database().fetchOperation().videos(fetchRequest);
+        fetchAction = faker.database().fetchAction().videos(fetchOperation);
+    }
+
     @Test
     void fetch_recentVideos() {
-        var fetchAction = FetchActionEntity.builder()
-                .publishedAfter(faker.timeAndDate().past().atOffset(ZoneOffset.UTC))
-                .build();
+        fetchAction.setPublishedAfter(faker.timeAndDate().past().atOffset(ZoneOffset.UTC));
 
         when(fetchVideosFromActivitiesAction.fetch(fetchAction))
                 .thenReturn(fetchResult);
@@ -49,9 +57,7 @@ class FetchVideosActionTest {
 
     @Test
     void fetch_allVideos() {
-        var fetchAction = FetchActionEntity.builder()
-                .publishedAfter(null)
-                .build();
+        fetchAction.setPublishedAfter(null);
 
         when(fetchVideosFromPlaylistItemsAction.fetch(fetchAction))
                 .thenReturn(fetchResult);

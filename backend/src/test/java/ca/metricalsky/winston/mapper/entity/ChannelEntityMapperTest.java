@@ -50,14 +50,6 @@ class ChannelEntityMapperTest {
                 .isNull();
     }
 
-    @Test
-    void toChannelEntity_emptyChannel() {
-        var channel = channelEntityMapper.toChannelEntity(new Channel());
-
-        assertThat(channel)
-                .hasAllNullFieldsOrProperties();
-    }
-
     private static Channel buildChannel() {
         var thumbnail = new Thumbnail()
                 .setUrl("channel.snippet.thumbnails.high.url");

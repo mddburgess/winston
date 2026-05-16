@@ -1,11 +1,10 @@
 package ca.metricalsky.winston.service;
 
-import ca.metricalsky.winston.entity.ThumbnailEntity;
-import ca.metricalsky.winston.entity.view.ThumbnailLookupView;
-import ca.metricalsky.winston.repository.ThumbnailRepository;
+import ca.metricalsky.winston.database.entity.ThumbnailEntity;
+import ca.metricalsky.winston.database.repository.ThumbnailRepository;
+import ca.metricalsky.winston.database.view.ThumbnailLookupView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,13 +43,13 @@ public class ThumbnailService {
     }
 
     private byte[] getOrFetchThumbnail(String id, ThumbnailLookupView lookup) {
-        if (lookup.getThumbnail().isEmpty()) {
+        if (lookup.getThumbnail() == null) {
             log.info("No cached thumbnail found for ID '{}', fetching", id);
             return fetchAndSaveThumbnail(id, lookup.getThumbnailUrl())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         }
 
-        var cachedThumbnail = lookup.getThumbnail().get();
+        var cachedThumbnail = lookup.getThumbnail();
         if (!cachedThumbnail.getUrl().equals(lookup.getThumbnailUrl())) {
             log.info("Cached thumbnail for ID '{}' is out of date, re-fetching", id);
             return fetchAndSaveThumbnail(id, lookup.getThumbnailUrl())

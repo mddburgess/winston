@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.PullRepliesOperation;
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.api.model.VideoDetails;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.repository.CommentRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import ca.metricalsky.winston.service.pull.PullStatisticsService;
 import ca.metricalsky.winston.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;

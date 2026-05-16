@@ -1,11 +1,11 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.dao.CommentDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Type;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import com.google.api.services.youtube.model.CommentListResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,14 +32,18 @@ class FetchRepliesActionTest {
     @Mock
     private YouTubeService youTubeService;
 
+    private FetchActionEntity fetchAction;
+
+    @BeforeEach
+    void beforeEach() {
+        var fetchRequest = faker.database().fetchRequest().minimalEntity();
+        var fetchOperation = faker.database().fetchOperation().replies(fetchRequest);
+        fetchAction = faker.database().fetchAction().replies(fetchOperation);
+    }
+
     @ParameterizedTest
     @MethodSource
     void fetch(CommentListResponse commentListResponse) {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(Type.REPLIES)
-                .objectId(faker.youtube().commentId())
-                .build();
-
         when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
 
@@ -66,11 +70,6 @@ class FetchRepliesActionTest {
 
     @Test
     void fetch_withNextPageToken() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(Type.REPLIES)
-                .objectId(faker.youtube().commentId())
-                .build();
-
         var commentListResponse = faker.youtube().response().commentList().firstPage();
         when(youTubeService.getReplies(fetchAction))
                 .thenReturn(commentListResponse);
@@ -97,12 +96,7 @@ class FetchRepliesActionTest {
     @Test
     void fetch_pageTokenDidNotChange() {
         var pageToken = faker.youtube().response().commentList().nextPageToken();
-
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(Type.REPLIES)
-                .objectId(faker.youtube().commentId())
-                .pageToken(pageToken)
-                .build();
+        fetchAction.setPageToken(pageToken);
 
         var commentListResponse = faker.youtube().response().commentList().firstPage();
         commentListResponse.setNextPageToken(pageToken);

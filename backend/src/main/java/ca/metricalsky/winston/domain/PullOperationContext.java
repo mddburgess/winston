@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.domain;
 
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import lombok.Builder;
 import lombok.Data;
 

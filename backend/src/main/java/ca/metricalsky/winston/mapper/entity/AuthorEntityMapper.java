@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.mapper.entity;
 
-import ca.metricalsky.winston.entity.AuthorEntity;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
 import com.google.api.services.youtube.model.CommentSnippet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,2 +1,2 @@
 group = "ca.metricalsky.winston"
-version = "1.9.0-SNAPSHOT"
+version = "2.0.0-SNAPSHOT"

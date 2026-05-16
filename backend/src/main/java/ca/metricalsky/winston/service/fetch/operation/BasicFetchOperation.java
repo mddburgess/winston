@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.domain.PullOperationContext;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import lombok.RequiredArgsConstructor;
 
@@ -24,12 +24,12 @@ public class BasicFetchOperation<T> implements FetchOperation<T> {
     }
 
     FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation) {
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchOperation.getId())
-                .actionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()))
-                .objectId(fetchOperation.getObjectId())
-                .publishedAfter(fetchOperation.getPublishedAfter())
-                .publishedBefore(fetchOperation.getPublishedBefore())
-                .build();
+        var fetchAction = new FetchActionEntity();
+        fetchAction.setFetchOperationId(fetchOperation.getId());
+        fetchAction.setActionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()));
+        fetchAction.setObjectId(fetchOperation.getObjectId());
+        fetchAction.setPublishedAfter(fetchOperation.getPublishedAfter());
+        fetchAction.setPublishedBefore(fetchOperation.getPublishedBefore());
+        return fetchAction;
     }
 }

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.convert.events;
 
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.model.AppEvent;
 import ca.metricalsky.winston.events.model.PullOperationEvent;
 import org.mapstruct.Mapper;

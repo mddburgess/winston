@@ -1,9 +1,10 @@
 package ca.metricalsky.winston.mappers.api;
 
-import ca.metricalsky.winston.entity.AuthorEntity;
-import ca.metricalsky.winston.entity.CommentEntity;
-import ca.metricalsky.winston.entity.CommentPropertiesEntity;
+import ca.metricalsky.winston.database.entity.author.AuthorEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentPropertiesEntity;
+import ca.metricalsky.winston.database.entity.comment.CommentEntity;
 import ca.metricalsky.winston.test.TestUtils;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,11 +13,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class CommentMapperTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
 
     @InjectMocks
     private final CommentMapper commentMapper = new CommentMapperImpl();
@@ -45,8 +49,8 @@ class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("publishedAt", commentEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", commentEntity.getUpdatedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", commentEntity.getLastFetchedAt())
-                .hasFieldOrPropertyWithValue("properties.important", commentEntity.getProperties().isImportant())
-                .hasFieldOrPropertyWithValue("properties.hidden", commentEntity.getProperties().isHidden())
+                .hasFieldOrPropertyWithValue("properties.important", commentEntity.getProperties().getImportant())
+                .hasFieldOrPropertyWithValue("properties.hidden", commentEntity.getProperties().getHidden())
                 .hasFieldOrPropertyWithValue("totalReplyCount", commentEntity.getTotalReplyCount().intValue())
                 .hasNoNullFieldsOrPropertiesExcept("replies");
     }
@@ -75,8 +79,8 @@ class CommentMapperTest {
                 .hasFieldOrPropertyWithValue("publishedAt", replyEntity.getPublishedAt())
                 .hasFieldOrPropertyWithValue("updatedAt", replyEntity.getUpdatedAt())
                 .hasFieldOrPropertyWithValue("lastFetchedAt", replyEntity.getLastFetchedAt())
-                .hasFieldOrPropertyWithValue("properties.important", replyEntity.getProperties().isImportant())
-                .hasFieldOrPropertyWithValue("properties.hidden", replyEntity.getProperties().isHidden())
+                .hasFieldOrPropertyWithValue("properties.important", replyEntity.getProperties().getImportant())
+                .hasFieldOrPropertyWithValue("properties.hidden", replyEntity.getProperties().getHidden())
                 .hasNoNullFieldsOrProperties();
     }
 
@@ -93,12 +97,14 @@ class CommentMapperTest {
         var topLevelComment = commentMapper.toTopLevelComment(new CommentEntity());
 
         assertThat(topLevelComment)
-                .hasAllNullFieldsOrPropertiesExcept("text", "properties");
+                .hasAllNullFieldsOrPropertiesExcept("text", "properties", "replies");
         assertThat(topLevelComment.getText())
                 .hasAllNullFieldsOrProperties();
         assertThat(topLevelComment.getProperties())
                 .hasFieldOrPropertyWithValue("important", false)
                 .hasFieldOrPropertyWithValue("hidden", false);
+        assertThat(topLevelComment.getReplies())
+                .isEmpty();
     }
 
     @Test
@@ -123,28 +129,27 @@ class CommentMapperTest {
     }
 
     private static CommentEntity buildCommentEntity() {
-        var authorEntity = AuthorEntity.builder()
-                .id(TestUtils.randomId())
-                .displayName(TestUtils.randomString())
-                .channelUrl(TestUtils.randomString())
-                .profileImageUrl(TestUtils.randomString())
-                .build();
-        var commentPropertiesEntity = CommentPropertiesEntity.builder()
-                .important(true)
-                .hidden(false)
-                .build();
-        return CommentEntity.builder()
-                .id(TestUtils.randomId())
-                .videoId(TestUtils.randomId())
-                .author(authorEntity)
-                .textDisplay(TestUtils.randomString())
-                .textOriginal(TestUtils.randomString())
-                .likeCount(TestUtils.randomLong())
-                .publishedAt(OffsetDateTime.now())
-                .updatedAt(OffsetDateTime.now())
-                .lastFetchedAt(OffsetDateTime.now())
-                .properties(commentPropertiesEntity)
-                .totalReplyCount(1L)
-                .build();
+        var commentId = faker.youtube().commentId();
+        var authorEntity = new AuthorEntity(
+                TestUtils.randomId(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                TestUtils.randomString(),
+                Set.of()
+        );
+        var commentPropertiesEntity = new CommentPropertiesEntity(commentId, true, false);
+        var commentEntity = new CommentEntity();
+        commentEntity.setId(commentId);
+        commentEntity.setVideoId(TestUtils.randomId());
+        commentEntity.setAuthor(authorEntity);
+        commentEntity.setTextDisplay(TestUtils.randomString());
+        commentEntity.setTextOriginal(TestUtils.randomString());
+        commentEntity.setLikeCount(TestUtils.randomLong());
+        commentEntity.setPublishedAt(OffsetDateTime.now());
+        commentEntity.setUpdatedAt(OffsetDateTime.now());
+        commentEntity.setLastFetchedAt(OffsetDateTime.now());
+        commentEntity.setProperties(commentPropertiesEntity);
+        commentEntity.setTotalReplyCount(1L);
+        return commentEntity;
     }
 }

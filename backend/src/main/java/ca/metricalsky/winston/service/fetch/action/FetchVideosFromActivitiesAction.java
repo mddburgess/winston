@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
@@ -84,12 +84,12 @@ public class FetchVideosFromActivitiesAction implements FetchAction<Video> {
                 .map(publishedAt -> publishedAt.minusSeconds(1))
                 .orElse(null);
 
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchAction.getFetchOperationId())
-                .actionType(fetchAction.getActionType())
-                .objectId(fetchAction.getObjectId())
-                .publishedAfter(fetchAction.getPublishedAfter())
-                .publishedBefore(nextPublishedBefore)
-                .build();
+        var nextFetchAction = new FetchActionEntity();
+        nextFetchAction.setFetchOperationId(fetchAction.getFetchOperationId());
+        nextFetchAction.setActionType(fetchAction.getActionType());
+        nextFetchAction.setObjectId(fetchAction.getObjectId());
+        nextFetchAction.setPublishedAfter(fetchAction.getPublishedAfter());
+        nextFetchAction.setPublishedBefore(nextPublishedBefore);
+        return nextFetchAction;
     }
 }

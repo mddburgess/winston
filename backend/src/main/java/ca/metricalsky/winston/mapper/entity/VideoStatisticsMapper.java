@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.mapper.entity;
 
 import ca.metricalsky.winston.api.model.VideoStatistics;
-import ca.metricalsky.winston.entity.view.VideoStatisticsView;
+import ca.metricalsky.winston.database.view.VideoStatisticsView;
 import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 

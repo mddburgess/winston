@@ -2,7 +2,7 @@ package ca.metricalsky.winston.convert.api;
 
 import ca.metricalsky.winston.api.model.PullRequest;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;

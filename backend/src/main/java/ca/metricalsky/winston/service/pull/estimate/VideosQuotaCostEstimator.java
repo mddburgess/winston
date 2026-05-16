@@ -2,14 +2,11 @@ package ca.metricalsky.winston.service.pull.estimate;
 
 import ca.metricalsky.winston.api.model.PullVideosOperation;
 import ca.metricalsky.winston.api.model.PullVideosOperation.RangeEnum;
-import ca.metricalsky.winston.entity.view.ChannelVideoStatisticsView;
-import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.database.view.ChannelVideoStatisticsView;
+import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import ca.metricalsky.winston.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.time.OffsetDateTime;
 
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 

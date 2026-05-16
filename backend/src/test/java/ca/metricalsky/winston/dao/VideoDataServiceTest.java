@@ -1,12 +1,12 @@
 package ca.metricalsky.winston.dao;
 
-import ca.metricalsky.winston.entity.ChannelEntity;
-import ca.metricalsky.winston.entity.VideoEntity;
-import ca.metricalsky.winston.entity.view.ChannelVideoView;
-import ca.metricalsky.winston.entity.view.VideoCountView;
+import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.video.VideoEntity;
+import ca.metricalsky.winston.database.view.ChannelVideoView;
+import ca.metricalsky.winston.database.view.VideoCountView;
 import ca.metricalsky.winston.mappers.api.VideoMapper;
 import ca.metricalsky.winston.mappers.api.VideoMapperImpl;
-import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.database.repository.video.VideoRepository;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class VideoDataServiceTest {
 
     @Test
     void listVideosByChannelId() {
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
         var pageRequest = faker.page().pageRequest();
         var videoEntity = buildVideoEntity();
 
@@ -56,7 +56,7 @@ class VideoDataServiceTest {
 
     @Test
     void listVideosByChannelId_empty() {
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
         var pageRequest = faker.page().pageRequest();
 
         when(videoRepository.findPageByChannelId(channelId, pageRequest.withSort(publishedAtDesc)))
@@ -150,9 +150,9 @@ class VideoDataServiceTest {
     }
 
     private static VideoEntity buildVideoEntity() {
-        return VideoEntity.builder()
-                .id(TestUtils.randomId())
-                .build();
+        var videoEntity = new VideoEntity();
+        videoEntity.setId(TestUtils.randomId());
+        return videoEntity;
     }
 
     private static ChannelVideoView mockChannelVideoView() {

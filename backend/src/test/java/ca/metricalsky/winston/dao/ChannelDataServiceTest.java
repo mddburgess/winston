@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
-import ca.metricalsky.winston.repository.ChannelRepository;
+import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
@@ -13,7 +13,6 @@ import org.springframework.core.convert.ConversionService;
 import java.util.List;
 import java.util.Optional;
 
-import static ca.metricalsky.winston.test.factory.entity.ChannelEntityFactory.createChannelEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +31,7 @@ class ChannelDataServiceTest {
 
     @Test
     void getAllChannels() {
-        var channelEntity = createChannelEntity();
+        var channelEntity = faker.database().channel().completeEntity();
         var channel = new Channel();
 
         when(channelRepository.findAll())
@@ -60,10 +59,10 @@ class ChannelDataServiceTest {
     @Test
     void findChannelIdByHandle() {
         var channelHandle = faker.youtube().channelHandle();
-        var channelId = faker.youtube().channelId();
+        var channelId = faker.youtube().channel().id();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
-                .thenReturn(Optional.of(channelId));
+                .thenReturn(channelId);
 
         var result = channelDataService.findChannelIdByHandle(channelHandle);
 
@@ -76,7 +75,7 @@ class ChannelDataServiceTest {
         var channelHandle = faker.youtube().channelHandle();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
-                .thenReturn(Optional.empty());
+                .thenReturn(null);
 
         var result = channelDataService.findChannelIdByHandle(channelHandle);
 
@@ -86,7 +85,7 @@ class ChannelDataServiceTest {
 
     @Test
     void findChannelByHandle() {
-        var channelEntity = createChannelEntity();
+        var channelEntity = faker.database().channel().completeEntity();
         var channel = new Channel();
 
         when(channelRepository.findByCustomUrl(channelEntity.getCustomUrl()))

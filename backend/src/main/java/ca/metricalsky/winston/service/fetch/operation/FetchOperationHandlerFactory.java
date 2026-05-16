@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

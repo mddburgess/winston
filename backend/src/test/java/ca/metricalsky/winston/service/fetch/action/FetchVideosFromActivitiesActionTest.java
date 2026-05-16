@@ -2,9 +2,10 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,13 +36,17 @@ class FetchVideosFromActivitiesActionTest {
     @Mock
     private YouTubeService youTubeService;
 
+    private FetchActionEntity fetchAction;
+
+    @BeforeEach
+    void beforeEach() {
+        var fetchRequest = faker.database().fetchRequest().minimalEntity();
+        var fetchOperation = faker.database().fetchOperation().videos(fetchRequest);
+        fetchAction = faker.database().fetchAction().videos(fetchOperation);
+    }
+
     @Test
     void fetch_emptyResponse() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.VIDEOS)
-                .objectId(faker.youtube().channelId())
-                .build();
-
         var activityListResponse = faker.youtube().response().activityList().emptyPage();
         when(youTubeService.getActivities(fetchAction))
                 .thenReturn(activityListResponse);
@@ -61,11 +66,6 @@ class FetchVideosFromActivitiesActionTest {
 
     @Test
     void fetch_firstPage() {
-        var fetchAction = FetchActionEntity.builder()
-                .actionType(FetchActionEntity.Type.VIDEOS)
-                .objectId(faker.youtube().channelId())
-                .build();
-
         var activityListResponse = faker.youtube().response().activityList().firstPage();
         when(youTubeService.getActivities(fetchAction))
                 .thenReturn(activityListResponse);

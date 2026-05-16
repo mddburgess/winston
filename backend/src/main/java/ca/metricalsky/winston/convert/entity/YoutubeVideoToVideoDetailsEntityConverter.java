@@ -1,12 +1,12 @@
 package ca.metricalsky.winston.convert.entity;
 
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.entity.VideoContentRatingEntity;
-import ca.metricalsky.winston.entity.VideoDetailsEntity;
-import ca.metricalsky.winston.entity.VideoDetailsEntity.Visibility;
-import ca.metricalsky.winston.entity.VideoRecordingLocationEntity;
-import ca.metricalsky.winston.entity.VideoRestrictionEntity;
-import ca.metricalsky.winston.entity.VideoRestrictionEntity.Restriction;
+import ca.metricalsky.winston.database.entity.video.VideoContentRatingEntity;
+import ca.metricalsky.winston.database.entity.video.VideoDetailsEntity;
+import ca.metricalsky.winston.database.entity.video.VideoDetailsEntity.Visibility;
+import ca.metricalsky.winston.database.entity.video.VideoRecordingLocationEntity;
+import ca.metricalsky.winston.database.entity.video.VideoRestrictionEntity;
+import ca.metricalsky.winston.database.entity.video.VideoRestrictionEntity.Restriction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.GeoPoint;
 import com.google.api.services.youtube.model.Video;
@@ -75,11 +75,13 @@ public abstract class YoutubeVideoToVideoDetailsEntityConverter
                 ? sourceRegionRestriction.getAllowed()
                 : firstNonNull(sourceRegionRestriction.getBlocked(), List.<String>of());
 
-        return countries.stream().map(country -> VideoRestrictionEntity.builder()
-                .videoId(source.getId())
-                .restriction(restriction)
-                .country(country)
-                .build()
+        return countries.stream().map(country -> {
+                    var videoRestriction = new VideoRestrictionEntity();
+                    videoRestriction.setVideoId(source.getId());
+                    videoRestriction.setRestriction(restriction);
+                    videoRestriction.setCountry(country);
+                    return videoRestriction;
+                }
         ).toList();
     }
 
@@ -95,11 +97,12 @@ public abstract class YoutubeVideoToVideoDetailsEntityConverter
             if (fieldName.endsWith("Rating") && sourceContentRating.get(fieldName) != null) {
                 var authority = fieldName.substring(0, fieldName.indexOf("Rating"));
                 var rating = sourceContentRating.get(fieldName).textValue();
-                contentRatings.add(VideoContentRatingEntity.builder()
-                        .videoId(source.getId())
-                        .authority(authority)
-                        .rating(rating)
-                        .build());
+
+                var videoContentRating = new VideoContentRatingEntity();
+                videoContentRating.setVideoId(source.getId());
+                videoContentRating.setAuthority(authority);
+                videoContentRating.setRating(rating);
+                contentRatings.add(videoContentRating);
             }
         });
 
@@ -120,12 +123,12 @@ public abstract class YoutubeVideoToVideoDetailsEntityConverter
             return null;
         }
 
-        return VideoRecordingLocationEntity.builder()
-                .videoId(source.getId())
-                .description(source.getRecordingDetails().getLocationDescription())
-                .latitude(latitude)
-                .longitude(longitude)
-                .altitude(source.getRecordingDetails().getLocation().getAltitude())
-                .build();
+        var videoRecordingLocation = new VideoRecordingLocationEntity();
+        videoRecordingLocation.setVideoId(source.getId());
+        videoRecordingLocation.setDescription(source.getRecordingDetails().getLocationDescription());
+        videoRecordingLocation.setLatitude(latitude);
+        videoRecordingLocation.setLongitude(longitude);
+        videoRecordingLocation.setAltitude(source.getRecordingDetails().getLocation().getAltitude());
+        return videoRecordingLocation;
     }
 }

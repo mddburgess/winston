@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity.Status;
-import ca.metricalsky.winston.repository.fetch.FetchActionRepository;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity.Status;
+import ca.metricalsky.winston.database.repository.fetch.FetchActionRepository;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

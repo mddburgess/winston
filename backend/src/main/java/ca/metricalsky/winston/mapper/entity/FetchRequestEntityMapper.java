@@ -6,8 +6,8 @@ import ca.metricalsky.winston.api.model.PullOperation;
 import ca.metricalsky.winston.api.model.PullRepliesOperation;
 import ca.metricalsky.winston.api.model.PullRequest;
 import ca.metricalsky.winston.api.model.PullVideosOperation;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.entity.fetch.FetchRequestEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -40,7 +40,7 @@ public abstract class FetchRequestEntityMapper {
     @Mapping(target = "mode", ignore = true)
     @Mapping(target = "publishedAfter", ignore = true)
     @Mapping(target = "publishedBefore", ignore = true)
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", constant = "READY")
     @Mapping(target = "error", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
@@ -53,7 +53,7 @@ public abstract class FetchRequestEntityMapper {
     @Mapping(target = "fetchRequestId", ignore = true)
     @Mapping(target = "publishedAfter", ignore = true)
     @Mapping(target = "publishedBefore", ignore = true)
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", constant = "READY")
     @Mapping(target = "error", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
@@ -66,7 +66,7 @@ public abstract class FetchRequestEntityMapper {
     @Mapping(target = "mode", ignore = true)
     @Mapping(target = "publishedAfter", ignore = true)
     @Mapping(target = "publishedBefore", ignore = true)
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", constant = "READY")
     @Mapping(target = "error", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
@@ -79,7 +79,7 @@ public abstract class FetchRequestEntityMapper {
     @Mapping(target = "fetchRequestId", ignore = true)
     @Mapping(target = "publishedAfter", ignore = true)
     @Mapping(target = "publishedBefore", ignore = true)
-    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "status", constant = "READY")
     @Mapping(target = "error", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)

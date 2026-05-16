@@ -1,8 +1,9 @@
 package ca.metricalsky.winston.convert.entity;
 
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
-import ca.metricalsky.winston.entity.VideoRestrictionEntity.Restriction;
+import ca.metricalsky.winston.database.entity.video.VideoRestrictionEntity.Restriction;
 import ca.metricalsky.winston.test.annotations.UnitTest;
+import ca.metricalsky.winston.test.faker.WinstonFaker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.services.youtube.model.ContentRating;
 import com.google.api.services.youtube.model.Video;
@@ -19,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @UnitTest
 class YoutubeVideoToVideoDetailsEntityConverterTest {
+
+    private static final WinstonFaker faker = new WinstonFaker();
 
     @InjectMocks
     private YoutubeVideoToVideoDetailsEntityConverter converter = new YoutubeVideoToVideoDetailsEntityConverterImpl();
@@ -65,6 +68,7 @@ class YoutubeVideoToVideoDetailsEntityConverterTest {
                 .setContentRating(contentRating);
 
         return new Video()
+                .setId(faker.youtube().videoId())
                 .setContentDetails(contentDetails);
     }
 }

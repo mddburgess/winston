@@ -1,8 +1,7 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 
-import java.util.Collection;
 import java.util.List;
 
 public record FetchResult<T>(

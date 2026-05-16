@@ -2,11 +2,11 @@ package ca.metricalsky.winston.service.fetch.operation;
 
 import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
-import ca.metricalsky.winston.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.entity.fetch.FetchOperationEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.repository.VideoRepository;
+import ca.metricalsky.winston.database.repository.video.VideoRepository;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,12 +45,12 @@ public class FetchVideosOperation extends BasicFetchOperation<Video> {
             objectId = channel.getUploadsPlaylistId();
         }
 
-        return FetchActionEntity.builder()
-                .fetchOperationId(fetchOperation.getId())
-                .actionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()))
-                .objectId(objectId)
-                .publishedAfter(publishedAfter)
-                .publishedBefore(fetchOperation.getPublishedBefore())
-                .build();
+        var fetchAction = new FetchActionEntity();
+        fetchAction.setFetchOperationId(fetchOperation.getId());
+        fetchAction.setActionType(FetchActionEntity.Type.valueOf(fetchOperation.getOperationType().name()));
+        fetchAction.setObjectId(objectId);
+        fetchAction.setPublishedAfter(publishedAfter);
+        fetchAction.setPublishedBefore(fetchOperation.getPublishedBefore());
+        return fetchAction;
     }
 }

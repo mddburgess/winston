@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.convert.api;
 
 import ca.metricalsky.winston.api.model.AuthorChannel;
-import ca.metricalsky.winston.entity.view.AuthorChannelView;
+import ca.metricalsky.winston.database.view.AuthorChannelView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
