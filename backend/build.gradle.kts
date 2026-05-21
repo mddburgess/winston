@@ -1,5 +1,6 @@
 plugins {
-    java
+    kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.spring") version libs.versions.kotlin
     jacoco
     `java-test-fixtures`
     alias(libs.plugins.springBoot)
@@ -13,6 +14,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
     }
+}
+
+kotlin {
+    jvmToolchain(23)
 }
 
 configurations {
@@ -48,6 +53,7 @@ dependencies {
     testFixturesImplementation(libs.bundles.youtube)
     testFixturesImplementation(project(":api"))
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.archunitJunit5)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
