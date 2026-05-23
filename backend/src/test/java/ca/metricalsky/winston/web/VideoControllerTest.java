@@ -41,7 +41,7 @@ class VideoControllerTest {
 
     @Test
     void listVideos() throws Exception {
-        var channelHandle = faker.youtube().channelHandle();
+        var channelHandle = faker.youtube().channel().handle();
         var channelId = faker.youtube().channel().id();
         var video = faker.video().dto(channelHandle);
 
@@ -64,7 +64,7 @@ class VideoControllerTest {
 
     @Test
     void listVideos_noResults() throws Exception {
-        var channelHandle = faker.youtube().channelHandle();
+        var channelHandle = faker.youtube().channel().handle();
         var channelId = faker.youtube().channel().id();
 
         when(channelDataService.findChannelIdByHandle(channelHandle))
@@ -85,7 +85,7 @@ class VideoControllerTest {
 
     @Test
     void listVideos_channelNotFound() throws Exception {
-        var channelHandle = faker.youtube().channelHandle();
+        var channelHandle = faker.youtube().channel().handle();
 
         when(channelDataService.findChannelIdByHandle(channelHandle))
                 .thenThrow(new AppException(ErrorCode.CHANNEL_NOT_FOUND));

@@ -50,36 +50,6 @@ public class CommentEntityMapperTest {
                 .isNull();
     }
 
-    @Test
-    void toCommentEntity_sanitizeTextOriginal() {
-        var snippet = new CommentSnippet().setTextOriginal("textOriginal\u0000");
-        var ytComment = new Comment().setSnippet(snippet);
-
-        var comment = commentEntityMapper.toCommentEntity(ytComment);
-
-        assertThat(comment)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue("textOriginal", "textOriginal");
-    }
-
-    @Test
-    void toCommentEntity_nullComment() {
-        var comment = commentEntityMapper.toCommentEntity((Comment) null);
-
-        assertThat(comment)
-                .isNull();
-    }
-
-    @Test
-    void toCommentEntity_emptyComment() {
-        var comment = commentEntityMapper.toCommentEntity(new Comment());
-
-        assertThat(comment)
-                .hasAllNullFieldsOrPropertiesExcept("replies");
-        assertThat(comment.getReplies())
-                .isEmpty();
-    }
-
     private static void assertCommentProperties(CommentEntity actual, Comment expected) {
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("id", expected.getId())

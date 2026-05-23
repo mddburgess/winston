@@ -10,7 +10,7 @@ import java.time.OffsetDateTime
 
 @Component
 class ChannelToChannelEntityConverter(
-    @Lazy private val conversionService: ConversionService
+    @Lazy private val conversionService: ConversionService,
 ): Converter<Channel, ChannelEntity> {
 
     private val keywordRegex = Regex("\".+?\"|[^ ]+")

@@ -10,11 +10,13 @@ import ca.metricalsky.winston.database.repository.comment.CommentJdbcRepository;
 import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import ca.metricalsky.winston.test.ClientTestObjectFactory;
 import ca.metricalsky.winston.test.TestUtils;
+import com.google.api.services.youtube.model.CommentThread;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.convert.ConversionService;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -25,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +44,8 @@ class CommentDataServiceTest {
     private CommentMapper commentMapper;
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private ConversionService conversionService;
 
     @Test
     void getCommentsForVideo_all() {
@@ -105,11 +110,12 @@ class CommentDataServiceTest {
     @Test
     void saveComments() {
         var commentThreadListResponse = ClientTestObjectFactory.buildCommentThreadListResponse();
+        var topLevelComment = new TopLevelComment();
 
+        when(conversionService.convert(any(CommentThread.class), eq(CommentEntity.class)))
+                .thenReturn(new CommentEntity());
         when(commentJdbcRepository.saveAll(anyList()))
                 .thenAnswer(returnsFirstArg());
-
-        var topLevelComment = new TopLevelComment();
         when(commentMapper.toTopLevelComment(any(CommentEntity.class)))
                 .thenReturn(topLevelComment);
 
@@ -123,15 +129,16 @@ class CommentDataServiceTest {
     void saveReplies() {
         var parentCommentId = TestUtils.randomId();
         var commentListResponse = ClientTestObjectFactory.buildCommentListResponse();
-
         var commentEntity = buildCommentEntity();
+        var comment = new Comment();
+
         when(commentRepository.findById(parentCommentId))
                 .thenReturn(Optional.of(commentEntity));
-
+        when(conversionService.convert(
+                any(com.google.api.services.youtube.model.Comment.class), eq(CommentEntity.class)))
+                .thenReturn(new CommentEntity());
         when(commentJdbcRepository.saveAll(anyList()))
                 .thenAnswer(returnsFirstArg());
-
-        var comment = new Comment();
         when(commentMapper.toComment(any(CommentEntity.class)))
                 .thenReturn(comment);
 

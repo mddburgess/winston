@@ -17,22 +17,12 @@ class YoutubeProvider(faker: WinstonFaker): AbstractProvider<WinstonFaker>(faker
         ChannelProvider(it)
     }
 
-    @Deprecated(
-        "Use channel().handle() instead.",
-        ReplaceWith("channel().handle()")
-    )
-    fun channelHandle() = channel().handle()
-
-    fun comment(): Comment {
-        val comment = Comment()
-        comment.setId(commentId())
-        return comment
+    fun comment() = faker.getProvider(CommentProvider::class.java) {
+        CommentProvider(it)
     }
 
-    fun commentId() = faker.regexify("Ug[A-Za-z0-9_-]{24}")
-
     fun commentThread(): CommentThread {
-        val topLevelComment = comment()
+        val topLevelComment = comment().minimalObject()
 
         val snippet = CommentThreadSnippet()
         snippet.setTopLevelComment(topLevelComment)
@@ -45,7 +35,7 @@ class YoutubeProvider(faker: WinstonFaker): AbstractProvider<WinstonFaker>(faker
     fun playlistId() = faker.regexify("UU[A-Za-z0-9_-]{22}")
 
     fun reply(): Comment {
-        val parentId = commentId()
+        val parentId = comment().id()
 
         val snippet = CommentSnippet()
         snippet.setParentId(parentId)
@@ -56,7 +46,7 @@ class YoutubeProvider(faker: WinstonFaker): AbstractProvider<WinstonFaker>(faker
         return comment
     }
 
-    fun replyId(parentId: String? = commentId()) = parentId + "." + faker.regexify("[A-Za-z0-9_-]{22}")
+    fun replyId(parentId: String? = comment().id()) = parentId + "." + faker.regexify("[A-Za-z0-9_-]{22}")
 
     fun response() = faker.getProvider(YoutubeResponseProvider::class.java) {
             YoutubeResponseProvider(it)

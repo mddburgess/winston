@@ -1,9 +1,7 @@
 package ca.metricalsky.winston.test;
 
 import ca.metricalsky.winston.test.faker.WinstonFaker;
-import com.google.api.services.youtube.model.Comment;
 import com.google.api.services.youtube.model.CommentListResponse;
-import com.google.api.services.youtube.model.CommentSnippet;
 import com.google.api.services.youtube.model.CommentThread;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
 import com.google.api.services.youtube.model.CommentThreadSnippet;
@@ -16,6 +14,8 @@ import java.util.List;
 @Deprecated(since = "2.0.0", forRemoval = true)
 public final class ClientTestObjectFactory {
 
+    private static final WinstonFaker faker = new WinstonFaker();
+
     private ClientTestObjectFactory() {
 
     }
@@ -27,8 +27,7 @@ public final class ClientTestObjectFactory {
     }
 
     private static CommentThread buildCommentThread() {
-        var topLevelComment = new Comment();
-        topLevelComment.setId(TestUtils.randomId());
+        var topLevelComment = faker.youtube().comment().minimalObject();
 
         var snippet = new CommentThreadSnippet();
         snippet.setTopLevelComment(topLevelComment);
@@ -40,17 +39,7 @@ public final class ClientTestObjectFactory {
 
     public static CommentListResponse buildCommentListResponse() {
         var commentListResponse = new CommentListResponse();
-        commentListResponse.setItems(List.of(buildComment()));
+        commentListResponse.setItems(List.of(faker.youtube().comment().completeObject()));
         return commentListResponse;
-    }
-
-    private static Comment buildComment() {
-        var snippet = new CommentSnippet();
-        snippet.setParentId(TestUtils.randomId());
-
-        var comment = new Comment();
-        comment.setId(TestUtils.randomId());
-        comment.setSnippet(snippet);
-        return comment;
     }
 }
