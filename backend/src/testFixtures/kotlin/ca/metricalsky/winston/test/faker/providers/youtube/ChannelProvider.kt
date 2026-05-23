@@ -3,8 +3,10 @@ package ca.metricalsky.winston.test.faker.providers.youtube
 import ca.metricalsky.winston.test.faker.WinstonFaker
 import com.google.api.client.util.DateTime
 import com.google.api.services.youtube.model.Channel
+import com.google.api.services.youtube.model.ChannelBrandingSettings
 import com.google.api.services.youtube.model.ChannelContentDetails
 import com.google.api.services.youtube.model.ChannelContentDetails.RelatedPlaylists
+import com.google.api.services.youtube.model.ChannelSettings
 import com.google.api.services.youtube.model.ChannelSnippet
 import com.google.api.services.youtube.model.ChannelStatistics
 import com.google.api.services.youtube.model.Thumbnail
@@ -45,6 +47,11 @@ class ChannelProvider(faker: WinstonFaker) : AbstractProvider<WinstonFaker>(fake
             viewCount = faker.number().numberBetween(0, 10_000).toBigInteger()
             subscriberCount = faker.number().numberBetween(0, 10_000).toBigInteger()
             videoCount = faker.number().numberBetween(0, 100).toBigInteger()
+        }
+        brandingSettings = ChannelBrandingSettings().apply {
+            channel = ChannelSettings().apply {
+                keywords = "short keyword \"long keyword\""
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.spring") version libs.versions.kotlin
     jacoco
     `java-test-fixtures`
+    alias(libs.plugins.powerAssert)
     alias(libs.plugins.springBoot)
     alias(libs.plugins.springDependencyManagement)
 }
@@ -64,6 +65,10 @@ dependencies {
     testAnnotationProcessor(libs.lombok)
 
     testRuntimeOnly(libs.junitPlatformLauncher)
+}
+
+powerAssert {
+    functions = listOf("io.kotest.matchers.shouldBe")
 }
 
 tasks {

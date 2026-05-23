@@ -5,6 +5,7 @@ import ca.metricalsky.winston.test.annotation.ConverterTest
 import ca.metricalsky.winston.test.faker.WinstonFaker
 import com.google.api.services.youtube.model.Channel
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -57,7 +58,7 @@ class ChannelToChannelEntityConverterTest(
                 subscriberCount shouldBe channel.statistics.subscriberCount.toLong()
                 properties shouldBe null
                 topics shouldBe emptySet()
-                keywords shouldBe emptySet()
+                keywords shouldContainExactlyInAnyOrder setOf("short", "keyword", "long keyword")
             }
         }
     }

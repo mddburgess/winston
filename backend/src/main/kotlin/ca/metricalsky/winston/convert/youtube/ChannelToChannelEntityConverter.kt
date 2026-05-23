@@ -2,19 +2,18 @@ package ca.metricalsky.winston.convert.youtube
 
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity
 import com.google.api.services.youtube.model.Channel
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.core.convert.ConversionService
 import org.springframework.core.convert.converter.Converter
 import org.springframework.stereotype.Component
 import java.time.OffsetDateTime
 
 @Component
-class ChannelToChannelEntityConverter: Converter<Channel, ChannelEntity> {
+class ChannelToChannelEntityConverter(
+    @Lazy private val conversionService: ConversionService
+): Converter<Channel, ChannelEntity> {
 
-    @Autowired
-    private lateinit var conversionService: ConversionService
-
-    val keywordRegex = Regex("\".+?\"|[^ ]+")
+    private val keywordRegex = Regex("\".+?\"|[^ ]+")
 
     override fun convert(source: Channel) = ChannelEntity(
         id = source.id,
