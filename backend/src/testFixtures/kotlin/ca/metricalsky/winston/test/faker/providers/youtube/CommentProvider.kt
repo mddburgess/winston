@@ -11,17 +11,18 @@ class CommentProvider(faker: WinstonFaker) : AbstractProvider<WinstonFaker>(fake
 
     fun id() = faker.regexify("Ug[A-Za-z0-9_-]{24}")
 
+    fun replyId(parentId: String? = id()) = parentId + "." + faker.regexify("[A-Za-z0-9_-]{22}")
+
     fun minimalObject() = Comment().apply {
         id = id()
     }
 
-    fun completeObject() = Comment().apply {
+    fun completeComment() = Comment().apply {
         id = id()
         snippet = CommentSnippet().apply {
             videoId = faker.youtube().videoId()
             textDisplay = faker.lorem().sentence()
             textOriginal = faker.lorem().sentence()
-            parentId = id()
             authorDisplayName = faker.youtube().channel().handle()
             authorProfileImageUrl = faker.internet().url()
             authorChannelUrl = faker.internet().url()
@@ -32,5 +33,10 @@ class CommentProvider(faker: WinstonFaker) : AbstractProvider<WinstonFaker>(fake
             publishedAt = DateTime.parseRfc3339("2025-01-01T00:00:00Z")
             updatedAt = DateTime.parseRfc3339("2025-01-01T00:00:00Z")
         }
+    }
+
+    fun completeReply(parent: Comment? = null) = completeComment().apply {
+        snippet.parentId = parent?.id ?: id
+        id = replyId(snippet.parentId)
     }
 }

@@ -39,7 +39,7 @@ public final class ClientTestObjectFactory {
 
     public static CommentListResponse buildCommentListResponse() {
         var commentListResponse = new CommentListResponse();
-        commentListResponse.setItems(List.of(faker.youtube().comment().completeObject()));
+        commentListResponse.setItems(List.of(faker.youtube().comment().completeComment()));
         return commentListResponse;
     }
 }

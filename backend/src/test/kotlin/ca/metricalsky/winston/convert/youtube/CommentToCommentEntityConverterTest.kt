@@ -47,7 +47,7 @@ class CommentToCommentEntityConverterTest(
         }
 
         "convert a complete object" {
-            val comment = faker.youtube().comment().completeObject()
+            val comment = faker.youtube().comment().completeReply()
             val commentEntity = conversionService.convert(comment, CommentEntity::class.java)
 
             commentEntity shouldNotBeNull {
@@ -73,7 +73,7 @@ class CommentToCommentEntityConverterTest(
         }
 
         "sanitize the textOriginal property" {
-            val comment = faker.youtube().comment().completeObject().apply {
+            val comment = faker.youtube().comment().completeComment().apply {
                 snippet.textOriginal += "\u0000"
             }
             val commentEntity = conversionService.convert(comment, CommentEntity::class.java)
