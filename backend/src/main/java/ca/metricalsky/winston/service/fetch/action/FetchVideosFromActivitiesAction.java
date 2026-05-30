@@ -6,7 +6,6 @@ import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.mapper.entity.OffsetDateTimeMapper;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.Activity;
@@ -15,8 +14,10 @@ import com.google.api.services.youtube.model.ActivityContentDetailsUpload;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ActivitySnippet;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
@@ -26,9 +27,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FetchVideosFromActivitiesAction implements FetchAction<Video> {
 
-    private final OffsetDateTimeMapper offsetDateTimeMapper = new OffsetDateTimeMapper();
 
     private final ChannelDataService channelDataService;
+    private final ConversionService conversionService;
     private final VideoDataService videoDataService;
     private final YouTubeService youTubeService;
 
@@ -79,7 +80,8 @@ public class FetchVideosFromActivitiesAction implements FetchAction<Video> {
         var nextPublishedBefore = activities.stream()
                 .map(Activity::getSnippet)
                 .map(ActivitySnippet::getPublishedAt)
-                .map(offsetDateTimeMapper::fromYouTube)
+                .map(publishedAt -> conversionService.convert(publishedAt, OffsetDateTime.class))
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .map(publishedAt -> publishedAt.minusSeconds(1))
                 .orElse(null);

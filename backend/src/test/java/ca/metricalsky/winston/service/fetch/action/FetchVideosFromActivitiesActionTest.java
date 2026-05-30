@@ -4,13 +4,13 @@ import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.service.YouTubeService;
+import ca.metricalsky.winston.test.annotations.UnitTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.convert.ConversionService;
 
 import java.util.Collections;
 
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@UnitTest
 class FetchVideosFromActivitiesActionTest {
 
     private static final WinstonFaker faker = new WinstonFaker();
@@ -31,6 +31,8 @@ class FetchVideosFromActivitiesActionTest {
 
     @Mock
     private ChannelDataService channelDataService;
+    @Mock
+    private ConversionService conversionService;
     @Mock
     private VideoDataService videoDataService;
     @Mock
