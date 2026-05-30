@@ -10,7 +10,10 @@ class PullRepliesOperationToFetchOperationEntityConverter: Converter<PullReplies
 
     override fun convert(source: PullRepliesOperation) = FetchOperationEntity(
         operationType = FetchOperationEntity.Type.REPLIES,
-        objectId = source.commentId.ifBlank { source.videoId }.orEmpty(),
+        objectId = when {
+            source.commentId.isNullOrBlank() -> source.videoId.orEmpty()
+            else -> source.commentId
+        },
         mode = when {
             source.commentId.isNullOrBlank() -> "FOR_VIDEO"
             else -> "FOR_COMMENT"

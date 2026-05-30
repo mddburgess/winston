@@ -26,13 +26,13 @@ class ChannelToChannelEntityConverter(
         viewCount = source.statistics?.viewCount?.toLong(),
         subscriberCount = source.statistics?.subscriberCount?.toLong(),
         publishedAt = conversionService.convert(source.snippet?.publishedAt, OffsetDateTime::class.java),
-        topics = source.topicDetails?.topicCategories.orEmpty().toSet(),
+        topics = source.topicDetails?.topicCategories.orEmpty().toMutableSet(),
         keywords = convertKeywords(source.brandingSettings?.channel?.keywords),
     )
 
     private fun convertKeywords(keywords: String?) = when (keywords) {
-        null -> emptySet()
-        else -> keywordRegex.findAll(keywords).map { it.value.trimQuotes() }.toSet()
+        null -> mutableSetOf()
+        else -> keywordRegex.findAll(keywords).map { it.value.trimQuotes() }.toMutableSet()
     }
 
     private fun String.trimQuotes() = when {

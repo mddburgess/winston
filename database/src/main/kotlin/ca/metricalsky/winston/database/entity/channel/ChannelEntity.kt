@@ -49,7 +49,7 @@ class ChannelEntity (
         joinColumns = [JoinColumn(name = "channel_id", referencedColumnName = "id")]
     )
     @Column(name = "topic_url")
-    var topics: Set<String> = emptySet(),
+    var topics: MutableSet<String> = mutableSetOf(),
 
     @ElementCollection
     @CollectionTable(
@@ -57,7 +57,7 @@ class ChannelEntity (
         joinColumns = [JoinColumn(name = "channel_id", referencedColumnName = "id")]
     )
     @Column(name = "keyword")
-    var keywords: Set<String> = emptySet(),
+    var keywords: MutableSet<String> = mutableSetOf(),
 ) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
