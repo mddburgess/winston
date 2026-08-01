@@ -3,8 +3,7 @@ import type { ReactNode } from "react";
 import type { Icon } from "react-bootstrap-icons";
 
 type IconLabelProps = { icon: Icon; reverse?: boolean } & (
-  | { children: ReactNode; label?: never }
-  | { label?: string | number; children?: never }
+  { children: ReactNode; label?: never } | { label?: string | number; children?: never }
 );
 
 const IconLabel = ({ icon: LabelIcon, reverse = false, ...props }: IconLabelProps) => (

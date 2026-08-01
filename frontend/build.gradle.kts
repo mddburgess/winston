@@ -10,7 +10,7 @@ version = rootProject.version
 
 node {
     download.set(true)
-    version.set("23.11.0")
+    version.set("26.5.1")
     workDir.set(file("$rootDir/.gradle/nodejs"))
 }
 
