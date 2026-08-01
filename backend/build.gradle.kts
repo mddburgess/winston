@@ -1,7 +1,9 @@
 plugins {
-    java
+    kotlin("jvm") version libs.versions.kotlin
+    kotlin("plugin.spring") version libs.versions.kotlin
     jacoco
     `java-test-fixtures`
+    alias(libs.plugins.powerAssert)
     alias(libs.plugins.springBoot)
     alias(libs.plugins.springDependencyManagement)
 }
@@ -13,6 +15,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
     }
+}
+
+kotlin {
+    jvmToolchain(23)
 }
 
 configurations {
@@ -48,6 +54,8 @@ dependencies {
     testFixturesImplementation(libs.bundles.youtube)
     testFixturesImplementation(project(":api"))
 
+    testImplementation(kotlin("test"))
+    testImplementation(libs.bundles.kotest)
     testImplementation(libs.archunitJunit5)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
@@ -57,6 +65,10 @@ dependencies {
     testAnnotationProcessor(libs.lombok)
 
     testRuntimeOnly(libs.junitPlatformLauncher)
+}
+
+powerAssert {
+    functions = listOf("io.kotest.matchers.shouldBe")
 }
 
 tasks {

@@ -4,11 +4,9 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.database.entity.channel.ChannelPropertiesEntity;
 import ca.metricalsky.winston.database.repository.channel.ChannelPropertiesRepository;
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
-import ca.metricalsky.winston.mapper.entity.ChannelEntityMapper;
 import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +19,6 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class ChannelDataService {
-
-    private final ChannelEntityMapper channelEntityMapper = Mappers.getMapper(ChannelEntityMapper.class);
 
     private final ChannelPropertiesRepository channelPropertiesRepository;
     private final ChannelRepository channelRepository;
@@ -53,7 +49,7 @@ public class ChannelDataService {
                 .orElse(Collections.emptyList())
                 .stream()
                 .findFirst()
-                .map(channelEntityMapper::toChannelEntity)
+                .map(channel -> conversionService.convert(channel, ChannelEntity.class))
                 .map(channelRepository::save)
                 .map(this::convert);
     }

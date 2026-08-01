@@ -34,7 +34,7 @@ public class CommentListResponseProvider
     }
 
     public CommentListResponse page(int minLength, int maxLength, String nextPageToken) {
-        List<Comment> comments = faker.collection(() -> faker.youtube().reply())
+        List<Comment> comments = faker.collection(() -> faker.youtube().comment().completeReply(null))
                 .minLen(minLength)
                 .maxLen(maxLength)
                 .generate();

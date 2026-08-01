@@ -2,7 +2,6 @@ package ca.metricalsky.winston.dao;
 
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
-import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
@@ -58,7 +57,7 @@ class ChannelDataServiceTest {
 
     @Test
     void findChannelIdByHandle() {
-        var channelHandle = faker.youtube().channelHandle();
+        var channelHandle = faker.youtube().channel().handle();
         var channelId = faker.youtube().channel().id();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
@@ -72,7 +71,7 @@ class ChannelDataServiceTest {
 
     @Test
     void findChannelIdByHandle_notFound() {
-        var channelHandle = faker.youtube().channelHandle();
+        var channelHandle = faker.youtube().channel().handle();
 
         when(channelRepository.findIdByCustomUrl(channelHandle))
                 .thenReturn(null);
@@ -101,7 +100,7 @@ class ChannelDataServiceTest {
 
     @Test
     void findChannelByHandle_notFound() {
-        var channelHandle = TestUtils.randomString();
+        var channelHandle = faker.youtube().channel().handle();
 
         when(channelRepository.findByCustomUrl(channelHandle))
                 .thenReturn(Optional.empty());

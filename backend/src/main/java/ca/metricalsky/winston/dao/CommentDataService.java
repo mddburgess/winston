@@ -3,18 +3,17 @@ package ca.metricalsky.winston.dao;
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.database.entity.author.AuthorEntity;
-import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository;
-import ca.metricalsky.winston.database.repository.comment.CommentPropertiesRepository;
 import ca.metricalsky.winston.database.entity.comment.CommentEntity;
-import ca.metricalsky.winston.mapper.entity.CommentEntityMapper;
-import ca.metricalsky.winston.mappers.api.CommentMapper;
+import ca.metricalsky.winston.database.repository.author.AuthorJdbcRepository;
 import ca.metricalsky.winston.database.repository.comment.CommentJdbcRepository;
+import ca.metricalsky.winston.database.repository.comment.CommentPropertiesRepository;
 import ca.metricalsky.winston.database.repository.comment.CommentRepository;
+import ca.metricalsky.winston.mappers.api.CommentMapper;
 import com.google.api.services.youtube.model.CommentListResponse;
 import com.google.api.services.youtube.model.CommentThreadListResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
-import org.mapstruct.factory.Mappers;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +25,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentDataService {
 
-    private final CommentEntityMapper commentEntityMapper = Mappers.getMapper(CommentEntityMapper.class);
-
     private final AuthorJdbcRepository authorJdbcRepository;
     private final CommentJdbcRepository commentJdbcRepository;
     private final CommentMapper commentMapper;
     private final CommentPropertiesRepository commentPropertiesRepository;
     private final CommentRepository commentRepository;
+    private final ConversionService conversionService;
 
     public Optional<TopLevelComment> findCommentById(String commentId) {
         return commentRepository.findById(commentId)
@@ -54,7 +52,7 @@ public class CommentDataService {
     public List<TopLevelComment> saveComments(CommentThreadListResponse commentThreadListResponse) {
         var commentEntities = commentThreadListResponse.getItems()
                 .stream()
-                .map(commentEntityMapper::toCommentEntity)
+                .map(commentThread -> conversionService.convert(commentThread, CommentEntity.class))
                 .toList();
 
         commentEntities = saveComments(commentEntities);
@@ -70,7 +68,7 @@ public class CommentDataService {
                 .orElse(null);
         var replyEntities = commentListResponse.getItems()
                 .stream()
-                .map(commentEntityMapper::toCommentEntity)
+                .map(comment -> conversionService.convert(comment, CommentEntity.class))
                 .peek(replyEntity -> replyEntity.setVideoId(videoId))
                 .toList();
 

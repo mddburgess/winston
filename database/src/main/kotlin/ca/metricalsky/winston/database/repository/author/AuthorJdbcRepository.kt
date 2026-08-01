@@ -21,8 +21,8 @@ class AuthorJdbcRepository(
         val idsToUpdate = selectAuthorIds(authorIds)
 
         val partition = authors.partition { it.id in idsToUpdate }
-        val authorsToUpdate = partition.first
-        val authorsToInsert = partition.second
+        val authorsToUpdate = partition.first.distinctBy { it.id }
+        val authorsToInsert = partition.second.distinctBy { it.id }
 
         insertAuthors(authorsToInsert)
         updateAuthors(authorsToUpdate)

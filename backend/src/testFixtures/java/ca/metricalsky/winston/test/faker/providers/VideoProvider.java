@@ -13,7 +13,7 @@ public class VideoProvider
     }
 
     public Video dto() {
-        return dto(faker.youtube().channelHandle());
+        return dto(faker.youtube().channel().handle());
     }
 
     public Video dto(String channelHandle) {

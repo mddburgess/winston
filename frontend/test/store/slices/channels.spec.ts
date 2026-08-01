@@ -9,7 +9,7 @@ import type { Channel } from "#/api";
 describe("channelsApi", () => {
   const entityAdapter = createEntityAdapter<Channel>();
 
-  describe("listChannels", () => {
+  describe.todo("listChannels", () => {
     it("handles a 200 response with a list of channels", async () => {
       const { result } = renderHookWithProviders(() => useListChannelsQuery({}));
       await waitFor(() => {

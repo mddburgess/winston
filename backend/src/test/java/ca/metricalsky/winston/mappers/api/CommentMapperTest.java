@@ -129,7 +129,7 @@ class CommentMapperTest {
     }
 
     private static CommentEntity buildCommentEntity() {
-        var commentId = faker.youtube().commentId();
+        var commentId = faker.youtube().comment().id();
         var authorEntity = new AuthorEntity(
                 TestUtils.randomId(),
                 TestUtils.randomString(),

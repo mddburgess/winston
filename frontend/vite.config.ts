@@ -32,6 +32,7 @@ export default defineConfig({
       include: ["**/src/**/*.{ts,tsx}"],
       reporter: ["cobertura", ["html", { subdir: "report" }], "text-summary"],
     },
+    environment: "jsdom",
     globals: true,
     include: ["**/test/**/*.spec.ts?(x)"],
     reporters: [

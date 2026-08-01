@@ -1,4 +1,4 @@
-package ca.metricalsky.winston.mapper.entity;
+package ca.metricalsky.winston.convert.api;
 
 import ca.metricalsky.winston.api.model.AuthorStatistics;
 import ca.metricalsky.winston.api.model.VideoStatistics;
@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class AuthorStatisticsMapper implements Converter<List<VideoStatistics>, AuthorStatistics> {
+public class VideoStatisticsListToAuthorStatisticsConverter
+        implements Converter<List<VideoStatistics>, AuthorStatistics> {
 
     @Override
     public AuthorStatistics convert(List<VideoStatistics> source) {

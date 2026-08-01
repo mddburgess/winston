@@ -76,5 +76,6 @@ youtube = [
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.9.8" }
 node = { id = "com.github.node-gradle.node", version = "7.1.0" }
 openapiGenerator = { id = "org.openapi.generator", version = "7.14.0" }
+powerAssert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
 springBoot = { id = "org.springframework.boot", version = "3.4.5" }
 springDependencyManagement = { id = "io.spring.dependency-management", version = "1.1.7" }
