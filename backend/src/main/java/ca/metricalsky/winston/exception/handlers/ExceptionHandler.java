@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.exception.handlers;
 
-import org.springframework.http.ProblemDetail;
+import ca.metricalsky.winston.api.model.Problem;
 
 public interface ExceptionHandler<T extends Throwable> {
 
-    ProblemDetail handleException(T exception);
+    Problem handleException(T exception);
 }

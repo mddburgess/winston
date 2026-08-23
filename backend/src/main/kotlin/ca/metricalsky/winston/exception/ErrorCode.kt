@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.exception
 
+import ca.metricalsky.winston.api.model.Problem
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import java.net.URI
@@ -34,12 +35,20 @@ enum class ErrorCode(
         "The requested video was not found."),
     ;
 
-    val type = URI.create("/api/problem/" + name.lowercase().replace("_", "-"))
+    val type = "/api/problem/" + name.lowercase().replace("_", "-")
 
     val problemDetail: ProblemDetail
         get() {
             val problemDetail = ProblemDetail.forStatusAndDetail(status, detail)
-            problemDetail.setType(type)
+            problemDetail.setType(URI.create(type))
             return problemDetail
+        }
+
+    val problem: Problem
+        get() = Problem().also {
+            it.type = type
+            it.title = status.reasonPhrase
+            it.status = status.value()
+            it.detail = detail
         }
 }

@@ -1,10 +1,11 @@
 package ca.metricalsky.winston.exception.handlers;
 
+import ca.metricalsky.winston.api.model.Problem;
+import ca.metricalsky.winston.api.model.ProblemError;
+import ca.metricalsky.winston.api.model.ProblemLocation;
 import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.exception.Location;
-import ca.metricalsky.winston.exception.ProblemError;
 import com.fasterxml.jackson.core.JsonParseException;
-import org.springframework.http.ProblemDetail;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 
@@ -18,31 +19,45 @@ public class HttpMessageNotReadableExceptionHandler
         implements ExceptionHandler<HttpMessageNotReadableException> {
 
     @Override
-    public ProblemDetail handleException(HttpMessageNotReadableException exception) {
+    public Problem handleException(HttpMessageNotReadableException exception) {
         return switch (getRootCause(exception)) {
             case JsonParseException ex -> handleException(ex);
+            case MismatchedInputException ex -> handleException(ex);
             case Throwable ex -> handleThrowable(ex);
         };
     }
 
-    private ProblemDetail handleException(JsonParseException exception) {
+    private Problem handleException(JsonParseException exception) {
         var detail = exception.getOriginalMessage()
                 .replaceFirst("Source:.*; ", "");
-        var location = new Location(exception.getLocation());
-        var error = new ProblemError("error:malformed-json", detail, location);
-
-        var problem = ErrorCode.MALFORMED_REQUEST_BODY.getProblemDetail();
-        problem.setProperties(Map.of("errors", List.of(error)));
-        return problem;
+        var location = exception.getLocation();
+        var error = new ProblemError()
+                .type("error:malformed-json")
+                .detail(detail)
+                .location(new ProblemLocation()
+                        .line(location.getLineNr())
+                        .column(location.getColumnNr()));
+        return ErrorCode.MALFORMED_REQUEST_BODY.getProblem().addErrorsItem(error);
     }
 
-    private ProblemDetail handleThrowable(Throwable ex) {
-        var type = "error:class:"  + ex.getClass().getSimpleName();
-        var detail = ex.getMessage();
-        var error = new ProblemError(type, detail);
+    private Problem handleException(MismatchedInputException exception) {
+        var error = new ProblemError()
+                .type("error:invalid-type")
+                .detail(exception.getMessage());
+        return ErrorCode.MALFORMED_REQUEST_BODY.getProblem().addErrorsItem(error);
+    }
 
-        var problem = ErrorCode.MALFORMED_REQUEST_BODY.getProblemDetail();
-        problem.setProperties(Map.of("errors", List.of(error)));
-        return problem;
+    private Problem handleThrowable(Throwable ex) {
+        if (ex.getMessage().startsWith("Required request body is missing: ")) {
+            var error = new ProblemError()
+                    .type("error:missing-request-body")
+                    .detail("The request body must not be empty.");
+            return ErrorCode.MALFORMED_REQUEST_BODY.getProblem().addErrorsItem(error);
+        }
+
+        var error = new ProblemError()
+                .type("error:class:"  + ex.getClass().getSimpleName())
+                .detail(ex.getMessage());
+        return ErrorCode.MALFORMED_REQUEST_BODY.getProblem().addErrorsItem(error);
     }
 }
