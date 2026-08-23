@@ -8,3 +8,5 @@ properties:
     type: string
   location:
     $ref: ./ProblemLocation.yaml
+  expected:
+    type: string
