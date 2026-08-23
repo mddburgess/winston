@@ -1,60 +1,54 @@
-package ca.metricalsky.winston.config.exception;
+package ca.metricalsky.winston.exception.handlers
 
-import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.exception.handlers.HttpMessageNotReadableExceptionHandler;
-import ca.metricalsky.winston.exception.handlers.MethodArgumentNotValidExceptionHandler;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ca.metricalsky.winston.exception.AppException
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
-@Slf4j
 @RestControllerAdvice
-@RequiredArgsConstructor
-public class AppExceptionHandler extends ResponseEntityExceptionHandler {
+class AppExceptionHandler(
+    private val httpMessageNotReadableHandler: HttpMessageNotReadableExceptionHandler,
+    private val methodArgumentNotValidHandler: MethodArgumentNotValidExceptionHandler,
+) : ResponseEntityExceptionHandler() {
 
-    private final HttpMessageNotReadableExceptionHandler httpMessageNotReadableHandler;
-    private final MethodArgumentNotValidExceptionHandler methodArgumentNotValidHandler;
+    private val log = KotlinLogging.logger {}
 
-    @ExceptionHandler(AppException.class)
-    public ErrorResponse handleAppException(AppException ex) {
-        log.error("Request has thrown an exception of type {}", ex.getClass().getSimpleName(), ex);
-        return ex;
+    @ExceptionHandler(AppException::class)
+    fun handleAppException(ex: AppException) = ex.also {
+        log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ErrorResponse handleRuntimeException(RuntimeException ex) {
-        log.error("Request has thrown an exception of type {}", ex.getClass().getSimpleName(), ex);
-        return new AppException(ex);
+    @ExceptionHandler(RuntimeException::class)
+    fun handleRuntimeException(ex: RuntimeException) = AppException(ex).also {
+        log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
     }
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request
-    ) {
-        var body = httpMessageNotReadableHandler.handleException(ex);
-        return handleExceptionInternal(ex, body, headers, status, request);
+    override fun handleHttpMessageNotReadable(
+        ex: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest
+    ): ResponseEntity<Any?>? {
+        log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
+        val body = httpMessageNotReadableHandler.handleException(ex)
+        return handleExceptionInternal(ex, body, headers, status, request)
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request
-    ) {
-        var body = methodArgumentNotValidHandler.handleException(ex);
-        return handleExceptionInternal(ex, body, headers, status, request);
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest
+    ): ResponseEntity<Any?>? {
+        log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
+        val body = methodArgumentNotValidHandler.handleException(ex)
+        return handleExceptionInternal(ex, body, headers, status, request)
     }
 }

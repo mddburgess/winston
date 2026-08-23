@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.bundles.youtube)
     implementation(libs.datasourceProxySpringBootStarter)
     implementation(libs.jsonPatch)
+    implementation(libs.kotlinLogging)
     implementation(project(":api"))
     implementation(project(":database"))
 
