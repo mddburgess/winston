@@ -1,44 +1,36 @@
-package ca.metricalsky.winston.exception.handlers;
+package ca.metricalsky.winston.exception.handlers
 
-import ca.metricalsky.winston.api.model.Problem;
-import ca.metricalsky.winston.api.model.ProblemError;
-import ca.metricalsky.winston.api.model.ProblemLocation;
-import ca.metricalsky.winston.exception.ErrorCode;
-import ca.metricalsky.winston.exception.Location;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.util.Locale;
-
-import static ca.metricalsky.winston.exception.utils.JsonExceptionUtils.getJsonPointer;
+import ca.metricalsky.winston.api.model.Problem
+import ca.metricalsky.winston.api.model.ProblemError
+import ca.metricalsky.winston.api.model.ProblemLocation
+import ca.metricalsky.winston.exception.ErrorCode
+import ca.metricalsky.winston.exception.Location
+import ca.metricalsky.winston.exception.utils.JsonExceptionUtils
+import org.springframework.context.MessageSource
+import org.springframework.stereotype.Component
+import org.springframework.validation.FieldError
+import org.springframework.web.bind.MethodArgumentNotValidException
+import java.util.Locale
 
 @Component
-@RequiredArgsConstructor
-public class MethodArgumentNotValidExceptionHandler
-        implements ExceptionHandler<MethodArgumentNotValidException> {
+class MethodArgumentNotValidExceptionHandler(
+    private val messageSource: MessageSource
+): ExceptionHandler<MethodArgumentNotValidException> {
 
-    private final MessageSource messageSource;
-
-    @Override
-    public Problem handleException(MethodArgumentNotValidException exception) {
-
-        var errors = exception.getFieldErrors().stream()
-                .map(this::buildError)
-                .toList();
-        return ErrorCode.INVALID_REQUEST_BODY.getProblem().errors(errors);
+    override fun handleException(exception: MethodArgumentNotValidException): Problem {
+        val errors = exception.fieldErrors.map { buildError(it) }
+        return ErrorCode.INVALID_REQUEST_BODY.problem.errors(errors)
     }
 
-    private ProblemError buildError(FieldError fieldError) {
-        var type = "error:" + fieldError.getCode();
-        var detail = messageSource.getMessage(fieldError, Locale.ENGLISH);
-        var location = new Location(getJsonPointer(fieldError));
+    private fun buildError(fieldError: FieldError): ProblemError {
+        val location = Location(JsonExceptionUtils.getJsonPointer(fieldError))
 
-        return new ProblemError()
-                .type(type)
-                .detail(detail)
-                .location(new ProblemLocation().line(location.line()).column(location.column()));
+        return ProblemError()
+            .type("error:${fieldError.code}")
+            .detail(messageSource.getMessage(fieldError, Locale.ENGLISH))
+            .location(ProblemLocation()
+                .pointer(location.pointer)
+                .line(location.line)
+                .column(location.column))
     }
 }

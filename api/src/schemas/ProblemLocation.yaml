@@ -1,6 +1,9 @@
 title: Problem Location
 type: object
 properties:
+  pointer:
+    type: string
+    format: json-pointer
   line:
     type: integer
     minimum: 1

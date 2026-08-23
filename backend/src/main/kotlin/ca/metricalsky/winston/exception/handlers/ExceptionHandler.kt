@@ -1,8 +1,8 @@
-package ca.metricalsky.winston.exception.handlers;
+package ca.metricalsky.winston.exception.handlers
 
-import ca.metricalsky.winston.api.model.Problem;
+import ca.metricalsky.winston.api.model.Problem
 
-public interface ExceptionHandler<T extends Throwable> {
+interface ExceptionHandler<T: Throwable> {
 
-    Problem handleException(T exception);
+    fun handleException(exception: T): Problem
 }
