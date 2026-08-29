@@ -7,7 +7,7 @@ import ca.metricalsky.winston.exception.ErrorCode
 import ca.metricalsky.winston.exception.utils.JsonExceptionUtils
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
-import org.apache.commons.lang3.exception.ExceptionUtils
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.stereotype.Component
 
@@ -15,12 +15,22 @@ import org.springframework.stereotype.Component
 class HttpMessageNotReadableExceptionHandler: ExceptionHandler<HttpMessageNotReadableException> {
 
     override fun handleException(exception: HttpMessageNotReadableException) =
-        when (val rootCause = ExceptionUtils.getRootCause(exception)) {
-            is JsonParseException -> handleException(rootCause)
-            is MismatchedInputException -> handleException(rootCause)
-            exception -> handleSelf(exception)
-            else -> handleThrowable(rootCause)
+        when (val cause = exception.cause) {
+            null -> handleSelf(exception)
+            else -> handleExceptionInternal(cause)
         }
+
+    private fun handleExceptionInternal(exception: Throwable): Problem =
+        when (exception) {
+            is JsonParseException -> handleException(exception)
+            is MismatchedInputException -> handleException(exception)
+            is ValueInstantiationException -> handleException(exception)
+            else -> when (val cause = exception.cause) {
+                null -> handleThrowable(exception)
+                else -> handleExceptionInternal(cause)
+            }
+        }
+
 
     private fun handleException(exception: JsonParseException): Problem {
         val detail = exception.originalMessage.replaceFirst(Regex("Source:.*; "), "")
@@ -46,6 +56,19 @@ class HttpMessageNotReadableExceptionHandler: ExceptionHandler<HttpMessageNotRea
                     .column(exception.location.columnNr)
             )
             .expected(JsonExceptionUtils.getJsonType(exception.targetType))
+        return ErrorCode.MALFORMED_REQUEST_BODY.problem.addErrorsItem(error)
+    }
+
+    private fun handleException(exception: ValueInstantiationException): Problem {
+        val error = ProblemError()
+            .type("error:invalid-property-value")
+            .detail("The value for a property in the request is invalid.")
+            .location(
+                ProblemLocation()
+                    .pointer(JsonExceptionUtils.getJsonPointer(exception).toString())
+                    .line(exception.location.lineNr)
+                    .column(exception.location.columnNr)
+            )
         return ErrorCode.MALFORMED_REQUEST_BODY.problem.addErrorsItem(error)
     }
 
