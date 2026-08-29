@@ -23,3 +23,8 @@ properties:
       It may or may not yield further information if dereferenced.
     type: string
     format: uri-reference
+  errors:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./ProblemError.yaml

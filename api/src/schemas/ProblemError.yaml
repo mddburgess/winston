@@ -1,0 +1,12 @@
+title: Problem Error
+type: object
+properties:
+  type:
+    type: string
+    format: uri-reference
+  detail:
+    type: string
+  location:
+    $ref: ./ProblemLocation.yaml
+  expected:
+    type: string
