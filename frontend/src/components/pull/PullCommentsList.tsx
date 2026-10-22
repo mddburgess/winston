@@ -1,4 +1,4 @@
-import { Col, ListGroup, ListGroupItem, Row } from "react-bootstrap";
+import { Col, ListGroup, ListGroupItem, Placeholder, Row } from "react-bootstrap";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
 import { useAppSelector } from "#/store/hooks";
@@ -41,7 +41,7 @@ const PullCommentsItem = ({ video, index }: PullCommentsItemProps) => {
     <ListGroupItem variant={statuses[overallStatus].variant}>
       <Row>
         <Col className={"line-clamp-1"}>
-          <strong>{index + 1}.</strong> {video.title}
+          <strong>{index + 1}.</strong> <Placeholder xs={8} />
         </Col>
         <Col xs={"auto"}>
           <Row className={"g-3 small"}>

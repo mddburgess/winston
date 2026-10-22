@@ -1,4 +1,4 @@
-import { Card, Ratio, Row } from "react-bootstrap";
+import { Card, Placeholder, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { AuthorVideoSummary } from "#/components/authors/focus/AuthorVideoSummary";
 import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
@@ -41,10 +41,14 @@ const VideoCard = ({ video, disabled = false }: VideoCardProps) => {
     <Card className={`h-100 ${cardClass}`} onClick={handleClick}>
       <VideoSelectedIcon video={video} />
       <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
-        <Card.Img variant={"top"} src={video.thumbnail_url} />
+        <Placeholder as={Card.Img} />
+        {/*<Card.Img variant={"top"} src={video.thumbnail_url} />*/}
       </Ratio>
       <Card.Body>
-        <Card.Subtitle>{video.title}</Card.Subtitle>
+        <Card.Subtitle>
+          <Placeholder xs={11} />
+          <Placeholder xs={8} />
+        </Card.Subtitle>
       </Card.Body>
       <IfAuthorFocus>
         {(authorHandle) => <AuthorVideoSummary videoId={video.id} authorHandle={authorHandle} />}
