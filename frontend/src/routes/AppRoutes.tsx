@@ -4,6 +4,7 @@ import { AuthorDetailsRoute } from "./authors/AuthorDetailsRoute";
 import { AuthorListRoute } from "./authors/AuthorListRoute";
 import { ChannelDetailsRoute } from "./channels/ChannelDetailsRoute";
 import { ChannelListRoute } from "./channels/ChannelListRoute";
+import { SettingsRoute } from "./SettingsRoute";
 import { VideoDetailsRoute } from "./videos/id/VideoDetailsRoute";
 
 const AppRoutes = () => (
@@ -12,6 +13,7 @@ const AppRoutes = () => (
     <Route path={routes.authors.list} element={<AuthorListRoute />} />
     <Route path={routes.authors.details()} element={<AuthorDetailsRoute />} />
     <Route path={routes.channels.details()} element={<ChannelDetailsRoute />} />
+    <Route path={routes.settings} element={<SettingsRoute />} />
     <Route path={routes.videos.details()} element={<VideoDetailsRoute />} />
   </Routes>
 );

@@ -8,6 +8,7 @@ const routes = {
     list: `/`,
     details: (handle?: string) => `/channels/${handle ?? `:handle`}`,
   },
+  settings: `/settings`,
   videos: {
     details: (videoId?: string) => `/videos/${videoId ?? `:videoId`}`,
   },
