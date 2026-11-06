@@ -1,12 +1,10 @@
-import { Col, Row } from "react-bootstrap";
+import { PageTitle } from "#/components/PageTitle";
+import { SettingsList } from "#/components/settings/SettingsList";
 
 const SettingsRoute = () => (
   <>
-    <Row>
-      <Col className={"flex-center"}>
-        <h1>Settings</h1>
-      </Col>
-    </Row>
+    <PageTitle title={"Settings"} />
+    <SettingsList />
   </>
 );
 
