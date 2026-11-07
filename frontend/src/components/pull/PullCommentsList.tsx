@@ -5,6 +5,7 @@ import { useAppSelector } from "#/store/hooks";
 import { getPullCommentsStatus } from "#/store/slices/pullComments";
 import type { PullOperationStatus, VideoProps } from "#/types";
 import type { Record } from "react-bootstrap-icons";
+import { useGetSettingsQuery } from "#/api";
 
 const PullCommentsList = () => {
   const { requested } = useAppSelector((state) => state.pullComments);
@@ -26,6 +27,9 @@ const PullCommentsItem = ({ video, index }: PullCommentsItemProps) => {
   const { responses } = useAppSelector((state) => state.pullComments);
   const response = responses[video.id];
 
+  const { isSuccess, data: settings } = useGetSettingsQuery();
+  const title = isSuccess && settings.hide_video_titles ? <Placeholder xs={8} /> : <>{video.title}</>;
+
   const overallStatus = getPullCommentsStatus(response);
   const pulledCommentCount = response?.commentCount ?? 0;
   const pulledReplyCount = response?.replyIds.length ?? 0;
@@ -41,7 +45,7 @@ const PullCommentsItem = ({ video, index }: PullCommentsItemProps) => {
     <ListGroupItem variant={statuses[overallStatus].variant}>
       <Row>
         <Col className={"line-clamp-1"}>
-          <strong>{index + 1}.</strong> <Placeholder xs={8} />
+          <strong>{index + 1}.</strong> {title}
         </Col>
         <Col xs={"auto"}>
           <Row className={"g-3 small"}>
