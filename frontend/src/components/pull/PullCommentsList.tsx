@@ -1,11 +1,11 @@
 import { Col, ListGroup, ListGroupItem, Placeholder, Row } from "react-bootstrap";
+import { useGetSettingsQuery } from "#/api";
 import { BasicProgressBar } from "#/components/BasicProgressBar";
 import { VideoCommentCounts } from "#/components/videos/VideoCommentCounts";
 import { useAppSelector } from "#/store/hooks";
 import { getPullCommentsStatus } from "#/store/slices/pullComments";
 import type { PullOperationStatus, VideoProps } from "#/types";
 import type { Record } from "react-bootstrap-icons";
-import { useGetSettingsQuery } from "#/api";
 
 const PullCommentsList = () => {
   const { requested } = useAppSelector((state) => state.pullComments);
