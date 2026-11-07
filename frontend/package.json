@@ -27,6 +27,7 @@
     "react-redux": "^9.3.1",
     "react-router": "^7.18.5",
     "react-sse-hooks": "^1.0.6",
+    "utility-types": "^3.11.0",
     "uuid": "^13.0.2"
   },
   "devDependencies": {
