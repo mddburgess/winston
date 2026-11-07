@@ -1,23 +1,18 @@
-package ca.metricalsky.winston.convert.api;
+package ca.metricalsky.winston.convert.api
 
-import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.database.entity.SettingsEntity;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
+import ca.metricalsky.winston.api.model.PatchOperation
+import ca.metricalsky.winston.database.entity.SettingsEntity
+import org.springframework.core.convert.converter.Converter
+import org.springframework.stereotype.Component
 
 @Component
-public class PatchOperationToSettingsEntityConverter
-        implements Converter<PatchOperation, SettingsEntity> {
+class PatchOperationToSettingsEntityConverter : Converter<PatchOperation, SettingsEntity> {
 
-    @Override
-    public SettingsEntity convert(PatchOperation patchOperation) {
-        var settingsEntity = new SettingsEntity();
-        settingsEntity.setName(patchOperation.getPath());
-
-        if (patchOperation.getOp() != PatchOperation.OpEnum.REMOVE && patchOperation.getValue() != null) {
-            settingsEntity.setValue(patchOperation.getValue().toString());
-        }
-
-        return settingsEntity;
-    }
+    override fun convert(patchOperation: PatchOperation) = SettingsEntity(
+        name = patchOperation.path,
+        value = when {
+            patchOperation.op == PatchOperation.OpEnum.REMOVE -> null
+            else -> patchOperation.value?.toString()
+        },
+    )
 }

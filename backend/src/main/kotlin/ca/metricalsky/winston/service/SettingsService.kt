@@ -1,35 +1,29 @@
-package ca.metricalsky.winston.service;
+package ca.metricalsky.winston.service
 
-import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.api.model.Settings;
-import ca.metricalsky.winston.database.entity.SettingsEntity;
-import ca.metricalsky.winston.database.repository.SettingsRepository;
-import ca.metricalsky.winston.utils.JsonPatchUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import ca.metricalsky.winston.api.model.PatchOperation
+import ca.metricalsky.winston.api.model.Settings
+import ca.metricalsky.winston.database.entity.SettingsEntity
+import ca.metricalsky.winston.database.repository.SettingsRepository
+import lombok.RequiredArgsConstructor
+import org.springframework.core.convert.ConversionService
+import org.springframework.stereotype.Service
 
 @Service
 @RequiredArgsConstructor
-public class SettingsService {
+class SettingsService(
+    private val conversionService: ConversionService,
+    private val settingsRepository: SettingsRepository,
+) {
 
-    private final ConversionService conversionService;
-    private final JsonPatchUtils jsonPatchUtils;
-    private final SettingsRepository settingsRepository;
-
-    public Settings getSettings() {
-        var settingsEntities = settingsRepository.findAll();
-        return conversionService.convert(settingsEntities, Settings.class);
+    fun getSettings(): Settings? {
+        val settingsEntities = settingsRepository.findAll()
+        return conversionService.convert(settingsEntities, Settings::class.java)
     }
 
-    public Settings patchSettings(List<PatchOperation> patchOperations) {
-        var settingsEntities = patchOperations.stream()
-                .map(patchOperation -> conversionService.convert(patchOperation, SettingsEntity.class))
-                .toList();
-        settingsRepository.saveAll(settingsEntities);
-
-        return getSettings();
+    fun patchSettings(patchOperations: List<PatchOperation>) {
+        val settingsEntities = patchOperations.map {
+            conversionService.convert(it, SettingsEntity::class.java)
+        }
+        settingsRepository.saveAll(settingsEntities)
     }
 }

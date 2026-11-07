@@ -1,32 +1,29 @@
-package ca.metricalsky.winston.web;
+package ca.metricalsky.winston.web
 
-import ca.metricalsky.winston.api.SettingsApi;
-import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.api.model.Settings;
-import ca.metricalsky.winston.service.SettingsService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import ca.metricalsky.winston.api.SettingsApi
+import ca.metricalsky.winston.api.model.PatchOperation
+import ca.metricalsky.winston.api.model.Settings
+import ca.metricalsky.winston.service.SettingsService
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequiredArgsConstructor
-public class SettingsController implements SettingsApi {
+class SettingsController(
+    private val settingsService: SettingsService,
+) : SettingsApi {
 
-    private final SettingsService settingsService;
+    override fun getSettings(): ResponseEntity<Settings> {
+        val settings = settingsService.getSettings()
 
-    @Override
-    public ResponseEntity<Settings> getSettings() {
-        var settings = settingsService.getSettings();
-
-        return ResponseEntity.ok(settings);
+        return ResponseEntity.ok(settings)
     }
 
-    @Override
-    public ResponseEntity<Settings> patchSettings(List<PatchOperation> patchOperations) {
-        var patchedSettings = settingsService.patchSettings(patchOperations);
+    override fun patchSettings(
+        patchOperations: List<PatchOperation>?
+    ): ResponseEntity<Settings> {
+        settingsService.patchSettings(patchOperations.orEmpty())
+        val settings = settingsService.getSettings()
 
-        return ResponseEntity.ok(patchedSettings);
+        return ResponseEntity.ok(settings)
     }
 }
