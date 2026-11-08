@@ -3,8 +3,8 @@ package ca.metricalsky.winston.web;
 import ca.metricalsky.winston.config.properties.api.VideosApiConfig;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.test.annotations.ControllerTest;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.Test;
@@ -88,7 +88,7 @@ class VideoControllerTest {
         var channelHandle = faker.youtube().channel().handle();
 
         when(channelDataService.findChannelIdByHandle(channelHandle))
-                .thenThrow(new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .thenThrow(new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         mvc.perform(get("/api/v1/channels/{handle}/videos", channelHandle)).andExpectAll(
                 status().isNotFound(),
@@ -118,7 +118,7 @@ class VideoControllerTest {
         var videoId = faker.youtube().videoId();
 
         when(videoDataService.findVideoById(videoId))
-                .thenThrow(new AppException(ErrorCode.VIDEO_NOT_FOUND));
+                .thenThrow(new WinstonException(ErrorCode.VIDEO_NOT_FOUND));
 
         mvc.perform(get("/api/v1/videos/{id}", videoId)).andExpectAll(
                 status().isNotFound(),

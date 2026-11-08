@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.api.model.PullCommentsOperation;
 import ca.metricalsky.winston.api.model.PullRequest;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import ca.metricalsky.winston.service.pull.estimate.QuotaCostEstimationService;
 import ca.metricalsky.winston.test.annotations.UnitTest;
@@ -60,7 +60,7 @@ class PullRequestServiceTest {
                 .thenReturn(10);
 
         assertThatThrownBy(() -> pullRequestService.validateEstimatedQuotaCost(pullRequest))
-                .isInstanceOf(AppException.class)
+                .isInstanceOf(WinstonException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.UNPROCESSABLE_ENTITY)
                 .hasMessageEndingWith(ErrorCode.REQUEST_TOO_EXPENSIVE.getDetail());
     }

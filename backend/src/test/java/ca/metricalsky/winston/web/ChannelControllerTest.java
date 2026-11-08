@@ -2,8 +2,8 @@ package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.test.annotations.ControllerTest;
 import org.junit.jupiter.api.Test;
@@ -76,7 +76,7 @@ class ChannelControllerTest {
     @Test
     void findByHandle_notFound() throws Exception {
         when(channelService.getChannelByHandle(CHANNEL_HANDLE))
-                .thenThrow(new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .thenThrow(new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         mvc.perform(get("/api/v1/channels/{channelHandle}", CHANNEL_HANDLE)).andExpectAll(
                 status().isNotFound(),

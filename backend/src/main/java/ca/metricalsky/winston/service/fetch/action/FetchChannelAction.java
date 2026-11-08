@@ -3,8 +3,8 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class FetchChannelAction implements FetchAction<Channel> {
     public FetchResult<Channel> fetch(FetchActionEntity fetchAction) {
         var channelListResponse = youTubeService.getChannels(fetchAction);
         var channel = channelDataService.saveChannel(channelListResponse)
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         return new FetchResult<>(fetchAction, channel, null);
     }

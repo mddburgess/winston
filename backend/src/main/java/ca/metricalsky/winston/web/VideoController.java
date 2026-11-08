@@ -7,8 +7,8 @@ import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.config.properties.api.VideosApiConfig;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class VideoController implements VideosApi {
         var pageRequest = PageRequest.of(firstNonNull(page, 0), firstNonNull(size, config.getDefaultPageSize()));
 
         var channelId = channelDataService.findChannelIdByHandle(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         var totalCount = videoDataService.countByChannelId(channelId);
         var videos = videoDataService.listVideosByChannelId(channelId, pageRequest);
@@ -47,7 +47,7 @@ public class VideoController implements VideosApi {
     @Override
     public ResponseEntity<Video> getVideo(String id) {
         var video = videoDataService.findVideoById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.VIDEO_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.VIDEO_NOT_FOUND));
 
         return ResponseEntity.ok(video);
     }

@@ -1,6 +1,10 @@
 title: Problem
 description: An RFC 7807 problem object.
 type: object
+required:
+  - title
+  - status
+  - detail
 properties:
   type:
     description: An URI reference that identifies the problem type.

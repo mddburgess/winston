@@ -4,9 +4,9 @@ import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.database.repository.video.VideoRepository;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.fetch.action.FetchActionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class FetchVideosOperation extends BasicFetchOperation<Video> {
     @Override
     FetchActionEntity getFirstFetchAction(FetchOperationEntity fetchOperation) {
         var channel = channelDataService.findChannelByHandle(fetchOperation.getObjectId())
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_PULLED));
+                .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_PULLED));
 
         var publishedAfter = fetchOperation.getPublishedAfter();
         if (publishedAfter == null && "LATEST".equals(fetchOperation.getMode())) {

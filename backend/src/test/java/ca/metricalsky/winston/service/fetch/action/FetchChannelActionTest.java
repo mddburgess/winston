@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service.fetch.action;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.exception.AppException;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +73,7 @@ class FetchChannelActionTest {
                 .thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> fetchChannelAction.fetch(fetchAction))
-                .isExactlyInstanceOf(AppException.class)
+                .isExactlyInstanceOf(WinstonException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.NOT_FOUND)
                 .hasMessageEndingWith("The requested channel was not found.");
     }

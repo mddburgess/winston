@@ -7,17 +7,8 @@ import org.springframework.web.ErrorResponseException;
 
 public class AppException extends ErrorResponseException {
 
-    public AppException(@NonNull ErrorCode errorCode) {
-        this(errorCode, null);
-    }
-
     public AppException(@NonNull ErrorCode errorCode, Throwable cause) {
         super(errorCode.getStatus(), errorCode.getProblemDetail(), cause);
-    }
-
-    @Deprecated(since = "1.6.0", forRemoval = true)
-    public AppException(HttpStatus status, String reason) {
-        this(status, reason, null);
     }
 
     public AppException(Throwable cause) {

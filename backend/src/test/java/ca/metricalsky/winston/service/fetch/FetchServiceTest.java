@@ -6,7 +6,6 @@ import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository
 import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandler;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -68,7 +66,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync_actionFailed() {
         var fetchRequest = buildFetchRequestEntity();
-        var exception = new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "");
+        var exception = new RuntimeException();
 
         when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
                 .thenReturn(fetchRequest.getOperations());
