@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrated database entities and repositories to Kotlin. (mddburgess/winston#137)
 - Migrated object converters to Kotlin. (mddburgess/winston#138)
 - Enhanced error messages for validation errors. (mddburgess/winston#140)
+- Pulling comments for a full page of videos pulls the oldest videos first. (mddburgess/winston#143)
 
 ### Fixed
 
