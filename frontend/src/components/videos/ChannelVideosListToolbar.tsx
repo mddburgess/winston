@@ -36,7 +36,7 @@ const ChannelVideosListToolbar = ({ videos, totalCount, pageSize, pageNumber }: 
         <ButtonToolbar>
           <ButtonGroup className={"me-3"}>
             <SelectVideosButton />
-            <PullCommentsBatchButton videos={videos} />
+            <PullCommentsBatchButton videos={videos.toReversed()} />
           </ButtonGroup>
           <ButtonGroup className={"me-3"}>
             <PaginationControl totalCount={totalCount} pageSize={pageSize} />
