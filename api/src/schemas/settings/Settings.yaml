@@ -2,4 +2,11 @@ title: Settings
 type: object
 properties:
   author_focus:
+    description: Focus on an author, highlighting their comments and showing their comment counts.
     type: string
+  hide_video_thumbnails:
+    description: Hide video thumbnails from the channel details page.
+    type: boolean
+  hide_video_titles:
+    description: Hide video titles from the channel details page.
+    type: boolean

@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
+import { Header } from "#/components/header/Header";
 import { Footer } from "./Footer";
-import { Header } from "./Header";
 import { AppRoutes } from "./routes/AppRoutes";
 
 export const App = () => (

@@ -1,11 +1,11 @@
 import { map } from "lodash";
 import { useState } from "react";
-import { Col, Row } from "react-bootstrap";
 import { ChannelCards } from "#/components/channels/ChannelCards";
 import { ChannelListToolbar } from "#/components/channels/ChannelListToolbar";
 import { PullChannelModal } from "#/components/channels/PullChannelModal";
 import { RefreshChannelsSidebar } from "#/components/channels/RefreshChannelsSidebar";
 import { PullChannelsRequest } from "#/components/events/PullChannelsRequest";
+import { PageTitle } from "#/components/PageTitle";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
 import { selectAllChannels, useListChannelsQuery } from "#/store/slices/channels";
 import { pullChannelRequested, pullChannelReset } from "#/store/slices/pullChannels";
@@ -40,11 +40,7 @@ const ChannelListRoute = () => {
 
   return (
     <>
-      <Row>
-        <Col className={"flex-center"}>
-          <h1>Channels</h1>
-        </Col>
-      </Row>
+      <PageTitle title={"Channels"} />
       <ChannelListToolbar
         channels={channels}
         onPullChannel={handleShowPullChannel}

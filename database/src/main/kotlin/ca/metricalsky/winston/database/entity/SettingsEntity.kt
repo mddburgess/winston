@@ -16,5 +16,5 @@ class SettingsEntity (
 
     @Basic
     @Column(name = "setting_value")
-    var value: String
+    var value: String?
 )

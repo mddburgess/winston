@@ -1,5 +1,6 @@
-import { Card, Ratio, Row } from "react-bootstrap";
+import { Card, Placeholder, Ratio, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { useGetSettingsQuery } from "#/api";
 import { AuthorVideoSummary } from "#/components/authors/focus/AuthorVideoSummary";
 import { IfAuthorFocus } from "#/components/authors/focus/IfAuthorFocus";
 import { useAppDispatch, useAppSelector } from "#/store/hooks";
@@ -18,6 +19,7 @@ const VideoCard = ({ video, disabled = false }: VideoCardProps) => {
   const dispatch = useAppDispatch();
   const selected = useAppSelector((state) => state.selections.videos.includes(video));
   const selectionActive = useAppSelector((state) => state.selections.active);
+  const { isSuccess, data: settings } = useGetSettingsQuery();
 
   const navigate = useNavigate();
 
@@ -37,14 +39,29 @@ const VideoCard = ({ video, disabled = false }: VideoCardProps) => {
     }
   };
 
+  const thumbnail =
+    isSuccess && settings.hide_video_thumbnails ? (
+      <Placeholder as={Card.Img} />
+    ) : (
+      <Card.Img variant={"top"} src={video.thumbnail_url} />
+    );
+
+  const title =
+    isSuccess && settings.hide_video_titles ? (
+      <>
+        <Placeholder xs={11} />
+        <Placeholder xs={8} />
+      </>
+    ) : (
+      <>{video.title}</>
+    );
+
   return (
     <Card className={`h-100 ${cardClass}`} onClick={handleClick}>
       <VideoSelectedIcon video={video} />
-      <Ratio aspectRatio={"4x3"} className={"bg-secondary-subtle"}>
-        <Card.Img variant={"top"} src={video.thumbnail_url} />
-      </Ratio>
+      <Ratio aspectRatio={"4x3"}>{thumbnail}</Ratio>
       <Card.Body>
-        <Card.Subtitle>{video.title}</Card.Subtitle>
+        <Card.Subtitle>{title}</Card.Subtitle>
       </Card.Body>
       <IfAuthorFocus>
         {(authorHandle) => <AuthorVideoSummary videoId={video.id} authorHandle={authorHandle} />}

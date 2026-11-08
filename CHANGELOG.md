@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Settings to hide video titles and thumbnails from the channel details page. (mddburgess/winston#141)
+
 ### Changed
 
 - Improved API error responses for some common error cases. (mddburgess/winston#135)
