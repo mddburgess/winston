@@ -1,0 +1,11 @@
+title: Problem Exception Cause
+type: object
+properties:
+  class:
+    type: string
+  message:
+    type: string
+  trace:
+    type: array
+    items:
+      type: string

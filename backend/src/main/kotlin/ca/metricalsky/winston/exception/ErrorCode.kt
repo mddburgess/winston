@@ -27,6 +27,8 @@ enum class ErrorCode(
         "The YouTube API request quota has been exceeded."),
     REQUEST_TOO_EXPENSIVE(HttpStatus.UNPROCESSABLE_ENTITY,
         "The estimated cost for this request exceeds the available YouTube API request quota."),
+    RUNTIME_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,
+        "An internal error occurred while performing the request."),
     SERVICE_SHUTDOWN(HttpStatus.SERVICE_UNAVAILABLE,
         "The service is shutting down and is no longer available."),
     SUBSCRIPTION_CLOSED(HttpStatus.BAD_REQUEST,

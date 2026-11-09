@@ -11,10 +11,6 @@ public class AppException extends ErrorResponseException {
         super(errorCode.getStatus(), errorCode.getProblemDetail(), cause);
     }
 
-    public AppException(Throwable cause) {
-        this(HttpStatus.INTERNAL_SERVER_ERROR, cause.getMessage(), cause);
-    }
-
     protected AppException(HttpStatus status, String reason, Throwable cause) {
         super(status, AppProblemDetail.forException(cause), cause);
         getBody().setStatus(status);

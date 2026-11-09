@@ -20,7 +20,7 @@ public class YouTubeException extends AppException {
     }
 
     private YouTubeException(Throwable cause) {
-        super(cause);
+        super(HttpStatus.INTERNAL_SERVER_ERROR, cause.getMessage(), cause);
     }
 
     public static YouTubeException wrap(Throwable cause) {

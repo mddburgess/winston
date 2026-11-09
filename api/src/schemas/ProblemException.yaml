@@ -1,0 +1,9 @@
+title: Problem Exception
+allOf:
+  - $ref: ./ProblemExceptionCause.yaml
+  - type: object
+    properties:
+      causes:
+        type: array
+        items:
+          $ref: ./ProblemExceptionCause.yaml
