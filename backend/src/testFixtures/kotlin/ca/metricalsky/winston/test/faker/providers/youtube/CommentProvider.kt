@@ -9,7 +9,7 @@ import net.datafaker.providers.base.AbstractProvider
 
 class CommentProvider(faker: WinstonFaker) : AbstractProvider<WinstonFaker>(faker) {
 
-    fun id() = faker.regexify("Ug[A-Za-z0-9_-]{24}")
+    fun id(): String = faker.regexify("Ug[A-Za-z0-9_-]{24}")
 
     fun replyId(parentId: String? = id()) = parentId + "." + faker.regexify("[A-Za-z0-9_-]{22}")
 

@@ -69,7 +69,7 @@ class YouTubeServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        wireMock = new YouTubeWireMock(youTubeConfig.getApiKey());
+        wireMock = new YouTubeWireMock(youTubeConfig);
         fetchRequest = entityManager.persist(faker.database().fetchRequest().minimalEntity());
     }
 

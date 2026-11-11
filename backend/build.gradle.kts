@@ -85,6 +85,7 @@ tasks {
 
     test {
         useJUnitPlatform()
+        systemProperty("kotest.framework.config.fqn", "ca.metricalsky.winston.TestConfig")
         finalizedBy(jacocoTestReport)
         testLogging {
             events("FAILED", "SKIPPED")
