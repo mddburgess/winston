@@ -2,13 +2,11 @@ package ca.metricalsky.winston.exception.handlers
 
 import ca.metricalsky.winston.api.ext.ProblemException
 import ca.metricalsky.winston.api.model.Problem
-import ca.metricalsky.winston.exception.AppException
 import ca.metricalsky.winston.exception.ErrorCode
 import ca.metricalsky.winston.exception.WinstonException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.ConstraintViolationException
 import org.slf4j.MDC
-import org.springframework.core.convert.ConversionService
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -38,11 +36,6 @@ class AppExceptionHandler(
     ): ResponseEntity<Any?>? {
         log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
         return handleExceptionInternal(ex, ex.problem, HttpHeaders.EMPTY, ex.status, request)
-    }
-
-    @ExceptionHandler(AppException::class)
-    fun handleAppException(ex: AppException) = ex.also {
-        log.error(ex) { "Request has thrown an exception of type ${ex.javaClass.simpleName}" }
     }
 
     @ExceptionHandler(ConstraintViolationException::class)

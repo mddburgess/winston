@@ -3,9 +3,11 @@ package ca.metricalsky.winston.service.fetch;
 import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
-import ca.metricalsky.winston.events.PublisherException;
+import ca.metricalsky.winston.event.exception.PublisherException;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandler;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
 import ca.metricalsky.winston.test.faker.WinstonFaker;
@@ -66,7 +68,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync_actionFailed() {
         var fetchRequest = buildFetchRequestEntity();
-        var exception = new RuntimeException();
+        var exception = new WinstonException(ErrorCode.RUNTIME_EXCEPTION);
 
         when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
                 .thenReturn(fetchRequest.getOperations());
@@ -85,7 +87,7 @@ class FetchServiceTest {
     @Test
     void fetchAsync_publisherClosed() {
         var fetchRequest = buildFetchRequestEntity();
-        var exception = new PublisherException("");
+        var exception = new PublisherException(ErrorCode.PUBLISHER_CLOSED, null);
 
         when(fetchRequestService.startProcessingRequest(fetchRequest.getId()))
                 .thenReturn(fetchRequest.getOperations());

@@ -5,6 +5,8 @@ import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.SsePublisherHolder;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandlerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -37,8 +39,10 @@ public class FetchService {
 
             fetchRequestService.finishProcessingRequest(fetchRequestId);
             ssePublisher.complete();
-        } catch (RuntimeException ex) {
+        } catch (WinstonException ex) {
             ssePublisher.completeWithError(ex);
+        } catch (RuntimeException ex) {
+            ssePublisher.completeWithError(new WinstonException(ErrorCode.RUNTIME_EXCEPTION, ex));
         } finally {
             ssePublisherHolder.clear();
         }
