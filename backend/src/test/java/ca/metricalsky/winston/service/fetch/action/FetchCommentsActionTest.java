@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.client.VideoNotFoundException;
+import ca.metricalsky.winston.client.exception.CommentsDisabledException;
+import ca.metricalsky.winston.client.exception.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
@@ -129,7 +129,7 @@ class FetchCommentsActionTest {
     @Test
     void fetch_videoNotFound() {
         when(youTubeService.getComments(fetchAction))
-                .thenThrow(new VideoNotFoundException(null));
+                .thenThrow(new VideoNotFoundException());
 
         assertThatThrownBy(() -> fetchCommentsAction.fetch(fetchAction))
                 .isInstanceOf(FetchOperationException.class)
@@ -142,7 +142,7 @@ class FetchCommentsActionTest {
     @Test
     void fetch_commentsDisabled() {
         when(youTubeService.getComments(fetchAction))
-                .thenThrow(new CommentsDisabledException(null));
+                .thenThrow(new CommentsDisabledException());
 
         assertThatThrownBy(() -> fetchCommentsAction.fetch(fetchAction))
                 .isInstanceOf(FetchOperationException.class)

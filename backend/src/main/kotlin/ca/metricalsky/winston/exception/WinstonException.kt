@@ -3,7 +3,7 @@ package ca.metricalsky.winston.exception
 import ca.metricalsky.winston.api.model.Problem
 import org.springframework.http.HttpStatus
 
-class WinstonException(
+open class WinstonException(
     val problem: Problem,
     cause: Throwable? = null,
 ) : RuntimeException(cause) {

@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.client.YouTubeClient;
-import ca.metricalsky.winston.client.YouTubeException;
+import ca.metricalsky.winston.client.exception.YouTubeException;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
@@ -46,7 +46,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(firstNonNull(response.getItems(), List.of()).size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
@@ -76,7 +76,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
@@ -104,7 +104,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
@@ -130,7 +130,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
@@ -158,7 +158,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {
@@ -186,7 +186,7 @@ public class YouTubeService {
             youTubeRequest.setItemCount(response.getItems().size());
             return response;
         } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatusCode().value());
+            youTubeRequest.setHttpStatus(ex.getStatus().value());
             youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
             throw ex;
         } finally {

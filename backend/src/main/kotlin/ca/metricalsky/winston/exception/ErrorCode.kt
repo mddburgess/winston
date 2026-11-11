@@ -35,6 +35,8 @@ enum class ErrorCode(
         "The specified event subscription is not open."),
     VIDEO_NOT_FOUND(HttpStatus.NOT_FOUND,
         "The requested video was not found."),
+    YOUTUBE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,
+        "YouTube returned an error while performing the request."),
     ;
 
     val type = "/api/problem/" + name.lowercase().replace("_", "-")

@@ -1,5 +1,7 @@
 package ca.metricalsky.winston.client;
 
+import ca.metricalsky.winston.client.exception.CommentsDisabledException;
+import ca.metricalsky.winston.client.exception.YouTubeException;
 import ca.metricalsky.winston.config.YouTubeProvider;
 import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
 import ca.metricalsky.winston.test.TestResources;

@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.client;
 
+import ca.metricalsky.winston.client.exception.YouTubeExceptionKt;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.ChannelListResponse;
@@ -64,7 +65,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch channels for handle '{}'", handle, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 
@@ -88,7 +89,7 @@ public class YouTubeClient {
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch activities for channelId '{}' publishedAfter '{}' publishedBefore '{}'",
                     channelId, publishedAfter, publishedBefore, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 
@@ -109,7 +110,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch playlist items for playlistId '{}' pageToken '{}'", playlistId, pageToken, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 
@@ -128,7 +129,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch videos for videoIds {}", videoIds, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 
@@ -148,7 +149,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch comments for videoId '{}' pageToken '{}'", videoId, pageToken, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 
@@ -168,7 +169,7 @@ public class YouTubeClient {
             return response;
         } catch (IOException | RuntimeException ex) {
             log.error("Failed to fetch replies for commentId '{}' pageToken '{}'", commentId, pageToken, ex);
-            throw YouTubeException.wrap(ex);
+            throw YouTubeExceptionKt.wrap(ex);
         }
     }
 }
