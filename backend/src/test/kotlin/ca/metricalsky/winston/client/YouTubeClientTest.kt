@@ -194,6 +194,18 @@ class YouTubeClientTest(
             exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
         }
 
+        "throw exception on a processing failure" {
+            wireMock.stubForGetCommentThreads(videoId).willReturn(badRequest()
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBody(testResources.load("400_processing_failure.json")))
+
+            val exception = shouldThrow<YouTubeException> {
+                youTubeClient.getComments(videoId)
+            }
+            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
+            exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
+        }
+
         "throw YouTubeException on a faulty response" {
             wireMock.stubForGetCommentThreads(videoId)
                 .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK))
