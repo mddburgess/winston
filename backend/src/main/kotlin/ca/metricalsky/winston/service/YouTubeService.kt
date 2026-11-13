@@ -1,201 +1,137 @@
-package ca.metricalsky.winston.service;
+package ca.metricalsky.winston.service
 
-import ca.metricalsky.winston.client.YouTubeClient;
-import ca.metricalsky.winston.client.exception.YouTubeException;
-import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity;
-import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
-import com.google.api.services.youtube.model.ActivityListResponse;
-import com.google.api.services.youtube.model.ChannelListResponse;
-import com.google.api.services.youtube.model.CommentListResponse;
-import com.google.api.services.youtube.model.CommentThreadListResponse;
-import com.google.api.services.youtube.model.PlaylistItemListResponse;
-import com.google.api.services.youtube.model.VideoListResponse;
-import com.google.common.base.Throwables;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static com.google.common.base.MoreObjects.firstNonNull;
+import ca.metricalsky.winston.client.YouTubeClient
+import ca.metricalsky.winston.client.exception.YouTubeException
+import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity
+import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity
+import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity.RequestType
+import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository
+import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Service
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
-@RequiredArgsConstructor
-public class YouTubeService {
+class YouTubeService(
+    private val youTubeClient: YouTubeClient,
+    private val youTubeRequestRepository: YouTubeRequestRepository,
+) {
 
-    private final YouTubeClient youTubeClient;
-    private final YouTubeRequestRepository youTubeRequestRepository;
-
-    public ChannelListResponse getChannels(FetchActionEntity fetchAction) {
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchAction.getId());
-        entity.setRequestType(YouTubeRequestEntity.RequestType.CHANNELS);
-        entity.setObjectId(fetchAction.getObjectId());
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var handle = youTubeRequest.getObjectId();
-
-            var response = youTubeClient.getChannel(handle);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(firstNonNull(response.getItems(), List.of()).size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getChannels(fetchAction: FetchActionEntity) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchAction.id,
+            requestType = RequestType.CHANNELS,
+            objectId = fetchAction.objectId,
+        )
+    ) {
+        getChannel(
+            handle = it.objectId,
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    public ActivityListResponse getActivities(FetchActionEntity fetchAction) {
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchAction.getId());
-        entity.setRequestType(YouTubeRequestEntity.RequestType.ACTIVITIES);
-        entity.setObjectId(fetchAction.getObjectId());
-        entity.setPublishedAfter(formatDate(fetchAction.getPublishedAfter()));
-        entity.setPublishedBefore(formatDate(fetchAction.getPublishedBefore()));
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var channelId = youTubeRequest.getObjectId();
-            var publishedAfter = youTubeRequest.getPublishedAfter();
-            var publishedBefore = youTubeRequest.getPublishedBefore();
-
-            var response = youTubeClient.getActivities(channelId, publishedAfter, publishedBefore);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getActivities(fetchAction: FetchActionEntity) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchAction.id,
+            requestType = RequestType.ACTIVITIES,
+            objectId = fetchAction.objectId,
+            publishedAfter = fetchAction.publishedAfter.toIsoInstantString(),
+            publishedBefore = fetchAction.publishedBefore.toIsoInstantString(),
+        )
+    ) {
+        getActivities(
+            channelId = it.objectId,
+            publishedAfter = it.publishedAfter,
+            publishedBefore = it.publishedBefore,
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    public PlaylistItemListResponse getPlaylistItems(FetchActionEntity fetchAction) {
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchAction.getId());
-        entity.setRequestType(YouTubeRequestEntity.RequestType.PLAYLIST_ITEMS);
-        entity.setObjectId(fetchAction.getObjectId());
-        entity.setPageToken(fetchAction.getPageToken());
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var playlistId =  youTubeRequest.getObjectId();
-            var pageToken = youTubeRequest.getPageToken();
-
-            var response = youTubeClient.getPlaylistItems(playlistId, pageToken);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getPlaylistItems(fetchAction: FetchActionEntity) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchAction.id,
+            requestType = RequestType.PLAYLIST_ITEMS,
+            objectId = fetchAction.objectId,
+            pageToken = fetchAction.pageToken,
+        )
+    ) {
+        getPlaylistItems(
+            playlistId = it.objectId,
+            pageToken = it.pageToken,
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    public VideoListResponse getVideos(Long fetchActionId, List<String> videoIds) {
-        var distinctVideoIds = videoIds.stream().distinct().toList();
-
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchActionId);
-        entity.setRequestType(YouTubeRequestEntity.RequestType.VIDEOS);
-        entity.setObjectId(String.join(",", distinctVideoIds));
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var response = youTubeClient.getVideos(distinctVideoIds);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getVideos(fetchActionId: Long, videoIds: List<String>) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchActionId,
+            requestType = RequestType.VIDEOS,
+            objectId = videoIds.distinct().joinToString(separator = ","),
+        )
+    ) {
+        getVideos(
+            videoIds = videoIds.distinct(),
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    public CommentThreadListResponse getComments(FetchActionEntity fetchAction) {
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchAction.getId());
-        entity.setRequestType(YouTubeRequestEntity.RequestType.COMMENTS);
-        entity.setObjectId(fetchAction.getObjectId());
-        entity.setPageToken(fetchAction.getPageToken());
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var videoId = youTubeRequest.getObjectId();
-            var pageToken = youTubeRequest.getPageToken();
-
-            var response = youTubeClient.getComments(videoId, pageToken);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getComments(fetchAction: FetchActionEntity) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchAction.id,
+            requestType = RequestType.COMMENTS,
+            objectId = fetchAction.objectId,
+            pageToken = fetchAction.pageToken,
+        )
+    ) {
+        getComments(
+            videoId = it.objectId,
+            pageToken = it.pageToken,
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    public CommentListResponse getReplies(FetchActionEntity fetchAction) {
-        var entity = new YouTubeRequestEntity();
-        entity.setFetchActionId(fetchAction.getId());
-        entity.setRequestType(YouTubeRequestEntity.RequestType.REPLIES);
-        entity.setObjectId(fetchAction.getObjectId());
-        entity.setPageToken(fetchAction.getPageToken());
-        entity.setRequestedAt(OffsetDateTime.now());
-        var youTubeRequest = youTubeRequestRepository.save(entity);
-
-        try {
-            var commentId = youTubeRequest.getObjectId();
-            var pageToken = youTubeRequest.getPageToken();
-
-            var response = youTubeClient.getReplies(commentId, pageToken);
-
-            youTubeRequest.setHttpStatus(HttpStatus.OK.value());
-            youTubeRequest.setItemCount(response.getItems().size());
-            return response;
-        } catch (YouTubeException ex) {
-            youTubeRequest.setHttpStatus(ex.getStatus().value());
-            youTubeRequest.setError(Throwables.getStackTraceAsString(ex));
-            throw ex;
-        } finally {
-            youTubeRequest.setRespondedAt(OffsetDateTime.now());
-            youTubeRequestRepository.save(youTubeRequest);
+    fun getReplies(fetchAction: FetchActionEntity) = callYouTube(
+        YouTubeRequestEntity(
+            fetchActionId = fetchAction.id,
+            requestType = RequestType.REPLIES,
+            objectId = fetchAction.objectId,
+            pageToken = fetchAction.pageToken,
+        )
+    ) {
+        getReplies(
+            commentId = it.objectId,
+            pageToken = it.pageToken,
+        ).apply {
+            it.itemCount = items.orEmpty().size
         }
     }
 
-    private static String formatDate(OffsetDateTime date) {
-        return date != null ? DateTimeFormatter.ISO_INSTANT.format(date) : null;
+    private fun <T> callYouTube(
+        request: YouTubeRequestEntity,
+        invoke: YouTubeClient.(YouTubeRequestEntity) -> T,
+    ): T {
+        val youTubeRequest = youTubeRequestRepository.save(request)
+        try {
+            val response = invoke(youTubeClient, youTubeRequest)
+            youTubeRequest.httpStatus = HttpStatus.OK.value()
+            return response
+        } catch (ex: YouTubeException) {
+            youTubeRequest.httpStatus = ex.status.value()
+            youTubeRequest.error = ex.stackTraceToString()
+            throw ex
+        } finally {
+            youTubeRequest.respondedAt = OffsetDateTime.now()
+            youTubeRequestRepository.save(youTubeRequest)
+        }
+    }
+
+    private fun OffsetDateTime?.toIsoInstantString() = when (this) {
+        null -> null
+        else -> DateTimeFormatter.ISO_INSTANT.format(this)
     }
 }
