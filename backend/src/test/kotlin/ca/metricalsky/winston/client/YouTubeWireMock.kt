@@ -10,13 +10,15 @@ import com.github.tomakehurst.wiremock.client.WireMock.including
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 
+fun youTubeWireMock(youTubeConfig: YouTubeConfig): WireMock {
+    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
+    return WireMock.create().port(port).build()
+}
+
 class YouTubeWireMock(
     private val youTubeConfig: YouTubeConfig,
 ) {
-    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
-    val wireMock: WireMock = WireMock.create().port(port).build()
-
-    fun reset() = wireMock.resetMappings()
+    val wireMock: WireMock = youTubeWireMock(youTubeConfig)
 
     fun stubForGetChannels(forHandle: String) = StubMappingBuilder(
         wireMock, get(urlPathEqualTo("/youtube/v3/channels"))

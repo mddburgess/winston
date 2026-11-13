@@ -1,44 +1,48 @@
 package ca.metricalsky.winston.client
 
 import ca.metricalsky.winston.client.exception.CommentsDisabledException
-import ca.metricalsky.winston.client.exception.YouTubeException
+import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.config.YouTubeProvider
 import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig
 import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
-import com.github.tomakehurst.wiremock.client.WireMock.*
-import com.github.tomakehurst.wiremock.http.Fault
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.util.DateTime
+import com.marcinziolo.kotlin.wiremock.SpecifyRequest
+import com.marcinziolo.kotlin.wiremock.and
+import com.marcinziolo.kotlin.wiremock.contains
+import com.marcinziolo.kotlin.wiremock.equalTo
+import com.marcinziolo.kotlin.wiremock.get
+import com.marcinziolo.kotlin.wiremock.returnsJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeTypeOf
-import org.apache.http.HttpHeaders
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.retry.annotation.EnableRetry
 import org.wiremock.spring.EnableWireMock
-import java.io.IOException
 
 @SpringBootTest(classes = [YouTubeClient::class, YouTubeProvider::class])
 @EnableConfigurationProperties(YouTubeConfig::class)
 @EnableWireMock
+@EnableRetry
 class YouTubeClientTest(
     private val youTubeClient: YouTubeClient,
     private val youTubeConfig: YouTubeConfig,
 ) : WordSpec({
 
     val faker = WinstonFaker()
-    val wireMock = YouTubeWireMock(youTubeConfig)
+    val wireMock = youTubeWireMock(youTubeConfig)
 
-    beforeEach {
-        wireMock.reset()
+    afterEach {
+        wireMock.resetMappings()
     }
 
     "getChannel()" should {
@@ -46,9 +50,15 @@ class YouTubeClientTest(
         val channelHandle = faker.youtube().channel().handle()
         val testResources = TestResources.dir("client", "channels")
 
+        fun channelsFor(channelHandle: String): SpecifyRequest = {
+            urlPath equalTo "/youtube/v3/channels"
+            queryParams contains "forHandle" equalTo channelHandle
+        }
+
         "handle a 200 response with channels" {
-            wireMock.stubForGetChannels(channelHandle)
-                .willReturn(okJson(testResources.load("200.json")))
+            wireMock.get(channelsFor(channelHandle)) returnsJson {
+                body = testResources.load("200.json")
+            }
 
             youTubeClient.getChannel(channelHandle) shouldNotBeNull {
                 items shouldHaveSize 1
@@ -69,23 +79,13 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no channels" {
-            wireMock.stubForGetChannels(channelHandle)
-                .willReturn(okJson(testResources.load("200_not_found.json")))
+            wireMock.get(channelsFor(channelHandle)) returnsJson {
+                body = testResources.load("200_not_found.json")
+            }
 
             youTubeClient.getChannel(channelHandle) shouldNotBeNull {
                 items shouldBe null
             }
-        }
-
-        "throw YouTubeException on a faulty response" {
-            wireMock.stubForGetChannels(channelHandle)
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK))
-
-            val exception = shouldThrow<YouTubeException> {
-                youTubeClient.getChannel(channelHandle)
-            }
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<IOException>()
         }
     }
 
@@ -94,9 +94,15 @@ class YouTubeClientTest(
         val channelId = faker.youtube().channel().id()
         val testResources = TestResources.dir("client", "activities")
 
+        fun activitiesFor(channelId: String): SpecifyRequest = {
+            urlPath equalTo "/youtube/v3/activities"
+            queryParams contains "channelId" equalTo channelId
+        }
+
         "handle a 200 response with activities" {
-            wireMock.stubForGetActivities(channelId)
-                .willReturn(okJson(testResources.load("200.json")))
+            wireMock.get(activitiesFor(channelId)) returnsJson {
+                body = testResources.load("200.json")
+            }
 
             youTubeClient.getActivities(channelId) shouldNotBeNull {
                 items shouldHaveSize 2
@@ -127,23 +133,13 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no activities" {
-            wireMock.stubForGetActivities(channelId)
-                .willReturn(okJson(testResources.load("200_empty.json")))
+            wireMock.get(activitiesFor(channelId)) returnsJson {
+                body = testResources.load("200_empty.json")
+            }
 
             youTubeClient.getActivities(channelId) shouldNotBeNull {
                 items shouldBe emptyList()
             }
-        }
-
-        "throw YouTubeException on a faulty response" {
-            wireMock.stubForGetActivities(channelId)
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK))
-
-            val exception = shouldThrow<YouTubeException> {
-                youTubeClient.getActivities(channelId)
-            }
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<IOException>()
         }
     }
 
@@ -152,9 +148,15 @@ class YouTubeClientTest(
         val videoId = faker.youtube().videoId()
         val testResources = TestResources.dir("client", "comments")
 
+        fun commentThreadsFor(videoId: String): SpecifyRequest = {
+            urlPath equalTo "/youtube/v3/commentThreads"
+            queryParams contains "videoId" equalTo videoId
+        }
+
         "handle a 200 response with comments" {
-            wireMock.stubForGetCommentThreads(videoId)
-                .willReturn(okJson(testResources.load("200.json")))
+            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+                body = testResources.load("200.json")
+            }
 
             youTubeClient.getComments(videoId) shouldNotBeNull {
                 items shouldHaveSize 1
@@ -173,8 +175,9 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no comments" {
-            wireMock.stubForGetCommentThreads(videoId)
-                .willReturn(okJson(testResources.load("200_empty.json")))
+            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+                body = testResources.load("200_empty.json")
+            }
 
             youTubeClient.getComments(videoId) shouldNotBeNull {
                 items shouldBe emptyList()
@@ -182,9 +185,10 @@ class YouTubeClientTest(
         }
 
         "throw exception when comments are disabled" {
-            wireMock.stubForGetCommentThreads(videoId).willReturn(forbidden()
-                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .withBody(testResources.load("403_comments_disabled.json")))
+            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+                statusCode = HttpStatus.FORBIDDEN.value()
+                body = testResources.load("403_comments_disabled.json")
+            }
 
             val exception = shouldThrow<CommentsDisabledException> {
                 youTubeClient.getComments(videoId)
@@ -194,47 +198,60 @@ class YouTubeClientTest(
             exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
         }
 
-        "throw exception on a processing failure" {
-            wireMock.stubForGetCommentThreads(videoId).willReturn(badRequest()
-                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .withBody(testResources.load("400_processing_failure.json")))
+        "retry the request on a processing failure" {
+            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+                statusCode = HttpStatus.BAD_REQUEST.value()
+                body = testResources.load("400_processing_failure.json")
+                toState = "recovered"
+            }
+            wireMock.get(commentThreadsFor(videoId)) and {
+                whenState = "recovered"
+            } returnsJson {
+                body = testResources.load("200.json")
+            }
 
-            val exception = shouldThrow<YouTubeException> {
+            youTubeClient.getComments(videoId) shouldNotBeNull {
+                items.shouldNotBeEmpty()
+            }
+        }
+
+        "throw exception on a processing failure" {
+            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+                statusCode = HttpStatus.BAD_REQUEST.value()
+                body = testResources.load("400_processing_failure.json")
+            }
+
+            val exception = shouldThrow<ProcessingFailureException> {
                 youTubeClient.getComments(videoId)
             }
             exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
             exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
         }
-
-        "throw YouTubeException on a faulty response" {
-            wireMock.stubForGetCommentThreads(videoId)
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK))
-
-            val exception = shouldThrow<YouTubeException> {
-                youTubeClient.getComments(videoId)
-            }
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<IOException>()
-        }
     }
 
     "getReplies()" should {
 
-        val commentId = faker.youtube().comment().id()
+        val parentId = faker.youtube().comment().id()
         val testResources = TestResources.dir("client", "replies")
 
-        "handle a 200 response with replies" {
-            wireMock.stubForGetComments(commentId)
-                .willReturn(okJson(testResources.load("200.json")))
+        fun commentsFor(parentId: String): SpecifyRequest = {
+            urlPath equalTo "/youtube/v3/comments"
+            queryParams contains "parentId" equalTo parentId
+        }
 
-            youTubeClient.getReplies(commentId) shouldNotBeNull {
+        "handle a 200 response with replies" {
+            wireMock.get(commentsFor(parentId)) returnsJson {
+                body = testResources.load("200.json")
+            }
+
+            youTubeClient.getReplies(parentId) shouldNotBeNull {
                 items shouldHaveSize 1
                 items[0].snippet shouldNotBeNull {
                     authorChannelId.value shouldBe "comment.snippet.authorChannelId.value"
                     authorChannelUrl shouldBe "https://www.example.com/comment/snippet/authorChannelUrl"
                     authorProfileImageUrl shouldBe "https://www.example.com/comment/snippet/authorProfileImageUrl"
                     authorDisplayName shouldBe "@commentAuthorDisplayName"
-                    parentId shouldBe "comment.snippet.parentId"
+                    this.parentId shouldBe "comment.snippet.parentId"
                     publishedAt shouldBe DateTime("2025-01-01T00:00:00Z")
                     textDisplay shouldBe "comment.snippet.textDisplay"
                     textOriginal shouldBe "comment.snippet.textOriginal"
@@ -244,23 +261,13 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no replies" {
-            wireMock.stubForGetComments(commentId)
-                .willReturn(okJson(testResources.load("200_empty.json")))
+            wireMock.get(commentsFor(parentId)) returnsJson {
+                body = testResources.load("200_empty.json")
+            }
 
-            youTubeClient.getReplies(commentId) shouldNotBeNull {
+            youTubeClient.getReplies(parentId) shouldNotBeNull {
                 items shouldBe emptyList()
             }
-        }
-
-        "throw YouTubeException on a faulty response" {
-            wireMock.stubForGetComments(commentId)
-                .willReturn(aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK))
-
-            val exception = shouldThrow<YouTubeException> {
-                youTubeClient.getReplies(commentId)
-            }
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<IOException>()
         }
     }
 })

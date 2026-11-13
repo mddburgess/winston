@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.client
 
+import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.client.exception.wrap
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.ActivityListResponse
@@ -9,6 +10,7 @@ import com.google.api.services.youtube.model.CommentThreadListResponse
 import com.google.api.services.youtube.model.PlaylistItemListResponse
 import com.google.api.services.youtube.model.VideoListResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 
 @Service
@@ -43,7 +45,8 @@ class YouTubeClient(
     ): ActivityListResponse {
         try {
             log.info {
-                "Fetching activities for channelId '${channelId}'" + " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
+                "Fetching activities for channelId '${channelId}'" +
+                        " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
             }
 
             val response = youTube.activities()
@@ -54,14 +57,16 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val activityCount = response?.items?.size ?: 0
+            val count = response?.items?.size ?: 0
             log.info {
-                "Fetched ${activityCount} activities for channelId '${channelId}'" + " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
+                "Fetched ${count} activities for channelId '${channelId}' " +
+                        "publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
             }
             return response
         } catch (ex: Exception) {
             log.error(ex) {
-                "Failed to fetch activities for channelId '${channelId}'" + " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
+                "Failed to fetch activities for channelId '${channelId}'" +
+                        " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
             }
             throw wrap(ex)
         }
@@ -81,10 +86,8 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val playlistItemCount = response?.items?.size ?: 0
-            log.info {
-                "Fetched ${playlistItemCount} playlist items for playlistId '${playlistId}'" + " pageToken '${pageToken}'"
-            }
+            val count = response?.items?.size ?: 0
+            log.info { "Fetched ${count} playlist items for playlistId '${playlistId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch playlist items for playlistId '${playlistId}' pageToken '${pageToken}'" }
@@ -102,8 +105,8 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val videoItemCount = response?.items?.size ?: 0
-            log.info { "Fetched ${videoItemCount} videos for videoIds ${videoIds}" }
+            val count = response?.items?.size ?: 0
+            log.info { "Fetched ${count} videos for videoIds ${videoIds}" }
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch videos for videoIds '${videoIds}'" }
@@ -111,6 +114,7 @@ class YouTubeClient(
         }
     }
 
+    @Retryable(retryFor = [ProcessingFailureException::class])
     fun getComments(
         videoId: String,
         pageToken: String? = null,
@@ -125,8 +129,8 @@ class YouTubeClient(
                 .setMaxResults(100L)
                 .execute()
 
-            val commentCount = response?.items?.size ?: 0
-            log.info { "Fetched ${commentCount} comments for videoId ${videoId}' pageToken '${pageToken}'" }
+            val count = response?.items?.size ?: 0
+            log.info { "Fetched ${count} comments for videoId ${videoId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch comments for videoId '${videoId}' pageToken '${pageToken}'" }
@@ -147,8 +151,8 @@ class YouTubeClient(
                 .setMaxResults(100L)
                 .setPageToken(pageToken).execute()
 
-            val replyCount = response?.items?.size ?: 0
-            log.info { "Fetched ${replyCount} replies for commentId '${commentId}' pageToken '${pageToken}'" }
+            val count = response?.items?.size ?: 0
+            log.info { "Fetched ${count} replies for commentId '${commentId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch replies for commentId '${commentId}' pageToken '${pageToken}'" }
