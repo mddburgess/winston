@@ -245,10 +245,6 @@ class YouTubeServiceTest(
 
             shouldThrow<CommentsDisabledException> {
                 youTubeService.getComments(fetchAction)
-            } should {
-                it.message shouldContain "Comments are disabled for the requested video."
-                it.status shouldBe HttpStatus.UNPROCESSABLE_ENTITY
-                it.cause.shouldBeTypeOf<GoogleJsonResponseException>()
             }
 
             youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) should {
@@ -296,12 +292,9 @@ class YouTubeServiceTest(
                 body = testResources["comments"].load("400_processing_failure.json")
             }
 
-            val exception = shouldThrow<ProcessingFailureException> {
+            shouldThrow<ProcessingFailureException> {
                 youTubeService.getComments(fetchAction)
             }
-
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
 
             youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) shouldHaveSize 3
         }

@@ -2,8 +2,6 @@ package ca.metricalsky.winston.exception
 
 import ca.metricalsky.winston.api.model.Problem
 import org.springframework.http.HttpStatus
-import org.springframework.http.ProblemDetail
-import java.net.URI
 
 enum class ErrorCode(
     val status: HttpStatus,
@@ -19,6 +17,8 @@ enum class ErrorCode(
         "The requested comment was not found."),
     COMMENTS_DISABLED(HttpStatus.UNPROCESSABLE_ENTITY,
         "Comments are disabled for the requested video."),
+    COMMENTS_RESTRICTED(HttpStatus.UNPROCESSABLE_ENTITY,
+        "Comments are restricted to channel members for the requested video."),
     INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST,
         "The request body is invalid and cannot be processed."),
     MALFORMED_REQUEST_BODY(HttpStatus.BAD_REQUEST,
@@ -44,13 +44,6 @@ enum class ErrorCode(
     ;
 
     val type = "/api/problem/" + name.lowercase().replace("_", "-")
-
-    val problemDetail: ProblemDetail
-        get() {
-            val problemDetail = ProblemDetail.forStatusAndDetail(status, detail)
-            problemDetail.setType(URI.create(type))
-            return problemDetail
-        }
 
     val problem: Problem
         get() = Problem().also {
