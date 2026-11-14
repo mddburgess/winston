@@ -26,5 +26,5 @@ data class YouTubeConfig(
     /**
      * Root URL for a mock YouTube API service. Use for testing only.
      */
-    val mockRootUrl: String? = null,
+    val mockRootUrl: String = "",
 )

@@ -35,6 +35,6 @@ class YouTubeWireMock(
 }
 
 private fun youTubeWireMock(youTubeConfig: YouTubeConfig): WireMock {
-    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl!!)?.groups[1]?.value?.toInt() ?: 0
+    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
     return WireMock.create().port(port).build()
 }
