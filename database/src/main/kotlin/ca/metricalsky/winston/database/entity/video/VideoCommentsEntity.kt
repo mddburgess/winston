@@ -13,8 +13,9 @@ class VideoCommentsEntity(
     var videoId: String,
 
     @Basic(optional = false)
-    @Column(name = "comments_disabled")
-    var commentsDisabled: Boolean,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comment_status")
+    var commentStatus: CommentStatus = CommentStatus.ENABLED,
 
     @Basic(optional = false)
     @Column(name = "comment_count")
@@ -31,4 +32,14 @@ class VideoCommentsEntity(
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
     var lastFetchedAt: OffsetDateTime? = null
+
+    @Deprecated(message = "Remove after migration")
+    val commentsDisabled
+        get() = commentStatus == CommentStatus.DISABLED
+
+    enum class CommentStatus {
+        ENABLED,
+        RESTRICTED,
+        DISABLED,
+    }
 }

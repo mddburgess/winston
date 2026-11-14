@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus;
 import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
 import ca.metricalsky.winston.database.view.CommentCountView;
 import ca.metricalsky.winston.database.repository.comment.CommentRepository;
@@ -86,7 +87,7 @@ class VideoCommentsServiceTest {
     private static VideoCommentsEntity buildVideoCommentsEntity() {
         var videoCommentsEntity = new VideoCommentsEntity();
         videoCommentsEntity.setVideoId(VIDEO_ID);
-        videoCommentsEntity.setCommentsDisabled(false);
+        videoCommentsEntity.setCommentStatus(CommentStatus.ENABLED);
         videoCommentsEntity.setCommentCount(1);
         videoCommentsEntity.setReplyCount(1);
         videoCommentsEntity.setTotalReplyCount(1);

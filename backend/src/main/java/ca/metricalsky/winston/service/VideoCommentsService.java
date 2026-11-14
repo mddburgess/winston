@@ -1,6 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus;
 import ca.metricalsky.winston.database.repository.video.VideoCommentsRepository;
 import ca.metricalsky.winston.database.repository.comment.CommentRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +19,9 @@ public class VideoCommentsService {
     public void updateVideoComments(String videoId) {
         var videoComments = videoCommentsRepository.findById(videoId)
                 .orElse(new VideoCommentsEntity());
+        if (videoComments.getCommentStatus() == null) {
+            videoComments.setCommentStatus(CommentStatus.ENABLED);
+        }
         var commentCount = commentRepository.countCommentsForVideoId(videoId);
 
         videoComments.setVideoId(videoId);
@@ -34,7 +38,7 @@ public class VideoCommentsService {
                 .orElse(new VideoCommentsEntity());
 
         videoComments.setVideoId(videoId);
-        videoComments.setCommentsDisabled(true);
+        videoComments.setCommentStatus(CommentStatus.DISABLED);
 
         videoCommentsRepository.save(videoComments);
     }
