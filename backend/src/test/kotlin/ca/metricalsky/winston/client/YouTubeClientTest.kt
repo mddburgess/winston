@@ -8,13 +8,11 @@ import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.util.DateTime
-import com.marcinziolo.kotlin.wiremock.and
 import com.marcinziolo.kotlin.wiremock.returnsJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -175,23 +173,6 @@ class YouTubeClientTest(
             exception.message shouldContain "Comments are disabled for the requested video."
             exception.status shouldBe HttpStatus.UNPROCESSABLE_ENTITY
             exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
-        }
-
-        "retry the request on a processing failure" {
-            wireMock.getCommentThreadsFor(videoId) returnsJson {
-                statusCode = HttpStatus.BAD_REQUEST.value()
-                body = testResources["comments"].load("400_processing_failure.json")
-                toState = "recovered"
-            }
-            wireMock.getCommentThreadsFor(videoId) and {
-                whenState = "recovered"
-            } returnsJson {
-                body = testResources["comments"].load("200.json")
-            }
-
-            youTubeClient.getComments(videoId) shouldNotBeNull {
-                items.shouldNotBeEmpty()
-            }
         }
 
         "throw exception on a processing failure" {

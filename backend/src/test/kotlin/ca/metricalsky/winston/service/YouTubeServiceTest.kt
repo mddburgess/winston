@@ -2,6 +2,7 @@ package ca.metricalsky.winston.service
 
 import ca.metricalsky.winston.client.YouTubeClient
 import ca.metricalsky.winston.client.YouTubeWireMock
+import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.config.YouTubeProvider
 import ca.metricalsky.winston.config.properties.YouTubeConfig
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity
@@ -9,19 +10,24 @@ import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository
 import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
+import com.marcinziolo.kotlin.wiremock.and
 import com.marcinziolo.kotlin.wiremock.returnsJson
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.context.annotation.ComponentScan.Filter
 import org.springframework.context.annotation.FilterType
 import org.springframework.http.HttpStatus
+import org.springframework.retry.annotation.EnableRetry
 import org.wiremock.spring.EnableWireMock
 
 @DataJpaTest(
@@ -36,6 +42,7 @@ import org.wiremock.spring.EnableWireMock
 )
 @EnableConfigurationProperties(YouTubeConfig::class)
 @EnableWireMock
+@EnableRetry
 class YouTubeServiceTest(
     private val entityManager: TestEntityManager,
     private val youTubeConfig: YouTubeConfig,
@@ -224,6 +231,47 @@ class YouTubeServiceTest(
                     itemCount shouldBe 0
                     respondedAt shouldNotBe null
                 }
+            }
+        }
+
+        "retry the request on a processing failure" {
+            wireMock.getCommentThreadsFor(fetchAction!!.objectId) returnsJson {
+                statusCode = HttpStatus.BAD_REQUEST.value()
+                body = testResources["comments"].load("400_processing_failure.json")
+                toState = "recovered"
+            }
+            wireMock.getCommentThreadsFor(fetchAction.objectId) and {
+                whenState = "recovered"
+            } returnsJson {
+                body = testResources["comments"].load("200.json")
+            }
+
+            youTubeService.getComments(fetchAction) shouldNotBeNull {
+                items shouldHaveSize 1
+            }
+
+            youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) should {
+                it shouldHaveSize 2
+                it[0].httpStatus shouldBe HttpStatus.INTERNAL_SERVER_ERROR.value()
+                it[1].httpStatus shouldBe HttpStatus.OK.value()
+            }
+        }
+
+        "throw exception on a processing failure after exhausting retries" {
+            wireMock.getCommentThreadsFor(fetchAction!!.objectId) returnsJson {
+                statusCode = HttpStatus.BAD_REQUEST.value()
+                body = testResources["comments"].load("400_processing_failure.json")
+            }
+
+            val exception = shouldThrow<ProcessingFailureException> {
+                youTubeService.getComments(fetchAction)
+            }
+
+            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
+            exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
+
+            youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) should {
+                it shouldHaveSize 3
             }
         }
     }

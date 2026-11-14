@@ -1,17 +1,20 @@
 package ca.metricalsky.winston.service
 
 import ca.metricalsky.winston.client.YouTubeClient
+import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.client.exception.YouTubeException
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity
 import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity
 import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity.RequestType
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository
 import org.springframework.http.HttpStatus
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
+@Retryable(retryFor = [ProcessingFailureException::class])
 class YouTubeService(
     private val youTubeClient: YouTubeClient,
     private val youTubeRequestRepository: YouTubeRequestRepository,

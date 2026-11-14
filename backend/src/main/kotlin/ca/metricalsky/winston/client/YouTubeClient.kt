@@ -1,6 +1,5 @@
 package ca.metricalsky.winston.client
 
-import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.client.exception.wrap
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.ActivityListResponse
@@ -10,7 +9,6 @@ import com.google.api.services.youtube.model.CommentThreadListResponse
 import com.google.api.services.youtube.model.PlaylistItemListResponse
 import com.google.api.services.youtube.model.VideoListResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,7 +22,7 @@ class YouTubeClient(
             log.info { "Fetching channels for handle '${handle}'" }
 
             val response = youTube.channels()
-                .list(CHANNEL_PARTS)
+                .list(channelParts)
                 .setForHandle(handle)
                 .setMaxResults(50L)
                 .execute()
@@ -50,7 +48,7 @@ class YouTubeClient(
             }
 
             val response = youTube.activities()
-                .list(ACTIVITY_PARTS)
+                .list(activityParts)
                 .setChannelId(channelId)
                 .setPublishedAfter(publishedAfter)
                 .setPublishedBefore(publishedBefore)
@@ -80,7 +78,7 @@ class YouTubeClient(
             log.info { "Fetching playlist items for playlistId '${playlistId}' pageToken '${pageToken}'" }
 
             val response = youTube.playlistItems()
-                .list(PLAYLIST_ITEM_PARTS)
+                .list(playlistItemParts)
                 .setPlaylistId(playlistId)
                 .setPageToken(pageToken)
                 .setMaxResults(50L)
@@ -100,7 +98,7 @@ class YouTubeClient(
             log.info { "Fetching videos for videoIds '${videoIds}'" }
 
             val response = youTube.videos()
-                .list(VIDEO_PARTS)
+                .list(videoParts)
                 .setId(videoIds)
                 .setMaxResults(50L)
                 .execute()
@@ -114,7 +112,6 @@ class YouTubeClient(
         }
     }
 
-    @Retryable(retryFor = [ProcessingFailureException::class])
     fun getComments(
         videoId: String,
         pageToken: String? = null,
@@ -123,7 +120,7 @@ class YouTubeClient(
             log.info { "Fetching comments for videoIds '${videoId}' pageToken '${pageToken}'" }
 
             val response = youTube.commentThreads()
-                .list(COMMENT_THREAD_PARTS)
+                .list(commentThreadParts)
                 .setVideoId(videoId)
                 .setPageToken(pageToken)
                 .setMaxResults(100L)
@@ -146,7 +143,7 @@ class YouTubeClient(
             log.info { "Fetching replies for commentId '${commentId}' pageToken '${pageToken}'" }
 
             val response = youTube.comments()
-                .list(COMMENT_PARTS)
+                .list(commentParts)
                 .setParentId(commentId)
                 .setMaxResults(100L)
                 .setPageToken(pageToken).execute()
@@ -161,7 +158,7 @@ class YouTubeClient(
     }
 }
 
-val CHANNEL_PARTS = listOf(
+private val channelParts = listOf(
     "brandingSettings",
     "contentDetails",
     "contentOwnerDetails",
@@ -173,11 +170,11 @@ val CHANNEL_PARTS = listOf(
     "topicDetails"
 )
 
-val ACTIVITY_PARTS = listOf("contentDetails", "id", "snippet")
+private val activityParts = listOf("contentDetails", "id", "snippet")
 
-val PLAYLIST_ITEM_PARTS = listOf("contentDetails", "id", "snippet", "status")
+private val playlistItemParts = listOf("contentDetails", "id", "snippet", "status")
 
-val VIDEO_PARTS = listOf(
+private val videoParts = listOf(
     "contentDetails",
     "id",
     "liveStreamingDetails",
@@ -190,6 +187,6 @@ val VIDEO_PARTS = listOf(
     "topicDetails"
 )
 
-val COMMENT_THREAD_PARTS = listOf("id", "replies", "snippet")
+private val commentThreadParts = listOf("id", "replies", "snippet")
 
-val COMMENT_PARTS = listOf("id", "snippet")
+private val commentParts = listOf("id", "snippet")
