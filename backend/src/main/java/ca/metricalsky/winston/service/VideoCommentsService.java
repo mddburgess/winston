@@ -34,11 +34,16 @@ public class VideoCommentsService {
 
     @Transactional
     public void markVideoCommentsDisabled(String videoId) {
+        markVideoCommentStatus(videoId, CommentStatus.DISABLED);
+    }
+
+    @Transactional
+    public void markVideoCommentStatus(String videoId, CommentStatus commentStatus) {
         var videoComments = videoCommentsRepository.findById(videoId)
                 .orElse(new VideoCommentsEntity());
 
         videoComments.setVideoId(videoId);
-        videoComments.setCommentStatus(CommentStatus.DISABLED);
+        videoComments.setCommentStatus(commentStatus);
 
         videoCommentsRepository.save(videoComments);
     }

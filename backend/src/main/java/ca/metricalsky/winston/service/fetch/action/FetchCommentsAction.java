@@ -2,9 +2,11 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.client.exception.CommentsDisabledException;
+import ca.metricalsky.winston.client.exception.CommentsRestrictedException;
 import ca.metricalsky.winston.client.exception.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -33,6 +35,9 @@ public class FetchCommentsAction implements FetchAction<TopLevelComment> {
             throw new FetchOperationException(ex);
         } catch (CommentsDisabledException ex) {
             videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
+            throw new FetchOperationException(ex);
+        } catch (CommentsRestrictedException ex) {
+            videoCommentsService.markVideoCommentStatus(fetchAction.getObjectId(), CommentStatus.RESTRICTED);
             throw new FetchOperationException(ex);
         }
     }

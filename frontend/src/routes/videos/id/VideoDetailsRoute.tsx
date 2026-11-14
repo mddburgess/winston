@@ -11,7 +11,7 @@ import { NoCommentsJumbotron } from "#/components/videos/NoCommentsJumbotron";
 import { VideoDetailsJumbotron } from "#/components/videos/VideoDetailsJumbotron";
 import { selectAllTopLevelComments, useListCommentsQuery } from "#/store/slices/comments";
 import { routes } from "#/utils/links";
-import { CommentsDisabledJumbotron } from "./CommentsDisabledJumbotron";
+import { CommentsUnavailableJumbotron } from "./CommentsUnavailableJumbotron";
 
 const VideoDetailsRoute = () => {
   const { videoId = "" } = useParams();
@@ -25,7 +25,7 @@ const VideoDetailsRoute = () => {
     return isSuccess ? selectAllTopLevelComments(comments) : [];
   }, [isSuccess, comments]);
 
-  const commentsDisabled = useMemo(() => video?.comments?.comments_disabled, [video]);
+  const commentStatus = useMemo(() => video?.comments?.comment_status || "enabled", [video]);
 
   const authorFocus = useGetSettingsQuery().data?.author_focus;
 
@@ -50,8 +50,8 @@ const VideoDetailsRoute = () => {
         )}
       </Breadcrumb>
       {video && <VideoDetailsJumbotron video={video} />}
-      {video && !commentsDisabled && commentsList.length == 0 && <NoCommentsJumbotron video={video} />}
-      {commentsDisabled && <CommentsDisabledJumbotron />}
+      {video && commentStatus === "enabled" && commentsList.length == 0 && <NoCommentsJumbotron video={video} />}
+      {commentStatus !== "enabled" && <CommentsUnavailableJumbotron commentStatus={commentStatus} />}
       {commentsList.length > 0 && (
         <PaginationContext pageSize={50} items={commentsList}>
           {({ pageNumber, setPageNumber, pageSize, pageCount, pageItems, totalItemCount }) => (

@@ -40,7 +40,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("channel", "details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentStatus", ca.metricalsky.winston.api.model.CommentStatus.ENABLED)
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
@@ -86,7 +86,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentStatus", ca.metricalsky.winston.api.model.CommentStatus.ENABLED)
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())

@@ -4,15 +4,23 @@ import { CommentCounts } from "#/components/comments/CommentCounts";
 
 describe(CommentCounts, () => {
   describe("the comment count", () => {
-    it("is displayed when the commentsDisabled property is false", () => {
+    it("is displayed when the comment status is enabled", () => {
       const comments = render(<CommentCounts />).getByTestId("comments");
 
       expect(comments).toBeInTheDocument();
       expect(comments).toHaveTextContent("0");
     });
 
-    it("displays a message when the commentsDisabled property is true", () => {
-      const comments = render(<CommentCounts commentsDisabled={true} />).getByTestId("comments");
+    it("displays a message when the comment status is restricted", () => {
+      const comments = render(<CommentCounts commentStatus={"restricted"} />).getByTestId("comments");
+
+      expect(comments).toBeInTheDocument();
+      expect(comments).toHaveClass("text-body-tertiary");
+      expect(comments).toHaveTextContent("comments restricted");
+    });
+
+    it("displays a message when the comment status is disabled", () => {
+      const comments = render(<CommentCounts commentStatus={"disabled"} />).getByTestId("comments");
 
       expect(comments).toBeInTheDocument();
       expect(comments).toHaveClass("text-body-tertiary");
