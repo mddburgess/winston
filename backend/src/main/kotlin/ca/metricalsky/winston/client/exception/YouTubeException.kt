@@ -21,7 +21,7 @@ class QuotaExceededException(cause: GoogleJsonResponseException? = null) :
 class VideoNotFoundException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.VIDEO_NOT_FOUND, cause)
 
-fun wrap(cause: Throwable) = when (cause) {
+fun youTubeException(cause: Throwable) = when (cause) {
     is GoogleJsonResponseException -> when (cause.details?.errors?.firstOrNull()?.reason) {
         "commentsDisabled" -> CommentsDisabledException(cause)
         "processingFailure" -> ProcessingFailureException(cause)

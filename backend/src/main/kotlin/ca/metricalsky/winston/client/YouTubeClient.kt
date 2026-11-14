@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.client
 
-import ca.metricalsky.winston.client.exception.wrap
+import ca.metricalsky.winston.client.exception.youTubeException
 import com.google.api.services.youtube.YouTube
 import com.google.api.services.youtube.model.ActivityListResponse
 import com.google.api.services.youtube.model.ChannelListResponse
@@ -32,7 +32,7 @@ class YouTubeClient(
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch channels for handle '${handle}'" }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 
@@ -66,7 +66,7 @@ class YouTubeClient(
                 "Failed to fetch activities for channelId '${channelId}'" +
                         " publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
             }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 
@@ -89,7 +89,7 @@ class YouTubeClient(
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch playlist items for playlistId '${playlistId}' pageToken '${pageToken}'" }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 
@@ -108,7 +108,7 @@ class YouTubeClient(
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch videos for videoIds '${videoIds}'" }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 
@@ -131,7 +131,7 @@ class YouTubeClient(
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch comments for videoId '${videoId}' pageToken '${pageToken}'" }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 
@@ -153,7 +153,7 @@ class YouTubeClient(
             return response
         } catch (ex: Exception) {
             log.error(ex) { "Failed to fetch replies for commentId '${commentId}' pageToken '${pageToken}'" }
-            throw wrap(ex)
+            throw youTubeException(ex)
         }
     }
 }
