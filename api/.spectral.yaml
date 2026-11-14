@@ -4,16 +4,21 @@ extends:
   - "@stoplight/spectral-documentation"
 
 rules:
-  api-health: off
-  api-home: off
+  # spectral:oas overrides
   contact-properties: off
-  docs-tags-alphabetical: off
-  hosts-https-only-oas3: off
-  no-security-schemes-defined: off
-  no-x-headers: off
   oas3-schema: warn
   oas3-valid-media-example: warn
   openapi-tags-alphabetical: off
+
+  # @apisyouwonthate/style-guide overrides
+  api-health: off
+  api-home: off
+  hosts-https-only-oas3: off
+  no-security-schemes-defined: off
+  no-x-headers: off
+
+  # @stoplight/spectral-documentation overrides
+  docs-tags-alphabetical: off
 
   example-description:
     description: Examples should have a description.
