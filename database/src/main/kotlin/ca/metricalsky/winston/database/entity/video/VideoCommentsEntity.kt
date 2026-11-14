@@ -33,10 +33,6 @@ class VideoCommentsEntity(
     @Column(name = "last_fetched_at")
     var lastFetchedAt: OffsetDateTime? = null
 
-    @Deprecated(message = "Remove after migration")
-    val commentsDisabled
-        get() = commentStatus == CommentStatus.DISABLED
-
     enum class CommentStatus {
         ENABLED,
         RESTRICTED,

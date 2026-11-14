@@ -28,7 +28,6 @@ class VideoCommentsEntityTest(
                 this shouldNotBeSameInstanceAs videoComments
                 videoId shouldBe videoComments.videoId
                 commentStatus shouldBe videoComments.commentStatus
-                commentsDisabled shouldBe (videoComments.commentStatus == CommentStatus.DISABLED)
                 commentCount shouldBe videoComments.commentCount
                 replyCount shouldBe videoComments.replyCount
                 totalReplyCount shouldBe videoComments.totalReplyCount
