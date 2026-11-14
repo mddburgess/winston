@@ -27,7 +27,7 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val channelCount = response?.items?.size ?: 0
+            val channelCount = response?.items.orEmpty().size
             log.info { "Fetched ${channelCount} channels for handle '${handle}'" }
             return response
         } catch (ex: Exception) {
@@ -55,7 +55,7 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val count = response?.items?.size ?: 0
+            val count = response?.items.orEmpty().size
             log.info {
                 "Fetched ${count} activities for channelId '${channelId}' " +
                         "publishedAfter '${publishedAfter}' publishedBefore '${publishedBefore}'"
@@ -84,7 +84,7 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val count = response?.items?.size ?: 0
+            val count = response?.items.orEmpty().size
             log.info { "Fetched ${count} playlist items for playlistId '${playlistId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
@@ -103,7 +103,7 @@ class YouTubeClient(
                 .setMaxResults(50L)
                 .execute()
 
-            val count = response?.items?.size ?: 0
+            val count = response?.items.orEmpty().size
             log.info { "Fetched ${count} videos for videoIds ${videoIds}" }
             return response
         } catch (ex: Exception) {
@@ -126,7 +126,7 @@ class YouTubeClient(
                 .setMaxResults(100L)
                 .execute()
 
-            val count = response?.items?.size ?: 0
+            val count = response?.items.orEmpty().size
             log.info { "Fetched ${count} comments for videoId ${videoId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
@@ -146,9 +146,10 @@ class YouTubeClient(
                 .list(commentParts)
                 .setParentId(commentId)
                 .setMaxResults(100L)
-                .setPageToken(pageToken).execute()
+                .setPageToken(pageToken)
+                .execute()
 
-            val count = response?.items?.size ?: 0
+            val count = response?.items.orEmpty().size
             log.info { "Fetched ${count} replies for commentId '${commentId}' pageToken '${pageToken}'" }
             return response
         } catch (ex: Exception) {
