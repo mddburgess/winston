@@ -7,7 +7,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.readText
 
 class TestResources private constructor(
-    private val resourceDir: Path = rootDir,
+    private val resourceDir: Path = Path("src", "test", "resources"),
 ) {
     operator fun get(subpath: String) = TestResources(resourceDir.resolve(subpath))
 
@@ -21,9 +21,6 @@ class TestResources private constructor(
     }
 
     companion object {
-        operator fun get(subPath: String) = TestResources()[subPath]
+        operator fun get(subpath: String) = TestResources()[subpath]
     }
-
 }
-
-private val rootDir = Path("src", "test", "resources")
