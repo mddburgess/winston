@@ -23,6 +23,8 @@ enum class ErrorCode(
         "The request body is invalid and cannot be processed."),
     MALFORMED_REQUEST_BODY(HttpStatus.BAD_REQUEST,
         "The request body is malformed and cannot be read."),
+    PROCESSING_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR,
+        "YouTube encountered a processing failure while performing the request. Please try again."),
     PUBLISHER_CLOSED(HttpStatus.REQUEST_TIMEOUT,
         "The event publisher is closed and cannot publish new events."),
     QUOTA_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS,

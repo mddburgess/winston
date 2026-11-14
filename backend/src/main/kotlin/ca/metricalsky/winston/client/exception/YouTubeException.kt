@@ -13,7 +13,7 @@ class CommentsDisabledException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.COMMENTS_DISABLED, cause)
 
 class ProcessingFailureException(cause: GoogleJsonResponseException? = null) :
-    YouTubeException(ErrorCode.YOUTUBE_EXCEPTION, cause)
+    YouTubeException(ErrorCode.PROCESSING_FAILURE, cause)
 
 class QuotaExceededException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.QUOTA_EXCEEDED, cause)
