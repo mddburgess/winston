@@ -7,7 +7,7 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException
 open class YouTubeException(
     errorCode: ErrorCode = ErrorCode.YOUTUBE_EXCEPTION,
     cause: Throwable? = null,
-) : WinstonException(errorCode.problem, cause)
+) : WinstonException(errorCode, cause)
 
 class CommentsDisabledException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.COMMENTS_DISABLED, cause)
