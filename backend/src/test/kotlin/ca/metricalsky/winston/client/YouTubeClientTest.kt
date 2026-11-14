@@ -3,7 +3,7 @@ package ca.metricalsky.winston.client
 import ca.metricalsky.winston.client.exception.CommentsDisabledException
 import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.config.YouTubeProvider
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig
+import ca.metricalsky.winston.config.properties.YouTubeConfig
 import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
 import com.google.api.client.googleapis.json.GoogleJsonResponseException

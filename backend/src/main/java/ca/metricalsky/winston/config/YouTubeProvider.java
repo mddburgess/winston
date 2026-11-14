@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.config;
 
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
+import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;

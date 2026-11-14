@@ -3,7 +3,7 @@ package ca.metricalsky.winston.service
 import ca.metricalsky.winston.client.YouTubeClient
 import ca.metricalsky.winston.client.YouTubeWireMock
 import ca.metricalsky.winston.config.YouTubeProvider
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig
+import ca.metricalsky.winston.config.properties.YouTubeConfig
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity
 import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository

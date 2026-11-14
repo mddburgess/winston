@@ -1,34 +1,30 @@
-package ca.metricalsky.winston.config.properties.youtube;
+package ca.metricalsky.winston.config.properties
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "winston.youtube")
-@Value
-public class YouTubeConfig {
+data class YouTubeConfig(
 
     /**
      * API key for YouTube API requests.
      */
-    @NotBlank
-    String apiKey;
+    @field:NotBlank
+    val apiKey: String,
 
     /**
      * Daily request quota available for YouTube API requests.
      */
-    @NotNull
-    @Min(0)
-    @Max(10_000)
-    Integer dailyRequestQuota;
+    @field:Min(0)
+    @field:Max(10_000)
+    val dailyRequestQuota: Int,
 
     /**
      * Root URL for a mock YouTube API service. Use for testing only.
      */
-    String mockRootUrl;
-}
+    val mockRootUrl: String? = null,
+)

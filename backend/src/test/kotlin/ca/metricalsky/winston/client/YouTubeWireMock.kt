@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.client
 
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig
+import ca.metricalsky.winston.config.properties.YouTubeConfig
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.marcinziolo.kotlin.wiremock.contains
 import com.marcinziolo.kotlin.wiremock.equalTo
@@ -35,6 +35,6 @@ class YouTubeWireMock(
 }
 
 private fun youTubeWireMock(youTubeConfig: YouTubeConfig): WireMock {
-    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
+    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl!!)?.groups[1]?.value?.toInt() ?: 0
     return WireMock.create().port(port).build()
 }

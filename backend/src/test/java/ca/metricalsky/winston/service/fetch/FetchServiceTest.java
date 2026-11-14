@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.service.fetch;
 
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
+import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.event.exception.PublisherException;

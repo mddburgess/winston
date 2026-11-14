@@ -2,7 +2,7 @@ package ca.metricalsky.winston.web.fetch;
 
 import ca.metricalsky.winston.api.FetchApi;
 import ca.metricalsky.winston.api.model.FetchLimitsResponse;
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
+import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
