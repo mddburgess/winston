@@ -29,5 +29,5 @@ class YoutubeProvider(faker: WinstonFaker): AbstractProvider<WinstonFaker>(faker
             YoutubeResponseProvider(it)
     }
 
-    fun videoId() = faker.regexify("[A-Za-z0-9_-]{11}")
+    fun videoId(): String = faker.regexify("[A-Za-z0-9_-]{11}")
 }

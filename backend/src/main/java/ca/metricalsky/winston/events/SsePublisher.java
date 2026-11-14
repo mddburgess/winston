@@ -1,8 +1,10 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.event.exception.PublisherException;
 import ca.metricalsky.winston.events.model.AppEvent;
 import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
-import ca.metricalsky.winston.mappers.ProblemMapper;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +41,9 @@ public class SsePublisher {
         sseEmitter.complete();
     }
 
-    public void completeWithError(Throwable ex) {
+    public void completeWithError(WinstonException ex) {
         if (open) {
-            var problem = new ProblemMapper().convert(ex);
-            publish(new EventSubscriptionEvent(id, problem));
+            publish(new EventSubscriptionEvent(id, ex.getProblem()));
         }
         sseEmitter.completeWithError(ex);
     }
@@ -59,10 +60,10 @@ public class SsePublisher {
             try {
                 sseEmitter.send(builder);
             } catch (IOException | RuntimeException ex) {
-                throw new PublisherException(ex);
+                throw new PublisherException(ErrorCode.RUNTIME_EXCEPTION, ex);
             }
         } else {
-            throw new PublisherException("The event publisher is closed and cannot publish new events.");
+            throw new PublisherException(ErrorCode.PUBLISHER_CLOSED, null);
         }
     }
 }

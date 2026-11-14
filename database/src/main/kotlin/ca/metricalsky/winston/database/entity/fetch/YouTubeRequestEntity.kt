@@ -20,6 +20,15 @@ class YouTubeRequestEntity(
     @Column(name = "object_id")
     var objectId: String,
 
+    @Column(name = "published_after")
+    var publishedAfter: String? = null,
+
+    @Column(name = "published_before")
+    var publishedBefore: String? = null,
+
+    @Column(name = "page_token")
+    var pageToken: String? = null,
+
     @Basic(optional = false)
     @Column(name = "requested_at")
     var requestedAt: OffsetDateTime = OffsetDateTime.now(),
@@ -28,15 +37,6 @@ class YouTubeRequestEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     var id: Long? = null
-
-    @Column(name = "published_after")
-    var publishedAfter: String? = null
-
-    @Column(name = "published_before")
-    var publishedBefore: String? = null
-
-    @Column(name = "page_token")
-    var pageToken: String? = null
 
     @Column(name = "http_status")
     var httpStatus: Int? = null

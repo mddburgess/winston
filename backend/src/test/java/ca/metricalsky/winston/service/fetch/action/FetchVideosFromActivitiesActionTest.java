@@ -15,7 +15,8 @@ import org.springframework.core.convert.ConversionService;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -45,6 +46,7 @@ class FetchVideosFromActivitiesActionTest {
         var fetchRequest = faker.database().fetchRequest().minimalEntity();
         var fetchOperation = faker.database().fetchOperation().videos(fetchRequest);
         fetchAction = faker.database().fetchAction().videos(fetchOperation);
+        fetchAction.setId(1L);
     }
 
     @Test
@@ -62,7 +64,7 @@ class FetchVideosFromActivitiesActionTest {
                 .hasFieldOrPropertyWithValue("items", Collections.emptyList())
                 .hasFieldOrPropertyWithValue("nextFetchAction", null);
 
-        verify(youTubeService, never()).getVideos(any(), any());
+        verify(youTubeService, never()).getVideos(anyLong(), anyList());
         verifyNoInteractions(channelDataService, videoDataService);
     }
 

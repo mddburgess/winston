@@ -4,7 +4,6 @@ import ca.metricalsky.winston.api.model.Problem
 import ca.metricalsky.winston.api.model.ProblemError
 import ca.metricalsky.winston.api.model.ProblemLocation
 import ca.metricalsky.winston.exception.ErrorCode
-import ca.metricalsky.winston.exception.Location
 import ca.metricalsky.winston.exception.utils.JsonExceptionUtils
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
@@ -23,14 +22,11 @@ class MethodArgumentNotValidExceptionHandler(
     }
 
     private fun buildError(fieldError: FieldError): ProblemError {
-        val location = Location(JsonExceptionUtils.getJsonPointer(fieldError))
+        val pointer = JsonExceptionUtils.getJsonPointer(fieldError)
 
         return ProblemError()
             .type("error:${fieldError.code}")
             .detail(messageSource.getMessage(fieldError, Locale.ENGLISH))
-            .location(ProblemLocation()
-                .pointer(location.pointer)
-                .line(location.line)
-                .column(location.column))
+            .location(ProblemLocation().pointer(pointer.toString()))
     }
 }

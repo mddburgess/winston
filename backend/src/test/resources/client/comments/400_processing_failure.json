@@ -1,0 +1,15 @@
+{
+  "error": {
+    "code": 400,
+    "errors": [
+      {
+        "domain": "youtube.commentThread",
+        "location": "body",
+        "locationType": "other",
+        "message": "The API server failed to successfully process the request. While this can be a transient error, it usually indicates that the request's input is invalid. Check the structure of the <code>commentThread</code> resource in the request body to ensure that it is valid.",
+        "reason": "processingFailure"
+      }
+    ],
+    "message": "The API server failed to successfully process the request. While this can be a transient error, it usually indicates that the request's input is invalid. Check the structure of the <code>commentThread</code> resource in the request body to ensure that it is valid."
+  }
+}

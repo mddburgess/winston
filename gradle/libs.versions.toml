@@ -23,6 +23,7 @@ kotestExtensionsSpring = { module = "io.kotest:kotest-extensions-spring", versio
 kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version = "8.0.4" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlinWiremock = { module = "com.marcinziolo:kotlin-wiremock", version = "2.1.1" }
 lombok = { module = "org.projectlombok:lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
@@ -37,6 +38,7 @@ springBootStarterDataJpa = { module = "org.springframework.boot:spring-boot-star
 springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
 springBootStarterValidation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springBoot" }
 springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot" }
+springRetry = { module = "org.springframework.retry:spring-retry", version = "2.0.13" }
 wiremockSpringBoot = { module = "org.wiremock.integrations:wiremock-spring-boot", version = "3.10.0" }
 
 [bundles]
@@ -65,7 +67,8 @@ springBoot = [
     "springBootStarterActuator",
     "springBootStarterDataJpa",
     "springBootStarterValidation",
-    "springBootStarterWeb"
+    "springBootStarterWeb",
+    "springRetry"
 ]
 youtube = [
     "googleApiClient",

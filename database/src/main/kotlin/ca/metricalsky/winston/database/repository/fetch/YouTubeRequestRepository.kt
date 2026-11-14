@@ -9,4 +9,6 @@ import java.time.OffsetDateTime
 interface YouTubeRequestRepository : JpaRepository<YouTubeRequestEntity, Long> {
 
     fun countAllByRequestedAtAfter(date: OffsetDateTime): Int
+
+    fun findAllByFetchActionId(fetchActionId: Long): List<YouTubeRequestEntity>
 }

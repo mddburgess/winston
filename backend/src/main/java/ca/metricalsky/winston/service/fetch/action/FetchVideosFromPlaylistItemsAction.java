@@ -4,8 +4,8 @@ import ca.metricalsky.winston.api.model.Video;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.YouTubeService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import com.google.api.services.youtube.model.PlaylistItem;
@@ -29,7 +29,7 @@ public class FetchVideosFromPlaylistItemsAction implements FetchAction<Video> {
     public FetchResult<Video> fetch(FetchActionEntity fetchAction) {
         if (fetchAction.getObjectId().startsWith("@")) {
             var channel = channelDataService.findChannelByHandle(fetchAction.getObjectId())
-                    .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_PULLED));
+                    .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_PULLED));
             fetchAction.setObjectId(channel.getId());
         }
 

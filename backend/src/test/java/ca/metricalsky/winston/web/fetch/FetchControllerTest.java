@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.web.fetch;
 
-import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig;
+import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import ca.metricalsky.winston.service.fetch.FetchService;
 import ca.metricalsky.winston.test.annotations.ControllerTest;
 import org.junit.jupiter.api.Test;

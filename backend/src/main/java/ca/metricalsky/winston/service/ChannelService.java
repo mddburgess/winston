@@ -3,9 +3,9 @@ package ca.metricalsky.winston.service;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.exception.AppException;
-import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class ChannelService {
 
     public Channel getChannelByHandle(String handle) {
         var channel = channelDataService.findChannelByHandle(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         var videoCount = videoDataService.countByChannelId(channel.getId());
         channel.setVideoCount(videoCount);
@@ -42,7 +42,7 @@ public class ChannelService {
 
     public void requireChannelExists(String channelId) {
         if (!channelRepository.existsById(channelId)) {
-            throw new AppException(ErrorCode.CHANNEL_NOT_FOUND);
+            throw new WinstonException(ErrorCode.CHANNEL_NOT_FOUND);
         };
     }
 }

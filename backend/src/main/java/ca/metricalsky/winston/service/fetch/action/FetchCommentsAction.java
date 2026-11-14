@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.api.model.TopLevelComment;
-import ca.metricalsky.winston.client.CommentsDisabledException;
-import ca.metricalsky.winston.client.VideoNotFoundException;
+import ca.metricalsky.winston.client.exception.CommentsDisabledException;
+import ca.metricalsky.winston.client.exception.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
 import ca.metricalsky.winston.exception.FetchOperationException;
