@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.events.SsePublisher;
 import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Service;
@@ -52,7 +52,7 @@ public class NotificationsService implements SmartLifecycle {
 
     public SsePublisher requireSubscription(UUID subscriptionId) {
         return Optional.ofNullable(subscriptions.get(subscriptionId))
-                .orElseThrow(() -> new AppException(ErrorCode.SUBSCRIPTION_CLOSED));
+                .orElseThrow(() -> new WinstonException(ErrorCode.SUBSCRIPTION_CLOSED));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class NotificationsService implements SmartLifecycle {
     @Override
     public void stop() {
         if (!subscriptions.isEmpty()) {
-            var ex = new AppException(ErrorCode.SERVICE_SHUTDOWN);
+            var ex = new WinstonException(ErrorCode.SERVICE_SHUTDOWN);
             Map.copyOf(subscriptions).forEach((subscriptionId, ssePublisher) -> {
                 log.warn("Closing notifications subscription {}", subscriptionId);
                 ssePublisher.completeWithError(ex);

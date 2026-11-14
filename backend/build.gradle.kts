@@ -58,6 +58,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.archunitJunit5)
+    testImplementation(libs.kotlinWiremock)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
     testImplementation(libs.wiremockSpringBoot)
@@ -85,6 +86,7 @@ tasks {
 
     test {
         useJUnitPlatform()
+        systemProperty("kotest.framework.config.fqn", "ca.metricalsky.winston.TestConfig")
         finalizedBy(jacocoTestReport)
         testLogging {
             events("FAILED", "SKIPPED")

@@ -6,8 +6,8 @@ import ca.metricalsky.winston.api.model.ChannelProperties;
 import ca.metricalsky.winston.api.model.ListChannelsResponse;
 import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.dao.ChannelDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.ChannelService;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class ChannelController implements ChannelsApi {
             List<PatchOperation> patchOperations
     ) {
         var channel = channelDataService.findChannelByHandle(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.CHANNEL_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.CHANNEL_NOT_FOUND));
 
         var channelProperties = channel.getProperties();
         var patchedChannelProperties = jsonPatchUtils.applyPatch(channelProperties, patchOperations);

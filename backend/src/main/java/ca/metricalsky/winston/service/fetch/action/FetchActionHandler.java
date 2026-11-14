@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service.fetch.action;
 
 import ca.metricalsky.winston.domain.PullOperationContext;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.event.exception.PublisherException;
 import ca.metricalsky.winston.events.EventPublisher;
-import ca.metricalsky.winston.events.PublisherException;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,9 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.event.exception.PublisherException;
 import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
+import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +41,7 @@ class SsePublisherTest {
 
     @Test
     void completeWithError() {
-        var exception = new RuntimeException();
+        var exception = new WinstonException(ErrorCode.RUNTIME_EXCEPTION);
 
         ssePublisher.completeWithError(exception);
 

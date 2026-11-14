@@ -10,8 +10,8 @@ import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.config.properties.api.AuthorsApiConfig;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class AuthorController implements AuthorsApi {
     @Override
     public ResponseEntity<GetAuthorResponse> getAuthor(String handle) {
         var author = authorDataService.findAuthorByHandle(handle)
-                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_FOUND));
+                .orElseThrow(() -> new WinstonException(ErrorCode.AUTHOR_NOT_FOUND));
         var videos = videoDataService.getVideosForAuthor(handle);
         var response = new GetAuthorResponse()
                 .author(author)

@@ -3,9 +3,9 @@ package ca.metricalsky.winston.service;
 import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.dao.ChannelDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.database.repository.channel.ChannelRepository;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.test.TestUtils;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.Test;
@@ -87,7 +87,7 @@ class ChannelServiceTest {
 
     @Test
     void getChannelByHandle_notFound() {
-        var exception = new AppException(ErrorCode.CHANNEL_NOT_FOUND);
+        var exception = new WinstonException(ErrorCode.CHANNEL_NOT_FOUND);
         when(channelDataService.findChannelByHandle(CHANNEL_HANDLE))
                 .thenThrow(exception);
 
@@ -110,7 +110,7 @@ class ChannelServiceTest {
                 .thenReturn(false);
 
         assertThatThrownBy(() -> channelService.requireChannelExists(CHANNEL_ID))
-                .isExactlyInstanceOf(AppException.class)
+                .isExactlyInstanceOf(WinstonException.class)
                 .hasFieldOrPropertyWithValue("status", HttpStatus.NOT_FOUND)
                 .hasMessageEndingWith("The requested channel was not found.");
     }

@@ -1,7 +1,6 @@
 package ca.metricalsky.winston.utils;
 
 import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.exception.AppException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
@@ -25,7 +24,7 @@ public class JsonPatchUtils {
             var patchedObjectNode = jsonPatch.apply(objectNode);
             return objectMapper.convertValue(patchedObjectNode, (Class<T>) object.getClass());
         } catch (JsonPatchException ex) {
-            throw new AppException(ex);
+            throw new RuntimeException(ex);
         }
     }
 }

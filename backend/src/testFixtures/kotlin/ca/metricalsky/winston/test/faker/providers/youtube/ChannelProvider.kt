@@ -15,7 +15,7 @@ import net.datafaker.providers.base.AbstractProvider
 
 class ChannelProvider(faker: WinstonFaker) : AbstractProvider<WinstonFaker>(faker) {
 
-    fun id() = faker.regexify("UC[A-Za-z0-9_-]{22}")
+    fun id(): String = faker.regexify("UC[A-Za-z0-9_-]{22}")
 
     fun handle() = "@" + faker.word().noun()
 

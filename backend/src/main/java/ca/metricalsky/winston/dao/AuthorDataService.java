@@ -8,8 +8,8 @@ import ca.metricalsky.winston.api.model.PatchOperation;
 import ca.metricalsky.winston.api.model.VideoStatistics;
 import ca.metricalsky.winston.database.repository.author.AuthorRepository;
 import ca.metricalsky.winston.database.view.AuthorDetailsView;
-import ca.metricalsky.winston.exception.AppException;
 import ca.metricalsky.winston.exception.ErrorCode;
+import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.mappers.api.AuthorMapper;
 import ca.metricalsky.winston.utils.JsonPatchUtils;
 import lombok.RequiredArgsConstructor;
@@ -102,7 +102,7 @@ public class AuthorDataService {
     public Author patchAuthor(String handle, List<PatchOperation> patchOperations) {
         var author = authorRepository.findByDisplayName(handle);
         if (author == null) {
-            throw new AppException(ErrorCode.AUTHOR_NOT_FOUND);
+            throw new WinstonException(ErrorCode.AUTHOR_NOT_FOUND);
         }
 
         var patchedAuthor = jsonPatchUtils.applyPatch(author, patchOperations);
