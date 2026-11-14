@@ -44,6 +44,7 @@ class YouTubeServiceTest(
 ) : WordSpec({
 
     val faker = WinstonFaker()
+    val testResources = TestResources["client"]
     val wireMock = YouTubeWireMock(youTubeConfig)
 
     afterEach {
@@ -52,7 +53,6 @@ class YouTubeServiceTest(
 
     "getChannels()" should {
 
-        val testResources = TestResources.dir("client", "channels")
         var fetchAction: FetchActionEntity? = null
 
         beforeEach {
@@ -63,7 +63,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with channels" {
             wireMock.getChannelsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["channels"].load("200.json")
             }
 
             youTubeService.getChannels(fetchAction) shouldNotBeNull {
@@ -87,7 +87,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with no channels" {
             wireMock.getChannelsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200_not_found.json")
+                body = testResources["channels"].load("200_not_found.json")
             }
 
             youTubeService.getChannels(fetchAction) shouldNotBeNull {
@@ -112,7 +112,6 @@ class YouTubeServiceTest(
 
     "getActivities()" should {
 
-        val testResources = TestResources.dir("client", "activities")
         var fetchAction: FetchActionEntity? = null
 
         beforeEach {
@@ -123,7 +122,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with activities" {
             wireMock.getActivitiesFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["activities"].load("200.json")
             }
 
             youTubeService.getActivities(fetchAction) shouldNotBeNull {
@@ -147,7 +146,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with no activities" {
             wireMock.getActivitiesFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["activities"].load("200_empty.json")
             }
 
             youTubeService.getActivities(fetchAction) shouldNotBeNull {
@@ -172,7 +171,6 @@ class YouTubeServiceTest(
 
     "getComments()" should {
 
-        val testResources = TestResources.dir("client", "comments")
         var fetchAction: FetchActionEntity? = null
 
         beforeEach {
@@ -183,7 +181,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with comments" {
             wireMock.getCommentThreadsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["comments"].load("200.json")
             }
 
             youTubeService.getComments(fetchAction) shouldNotBeNull {
@@ -207,7 +205,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with no comments" {
             wireMock.getCommentThreadsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["comments"].load("200_empty.json")
             }
 
             youTubeService.getComments(fetchAction) shouldNotBeNull {
@@ -232,7 +230,6 @@ class YouTubeServiceTest(
 
     "getReplies()" should {
 
-        val testResources = TestResources.dir("client", "replies")
         var fetchAction: FetchActionEntity? = null
 
         beforeEach {
@@ -243,7 +240,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with replies" {
             wireMock.getCommentsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["replies"].load("200.json")
             }
 
             youTubeService.getReplies(fetchAction) shouldNotBeNull {
@@ -267,7 +264,7 @@ class YouTubeServiceTest(
 
         "handle a 200 response with no replies" {
             wireMock.getCommentsFor(fetchAction!!.objectId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["replies"].load("200_empty.json")
             }
 
             youTubeService.getReplies(fetchAction) shouldNotBeNull {

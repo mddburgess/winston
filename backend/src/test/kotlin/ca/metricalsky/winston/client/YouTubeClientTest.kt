@@ -8,11 +8,7 @@ import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.util.DateTime
-import com.marcinziolo.kotlin.wiremock.SpecifyRequest
 import com.marcinziolo.kotlin.wiremock.and
-import com.marcinziolo.kotlin.wiremock.contains
-import com.marcinziolo.kotlin.wiremock.equalTo
-import com.marcinziolo.kotlin.wiremock.get
 import com.marcinziolo.kotlin.wiremock.returnsJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
@@ -39,6 +35,7 @@ class YouTubeClientTest(
 ) : WordSpec({
 
     val faker = WinstonFaker()
+    val testResources = TestResources["client"]
     val wireMock = YouTubeWireMock(youTubeConfig)
 
     afterEach {
@@ -48,16 +45,10 @@ class YouTubeClientTest(
     "getChannel()" should {
 
         val channelHandle = faker.youtube().channel().handle()
-        val testResources = TestResources.dir("client", "channels")
-
-        fun channelsFor(channelHandle: String): SpecifyRequest = {
-            urlPath equalTo "/youtube/v3/channels"
-            queryParams contains "forHandle" equalTo channelHandle
-        }
 
         "handle a 200 response with channels" {
             wireMock.getChannelsFor(channelHandle) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["channels"].load("200.json")
             }
 
             youTubeClient.getChannel(channelHandle) shouldNotBeNull {
@@ -80,7 +71,7 @@ class YouTubeClientTest(
 
         "handle a 200 response with no channels" {
             wireMock.getChannelsFor(channelHandle) returnsJson {
-                body = testResources.load("200_not_found.json")
+                body = testResources["channels"].load("200_not_found.json")
             }
 
             youTubeClient.getChannel(channelHandle) shouldNotBeNull {
@@ -92,11 +83,10 @@ class YouTubeClientTest(
     "getActivities()" should {
 
         val channelId = faker.youtube().channel().id()
-        val testResources = TestResources.dir("client", "activities")
 
         "handle a 200 response with activities" {
             wireMock.getActivitiesFor(channelId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["activities"].load("200.json")
             }
 
             youTubeClient.getActivities(channelId) shouldNotBeNull {
@@ -129,7 +119,7 @@ class YouTubeClientTest(
 
         "handle a 200 response with no activities" {
             wireMock.getActivitiesFor(channelId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["activities"].load("200_empty.json")
             }
 
             youTubeClient.getActivities(channelId) shouldNotBeNull {
@@ -141,11 +131,10 @@ class YouTubeClientTest(
     "getComments()" should {
 
         val videoId = faker.youtube().videoId()
-        val testResources = TestResources.dir("client", "comments")
 
         "handle a 200 response with comments" {
             wireMock.getCommentThreadsFor(videoId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["comments"].load("200.json")
             }
 
             youTubeClient.getComments(videoId) shouldNotBeNull {
@@ -166,7 +155,7 @@ class YouTubeClientTest(
 
         "handle a 200 response with no comments" {
             wireMock.getCommentThreadsFor(videoId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["comments"].load("200_empty.json")
             }
 
             youTubeClient.getComments(videoId) shouldNotBeNull {
@@ -177,7 +166,7 @@ class YouTubeClientTest(
         "throw exception when comments are disabled" {
             wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.FORBIDDEN.value()
-                body = testResources.load("403_comments_disabled.json")
+                body = testResources["comments"].load("403_comments_disabled.json")
             }
 
             val exception = shouldThrow<CommentsDisabledException> {
@@ -191,13 +180,13 @@ class YouTubeClientTest(
         "retry the request on a processing failure" {
             wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.BAD_REQUEST.value()
-                body = testResources.load("400_processing_failure.json")
+                body = testResources["comments"].load("400_processing_failure.json")
                 toState = "recovered"
             }
             wireMock.getCommentThreadsFor(videoId) and {
                 whenState = "recovered"
             } returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["comments"].load("200.json")
             }
 
             youTubeClient.getComments(videoId) shouldNotBeNull {
@@ -208,7 +197,7 @@ class YouTubeClientTest(
         "throw exception on a processing failure" {
             wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.BAD_REQUEST.value()
-                body = testResources.load("400_processing_failure.json")
+                body = testResources["comments"].load("400_processing_failure.json")
             }
 
             val exception = shouldThrow<ProcessingFailureException> {
@@ -222,11 +211,10 @@ class YouTubeClientTest(
     "getReplies()" should {
 
         val parentId = faker.youtube().comment().id()
-        val testResources = TestResources.dir("client", "replies")
 
         "handle a 200 response with replies" {
             wireMock.getCommentsFor(parentId) returnsJson {
-                body = testResources.load("200.json")
+                body = testResources["replies"].load("200.json")
             }
 
             youTubeClient.getReplies(parentId) shouldNotBeNull {
@@ -247,7 +235,7 @@ class YouTubeClientTest(
 
         "handle a 200 response with no replies" {
             wireMock.getCommentsFor(parentId) returnsJson {
-                body = testResources.load("200_empty.json")
+                body = testResources["replies"].load("200_empty.json")
             }
 
             youTubeClient.getReplies(parentId) shouldNotBeNull {
