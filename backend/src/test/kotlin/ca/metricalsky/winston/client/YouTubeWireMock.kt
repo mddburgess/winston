@@ -1,62 +1,40 @@
 package ca.metricalsky.winston.client
 
 import ca.metricalsky.winston.config.properties.youtube.YouTubeConfig
-import com.github.tomakehurst.wiremock.client.MappingBuilder
-import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.including
-import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-
-fun youTubeWireMock(youTubeConfig: YouTubeConfig): WireMock {
-    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
-    return WireMock.create().port(port).build()
-}
+import com.marcinziolo.kotlin.wiremock.contains
+import com.marcinziolo.kotlin.wiremock.equalTo
+import com.marcinziolo.kotlin.wiremock.get
 
 class YouTubeWireMock(
-    private val youTubeConfig: YouTubeConfig,
+    youTubeConfig: YouTubeConfig,
 ) {
     val wireMock: WireMock = youTubeWireMock(youTubeConfig)
 
-    fun stubForGetChannels(forHandle: String) = StubMappingBuilder(
-        wireMock, get(urlPathEqualTo("/youtube/v3/channels"))
-            .withQueryParam("part", including(*CHANNEL_PARTS.toTypedArray()))
-            .withQueryParam("forHandle", equalTo(forHandle))
-            .withQueryParam("maxResults", equalTo("50"))
-            .withQueryParam("key", equalTo(youTubeConfig.apiKey))
-    )
+    fun reset() = wireMock.resetMappings()
 
-    fun stubForGetActivities(channelId: String) = StubMappingBuilder(
-        wireMock, get(urlPathEqualTo("/youtube/v3/activities"))
-            .withQueryParam("part", including(*ACTIVITY_PARTS.toTypedArray()))
-            .withQueryParam("channelId", equalTo(channelId))
-            .withQueryParam("maxResults", equalTo("50"))
-            .withQueryParam("key", equalTo(youTubeConfig.apiKey))
-    )
-
-    fun stubForGetCommentThreads(videoId: String) = StubMappingBuilder(
-        wireMock, get(urlPathEqualTo("/youtube/v3/commentThreads"))
-            .withQueryParam("part", including(*COMMENT_THREAD_PARTS.toTypedArray()))
-            .withQueryParam("videoId", equalTo(videoId))
-            .withQueryParam("maxResults", equalTo("100"))
-            .withQueryParam("key", equalTo(youTubeConfig.apiKey))
-    )
-
-    fun stubForGetComments(parentId: String) = StubMappingBuilder(
-        wireMock, get(urlPathEqualTo("/youtube/v3/comments"))
-            .withQueryParam("part", including(*COMMENT_PARTS.toTypedArray()))
-            .withQueryParam("parentId", equalTo(parentId))
-            .withQueryParam("maxResults", equalTo("100"))
-            .withQueryParam("key", equalTo(youTubeConfig.apiKey))
-    )
-
-    class StubMappingBuilder(
-        private val wireMock: WireMock,
-        private val mappingBuilder: MappingBuilder,
-    ) {
-        fun willReturn(responseDefBuilder: ResponseDefinitionBuilder): StubMapping =
-            wireMock.register(mappingBuilder.willReturn(responseDefBuilder))
+    fun getActivitiesFor(channelId: String) = wireMock.get {
+        urlPath equalTo "/youtube/v3/activities"
+        queryParams contains "channelId" equalTo channelId
     }
+
+    fun getChannelsFor(channelHandle: String) = wireMock.get {
+        urlPath equalTo "/youtube/v3/channels"
+        queryParams contains "forHandle" equalTo channelHandle
+    }
+
+    fun getCommentsFor(parentId: String) = wireMock.get {
+        urlPath equalTo "/youtube/v3/comments"
+        queryParams contains "parentId" equalTo parentId
+    }
+
+    fun getCommentThreadsFor(videoId: String) = wireMock.get {
+        urlPath equalTo "/youtube/v3/commentThreads"
+        queryParams contains "videoId" equalTo videoId
+    }
+}
+
+private fun youTubeWireMock(youTubeConfig: YouTubeConfig): WireMock {
+    val port = Regex("https?://.+:(\\d+)").find(youTubeConfig.mockRootUrl)?.groups[1]?.value?.toInt() ?: 0
+    return WireMock.create().port(port).build()
 }

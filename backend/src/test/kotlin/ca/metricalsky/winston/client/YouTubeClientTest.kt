@@ -39,10 +39,10 @@ class YouTubeClientTest(
 ) : WordSpec({
 
     val faker = WinstonFaker()
-    val wireMock = youTubeWireMock(youTubeConfig)
+    val wireMock = YouTubeWireMock(youTubeConfig)
 
     afterEach {
-        wireMock.resetMappings()
+        wireMock.reset()
     }
 
     "getChannel()" should {
@@ -56,7 +56,7 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with channels" {
-            wireMock.get(channelsFor(channelHandle)) returnsJson {
+            wireMock.getChannelsFor(channelHandle) returnsJson {
                 body = testResources.load("200.json")
             }
 
@@ -79,7 +79,7 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no channels" {
-            wireMock.get(channelsFor(channelHandle)) returnsJson {
+            wireMock.getChannelsFor(channelHandle) returnsJson {
                 body = testResources.load("200_not_found.json")
             }
 
@@ -94,13 +94,8 @@ class YouTubeClientTest(
         val channelId = faker.youtube().channel().id()
         val testResources = TestResources.dir("client", "activities")
 
-        fun activitiesFor(channelId: String): SpecifyRequest = {
-            urlPath equalTo "/youtube/v3/activities"
-            queryParams contains "channelId" equalTo channelId
-        }
-
         "handle a 200 response with activities" {
-            wireMock.get(activitiesFor(channelId)) returnsJson {
+            wireMock.getActivitiesFor(channelId) returnsJson {
                 body = testResources.load("200.json")
             }
 
@@ -133,7 +128,7 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no activities" {
-            wireMock.get(activitiesFor(channelId)) returnsJson {
+            wireMock.getActivitiesFor(channelId) returnsJson {
                 body = testResources.load("200_empty.json")
             }
 
@@ -148,13 +143,8 @@ class YouTubeClientTest(
         val videoId = faker.youtube().videoId()
         val testResources = TestResources.dir("client", "comments")
 
-        fun commentThreadsFor(videoId: String): SpecifyRequest = {
-            urlPath equalTo "/youtube/v3/commentThreads"
-            queryParams contains "videoId" equalTo videoId
-        }
-
         "handle a 200 response with comments" {
-            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+            wireMock.getCommentThreadsFor(videoId) returnsJson {
                 body = testResources.load("200.json")
             }
 
@@ -175,7 +165,7 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no comments" {
-            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+            wireMock.getCommentThreadsFor(videoId) returnsJson {
                 body = testResources.load("200_empty.json")
             }
 
@@ -185,7 +175,7 @@ class YouTubeClientTest(
         }
 
         "throw exception when comments are disabled" {
-            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+            wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.FORBIDDEN.value()
                 body = testResources.load("403_comments_disabled.json")
             }
@@ -199,12 +189,12 @@ class YouTubeClientTest(
         }
 
         "retry the request on a processing failure" {
-            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+            wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.BAD_REQUEST.value()
                 body = testResources.load("400_processing_failure.json")
                 toState = "recovered"
             }
-            wireMock.get(commentThreadsFor(videoId)) and {
+            wireMock.getCommentThreadsFor(videoId) and {
                 whenState = "recovered"
             } returnsJson {
                 body = testResources.load("200.json")
@@ -216,7 +206,7 @@ class YouTubeClientTest(
         }
 
         "throw exception on a processing failure" {
-            wireMock.get(commentThreadsFor(videoId)) returnsJson {
+            wireMock.getCommentThreadsFor(videoId) returnsJson {
                 statusCode = HttpStatus.BAD_REQUEST.value()
                 body = testResources.load("400_processing_failure.json")
             }
@@ -234,13 +224,8 @@ class YouTubeClientTest(
         val parentId = faker.youtube().comment().id()
         val testResources = TestResources.dir("client", "replies")
 
-        fun commentsFor(parentId: String): SpecifyRequest = {
-            urlPath equalTo "/youtube/v3/comments"
-            queryParams contains "parentId" equalTo parentId
-        }
-
         "handle a 200 response with replies" {
-            wireMock.get(commentsFor(parentId)) returnsJson {
+            wireMock.getCommentsFor(parentId) returnsJson {
                 body = testResources.load("200.json")
             }
 
@@ -261,7 +246,7 @@ class YouTubeClientTest(
         }
 
         "handle a 200 response with no replies" {
-            wireMock.get(commentsFor(parentId)) returnsJson {
+            wireMock.getCommentsFor(parentId) returnsJson {
                 body = testResources.load("200_empty.json")
             }
 
