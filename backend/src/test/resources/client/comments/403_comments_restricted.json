@@ -1,0 +1,15 @@
+{
+  "error": {
+    "code": 403,
+    "errors": [
+      {
+        "domain": "youtube.commentThread",
+        "location": "id",
+        "locationType": "parameter",
+        "message": "One or more of the requested comment threads cannot be retrieved due to insufficient permissions. The request might not be properly authorized.",
+        "reason": "forbidden"
+      }
+    ],
+    "message": "One or more of the requested comment threads cannot be retrieved due to insufficient permissions. The request might not be properly authorized."
+  }
+}

@@ -3,27 +3,26 @@ package ca.metricalsky.winston.service
 import ca.metricalsky.winston.client.YouTubeClient
 import ca.metricalsky.winston.client.YouTubeWireMock
 import ca.metricalsky.winston.client.exception.CommentsDisabledException
+import ca.metricalsky.winston.client.exception.CommentsRestrictedException
 import ca.metricalsky.winston.client.exception.ProcessingFailureException
 import ca.metricalsky.winston.config.YouTubeProvider
 import ca.metricalsky.winston.config.properties.YouTubeConfig
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity
 import ca.metricalsky.winston.database.entity.fetch.YouTubeRequestEntity
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository
+import ca.metricalsky.winston.exception.ErrorCode
 import ca.metricalsky.winston.test.TestResources
 import ca.metricalsky.winston.test.faker.WinstonFaker
-import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.marcinziolo.kotlin.wiremock.and
 import com.marcinziolo.kotlin.wiremock.returnsJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.collections.shouldMatchEach
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.types.shouldBeTypeOf
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
@@ -245,10 +244,6 @@ class YouTubeServiceTest(
 
             shouldThrow<CommentsDisabledException> {
                 youTubeService.getComments(fetchAction)
-            } should {
-                it.message shouldContain "Comments are disabled for the requested video."
-                it.status shouldBe HttpStatus.UNPROCESSABLE_ENTITY
-                it.cause.shouldBeTypeOf<GoogleJsonResponseException>()
             }
 
             youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) should {
@@ -261,7 +256,33 @@ class YouTubeServiceTest(
                     requestedAt shouldNotBe null
                     httpStatus shouldBe HttpStatus.UNPROCESSABLE_ENTITY.value()
                     itemCount shouldBe null
-                    error shouldContain "Comments are disabled for the requested video."
+                    error shouldContain ErrorCode.COMMENTS_DISABLED.detail
+                    respondedAt shouldNotBe null
+                }
+            }
+        }
+
+        "throw exception when comments are restricted" {
+            wireMock.getCommentThreadsFor(fetchAction!!.objectId) returnsJson {
+                statusCode = HttpStatus.FORBIDDEN.value()
+                body = testResources["comments"].load("403_comments_restricted.json")
+            }
+
+            shouldThrow<CommentsRestrictedException> {
+                youTubeService.getComments(fetchAction)
+            }
+
+            youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) should {
+                it shouldHaveSize 1
+                it[0] shouldNotBeNull {
+                    id shouldNotBe null
+                    fetchActionId shouldBe fetchAction.id
+                    requestType shouldBe YouTubeRequestEntity.RequestType.COMMENTS
+                    objectId shouldBe fetchAction.objectId
+                    requestedAt shouldNotBe null
+                    httpStatus shouldBe HttpStatus.UNPROCESSABLE_ENTITY.value()
+                    itemCount shouldBe null
+                    error shouldContain ErrorCode.COMMENTS_RESTRICTED.detail
                     respondedAt shouldNotBe null
                 }
             }
@@ -296,12 +317,9 @@ class YouTubeServiceTest(
                 body = testResources["comments"].load("400_processing_failure.json")
             }
 
-            val exception = shouldThrow<ProcessingFailureException> {
+            shouldThrow<ProcessingFailureException> {
                 youTubeService.getComments(fetchAction)
             }
-
-            exception.status shouldBe HttpStatus.INTERNAL_SERVER_ERROR
-            exception.cause.shouldBeTypeOf<GoogleJsonResponseException>()
 
             youTubeRequestRepository.findAllByFetchActionId(fetchAction.id!!) shouldHaveSize 3
         }

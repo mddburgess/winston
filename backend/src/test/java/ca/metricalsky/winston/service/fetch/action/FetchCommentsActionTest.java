@@ -4,6 +4,7 @@ import ca.metricalsky.winston.client.exception.CommentsDisabledException;
 import ca.metricalsky.winston.client.exception.VideoNotFoundException;
 import ca.metricalsky.winston.dao.CommentDataService;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus;
 import ca.metricalsky.winston.exception.FetchOperationException;
 import ca.metricalsky.winston.service.VideoCommentsService;
 import ca.metricalsky.winston.service.YouTubeService;
@@ -151,6 +152,6 @@ class FetchCommentsActionTest {
                 .hasFieldOrPropertyWithValue("status", HttpStatus.UNPROCESSABLE_ENTITY)
                 .hasMessageEndingWith("Comments are disabled for the requested video.");
 
-        verify(videoCommentsService).markVideoCommentsDisabled(fetchAction.getObjectId());
+        verify(videoCommentsService).markVideoCommentStatus(fetchAction.getObjectId(), CommentStatus.DISABLED);
     }
 }

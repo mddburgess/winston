@@ -13,22 +13,29 @@ class VideoCommentsEntity(
     var videoId: String,
 
     @Basic(optional = false)
-    @Column(name = "comments_disabled")
-    var commentsDisabled: Boolean,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comment_status")
+    var commentStatus: CommentStatus = CommentStatus.ENABLED,
 
     @Basic(optional = false)
     @Column(name = "comment_count")
-    var commentCount: Long,
+    var commentCount: Long = 0,
 
     @Basic(optional = false)
     @Column(name = "reply_count")
-    var replyCount: Long,
+    var replyCount: Long = 0,
 
     @Basic(optional = false)
     @Column(name = "total_reply_count")
-    var totalReplyCount: Long,
+    var totalReplyCount: Long = 0,
 ) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")
     var lastFetchedAt: OffsetDateTime? = null
+
+    enum class CommentStatus {
+        ENABLED,
+        RESTRICTED,
+        DISABLED,
+    }
 }

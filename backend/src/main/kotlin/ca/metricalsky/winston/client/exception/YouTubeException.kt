@@ -12,6 +12,9 @@ open class YouTubeException(
 class CommentsDisabledException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.COMMENTS_DISABLED, cause)
 
+class CommentsRestrictedException(cause: GoogleJsonResponseException? = null) :
+    YouTubeException(ErrorCode.COMMENTS_RESTRICTED, cause)
+
 class ProcessingFailureException(cause: GoogleJsonResponseException? = null) :
     YouTubeException(ErrorCode.PROCESSING_FAILURE, cause)
 
@@ -24,11 +27,17 @@ class VideoNotFoundException(cause: GoogleJsonResponseException? = null) :
 fun youTubeException(cause: Throwable) = when (cause) {
     is GoogleJsonResponseException -> when (cause.details?.errors?.firstOrNull()?.reason) {
         "commentsDisabled" -> CommentsDisabledException(cause)
+        "forbidden" -> when (cause.details.errors.firstOrNull()?.domain) {
+            "youtube.commentThread" -> CommentsRestrictedException(cause)
+            else -> YouTubeException(cause = cause).apply {
+                problem.detail = cause.details?.message ?: problem.detail
+            }
+        }
         "processingFailure" -> ProcessingFailureException(cause)
         "quotaExceeded" -> QuotaExceededException(cause)
         "videoNotFound" -> VideoNotFoundException(cause)
-        else -> YouTubeException(cause = cause).also {
-            it.problem.detail = cause.details?.message ?: it.problem.detail
+        else -> YouTubeException(cause = cause).apply {
+            problem.detail = cause.details?.message ?: problem.detail
         }
     }
     else -> YouTubeException(cause = cause)

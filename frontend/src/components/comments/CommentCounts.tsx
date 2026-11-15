@@ -1,9 +1,10 @@
 import { Col } from "react-bootstrap";
 import { Chat, ChatFill, ChatQuote, ChatQuoteFill } from "react-bootstrap-icons";
 import { formatInteger } from "#/utils/formatInteger";
+import type { CommentStatus } from "#/api";
 
 type CommentCountsProps = {
-  commentsDisabled?: boolean;
+  commentStatus?: CommentStatus;
   commentCount?: number;
   replyCount?: number;
   totalReplyCount?: number;
@@ -11,14 +12,14 @@ type CommentCountsProps = {
   showTotalReplyCount?: boolean;
 };
 
-type CommentsColProps = Required<Pick<CommentCountsProps, "commentCount" | "commentsDisabled">> & {
+type CommentsColProps = Required<Pick<CommentCountsProps, "commentCount" | "commentStatus">> & {
   hasBeenFetched: boolean;
 };
 
 type RepliesColProps = Required<Pick<CommentCountsProps, "replyCount" | "totalReplyCount" | "showTotalReplyCount">>;
 
 const CommentCounts = ({
-  commentsDisabled = false,
+  commentStatus = "enabled",
   commentCount = 0,
   replyCount = 0,
   totalReplyCount = 0,
@@ -28,8 +29,8 @@ const CommentCounts = ({
   const hasBeenFetched = lastFetchedAt !== undefined;
   return (
     <>
-      <CommentsCol commentCount={commentCount} commentsDisabled={commentsDisabled} hasBeenFetched={hasBeenFetched} />
-      {hasBeenFetched && !commentsDisabled && (
+      <CommentsCol commentCount={commentCount} commentStatus={commentStatus} hasBeenFetched={hasBeenFetched} />
+      {hasBeenFetched && commentStatus === "enabled" && (
         <RepliesCol
           replyCount={replyCount}
           totalReplyCount={totalReplyCount}
@@ -40,16 +41,20 @@ const CommentCounts = ({
   );
 };
 
-const CommentsCol = ({ commentCount, commentsDisabled, hasBeenFetched }: CommentsColProps) => {
+const CommentsCol = ({ commentCount, commentStatus, hasBeenFetched }: CommentsColProps) => {
   const CommentsIcon = hasBeenFetched ? ChatFill : Chat;
   return (
     <Col
-      className={"align-items-center d-flex" + (commentsDisabled ? " text-body-tertiary" : "")}
+      className={"align-items-center d-flex" + (commentStatus === "enabled" ? "" : " text-body-tertiary")}
       data-testid={"comments"}
       xs={"auto"}
     >
       <CommentsIcon className={"me-2"} data-testid={"commentsIcon"} />
-      {commentsDisabled ? "comments disabled" : formatInteger(commentCount)}
+      {commentStatus === "disabled"
+        ? "comments disabled"
+        : commentStatus === "restricted"
+          ? "comments restricted"
+          : formatInteger(commentCount)}
     </Col>
   );
 };

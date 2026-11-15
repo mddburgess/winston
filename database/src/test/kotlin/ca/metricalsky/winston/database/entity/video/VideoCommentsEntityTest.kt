@@ -1,5 +1,6 @@
 package ca.metricalsky.winston.database.entity.video
 
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus
 import ca.metricalsky.winston.database.test.annotation.DatabaseTest
 import ca.metricalsky.winston.database.test.faker.DatabaseFaker
 import io.kotest.core.spec.style.WordSpec
@@ -26,7 +27,7 @@ class VideoCommentsEntityTest(
             entityManager.persistFlushFind(videoComments) shouldNotBeNull {
                 this shouldNotBeSameInstanceAs videoComments
                 videoId shouldBe videoComments.videoId
-                commentsDisabled shouldBe videoComments.commentsDisabled
+                commentStatus shouldBe videoComments.commentStatus
                 commentCount shouldBe videoComments.commentCount
                 replyCount shouldBe videoComments.replyCount
                 totalReplyCount shouldBe videoComments.totalReplyCount

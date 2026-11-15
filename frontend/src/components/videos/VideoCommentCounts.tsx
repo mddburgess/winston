@@ -12,7 +12,7 @@ const VideoCommentCounts = ({ video, showTotalReplyCount }: VideoCommentCountsPr
 
   return (
     <CommentCounts
-      commentsDisabled={video.comments?.comments_disabled}
+      commentStatus={video.comments?.comment_status}
       commentCount={Math.max(detailsCommentCount, video.comments?.comment_count ?? 0)}
       replyCount={video.comments?.reply_count}
       totalReplyCount={video.comments?.total_reply_count}

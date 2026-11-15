@@ -2,6 +2,7 @@ package ca.metricalsky.winston.mappers.api;
 
 import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity;
 import ca.metricalsky.winston.database.entity.channel.ChannelEntity;
+import ca.metricalsky.winston.database.entity.video.VideoCommentsEntity.CommentStatus;
 import ca.metricalsky.winston.database.entity.video.VideoEntity;
 import ca.metricalsky.winston.database.view.ChannelVideoView;
 import ca.metricalsky.winston.test.TestUtils;
@@ -39,7 +40,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("channel", "details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentStatus", ca.metricalsky.winston.api.model.CommentStatus.ENABLED)
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
@@ -85,7 +86,7 @@ class VideoMapperTest {
                 .hasNoNullFieldsOrPropertiesExcept("details");
         assertThat(video.getComments())
                 .as("video comments")
-                .hasFieldOrPropertyWithValue("commentsDisabled", videoCommentsEntity.getCommentsDisabled())
+                .hasFieldOrPropertyWithValue("commentStatus", ca.metricalsky.winston.api.model.CommentStatus.ENABLED)
                 .hasFieldOrPropertyWithValue("commentCount", (int) videoCommentsEntity.getCommentCount())
                 .hasFieldOrPropertyWithValue("replyCount", (int) videoCommentsEntity.getReplyCount())
                 .hasFieldOrPropertyWithValue("totalReplyCount", (int) videoCommentsEntity.getTotalReplyCount())
@@ -118,7 +119,7 @@ class VideoMapperTest {
 
     private static VideoEntity buildVideoEntity() {
         var videoId = faker.youtube().videoId();
-        var videoCommentsEntity = new VideoCommentsEntity(videoId, false, 1, 2, 3);
+        var videoCommentsEntity = new VideoCommentsEntity(videoId, CommentStatus.ENABLED, 1, 2, 3);
         var videoEntity = new VideoEntity();
         videoEntity.setId(videoId);
         videoEntity.setChannelId(TestUtils.randomId());

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Settings to hide video titles and thumbnails from the channel details page. (mddburgess/winston#141)
 - Retry requests to YouTube when it returns a processing failure. (mddburgess/winston#3)
+- Handle videos with restricted comments and label them as such in the UI. (mddburgess/winston#146)
 
 ### Changed
 

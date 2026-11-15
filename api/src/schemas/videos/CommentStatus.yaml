@@ -1,0 +1,11 @@
+title: Comment Status
+description: A flag indicating if comments are enabled for a video.
+type: string
+enum:
+  - enabled
+  - restricted
+  - disabled
+x-enum-descriptions:
+  - Comments are enabled for all users.
+  - Comments are restricted to channel members.
+  - Comments are disabled for all users.
