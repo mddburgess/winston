@@ -4,29 +4,25 @@ import ca.metricalsky.winston.api.model.Problem
 import ca.metricalsky.winston.api.model.ProblemError
 import ca.metricalsky.winston.api.model.ProblemLocation
 import ca.metricalsky.winston.exception.ErrorCode
-import ca.metricalsky.winston.exception.utils.JsonExceptionUtils
+import ca.metricalsky.winston.exception.utils.jsonPointer
 import org.springframework.context.MessageSource
 import org.springframework.stereotype.Component
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
-import java.util.Locale
+import java.util.*
 
 @Component
 class MethodArgumentNotValidExceptionHandler(
     private val messageSource: MessageSource
-): ExceptionHandler<MethodArgumentNotValidException> {
+) : ExceptionHandler<MethodArgumentNotValidException> {
 
-    override fun handleException(exception: MethodArgumentNotValidException): Problem {
-        val errors = exception.fieldErrors.map { buildError(it) }
-        return ErrorCode.INVALID_REQUEST_BODY.problem.errors(errors)
-    }
+    override fun handleException(exception: MethodArgumentNotValidException): Problem =
+        ErrorCode.INVALID_REQUEST_BODY.problem.errors(exception.fieldErrors.map {
+            buildError(it)
+        })
 
-    private fun buildError(fieldError: FieldError): ProblemError {
-        val pointer = JsonExceptionUtils.getJsonPointer(fieldError)
-
-        return ProblemError()
-            .type("error:${fieldError.code}")
-            .detail(messageSource.getMessage(fieldError, Locale.ENGLISH))
-            .location(ProblemLocation().pointer(pointer.toString()))
-    }
+    private fun buildError(fieldError: FieldError): ProblemError = ProblemError()
+        .type("error:${fieldError.code}")
+        .detail(messageSource.getMessage(fieldError, Locale.ENGLISH))
+        .location(ProblemLocation().pointer(fieldError.jsonPointer.toString()))
 }
