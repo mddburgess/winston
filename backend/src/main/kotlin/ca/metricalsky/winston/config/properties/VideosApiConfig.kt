@@ -9,13 +9,12 @@ import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "winston.api.videos")
-@Value
-class VideosApiConfig {
+class VideosApiConfig(
+
     /**
      * Default page size for the list videos endpoint.
      */
-    @NotNull
-    @Min(1)
-    @Max(500)
-    var defaultPageSize: @NotNull @Min(1) @Max(500) Int? = null
-}
+    @field:Min(1)
+    @field:Max(500)
+    var defaultPageSize: Int,
+)
