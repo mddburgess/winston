@@ -31,12 +31,12 @@ tasks {
     }
 
     bootJar {
-        mainClass.set("ca.metricalsky.winston.Application")
+        mainClass.set("ca.metricalsky.winston.ApplicationKt")
         archiveBaseName.set("winston")
     }
 
     bootRun {
-        mainClass.set("ca.metricalsky.winston.Application")
+        mainClass.set("ca.metricalsky.winston.ApplicationKt")
         environment["SPRING_PROFILES_ACTIVE"] = "dev"
     }
 }

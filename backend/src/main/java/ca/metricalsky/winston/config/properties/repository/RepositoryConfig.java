@@ -16,5 +16,5 @@ public class RepositoryConfig {
      */
     @NotNull
     @Min(0)
-    Integer defaultSloMs;
+    public Integer defaultSloMs;
 }

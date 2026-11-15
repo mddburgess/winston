@@ -1,23 +1,19 @@
-package ca.metricalsky.winston.config;
+package ca.metricalsky.winston.config
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.lang.Nullable;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-
-import java.io.IOException;
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.Resource
+import org.springframework.web.servlet.resource.PathResourceResolver
 
 @Configuration
-public class AppResourceResolver extends PathResourceResolver {
+class AppResourceResolver : PathResourceResolver() {
 
-    @Override
-    @Nullable
-    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-        var resource = super.getResource(resourcePath, location);
-        if (resource == null && !resourcePath.startsWith("api")) {
-            resource = new ClassPathResource("/static/index.html");
+    override fun getResource(resourcePath: String, location: Resource): Resource? {
+        val resource = super.getResource(resourcePath, location)
+        return when {
+            resource != null -> resource
+            resourcePath.startsWith("api") -> null
+            else -> ClassPathResource("/static/index.html")
         }
-        return resource;
     }
 }
