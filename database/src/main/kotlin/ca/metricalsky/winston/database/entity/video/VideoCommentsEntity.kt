@@ -19,15 +19,15 @@ class VideoCommentsEntity(
 
     @Basic(optional = false)
     @Column(name = "comment_count")
-    var commentCount: Long,
+    var commentCount: Long = 0,
 
     @Basic(optional = false)
     @Column(name = "reply_count")
-    var replyCount: Long,
+    var replyCount: Long = 0,
 
     @Basic(optional = false)
     @Column(name = "total_reply_count")
-    var totalReplyCount: Long,
+    var totalReplyCount: Long = 0,
 ) {
     @UpdateTimestamp
     @Column(name = "last_fetched_at")

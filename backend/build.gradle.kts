@@ -61,6 +61,7 @@ dependencies {
     testImplementation(libs.kotlinWiremock)
     testImplementation(libs.mapstructSpringTestExtensions)
     testImplementation(libs.springBootStarterTest)
+    testImplementation(libs.springmockk)
     testImplementation(libs.wiremockSpringBoot)
 
     testCompileOnly(libs.lombok)

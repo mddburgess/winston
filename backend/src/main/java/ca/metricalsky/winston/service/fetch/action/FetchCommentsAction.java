@@ -34,7 +34,7 @@ public class FetchCommentsAction implements FetchAction<TopLevelComment> {
         } catch (VideoNotFoundException ex) {
             throw new FetchOperationException(ex);
         } catch (CommentsDisabledException ex) {
-            videoCommentsService.markVideoCommentsDisabled(fetchAction.getObjectId());
+            videoCommentsService.markVideoCommentStatus(fetchAction.getObjectId(), CommentStatus.DISABLED);
             throw new FetchOperationException(ex);
         } catch (CommentsRestrictedException ex) {
             videoCommentsService.markVideoCommentStatus(fetchAction.getObjectId(), CommentStatus.RESTRICTED);
