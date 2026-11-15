@@ -2,7 +2,7 @@ package ca.metricalsky.winston.web;
 
 import ca.metricalsky.winston.api.model.Author;
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.config.properties.api.AuthorsApiConfig;
+import ca.metricalsky.winston.config.properties.AuthorsApiConfig;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.ErrorCode;

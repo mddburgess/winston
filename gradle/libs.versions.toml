@@ -1,6 +1,7 @@
 [versions]
 kotest = "6.1.11"
 kotlin = "2.3.20"
+logcapture = "1.3.7"
 mapstruct = "1.6.3"
 mapstructSpringExtensions = "1.1.3"
 springBoot = "3.4.5"
@@ -24,6 +25,8 @@ kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = 
 kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version = "8.0.4" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
 kotlinWiremock = { module = "com.marcinziolo:kotlin-wiremock", version = "2.1.1" }
+logcaptureCore = { module = "org.logcapture:logcapture-core", version.ref = "logcapture" }
+logcaptureKotest6 = { module = "org.logcapture:logcapture-kotest6", version.ref = "logcapture" }
 lombok = { module = "org.projectlombok:lombok" }
 mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
 mapstructProcessor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
@@ -45,16 +48,20 @@ wiremockSpringBoot = { module = "org.wiremock.integrations:wiremock-spring-boot"
 [bundles]
 apacheCommons = [
     "commonsCollections4",
-    "commonsLang3"
+    "commonsLang3",
 ]
 database = [
     "flywayCore",
     "flywayDatabasePostgresql",
-    "postgresql"
+    "postgresql",
 ]
 kotest = [
     "kotestExtensionsSpring",
-    "kotestRunnerJunit5"
+    "kotestRunnerJunit5",
+]
+logcapture = [
+    "logcaptureCore",
+    "logcaptureKotest6",
 ]
 mapstruct = [
     "mapstruct",
@@ -62,19 +69,19 @@ mapstruct = [
 ]
 mapstructProcessor = [
     "mapstructProcessor",
-    "mapstructSpringExtensions"
+    "mapstructSpringExtensions",
 ]
 springBoot = [
     "springBootStarterActuator",
     "springBootStarterDataJpa",
     "springBootStarterValidation",
     "springBootStarterWeb",
-    "springRetry"
+    "springRetry",
 ]
 youtube = [
     "googleApiClient",
     "googleApiServicesYoutube",
-    "googleHttpClientGson"
+    "googleHttpClientGson",
 ]
 
 [plugins]

@@ -4,7 +4,8 @@ import ca.metricalsky.winston.api.model.Problem
 import ca.metricalsky.winston.api.model.ProblemError
 import ca.metricalsky.winston.api.model.ProblemLocation
 import ca.metricalsky.winston.exception.ErrorCode
-import ca.metricalsky.winston.exception.utils.JsonExceptionUtils
+import ca.metricalsky.winston.exception.utils.jsonPointer
+import ca.metricalsky.winston.exception.utils.jsonType
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
@@ -51,11 +52,11 @@ class HttpMessageNotReadableExceptionHandler: ExceptionHandler<HttpMessageNotRea
             .detail("The value type for a property in the request is invalid.")
             .location(
                 ProblemLocation()
-                    .pointer(JsonExceptionUtils.getJsonPointer(exception).toString())
+                    .pointer(exception.jsonPointer.toString())
                     .line(exception.location.lineNr)
                     .column(exception.location.columnNr)
             )
-            .expected(JsonExceptionUtils.getJsonType(exception.targetType))
+            .expected(exception.targetType.jsonType)
         return ErrorCode.MALFORMED_REQUEST_BODY.problem.addErrorsItem(error)
     }
 
@@ -65,7 +66,7 @@ class HttpMessageNotReadableExceptionHandler: ExceptionHandler<HttpMessageNotRea
             .detail("The value for a property in the request is invalid.")
             .location(
                 ProblemLocation()
-                    .pointer(JsonExceptionUtils.getJsonPointer(exception).toString())
+                    .pointer(exception.jsonPointer.toString())
                     .line(exception.location.lineNr)
                     .column(exception.location.columnNr)
             )

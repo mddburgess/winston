@@ -57,6 +57,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(libs.bundles.kotest)
+    testImplementation(libs.bundles.logcapture)
     testImplementation(libs.archunitJunit5)
     testImplementation(libs.kotlinWiremock)
     testImplementation(libs.mapstructSpringTestExtensions)

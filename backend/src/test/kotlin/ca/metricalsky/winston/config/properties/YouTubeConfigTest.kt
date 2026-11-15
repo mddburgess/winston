@@ -8,21 +8,21 @@ import io.kotest.matchers.string.shouldMatch
 @IntegrationTest
 class YouTubeConfigTest(
     youTubeConfig: YouTubeConfig,
-): WordSpec({
+) : WordSpec({
 
-    "getApiKey()" should {
+    "apiKey" should {
         "return the configured API key" {
             youTubeConfig.apiKey shouldEqual "YOUTUBE_API_KEY"
         }
     }
 
-    "getDailyRequestQuota()" should {
+    "dailyRequestQuota" should {
         "return the configured daily request quota" {
             youTubeConfig.dailyRequestQuota shouldEqual 10_000
         }
     }
 
-    "getMockRootUrl()" should {
+    "mockRootUrl" should {
         "return the configured mock root URL" {
             youTubeConfig.mockRootUrl shouldMatch Regex("http://localhost:\\d+")
         }
