@@ -17,7 +17,6 @@ class VideoCommentsService(
     @Transactional
     fun updateVideoComments(videoId: String) {
         val counts = commentRepository.countCommentsForVideoId(videoId)
-
         val videoComments = (videoCommentsRepository.findById(videoId) orElse VideoCommentsEntity(videoId)).also {
             it.commentCount = counts.comments
             it.replyCount = counts.replies
