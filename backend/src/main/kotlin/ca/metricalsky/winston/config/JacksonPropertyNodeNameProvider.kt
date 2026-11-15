@@ -1,41 +1,28 @@
-package ca.metricalsky.winston.config.validation;
+package ca.metricalsky.winston.config
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.spi.nodenameprovider.JavaBeanProperty;
-import org.hibernate.validator.spi.nodenameprovider.Property;
-import org.hibernate.validator.spi.nodenameprovider.PropertyNodeNameProvider;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.hibernate.validator.spi.nodenameprovider.JavaBeanProperty
+import org.hibernate.validator.spi.nodenameprovider.Property
+import org.hibernate.validator.spi.nodenameprovider.PropertyNodeNameProvider
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class JacksonPropertyNodeNameProvider
-        implements PropertyNodeNameProvider {
+class JacksonPropertyNodeNameProvider(
+    private val objectMapper: ObjectMapper,
+) : PropertyNodeNameProvider {
 
-    private final ObjectMapper objectMapper;
-
-    @Override
-    public String getName(Property property) {
-        if (property instanceof JavaBeanProperty beanProperty) {
-            return getJavaBeanPropertyName(beanProperty);
-        }
-        return getDefaultName(property);
+    override fun getName(property: Property) = when (property) {
+        is JavaBeanProperty -> getJavaBeanPropertyName(property)
+        else -> property.name
     }
 
-    private String getJavaBeanPropertyName(JavaBeanProperty property) {
-        var javaType = objectMapper.constructType(property.getDeclaringClass());
-        var beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
+    private fun getJavaBeanPropertyName(property: JavaBeanProperty): String {
+        val javaType = objectMapper.constructType(property.declaringClass)
+        val beanDescription = objectMapper.serializationConfig.introspect(javaType)
 
         return beanDescription.findProperties()
-                .stream()
-                .filter(def -> def.getInternalName().equals(property.getName()))
-                .map(BeanPropertyDefinition::getName)
-                .findFirst()
-                .orElse(getDefaultName(property));
-    }
-
-    private String getDefaultName(Property property) {
-        return property.getName();
+            .filter { it.internalName == property.name }
+            .map { it.name }
+            .firstOrNull() ?: property.name
     }
 }

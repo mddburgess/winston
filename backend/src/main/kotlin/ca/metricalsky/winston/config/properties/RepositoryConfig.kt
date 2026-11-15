@@ -1,20 +1,16 @@
-package ca.metricalsky.winston.config.properties.repository;
+package ca.metricalsky.winston.config.properties
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Min
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "winston.repository")
-@Value
-public class RepositoryConfig {
+class RepositoryConfig (
 
     /**
      * Default service level objective (in milliseconds) for repository methods.
      */
-    @NotNull
-    @Min(0)
-    public Integer defaultSloMs;
-}
+    @field:Min(0)
+    var defaultSloMs: Int,
+)

@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.aspect
 
-import ca.metricalsky.winston.config.properties.controller.ControllerConfig
+import ca.metricalsky.winston.config.properties.ControllerConfig
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.commons.lang3.time.StopWatch
 import org.aspectj.lang.ProceedingJoinPoint

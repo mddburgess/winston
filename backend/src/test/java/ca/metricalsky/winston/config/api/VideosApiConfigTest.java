@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.config.api;
 
-import ca.metricalsky.winston.config.properties.api.VideosApiConfig;
+import ca.metricalsky.winston.config.properties.VideosApiConfig;
 import ca.metricalsky.winston.test.annotations.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

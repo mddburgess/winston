@@ -7,7 +7,7 @@ import ca.metricalsky.winston.api.model.GetAuthorResponse;
 import ca.metricalsky.winston.api.model.ListAuthorsResponse;
 import ca.metricalsky.winston.api.model.ListVideosResponseResults;
 import ca.metricalsky.winston.api.model.PatchOperation;
-import ca.metricalsky.winston.config.properties.api.AuthorsApiConfig;
+import ca.metricalsky.winston.config.properties.AuthorsApiConfig;
 import ca.metricalsky.winston.dao.AuthorDataService;
 import ca.metricalsky.winston.dao.VideoDataService;
 import ca.metricalsky.winston.exception.ErrorCode;

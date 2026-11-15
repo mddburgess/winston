@@ -1,22 +1,18 @@
-package ca.metricalsky.winston.config.properties.api;
+package ca.metricalsky.winston.config.properties
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "winston.api.authors")
-@Value
-public class AuthorsApiConfig {
+class AuthorsApiConfig(
 
     /**
      * Default page size for the list authors endpoint.
      */
-    @NotNull
-    @Min(1)
-    @Max(500)
-    Integer defaultPageSize;
-}
+    @field:Min(1)
+    @field:Max(500)
+    var defaultPageSize: Int,
+)

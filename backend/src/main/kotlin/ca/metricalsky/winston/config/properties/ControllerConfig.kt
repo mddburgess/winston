@@ -1,20 +1,16 @@
-package ca.metricalsky.winston.config.properties.controller;
+package ca.metricalsky.winston.config.properties
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Min
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.validation.annotation.Validated
 
 @Validated
 @ConfigurationProperties(prefix = "winston.controller")
-@Value
-public class ControllerConfig {
+class ControllerConfig (
 
     /**
      * Default service level objective (in milliseconds) for controller methods.
      */
-    @NotNull
-    @Min(0)
-    public Integer defaultSloMs;
-}
+    @field:Min(0)
+    var defaultSloMs: Int,
+)
