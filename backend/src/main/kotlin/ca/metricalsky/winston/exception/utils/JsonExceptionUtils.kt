@@ -27,8 +27,9 @@ val Class<*>?.jsonType: String
     get() = when {
         this == null -> "null"
         CharSequence::class.java.isAssignableFrom(this) -> "string"
-        Number::class.java.isAssignableFrom(this) -> "number"
-        this.isArray || Collection::class.java.isAssignableFrom(this) -> "array"
+        Char::class.java.isAssignableFrom(this) -> "string"
         Boolean::class.java.isAssignableFrom(this) -> "boolean"
+        this.isPrimitive || Number::class.java.isAssignableFrom(this) -> "number"
+        this.isArray || Collection::class.java.isAssignableFrom(this) -> "array"
         else -> "object"
     }
