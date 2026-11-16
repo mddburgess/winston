@@ -60,7 +60,7 @@ class FetchServiceTest {
 
         verify(ssePublisherHolder).hold(ssePublisher);
         verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst());
-        verify(fetchRequestService).finishProcessingRequest(fetchRequest.getId());
+        verify(fetchRequestService).finishProcessingRequest(fetchRequest.getId(), null);
         verify(ssePublisher).complete();
         verify(ssePublisherHolder).clear();
     }

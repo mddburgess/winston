@@ -27,10 +27,10 @@ public class FetchRequestService {
     }
 
     @Transactional
-    public void finishProcessingRequest(Long fetchRequestId) {
+    public void finishProcessingRequest(Long fetchRequestId, Throwable throwable) {
         var fetchRequest = fetchRequestRepository.findById(fetchRequestId).orElseThrow();
         fetchRequest.setStatus(FetchRequestEntity.Status.COMPLETED);
         fetchRequest = fetchRequestRepository.save(fetchRequest);
-        eventPublisher.publishEvent(fetchRequest);
+        eventPublisher.publishEvent(fetchRequest, throwable);
     }
 }

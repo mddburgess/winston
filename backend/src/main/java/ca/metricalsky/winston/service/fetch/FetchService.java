@@ -37,11 +37,13 @@ public class FetchService {
                     .forEach(fetchOperation ->
                             fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation));
 
-            fetchRequestService.finishProcessingRequest(fetchRequestId);
+            fetchRequestService.finishProcessingRequest(fetchRequestId, null);
             ssePublisher.complete();
         } catch (WinstonException ex) {
+            fetchRequestService.finishProcessingRequest(fetchRequestId, ex);
             ssePublisher.completeWithError(ex);
         } catch (RuntimeException ex) {
+            fetchRequestService.finishProcessingRequest(fetchRequestId, ex);
             ssePublisher.completeWithError(new WinstonException(ErrorCode.RUNTIME_EXCEPTION, ex));
         } finally {
             ssePublisherHolder.clear();
