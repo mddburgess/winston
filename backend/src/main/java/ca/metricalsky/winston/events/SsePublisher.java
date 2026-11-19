@@ -1,8 +1,8 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.api.model.Event;
+import ca.metricalsky.winston.api.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.event.exception.PublisherException;
-import ca.metricalsky.winston.events.model.AppEvent;
-import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import com.google.common.annotations.VisibleForTesting;
@@ -37,18 +37,18 @@ public class SsePublisher {
     }
 
     public void complete() {
-        publish(new EventSubscriptionEvent(id, false));
+        publish(new EventSubscriptionEvent().eventId(id).subscribed(false));
         sseEmitter.complete();
     }
 
     public void completeWithError(WinstonException ex) {
         if (open) {
-            publish(new EventSubscriptionEvent(id, ex.getProblem()));
+            publish(new EventSubscriptionEvent().eventId(id).subscribed(false).error(ex.getProblem()));
         }
         sseEmitter.completeWithError(ex);
     }
 
-    public void publish(AppEvent appEvent) {
+    public void publish(Event appEvent) {
         publish(SseEmitter.event()
                 .id(appEvent.getEventId().toString())
                 .name(appEvent.getEventType())

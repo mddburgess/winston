@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.api.model.Event;
 import ca.metricalsky.winston.api.model.Problem;
-import ca.metricalsky.winston.events.model.AppEvent;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -27,12 +27,12 @@ class EventPublisherTest {
     private SsePublisher ssePublisher;
 
     private final Object object = new Object();
-    private final AppEvent appEvent = mock(AppEvent.class);
+    private final Event appEvent = mock(Event.class);
 
     @BeforeEach
     void beforeEach() {
         doReturn(appEvent)
-                .when(conversionService).convert(object, AppEvent.class);
+                .when(conversionService).convert(object, Event.class);
     }
 
     @Test

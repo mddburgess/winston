@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
+import ca.metricalsky.winston.api.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.events.SsePublisher;
-import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class NotificationsService implements SmartLifecycle {
         subscriptions.put(subscriptionId, ssePublisher);
 
         log.info("Notifications subscription {} opened", subscriptionId);
-        ssePublisher.publish(new EventSubscriptionEvent(subscriptionId, true));
+        ssePublisher.publish(new EventSubscriptionEvent().eventId(subscriptionId).subscribed(true));
         return ssePublisher;
     }
 

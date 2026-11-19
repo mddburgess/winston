@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.convert.events;
 
+import ca.metricalsky.winston.api.model.Event;
+import ca.metricalsky.winston.api.model.PullResultsEvent;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.domain.PullOperationContext;
-import ca.metricalsky.winston.events.model.AppEvent;
-import ca.metricalsky.winston.events.model.PullResultsEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
@@ -13,10 +13,12 @@ import org.springframework.core.convert.converter.Converter;
         uses = ConversionServiceAdapter.class
 )
 public interface PullOperationContextToAppEventConverter
-        extends Converter<PullOperationContext, AppEvent> {
+        extends Converter<PullOperationContext, Event> {
 
     @Override
-    @Mapping(target = "items", source = "results")
+    @Mapping(target = "eventId", ignore = true)
+    @Mapping(target = "eventType", constant = "pull-results")
+    @Mapping(target = "results.items", source = "results")
     @Mapping(target = "error", ignore = true)
-    PullResultsEvent<Object> convert(PullOperationContext source);
+    PullResultsEvent convert(PullOperationContext source);
 }

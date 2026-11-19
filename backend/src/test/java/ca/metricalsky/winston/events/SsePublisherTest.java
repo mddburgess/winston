@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.events;
 
+import ca.metricalsky.winston.api.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.event.exception.PublisherException;
-import ca.metricalsky.winston.events.model.EventSubscriptionEvent;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class SsePublisherTest {
 
     @Test
     void publish_ioException() throws Exception {
-        var appEvent = new EventSubscriptionEvent(UUID.randomUUID(), true);
+        var appEvent = new EventSubscriptionEvent().eventId(UUID.randomUUID()).subscribed(true);
         doThrow(IOException.class)
                 .when(sseEmitter).send(any(SseEmitter.SseEventBuilder.class));
 

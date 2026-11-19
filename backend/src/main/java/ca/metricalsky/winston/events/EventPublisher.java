@@ -1,6 +1,6 @@
 package ca.metricalsky.winston.events;
 
-import ca.metricalsky.winston.events.model.AppEvent;
+import ca.metricalsky.winston.api.model.Event;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class EventPublisher {
             @NonNull Object object,
             Throwable throwable
     ) {
-        var appEvent = conversionService.convert(object, AppEvent.class);
+        var appEvent = conversionService.convert(object, Event.class);
         if (throwable instanceof WinstonException ex) {
             appEvent.setError(ex.getProblem());
         } else if (throwable != null) {
