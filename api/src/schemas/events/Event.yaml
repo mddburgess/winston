@@ -1,0 +1,20 @@
+title: Event
+type: object
+required:
+  - event_id
+  - event_type
+properties:
+  event_id:
+    type: string
+    format: uuid
+  event_type:
+    type: string
+  error:
+    $ref: ../Problem.yaml
+discriminator:
+  propertyName: event_type
+  mapping:
+    event-subscription: ./EventSubscriptionEvent.yaml
+    pull-operation: ./PullOperationEvent.yaml
+    pull-request: ./PullRequestEvent.yaml
+    pull-results: ./PullResultsEvent.yaml

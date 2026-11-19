@@ -1,0 +1,9 @@
+title: Pull Request Event
+allOf:
+  - $ref: ./Event.yaml
+  - type: object
+    required:
+      - request
+    properties:
+      request:
+        $ref: ../pull/PullRequest.yaml

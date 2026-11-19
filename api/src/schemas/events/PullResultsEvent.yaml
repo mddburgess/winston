@@ -1,0 +1,9 @@
+title: Pull Results Event
+allOf:
+  - $ref: ./PullOperationEvent.yaml
+  - type: object
+    required:
+      - results
+    properties:
+      results:
+        $ref: ./PullResults.yaml

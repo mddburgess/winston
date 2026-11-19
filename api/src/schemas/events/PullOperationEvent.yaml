@@ -1,0 +1,9 @@
+title: Pull Operation Event
+allOf:
+  - $ref: ./Event.yaml
+  - type: object
+    required:
+      - operation
+    properties:
+      operation:
+        $ref: ../pull/PullOperation.yaml

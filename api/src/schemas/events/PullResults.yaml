@@ -1,0 +1,15 @@
+title: Pull Results
+type: object
+required:
+  - count
+  - total_count
+  - items
+properties:
+  count:
+    type: integer
+  total_count:
+    type: integer
+  items:
+    type: array
+    items:
+      type: object

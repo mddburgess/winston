@@ -21,7 +21,7 @@ const PullCommentsRequest = () => {
       { pull: "comments", video_id: video.id },
       { pull: "replies", video_id: video.id },
     ]);
-    pull({ body: { event_subscription_id: eventSubscriptionId, operations } })
+    pull({ pullRequest: { event_subscription_id: eventSubscriptionId, operations } })
       .unwrap()
       .catch((rejected: FetchBaseQueryError) => dispatch(pullCommentsError({ error: rejected.data as Problem })));
   };

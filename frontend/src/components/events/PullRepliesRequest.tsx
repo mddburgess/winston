@@ -15,7 +15,7 @@ const PullRepliesRequest = () => {
 
   const whenSubscribed = (eventSubscriptionId: string) => {
     void pull({
-      body: {
+      pullRequest: {
         event_subscription_id: eventSubscriptionId,
         operations: [{ pull: "replies", video_id: requested.videoId, comment_id: requested.commentId }],
       },
