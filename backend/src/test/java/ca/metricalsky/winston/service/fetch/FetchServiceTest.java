@@ -3,9 +3,9 @@ package ca.metricalsky.winston.service.fetch;
 import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import ca.metricalsky.winston.database.entity.fetch.FetchRequestEntity;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
+import ca.metricalsky.winston.event.EventPublisherService;
 import ca.metricalsky.winston.event.exception.PublisherException;
-import ca.metricalsky.winston.events.SsePublisher;
-import ca.metricalsky.winston.events.SsePublisherHolder;
+import ca.metricalsky.winston.event.SsePublisher;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import ca.metricalsky.winston.service.fetch.operation.FetchOperationHandler;
@@ -33,6 +33,8 @@ class FetchServiceTest {
     private FetchService fetchService;
 
     @Mock
+    private EventPublisherService eventPublisherService;
+    @Mock
     private FetchOperationHandler fetchOperationHandler;
     @Mock
     private FetchOperationHandlerFactory fetchOperationHandlerFactory;
@@ -40,8 +42,6 @@ class FetchServiceTest {
     private FetchRequestService fetchRequestService;
     @Mock
     private SsePublisher ssePublisher;
-    @Mock
-    private SsePublisherHolder ssePublisherHolder;
     @Mock
     private YouTubeConfig youTubeConfig;
     @Mock
@@ -58,11 +58,11 @@ class FetchServiceTest {
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
-        verify(ssePublisherHolder).hold(ssePublisher);
+        verify(eventPublisherService).registerPublisher(ssePublisher);
         verify(fetchOperationHandler).fetch(fetchRequest.getOperations().getFirst());
         verify(fetchRequestService).finishProcessingRequest(fetchRequest.getId(), null);
         verify(ssePublisher).complete();
-        verify(ssePublisherHolder).clear();
+        verify(eventPublisherService).unregisterPublisher();
     }
 
     @Test
@@ -79,9 +79,9 @@ class FetchServiceTest {
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
-        verify(ssePublisherHolder).hold(ssePublisher);
+        verify(eventPublisherService).registerPublisher(ssePublisher);
         verify(ssePublisher).completeWithError(exception);
-        verify(ssePublisherHolder).clear();
+        verify(eventPublisherService).unregisterPublisher();
     }
 
     @Test
@@ -98,8 +98,8 @@ class FetchServiceTest {
 
         fetchService.fetchAsync(fetchRequest.getId(), ssePublisher);
 
-        verify(ssePublisherHolder).hold(ssePublisher);
-        verify(ssePublisherHolder).clear();
+        verify(eventPublisherService).registerPublisher(ssePublisher);
+        verify(eventPublisherService).unregisterPublisher();
     }
 
     @Test

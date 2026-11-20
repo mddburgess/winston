@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity.Status;
-import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.database.repository.fetch.FetchOperationRepository;
+import ca.metricalsky.winston.event.EventPublisherService;
 import com.google.common.base.Throwables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FetchOperationService {
 
-    private final EventPublisher eventPublisher;
+    private final EventPublisherService eventPublisherService;
     private final FetchOperationRepository fetchOperationRepository;
 
     public FetchOperationEntity startFetch(
@@ -50,7 +50,7 @@ public class FetchOperationService {
         fetchOperationEntity.setStatus(fetchOperationStatus);
         fetchOperationEntity.setError(throwable == null ? null : Throwables.getStackTraceAsString(throwable));
         fetchOperationEntity = fetchOperationRepository.save(fetchOperationEntity);
-        eventPublisher.publishEvent(fetchOperationEntity, throwable);
+        eventPublisherService.publishEvent(fetchOperationEntity, throwable);
         return fetchOperationEntity;
     }
 }

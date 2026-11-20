@@ -1,7 +1,7 @@
 package ca.metricalsky.winston.service;
 
 import ca.metricalsky.winston.api.model.EventSubscriptionEvent;
-import ca.metricalsky.winston.events.SsePublisher;
+import ca.metricalsky.winston.event.SsePublisher;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.service.fetch.action;
 
-import ca.metricalsky.winston.domain.PullOperationContext;
 import ca.metricalsky.winston.database.entity.fetch.FetchActionEntity;
+import ca.metricalsky.winston.domain.PullOperationContext;
+import ca.metricalsky.winston.event.EventPublisherService;
 import ca.metricalsky.winston.event.exception.PublisherException;
-import ca.metricalsky.winston.events.EventPublisher;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import ca.metricalsky.winston.service.fetch.FetchResult;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FetchActionHandler<T> {
 
-    private final EventPublisher eventPublisher;
+    private final EventPublisherService eventPublisherService;
     private final FetchActionService fetchActionService;
     private final FetchAction<T> delegate;
 
@@ -22,7 +22,7 @@ public class FetchActionHandler<T> {
             var fetchResult = fetchInternal(operationContext.getNextAction());
             operationContext.setResults(fetchResult.items());
             operationContext.setNextAction(fetchResult.nextFetchAction());
-            eventPublisher.publishEvent(operationContext);
+            eventPublisherService.publishEvent(operationContext, null);
         } catch (PublisherException ex) {
             if (operationContext.getNextAction() == null) {
                 return;
