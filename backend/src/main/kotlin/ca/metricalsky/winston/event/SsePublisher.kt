@@ -30,7 +30,7 @@ class SsePublisher internal constructor(
     fun complete() {
         publish(
             EventSubscriptionEvent()
-                .eventId(UUID.randomUUID())
+                .eventType("event-subscription")
                 .eventSubscriptionId(id)
                 .subscribed(false)
         )
@@ -41,7 +41,7 @@ class SsePublisher internal constructor(
         if (open) {
             publish(
                 EventSubscriptionEvent()
-                    .eventId(UUID.randomUUID())
+                    .eventType("event-subscription")
                     .eventSubscriptionId(id)
                     .subscribed(false)
                     .error(ex.problem)
@@ -50,12 +50,15 @@ class SsePublisher internal constructor(
         sseEmitter.completeWithError(ex)
     }
 
-    override fun publish(event: Event) = publish(
-        SseEmitter.event()
-            .id(event.eventId.toString())
-            .name(event.eventType)
-            .data(event, MediaType.APPLICATION_JSON)
-    )
+    override fun publish(event: Event) {
+        event.eventId = UUID.randomUUID()
+        publish(
+            SseEmitter.event()
+                .id(event.eventId.toString())
+                .name(event.eventType)
+                .data(event, MediaType.APPLICATION_JSON)
+        )
+    }
 
 
     private fun publish(builder: SseEventBuilder) = when {

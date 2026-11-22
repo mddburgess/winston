@@ -46,7 +46,10 @@ public class NotificationsService implements SmartLifecycle {
         subscriptions.put(subscriptionId, ssePublisher);
 
         log.info("Notifications subscription {} opened", subscriptionId);
-        ssePublisher.publish(new EventSubscriptionEvent().eventId(subscriptionId).subscribed(true));
+        ssePublisher.publish(new EventSubscriptionEvent()
+                .eventType("event-subscription")
+                .eventSubscriptionId(subscriptionId)
+                .subscribed(true));
         return ssePublisher;
     }
 
