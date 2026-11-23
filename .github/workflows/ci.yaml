@@ -124,7 +124,8 @@ jobs:
       - name: Validate OpenAPI specification
         uses: stoplightio/spectral-action@latest
         with:
-          file_glob: src/**/*.yaml
+          file_glob: api/src/**/*.yaml
+          spectral_ruleset: api/.spectral.yaml
       - name: Bundle OpenAPI specification
         run: ./gradlew :api:bundle
       - name: Generate OpenAPI sources
