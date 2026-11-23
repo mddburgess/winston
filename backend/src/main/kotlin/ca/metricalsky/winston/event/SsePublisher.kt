@@ -15,7 +15,7 @@ class SsePublisher internal constructor(
 ) : Publisher {
 
     val id: UUID = UUID.randomUUID()
-    private var open: Boolean = true
+    internal var open: Boolean = true
 
     init {
         sseEmitter.apply {

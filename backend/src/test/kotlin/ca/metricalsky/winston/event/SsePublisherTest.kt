@@ -8,7 +8,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -50,19 +49,43 @@ class SsePublisherTest : WordSpec({
 
             verify { sseEmitter.completeWithError(exception) }
         }
+
+        "not publish a subscription event when the publisher is closed" {
+            val exception = WinstonException(ErrorCode.RUNTIME_EXCEPTION)
+
+            ssePublisher.apply { open = false }
+            ssePublisher.completeWithError(exception)
+
+            verify(exactly = 0) { sseEmitter.send(any<SseEventBuilder>()) }
+            verify { sseEmitter.completeWithError(exception) }
+        }
     }
 
     "publish()" should {
 
         "throw a PublisherException when an I/O error occurs" {
-            every { sseEmitter.send(any<SseEventBuilder>()) } throws IOException()
+            var exception = IOException()
+            every { sseEmitter.send(any<SseEventBuilder>()) } throws exception
 
             shouldThrow<PublisherException> {
                 ssePublisher.publish(Event().eventId(UUID.randomUUID()))
             } should {
                 it.problem shouldBe ErrorCode.RUNTIME_EXCEPTION.problem
-                it.cause.shouldBeTypeOf<IOException>()
+                it.cause shouldBe exception
             }
+        }
+
+        "throw a PublisherException when the publisher is closed" {
+            ssePublisher.apply { open = false }
+
+            shouldThrow<PublisherException> {
+                ssePublisher.publish(Event().eventId(UUID.randomUUID()))
+            } should {
+                it.problem shouldBe ErrorCode.PUBLISHER_CLOSED.problem
+                it.cause shouldBe null
+            }
+
+            verify(exactly = 0) { sseEmitter.send(any<SseEventBuilder>()) }
         }
     }
 })

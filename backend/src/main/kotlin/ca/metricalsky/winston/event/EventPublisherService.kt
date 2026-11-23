@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service
 class EventPublisherService(
     private val conversionService: ConversionService,
 ) {
-
     private val threadLocalPublisher: ThreadLocal<Publisher> = ThreadLocal.withInitial { NoOpPublisher() }
+
+    internal val publisher: Publisher
+        get() = threadLocalPublisher.get()
 
     fun registerPublisher(publisher: Publisher) {
         threadLocalPublisher.set(publisher)
@@ -24,11 +26,11 @@ class EventPublisherService(
     fun publishEvent(entity: Any, throwable: Throwable? = null) {
         val event = conversionService.convert(entity, Event::class.java)!!
         if (throwable is WinstonException) {
-            event.setError(throwable.problem)
+            event.error = throwable.problem
         } else if (throwable != null) {
-            event.setError(WinstonException(ErrorCode.RUNTIME_EXCEPTION, throwable).problem)
+            event.error = WinstonException(ErrorCode.RUNTIME_EXCEPTION, throwable).problem
         }
 
-        threadLocalPublisher.get().publish(event)
+        publisher.publish(event)
     }
 }
