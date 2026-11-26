@@ -16,7 +16,7 @@ const PullVideosRequest = () => {
   const requestPullVideos = (eventSubscriptionId: string) => {
     if (requested) {
       void pull({
-        body: {
+        pullRequest: {
           event_subscription_id: eventSubscriptionId,
           operations: [{ pull: "videos", channel_handle: requested.channelHandle, range: requested.range }],
         },

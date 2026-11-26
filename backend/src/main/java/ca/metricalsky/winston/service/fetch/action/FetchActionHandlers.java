@@ -4,7 +4,7 @@ import ca.metricalsky.winston.api.model.Channel;
 import ca.metricalsky.winston.api.model.Comment;
 import ca.metricalsky.winston.api.model.TopLevelComment;
 import ca.metricalsky.winston.api.model.Video;
-import ca.metricalsky.winston.events.EventPublisher;
+import ca.metricalsky.winston.event.EventPublisherService;
 import ca.metricalsky.winston.service.fetch.FetchActionService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,37 +14,37 @@ class FetchActionHandlers {
 
     @Bean
     FetchActionHandler<Channel> fetchChannelActionHandler(
-            EventPublisher eventPublisher,
+            EventPublisherService eventPublisherService,
             FetchActionService fetchActionService,
             FetchChannelAction fetchChannelAction
     ) {
-        return new FetchActionHandler<>(eventPublisher, fetchActionService, fetchChannelAction);
+        return new FetchActionHandler<>(eventPublisherService, fetchActionService, fetchChannelAction);
     }
 
     @Bean
     FetchActionHandler<Video> fetchVideosActionHandler(
-            EventPublisher eventPublisher,
+            EventPublisherService eventPublisherService,
             FetchActionService fetchActionService,
             FetchVideosAction fetchVideosAction
     ) {
-        return new FetchActionHandler<>(eventPublisher, fetchActionService, fetchVideosAction);
+        return new FetchActionHandler<>(eventPublisherService, fetchActionService, fetchVideosAction);
     }
 
     @Bean
     FetchActionHandler<TopLevelComment> fetchCommentsActionHandler(
-            EventPublisher eventPublisher,
+            EventPublisherService eventPublisherService,
             FetchActionService fetchActionService,
             FetchCommentsAction fetchCommentsAction
     ) {
-        return new FetchActionHandler<>(eventPublisher, fetchActionService, fetchCommentsAction);
+        return new FetchActionHandler<>(eventPublisherService, fetchActionService, fetchCommentsAction);
     }
 
     @Bean
     FetchActionHandler<Comment> fetchRepliesActionHandler(
-            EventPublisher eventPublisher,
+            EventPublisherService eventPublisherService,
             FetchActionService fetchActionService,
             FetchRepliesAction fetchRepliesAction
     ) {
-        return new FetchActionHandler<>(eventPublisher, fetchActionService, fetchRepliesAction);
+        return new FetchActionHandler<>(eventPublisherService, fetchActionService, fetchRepliesAction);
     }
 }

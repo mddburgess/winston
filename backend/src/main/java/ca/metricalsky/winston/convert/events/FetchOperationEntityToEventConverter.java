@@ -1,9 +1,9 @@
 package ca.metricalsky.winston.convert.events;
 
+import ca.metricalsky.winston.api.model.Event;
+import ca.metricalsky.winston.api.model.PullOperationEvent;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.model.AppEvent;
-import ca.metricalsky.winston.events.model.PullOperationEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
@@ -12,10 +12,12 @@ import org.springframework.core.convert.converter.Converter;
         componentModel = "spring",
         uses = ConversionServiceAdapter.class
 )
-public interface FetchOperationEntityToAppEventConverter
-        extends Converter<FetchOperationEntity, AppEvent> {
+public interface FetchOperationEntityToEventConverter
+        extends Converter<FetchOperationEntity, Event> {
 
     @Override
+    @Mapping(target = "eventId", ignore = true)
+    @Mapping(target = "eventType", constant = "pull-operation")
     @Mapping(target = "operation", source = ".")
     @Mapping(target = "error", ignore = true)
     PullOperationEvent convert(FetchOperationEntity source);

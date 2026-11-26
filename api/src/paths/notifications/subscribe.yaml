@@ -7,9 +7,9 @@ responses:
   "200":
     description: The request was successful.
     content:
-      text/event-stream:
+      application/json:
         schema:
           type: array
           format: event-stream
           items:
-            type: string
+            $ref: ../../schemas/events/Event.yaml

@@ -16,7 +16,7 @@ const PullChannelsRequest = () => {
 
   const requestPullChannel = (eventSubscriptionId: string) => {
     const operations: PullOperation[] = requested.map((handle) => ({ pull: "channel", channel_handle: handle }));
-    void pull({ body: { event_subscription_id: eventSubscriptionId, operations } });
+    void pull({ pullRequest: { event_subscription_id: eventSubscriptionId, operations } });
   };
 
   const handlePullOperationEvent = (event: PullOperationEvent) => {

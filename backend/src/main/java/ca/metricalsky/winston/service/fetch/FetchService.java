@@ -2,8 +2,8 @@ package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.config.properties.YouTubeConfig;
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
-import ca.metricalsky.winston.events.SsePublisher;
-import ca.metricalsky.winston.events.SsePublisherHolder;
+import ca.metricalsky.winston.event.EventPublisherService;
+import ca.metricalsky.winston.event.SsePublisher;
 import ca.metricalsky.winston.database.repository.fetch.YouTubeRequestRepository;
 import ca.metricalsky.winston.exception.ErrorCode;
 import ca.metricalsky.winston.exception.WinstonException;
@@ -20,16 +20,16 @@ import java.util.Comparator;
 @RequiredArgsConstructor
 public class FetchService {
 
+    private final EventPublisherService eventPublisherService;
     private final FetchOperationHandlerFactory fetchOperationHandlerFactory;
     private final FetchRequestService fetchRequestService;
-    private final SsePublisherHolder ssePublisherHolder;
     private final YouTubeConfig youTubeConfig;
     private final YouTubeRequestRepository youTubeRequestRepository;
 
     @Async
     public void fetchAsync(Long fetchRequestId, SsePublisher ssePublisher) {
         try {
-            ssePublisherHolder.hold(ssePublisher);
+            eventPublisherService.registerPublisher(ssePublisher);
             var fetchOperations = fetchRequestService.startProcessingRequest(fetchRequestId);
 
             fetchOperations.stream()
@@ -37,14 +37,16 @@ public class FetchService {
                     .forEach(fetchOperation ->
                             fetchOperationHandlerFactory.getHandler(fetchOperation).fetch(fetchOperation));
 
-            fetchRequestService.finishProcessingRequest(fetchRequestId);
+            fetchRequestService.finishProcessingRequest(fetchRequestId, null);
             ssePublisher.complete();
         } catch (WinstonException ex) {
+            fetchRequestService.finishProcessingRequest(fetchRequestId, ex);
             ssePublisher.completeWithError(ex);
         } catch (RuntimeException ex) {
+            fetchRequestService.finishProcessingRequest(fetchRequestId, ex);
             ssePublisher.completeWithError(new WinstonException(ErrorCode.RUNTIME_EXCEPTION, ex));
         } finally {
-            ssePublisherHolder.clear();
+            eventPublisherService.unregisterPublisher();
         }
     }
 

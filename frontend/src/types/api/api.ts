@@ -8,7 +8,7 @@ type PullOperationRead = PullOperationsRead[number];
 
 type PullOperationStatus = NonNullable<PullOperationRead["status"]>;
 
-type PullRequestRead = PullReq["body"] & {
+type PullRequestRead = PullReq["pullRequest"] & {
   status: PullRequestStatus;
   id: string;
 };

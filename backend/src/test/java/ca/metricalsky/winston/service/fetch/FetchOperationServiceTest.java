@@ -2,7 +2,7 @@ package ca.metricalsky.winston.service.fetch;
 
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity;
 import ca.metricalsky.winston.database.entity.fetch.FetchOperationEntity.Status;
-import ca.metricalsky.winston.events.EventPublisher;
+import ca.metricalsky.winston.event.EventPublisherService;
 import ca.metricalsky.winston.database.repository.fetch.FetchOperationRepository;
 import ca.metricalsky.winston.test.annotations.UnitTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ class FetchOperationServiceTest {
     private FetchOperationService fetchOperationService;
 
     @Mock
-    private EventPublisher eventPublisher;
+    private EventPublisherService eventPublisherService;
     @Mock
     private FetchOperationRepository fetchOperationRepository;
 
@@ -42,7 +42,7 @@ class FetchOperationServiceTest {
                 .isEqualTo(Status.FETCHING);
         assertThat(result.getError())
                 .isNull();
-        verify(eventPublisher)
+        verify(eventPublisherService)
                 .publishEvent(result, null);
     }
 
@@ -54,7 +54,7 @@ class FetchOperationServiceTest {
                 .isEqualTo(Status.SUCCESSFUL);
         assertThat(result.getError())
                 .isNull();
-        verify(eventPublisher)
+        verify(eventPublisherService)
                 .publishEvent(result, null);
     }
 

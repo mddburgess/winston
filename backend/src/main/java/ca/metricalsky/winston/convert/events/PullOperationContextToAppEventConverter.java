@@ -1,9 +1,11 @@
 package ca.metricalsky.winston.convert.events;
 
+import ca.metricalsky.winston.api.model.Event;
+import ca.metricalsky.winston.api.model.PullResults;
+import ca.metricalsky.winston.api.model.PullResultsEvent;
 import ca.metricalsky.winston.convert.ConversionServiceAdapter;
 import ca.metricalsky.winston.domain.PullOperationContext;
-import ca.metricalsky.winston.events.model.AppEvent;
-import ca.metricalsky.winston.events.model.PullResultsEvent;
+import org.apache.commons.collections4.ListUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.core.convert.converter.Converter;
@@ -12,11 +14,20 @@ import org.springframework.core.convert.converter.Converter;
         componentModel = "spring",
         uses = ConversionServiceAdapter.class
 )
-public interface PullOperationContextToAppEventConverter
-        extends Converter<PullOperationContext, AppEvent> {
+public abstract class PullOperationContextToAppEventConverter
+        implements Converter<PullOperationContext, Event> {
 
     @Override
-    @Mapping(target = "items", source = "results")
+    @Mapping(target = "eventId", ignore = true)
+    @Mapping(target = "eventType", constant = "pull-results")
+    @Mapping(target = "results", source = ".")
     @Mapping(target = "error", ignore = true)
-    PullResultsEvent<Object> convert(PullOperationContext source);
+    public abstract PullResultsEvent convert(PullOperationContext source);
+
+    protected PullResults mapResults(PullOperationContext source) {
+        return new PullResults()
+                .count(ListUtils.emptyIfNull(source.getResults()).size())
+                .totalCount(source.getTotalCount())
+                .items(source.getResults());
+    }
 }

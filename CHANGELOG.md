@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fetch requests no longer loop infinitely when the next page token doesn't change. (mddburgess/winston#133)
+- Failed pull requests now publish a closing `pull-request` message with the error details. (mddburgess/winston#149)
 
 ## [1.8.0] — 2026-03-19
 
